@@ -2,7 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import LeftPane from './components/LeftPane';
-import RightPane from './components/RightPane';
+import MiddlePane from './components/MiddlePane';
+
+import HistoryPane from './components/HistoryPane';
+
 import './styles/index.css';
 
 export default class Layout extends React.Component {
@@ -21,7 +24,8 @@ export default class Layout extends React.Component {
 		return (
 			<div>
 				<LeftPane changeTargetTag={this.changeTargetTag.bind(this)} />
-				<RightPane tag={this.state.targetTag}/>
+				<MiddlePane tag={this.state.targetTag}/>
+				<HistoryPane />
 			</div>
 		);
 	}

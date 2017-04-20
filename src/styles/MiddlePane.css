@@ -1,0 +1,18 @@
+.MiddlePane {
+	text-align: left;
+	float: left;
+	width: 70%;
+}
+
+.MiddlePaneInner {
+	margin: 10px;
+	border: 1px solid blue;
+}
+
+.MiddlePane-intro {
+	font-size: large;
+}
+
+.leDivs {
+	border: 1px solid green;
+}

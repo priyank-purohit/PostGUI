@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import '../styles/RightPane.css';
+import Navigation from './Navigation';
+import '../styles/MiddlePane.css';
 
 var data = require('../data/data.json');
 var lib = require('../utils/library.js');
 
-class RightPane extends Component {
+class MiddlePane extends Component {
 	getValuesForKey(key) {
 		var values = [];
 		if (data[key]) {
@@ -27,7 +28,7 @@ class RightPane extends Component {
 			var height = 157.5;
 
 			// Replace the stuff inside the <div> tag to whatever you want to display
-			const div = <div key={url+4} width={width+5} height={height+25} style={{float: 'left', borderBottom: '1px solid black'}} >
+			const div = <div key={url+4} width={width+5} height={height+25} style={{float: 'left', borderBottom: '1px solid black'}} className="leDivs">
 							<iframe key={url} width={width} height={height} src={url} style={{padding: 5 + 'px'}} frameBorder="0"></iframe>
 							<br key={url+2}/>
 							<button key={url+1} type="button" width={width} style={{textAlign: 'center', position: 'relative', margin: '0 auto', display: 'block'}} onClick={this.visitPage.bind(this, url)} >Open in New Tab</button>
@@ -41,8 +42,9 @@ class RightPane extends Component {
 
 	render() {
 		return (
-			<div className="RightPane">
-				<div className="RightPaneInner">
+			<div className="MiddlePane">
+				<Navigation />
+				<div className="MiddlePaneInner">
 					<h2>Doing {lib.rot13ED(this.props.tag)}</h2>
 					{this.getValuesForKey(this.props.tag)}
 				</div>
@@ -51,4 +53,4 @@ class RightPane extends Component {
 	}
 }
 
-export default RightPane;
+export default MiddlePane;

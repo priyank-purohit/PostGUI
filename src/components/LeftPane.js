@@ -7,10 +7,11 @@ class LeftPane extends Component {
 	render() {
 		return (
 			<div className="LeftPane">
-				<img src={logo} className="LeftPane-logo" alt="logo" />
-				<h3>React.js Bookmarks App</h3>
+				<div className="logoAndTitle">
+					<img src={logo} className="LeftPane-logo" alt="logo" />
+					<h3>PostgUI</h3>
+				</div>
 				<hr/>
-				<LeftPaneTagsDiv changeTargetTag={this.props.changeTargetTag}/>
 			</div>
 		);
 	}

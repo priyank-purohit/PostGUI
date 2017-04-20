@@ -1,0 +1,15 @@
+.HistoryPane {
+    text-align: center;
+    float: right;
+    width: 10%;
+    background-color: #666;
+    height: 100vh;
+    color: white;
+}
+
+.HistoryPaneInner {
+    margin: 0px;
+    padding: 0px;
+    line-height: 0px;
+    border-bottom: 1px solid red;
+}

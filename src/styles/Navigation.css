@@ -1,0 +1,16 @@
+.navigation {
+	background: #ccc;
+	display: inline-block;
+	vertical-align: middle;
+	border: 1px solid red;
+	text-align: center;
+	width: 100%;
+}
+
+.navigationElement {
+	font-size: 18px;
+	font-weight: bold;
+	float: left;
+	width: 18%;
+	border: 1px solid pink;
+}
