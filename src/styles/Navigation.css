@@ -1,16 +1,37 @@
 .navigation {
-	background: #ccc;
+	background: #222;
+	color: white;
 	display: inline-block;
 	vertical-align: middle;
-	border: 1px solid red;
 	text-align: center;
 	width: 100%;
+	border-bottom: 2px solid #666;
 }
 
 .navigationElement {
+	line-height: 20px;
 	font-size: 18px;
 	font-weight: bold;
 	float: left;
-	width: 18%;
-	border: 1px solid pink;
+	width: 15%;
+}
+
+.titleElement {
+	width: 20%;
+}
+
+.LogoAndTitle {
+    display: inline-block;
+}
+
+.LeftPaneLogo {
+    animation: LeftPane-logo-spin infinite 20s linear;
+    height: 60px;
+    width: 75px;
+    float: left;
+    vertical-align: middle;
+}
+
+.LeftPaneTitle {
+    float: left;
 }

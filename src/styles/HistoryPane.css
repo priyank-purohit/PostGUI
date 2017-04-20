@@ -2,7 +2,7 @@
     text-align: center;
     float: right;
     width: 10%;
-    background-color: #666;
+    background-color: #aaa;
     height: 100vh;
     color: white;
 }
@@ -11,5 +11,4 @@
     margin: 0px;
     padding: 0px;
     line-height: 0px;
-    border-bottom: 1px solid red;
 }

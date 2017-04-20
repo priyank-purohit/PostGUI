@@ -1,19 +1,29 @@
 .LeftPane {
     text-align: center;
     float: left;
-    width: 20%;
-    background-color: #222;
+    width: 15%;
+    background-color: #ddd;
     height: 100vh;
     color: white;
 }
 
-.LeftPaneInner {
-    margin: 10px;
+.LogoAndTitle {
+    display: inline-block;
+    margin: 0px;
+    padding: 0px;
 }
 
-.LeftPane-logo {
+.LeftPaneLogo {
     animation: LeftPane-logo-spin infinite 20s linear;
-    height: 50px;
+    height: 60px;
+    width: 75px;
+    float: left;
+    vertical-align: middle;
+    margin-left: -40px;
+}
+
+.LeftPaneTitle {
+    float: left;
 }
 
 .tagsButton {

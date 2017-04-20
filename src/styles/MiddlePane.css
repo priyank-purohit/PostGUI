@@ -1,12 +1,12 @@
 .MiddlePane {
 	text-align: left;
 	float: left;
-	width: 70%;
+	width: 75%;
+	background: #eee;
 }
 
 .MiddlePaneInner {
 	margin: 10px;
-	border: 1px solid blue;
 }
 
 .MiddlePane-intro {
@@ -14,5 +14,4 @@
 }
 
 .leDivs {
-	border: 1px solid green;
 }
