@@ -33,6 +33,7 @@ class LeftPaneTagsDiv extends Component {
 			})
 			.then(function(response) {
 				console.log("le resp = " + JSON.stringify(response.data));
+				// TO DO : parse the response.data to produce a list of tables...
 			})
 			.catch(function(error) {
 				console.log(error);
