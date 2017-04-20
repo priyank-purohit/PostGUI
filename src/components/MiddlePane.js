@@ -9,7 +9,7 @@ class MiddlePane extends Component {
 		var values = [];
 		if (data[key]) {
 			for (var i = 0; i < (data[key]).length; i++) {
-				values.push(lib.rot13ED(data[key][i]));
+				values.push(data[key][i]);
 			}
 			return this.buildURLsIntoHtmlCode(values);
 		}
@@ -43,7 +43,7 @@ class MiddlePane extends Component {
 		return (
 			<div className="MiddlePane">
 				<div className="MiddlePaneInner">
-					<h2>Doing {lib.rot13ED(this.props.tag)}</h2>
+					<h2>Doing {this.props.tag}</h2>
 					{this.getValuesForKey(this.props.tag)}
 				</div>
 			</div>

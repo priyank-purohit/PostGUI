@@ -13,7 +13,7 @@ export default class Layout extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			targetTag: "Gnt 1"
+			targetTag: "Table 1"
 		};
 	}
 

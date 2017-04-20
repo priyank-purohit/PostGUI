@@ -6,7 +6,7 @@ class LeftPane extends Component {
 	render() {
 		return (
 			<div className="LeftPane">
-				<LeftPaneTagsDiv />
+				<LeftPaneTagsDiv changeTargetTag={this.props.changeTargetTag}/>
 			</div>
 		);
 	}

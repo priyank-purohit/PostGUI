@@ -11,13 +11,14 @@
 .navigationElement {
 	line-height: 20px;
 	font-size: 18px;
-	font-weight: bold;
 	float: left;
 	width: 15%;
+	/*border: 1px solid pink;*/
+	vertical-align: middle;
 }
 
 .titleElement {
-	width: 20%;
+	font-weight: bold;
 }
 
 .LogoAndTitle {

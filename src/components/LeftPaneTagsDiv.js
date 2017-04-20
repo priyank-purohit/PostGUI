@@ -12,7 +12,7 @@ class LeftPaneTagsDiv extends Component {
 	getKeysFromJSON(jsonDataStr) {
 		var keys = [];
 		for (var k in jsonDataStr) {
- 			keys.push(<button key={k} id={k} className="tagsButton" onClick={this.handleClick.bind(this)}>{lib.rot13ED(k)}</button>);
+ 			keys.push(<button key={k} id={k} className="tagsButton" onClick={this.handleClick.bind(this)}>{k}</button>);
 			keys.push(<br key={k+1}/>);
 		}
 		return keys;
