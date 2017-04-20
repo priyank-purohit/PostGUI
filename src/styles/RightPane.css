@@ -1,0 +1,13 @@
+.RightPane {
+	text-align: left;
+	float: right;
+	width: 80%;
+}
+
+.RightPaneInner {
+	margin: 10px;
+}
+
+.RightPane-intro {
+	font-size: large;
+}

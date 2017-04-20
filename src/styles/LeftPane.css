@@ -1,0 +1,33 @@
+.LeftPane {
+    text-align: center;
+    float: left;
+    width: 20%;
+    background-color: #222;
+    height: 100vh;
+    color: white;
+}
+
+.LeftPaneInner {
+    margin: 10px;
+}
+
+.LeftPane-logo {
+    animation: LeftPane-logo-spin infinite 20s linear;
+    height: 50px;
+}
+
+.tagsButton {
+    margin: 5px;
+    padding: 10px;
+    width: 80%;
+    max-width: 90%;
+}
+
+@keyframes LeftPane-logo-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
