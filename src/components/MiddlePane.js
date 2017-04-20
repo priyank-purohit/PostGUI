@@ -43,8 +43,7 @@ class MiddlePane extends Component {
 		return (
 			<div className="MiddlePane">
 				<div className="MiddlePaneInner">
-					<h2>Doing {this.props.tag}</h2>
-					{this.getValuesForKey(this.props.tag)}
+					{/*this.getValuesForKey(this.props.tag)*/}
 				</div>
 			</div>
 		);
