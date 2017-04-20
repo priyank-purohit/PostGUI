@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
 
 import LeftPane from './components/LeftPane';
 import RightPane from './components/RightPane';
@@ -10,6 +9,7 @@ export default class Layout extends React.Component {
 	constructor() {
 		super();
 		this.state = {
+			targetTag: "Gnt 1"
 		};
 	}
 
