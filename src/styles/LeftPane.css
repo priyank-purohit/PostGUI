@@ -34,6 +34,11 @@
     word-wrap: break-word;
 }
 
+.indent {
+    margin-left: 20%;
+    width: 60%;
+}
+
 @keyframes LeftPane-logo-spin {
     from {
         transform: rotate(0deg);
