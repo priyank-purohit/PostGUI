@@ -1,49 +1,56 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-var data = require('../data/data.json');
-var lib = require('../utils/library.js');
-
 class LeftPaneTagsDiv extends Component {
 	constructor(props) {
 		super(props);
-
-		this.state = { tables: [] };
+		this.state = { rawResp: "", tables: ["Table1"] };
 	}
 
-	handleClick(e) {
+	/*handleClick(e) {
 		var buttonClicked = e.target.id;
 		this.props.changeTargetTag(buttonClicked);
-	}
+	}*/
 
-	getKeysFromJSON(jsonDataStr) {
-		var keys = [];
-		for (var k in jsonDataStr) {
-			keys.push(<button key={k} id={k} className="tagsButton" onClick={this.handleClick.bind(this)}>{k}</button>);
-			keys.push(<br key={k+1}/>);
+	// Produces buttons for the UI
+	displayTables(listOfTables = this.state.tables) {
+		let ret = [];
+		for (let i = 0; i < listOfTables.length; i++) {
+			ret.push(<button key={i} id={i} className="tablesButtons">{listOfTables[i]}</button>);
 		}
-		return keys;
+		return ret;
 	}
 
+	// Extract the names of db tables and update state
+	parseTables(rawResp = this.state.rawResp) {
+		let dbTables = [];
+		for (let i = 0; i < rawResp.length; i++) {
+			dbTables.push(rawResp[i].name);
+		}
+		this.setState({tables: dbTables});
+	}
+
+	// Makes a GET call to '/' to retrieve the db schema from PostgREST
 	fetchDbTables(url = 'http://localhost:3001/') {
-		axios.get(url, {
-				params: {
-					ID: 12345
-				}
-			})
-			.then(function(response) {
-				console.log("le resp = " + JSON.stringify(response.data));
-				// TO DO : parse the response.data to produce a list of tables...
+		axios.get(url, {params: {}})
+			.then((response) => {
+				this.setState({rawResp: response.data});
+				this.parseTables(response.data);
 			})
 			.catch(function(error) {
 				console.log(error);
 			});
 	}
 
+	// Makes the API call once the basic UI has been rendered
+	componentDidMount() {
+		this.fetchDbTables();
+	}
+
 	render() {
 		return (
 			<div id="tagsDiv">
-				{this.fetchDbTables()}
+				{this.displayTables()}
 			</div>
 		);
 	}
