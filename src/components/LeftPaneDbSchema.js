@@ -1,22 +1,23 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-class LeftPaneTagsDiv extends Component {
+class LeftPaneDbSchema extends Component {
 	constructor(props) {
 		super(props);
 		this.state = { rawResp: "", tables: ["Table1"] };
 	}
 
-	/*handleClick(e) {
+	handleClick(e) {
 		var buttonClicked = e.target.id;
+		console.log(buttonClicked);
 		this.props.changeTargetTag(buttonClicked);
-	}*/
+	}
 
 	// Produces buttons for the UI
 	displayTables(listOfTables = this.state.tables) {
 		let ret = [];
 		for (let i = 0; i < listOfTables.length; i++) {
-			ret.push(<button key={i} id={i} className="tablesButtons">{listOfTables[i]}</button>);
+			ret.push(<button key={i} id={listOfTables[i]} className="tablesButtons" onClick={this.handleClick.bind(this)}>{listOfTables[i]}</button>);
 		}
 		return ret;
 	}
@@ -56,4 +57,4 @@ class LeftPaneTagsDiv extends Component {
 	}
 }
 
-export default LeftPaneTagsDiv;
+export default LeftPaneDbSchema;
