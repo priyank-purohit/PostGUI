@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import LeftPaneTagsDiv from './LeftPaneTagsDiv';
+import LeftPaneDbSchema from './LeftPaneDbSchema';
 import '../styles/LeftPane.css';
 
 class LeftPane extends Component {
 	render() {
 		return (
 			<div className="LeftPane">
-				<LeftPaneTagsDiv changeTargetTag={this.props.changeTargetTag}/>
+				<LeftPaneDbSchema changeTargetTag={this.props.changeTargetTag}/>
 			</div>
 		);
 	}
