@@ -8,7 +8,7 @@ class MiddlePane extends Component {
 		return (
 			<div className="MiddlePane">
 				<div className="MiddlePaneInner">
-					<p>{this.props.tag}</p>
+					<h2>{this.props.tag}</h2>
 				</div>
 			</div>
 		);

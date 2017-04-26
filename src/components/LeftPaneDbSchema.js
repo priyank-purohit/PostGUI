@@ -18,6 +18,7 @@ class LeftPaneDbSchema extends Component {
 		// If the columns are already known and displayed, then hide them
 		if (this.state[buttonClicked]) {
 			this.setState({[buttonClicked] : null});
+			this.props.changeTargetTag(lib.getFromConfig("noTableMsg"));
 		}
 		else {
 			this.fetchTableColumns(buttonClicked);
