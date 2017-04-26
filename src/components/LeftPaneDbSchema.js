@@ -11,6 +11,10 @@ class LeftPaneDbSchema extends Component {
 
 	handleClick(e) {
 		var buttonClicked = e.target.id;
+		
+		//Can use the below to propogate table change back to index.js
+		this.props.changeTargetTag(buttonClicked);
+
 		// If the columns are already known and displayed, then hide them
 		if (this.state[buttonClicked]) {
 			this.setState({[buttonClicked] : null});
@@ -18,8 +22,6 @@ class LeftPaneDbSchema extends Component {
 		else {
 			this.fetchTableColumns(buttonClicked);
 		}
-		//Can use the below to propogate table change back to index.js
-		//this.props.changeTargetTag(buttonClicked);
 	}
 
 	displayColumns(table) {
