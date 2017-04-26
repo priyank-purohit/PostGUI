@@ -5,7 +5,11 @@ exports.rot13ED = function(str) {
 
 // Retrieves value of key from the config file
 exports.getFromConfig = function(key = "title") {
-	let configFile = require('../data/config.json');
+	let configFile = require("../data/config.json");
 	let config = JSON.parse(JSON.stringify(configFile));
 	return config[key]
+}
+
+exports.visitPage = function(url = "http://www.google.ca") {
+    window.open(url, "_blank");
 }

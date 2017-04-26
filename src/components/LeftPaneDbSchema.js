@@ -6,20 +6,23 @@ let lib = require('../utils/library.js');
 class LeftPaneDbSchema extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { rawResp: "", tables: ["Table1"] };
+		this.state = { rawResp: "", tables: [] };
 	}
 
 	handleClick(e) {
 		var buttonClicked = e.target.id;
+		
+		//Can use the below to propogate table change back to index.js
+		this.props.changeTargetTag(buttonClicked);
+
 		// If the columns are already known and displayed, then hide them
 		if (this.state[buttonClicked]) {
 			this.setState({[buttonClicked] : null});
+			this.props.changeTargetTag(lib.getFromConfig("noTableMsg"));
 		}
 		else {
 			this.fetchTableColumns(buttonClicked);
 		}
-		//Can use the below to propogate table change back to index.js
-		//this.props.changeTargetTag(buttonClicked);
 	}
 
 	displayColumns(table) {

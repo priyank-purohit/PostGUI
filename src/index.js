@@ -9,11 +9,13 @@ import HistoryPane from './components/HistoryPane';
 
 import './styles/index.css';
 
+let lib = require("./utils/library.js");
+
 export default class Layout extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			targetTag: "Table 1"
+			targetTag: lib.getFromConfig("noTableMsg")
 		};
 	}
 
