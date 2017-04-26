@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import logo from '../resources/logo.svg';
 import '../styles/Navigation.css';
 
+let lib = require('../utils/library.js');
+
 class Navigation extends Component {
 	render() {
 		return (
@@ -9,7 +11,7 @@ class Navigation extends Component {
 				<div className="navigationElement titleElement">
 					<div className="LogoAndTitle">
 						<img src={logo} className="LeftPaneLogo" alt="logo" />
-						<h3 className="LeftPaneTitle">PostgUI</h3>
+						<h3 className="LeftPaneTitle">{lib.getFromConfig('title')}</h3>
 					</div>
 				</div>
 				<p className="navigationElement">Data Visualization</p>
