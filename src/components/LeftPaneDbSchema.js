@@ -6,7 +6,7 @@ let lib = require('../utils/library.js');
 class LeftPaneDbSchema extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { rawResp: "", tables: ["Please select the view you wish to query from left panel."] };
+		this.state = { rawResp: "", tables: [] };
 	}
 
 	handleClick(e) {

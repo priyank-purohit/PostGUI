@@ -13,7 +13,7 @@ export default class Layout extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			targetTag: "Table 1"
+			targetTag: "Please select the view you wish to query from left panel."
 		};
 	}
 
