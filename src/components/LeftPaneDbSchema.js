@@ -11,20 +11,22 @@ class LeftPaneDbSchema extends Component {
 
 	handleClick(e) {
 		var buttonClicked = e.target.id;
-		console.log("Clicked on " + buttonClicked);
-		this.fetchTableColumns(buttonClicked);
-		this.props.changeTargetTag(buttonClicked);
+		// If the columns are already known and displayed, then hide them
+		if (this.state[buttonClicked]) {
+			this.setState({[buttonClicked] : null});
+		}
+		else {
+			this.fetchTableColumns(buttonClicked);
+		}
+		//Can use the below to propogate table change back to index.js
+		//this.props.changeTargetTag(buttonClicked);
 	}
 
 	displayColumns(table) {
-		let columns = this.state[table];
-		console.log("columns found for table = " + table);
-		console.log(columns);
-
 		let ret = [];
+		let columns = this.state[table];
 		if (columns) {
 			for (let i = 0; i < columns.length; i++) {
-				console.log("Created a button for table " + table + "'s column " + columns[i]);
 				ret.push(
 					<div key={i}>
 					<button key={i} id={columns[i]} className="tablesButtons indent">{columns[i]}</button>
