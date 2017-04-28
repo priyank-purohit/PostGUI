@@ -10,8 +10,8 @@ class MiddlePane extends Component {
 		return (
 			<div className="MiddlePane" id="middlePane">
 				<div className="MiddlePaneInner">
-					<div id="queryBuilder" className="queryBuilder">
-					</div>
+					<h2>{this.props.tag}</h2>
+					<div id="queryBuilder" className="queryBuilder"></div>
 				</div>
 			</div>
 		);
