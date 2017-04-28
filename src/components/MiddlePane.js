@@ -11,6 +11,7 @@ class MiddlePane extends Component {
 			<div className="MiddlePane" id="middlePane">
 				<div className="MiddlePaneInner">
 					<h2>{this.props.tag}</h2>
+					<hr color="grey"/>
 					<div id="queryBuilder" className="queryBuilder"></div>
 				</div>
 			</div>
