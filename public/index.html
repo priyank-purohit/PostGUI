@@ -1,31 +1,164 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
-    <!--
-      Notice the use of %PUBLIC_URL% in the tag above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+  <!--
+    Notice the use of %PUBLIC_URL% in the tag above.
+    It will be replaced with the URL of the `public` folder during the build.
+    Only files inside the `public` folder can be referenced from the HTML.
+
+    Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+    work correctly both with client-side routing and a non-root public URL.
+    Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>PostgUI</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+  <title>PostgUI</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+  <script src="https://rawgit.com/mistic100/jQuery-QueryBuilder/master/dist/js/query-builder.standalone.min.js"></script>
+  <link href="http://querybuilder.js.org/dist/jQuery-QueryBuilder/dist/css/query-builder.default.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+  <script src="https://fb.me/react-0.14.7.js"></script>
+  <script src="https://fb.me/react-dom-0.14.7.js"></script>
+  <script type="text/babel">
+        const defaultRules = {
+            condition: 'AND',
+            rules: [{
+                id: 'price',
+                operator: 'less',
+                value: 10.25
+            }, {
+                condition: 'OR',
+                rules: [{
+                    id: 'category',
+                    operator: 'equal',
+                    value: 2
+                }, {
+                    id: 'category',
+                    operator: 'equal',
+                    value: 1
+                }]
+            }]
+        };
+        function initializeQueryBuilder(element, newRules) {
+            const filters = [{
+                id: 'name',
+                label: 'Name',
+                type: 'string'
+            }, {
+                id: 'category',
+                label: 'Category',
+                type: 'integer',
+                input: 'select',
+                values: {
+                    1: 'Books',
+                    2: 'Movies',
+                    3: 'Music',
+                    4: 'Tools',
+                    5: 'Goodies',
+                    6: 'Clothes'
+                },
+                operators: ['equal', 'not_equal', 'in', 'not_in', 'is_null', 'is_not_null']
+            }, {
+                id: 'in_stock',
+                label: 'In stock',
+                type: 'integer',
+                input: 'radio',
+                values: {
+                    1: 'Yes',
+                    0: 'No'
+                },
+                operators: ['equal']
+            }, {
+                id: 'price',
+                label: 'Price',
+                type: 'double',
+                validation: {
+                    min: 0,
+                    step: 0.01
+                }
+            }, {
+                id: 'id',
+                label: 'Identifier',
+                type: 'string',
+                placeholder: '____-____-____',
+                operators: ['equal', 'not_equal'],
+                validation: {
+                    format: /^.{4}-.{4}-.{4}$/
+                }
+            }];
+            const rules = newRules ? newRules : defaultRules;
+            $(element).queryBuilder({filters, rules});
+        }
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+        class QueryBuilderWrapper extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    rules: {}
+                };
+            }
+            componentDidMount() {
+                const element = this.refs.queryBuilder;
+                initializeQueryBuilder(element);
+            }
+            componentWillUnmount() {
+                $(this.refs.queryBuilder).queryBuilder('destroy');
+            }
+            shouldComponentUpdate() {
+                return false;
+            }
+            // get data from jQuery Query Builder and pass to the react component
+            handleGetRulesClick() {
+                const rules = $(this.refs.queryBuilder).queryBuilder('getRules');
+                this.setState({rules: rules});
+                this.forceUpdate();
+            }
+            // reinitialize jQuery Query Builder based on react state
+            handleSetRulesClick() {
+                const newRules = {...defaultRules};
+                newRules.rules[0].value = newRules.rules[0].value + 10;
+                $(this.refs.queryBuilder).queryBuilder('setRules', newRules);
+                this.setState({rules: newRules});
+            }
 
-      To begin the development, run `npm start`.
-      To create a production bundle, use `npm run build`.
+            render() {
+                return (
+                    <div>
+                        <div id='query-builder' ref='queryBuilder'/>
+                        <div className='row'>
+                            <div className='col-md-4'>
+                                <button className='btn btn-success' onClick={this.handleGetRulesClick.bind(this)}>GET RULES FROM QUERY BUILDER</button>
+                            </div>
+                            <div className='col-md-4'>
+                                <button className='btn btn-success' onClick={this.handleSetRulesClick.bind(this)}>SET RULES FROM REACT</button>
+                            </div>
+                        </div>
+                        <pre>
+                            Component state:
+                            {JSON.stringify(this.state.rules, undefined, 2)}
+                        </pre>
+                    </div>
+                );
+            }
+        };
+        ReactDOM.render(React.createElement(QueryBuilderWrapper), document.getElementById('queryBuilder'));
+    </script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <!--
+    This HTML file is a template.
+    If you open it directly in the browser, you will see an empty page.
+
+    You can add webfonts, meta tags, or analytics to this file.
+    The build step will place the bundled scripts into the <body> tag.
+
+    To begin the development, run `npm start`.
+    To create a production bundle, use `npm run build`.
     -->
-  </body>
+</body>
+
 </html>
