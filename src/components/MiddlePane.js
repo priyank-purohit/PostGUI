@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import '../styles/MiddlePane.css';
 import '../styles/QueryBuilder.css';
-import $ from 'jquery';
+import QueryBuilderWrapper from '../components/QueryBuilder.js';
+
+import ReactDOM from 'react-dom';
 
 var data = require('../data/data.json');
 
@@ -12,7 +14,8 @@ class MiddlePane extends Component {
 				<div className="MiddlePaneInner">
 					<h2>{this.props.tag}</h2>
 					<hr color="grey"/>
-					<div id="queryBuilder" className="queryBuilder"></div>
+					<div id="queryBuilder" ref="queryBuilder" className="queryBuilder"></div>
+					<QueryBuilderWrapper />
 				</div>
 			</div>
 		);
@@ -20,3 +23,4 @@ class MiddlePane extends Component {
 }
 
 export default MiddlePane;
+
