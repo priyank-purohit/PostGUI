@@ -3,10 +3,6 @@ import '../styles/MiddlePane.css';
 import '../styles/QueryBuilder.css';
 import QueryBuilderWrapper from '../components/QueryBuilder.js';
 
-import ReactDOM from 'react-dom';
-
-var data = require('../data/data.json');
-
 class MiddlePane extends Component {
 	render() {
 		return (
