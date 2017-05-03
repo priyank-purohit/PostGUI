@@ -19,6 +19,7 @@ class LeftPaneDbSchema extends Component {
 		if (this.state[buttonClicked]) {
 			this.setState({[buttonClicked] : null});
 			this.props.changeTargetTable(lib.getFromConfig("noTableMsg"));
+			this.props.changeTargetTableColumns([1,2,3,4]);
 		}
 		else {
 			// before showing any table's columns, hide any other open tables
@@ -75,6 +76,7 @@ class LeftPaneDbSchema extends Component {
 		}
 		this.setState({
 			[table]: columns });
+		this.props.changeTargetTableColumns(columns);
 	}
 
 	// Makes a GET call to '/' to retrieve the db schema from PostgREST

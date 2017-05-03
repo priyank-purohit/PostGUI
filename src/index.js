@@ -15,7 +15,8 @@ export default class Layout extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			targetTable: lib.getFromConfig("noTableMsg")
+			targetTable: lib.getFromConfig("noTableMsg"),
+			targetTableColumns: []
 		};
 	}
 
@@ -23,12 +24,16 @@ export default class Layout extends React.Component {
 		this.setState({targetTable: newTable});
 	}
 
+	changeTargetTableColumns(newTableColumns) {
+		this.setState({targetTableColumns: newTableColumns});
+	}
+
 	render() {
 		return (
 			<div>
 				<Navigation />
-				<LeftPane changeTargetTable={this.changeTargetTable.bind(this)} />
-				<MiddlePane table={this.state.targetTable} />
+				<LeftPane changeTargetTable={this.changeTargetTable.bind(this)} changeTargetTableColumns={this.changeTargetTableColumns.bind(this)} />
+				<MiddlePane table={this.state.targetTable} columns={this.state.targetTableColumns} />
 				<HistoryPane />
 			</div>
 		);

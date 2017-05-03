@@ -9,6 +9,7 @@ class MiddlePane extends Component {
 			<div className="MiddlePane" id="middlePane">
 				<div className="MiddlePaneInner">
 					<h2>{this.props.table}</h2>
+					<p>{this.props.columns.join(', ')}</p>
 					<hr color="grey"/>
 					<div id="queryBuilder" ref="queryBuilder" className="queryBuilder"></div>
 					<QueryBuilderWrapper />
