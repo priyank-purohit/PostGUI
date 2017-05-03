@@ -48,7 +48,7 @@ exports.getQBRules = function() {
 
 exports.getQBFilters = function(table, columns) {
 	if (columns.length <= 0) {
-		return [{id: 'error', label: 'Error', type: 'string'}];
+		return [{id: 'error', label: 'ERROR: select a view...', type: 'string'}];
 	}
 
 	let plain_strings_query_builder = [];
