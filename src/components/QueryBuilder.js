@@ -63,11 +63,15 @@ export default class QueryBuilderWrapper extends React.Component {
         this.setState({ rules: newRules });
     }
 
+    handleSubmitClick() {
+        window.alert("test");
+    }
+
     render() {
         return (
             <div>
                 <div id='query-builder' ref='queryBuilder'/>
-                <button id="submit" className="submitButton btn-primary">Submit</button>
+                <button onClick={this.handleSubmitClick.bind(this)} id="submit" className="submitButton btn-primary">Submit</button>
                 {/*<div className='row'>
                     <div className='col-md-4'>
                         <button className='btn btn-success' onClick={this.handleGetRulesClick.bind(this)}>GET RULES FROM QUERY BUILDER</button>
