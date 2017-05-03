@@ -23,16 +23,14 @@ export default class QueryBuilderWrapper extends React.Component {
         window.$(this.refs.queryBuilder).queryBuilder('destroy');
     }
 
-    shouldComponentUpdate() {
-        return true;
-    }
-
+    // Creates the QB on first render with default table (error msg for now)
     initializeQueryBuilder(element, newRules) {
-        const filters = lib.getQBFilters(this.state.table, this.state.columns);
+        const filters = lib.getQBFilters("", []);
         const rules = newRules ? newRules : defaultRules;
         window.$(element).queryBuilder({ filters, rules });
     }
 
+    // Called when new props are received by the QB component
     componentWillReceiveProps(newProps) {
         this.setState({table: newProps.table, columns: newProps.columns});
         if (newProps.table && newProps.columns) {
@@ -41,6 +39,7 @@ export default class QueryBuilderWrapper extends React.Component {
         }
     }
 
+    // Destroys the old one, and creates a new QB based on the selected view's attributes
     rebuildQueryBuilder(element, table, columns, newRules) {
         window.$(this.refs.queryBuilder).queryBuilder('destroy');
 
@@ -50,7 +49,7 @@ export default class QueryBuilderWrapper extends React.Component {
         window.$(element).queryBuilder({ filters, rules });
     }
 
-    // get data from jQuery Query Builder and pass to the react component
+    // get data from QB and pass it as react component state
     handleGetRulesClick() {
         const rules = window.$(this.refs.queryBuilder).queryBuilder('getRules');
         this.setState({ rules: rules });
@@ -60,31 +59,26 @@ export default class QueryBuilderWrapper extends React.Component {
     // reinitialize jQuery Query Builder based on react state
     handleSetRulesClick() {
         const newRules = {...defaultRules };
-        newRules.rules[0].value += 10;
         window.$(this.refs.queryBuilder).queryBuilder('setRules', newRules);
         this.setState({ rules: newRules });
-    }
-
-    handleSetFiltersClick() {
-        // TO DO: Write a method based on jQuery-QB docs that changes the QB's filters
     }
 
     render() {
         return (
             <div>
                 <div id='query-builder' ref='queryBuilder'/>
-                <div className='row'>
+                {/*<div className='row'>
                     <div className='col-md-4'>
                         <button className='btn btn-success' onClick={this.handleGetRulesClick.bind(this)}>GET RULES FROM QUERY BUILDER</button>
                     </div>
                     <div className='col-md-4'>
                         <button className='btn btn-success' onClick={this.handleSetRulesClick.bind(this)}>SET RULES FROM REACT</button>
                     </div>
-                </div>
-                <pre>
+                </div>*/}
+                {/*<pre>
                     Component state:
                     {JSON.stringify(this.state.rules, undefined, 2)}
-                </pre>
+                </pre>*/}
             </div>
         );
     }
