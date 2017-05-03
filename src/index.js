@@ -15,20 +15,20 @@ export default class Layout extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			targetTag: lib.getFromConfig("noTableMsg")
+			targetTable: lib.getFromConfig("noTableMsg")
 		};
 	}
 
-	changeTargetTag(newTag) {
-		this.setState({targetTag: newTag});
+	changetargetTable(newTable) {
+		this.setState({targetTable: newTable});
 	}
 
 	render() {
 		return (
 			<div>
 				<Navigation />
-				<LeftPane changeTargetTag={this.changeTargetTag.bind(this)} />
-				<MiddlePane tag={this.state.targetTag}/>
+				<LeftPane changetargetTable={this.changetargetTable.bind(this)} />
+				<MiddlePane table={this.state.targetTable} />
 				<HistoryPane />
 			</div>
 		);
