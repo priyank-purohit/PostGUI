@@ -4,12 +4,6 @@ let lib = require('../utils/library.js');
 
 const defaultRules = lib.getQBRules();
 
-function initializeQueryBuilder(element, newRules) {
-    const filters = lib.getQBFilters();
-    const rules = newRules ? newRules : defaultRules;
-    window.$(element).queryBuilder({ filters, rules });
-}
-
 export default class QueryBuilderWrapper extends React.Component {
     constructor(props) {
         super(props);
@@ -17,29 +11,43 @@ export default class QueryBuilderWrapper extends React.Component {
             rules: {}
         };
     }
+
+    initializeQueryBuilder(element, newRules) {
+        const filters = lib.getQBFilters();
+        const rules = newRules ? newRules : defaultRules;
+        window.$(element).queryBuilder({ filters, rules });
+    }
+
     componentDidMount() {
         const element = this.refs.queryBuilder;
-        initializeQueryBuilder(element);
+        this.initializeQueryBuilder(element);
     }
 
     componentWillUnmount() {
         window.$(this.refs.queryBuilder).queryBuilder('destroy');
     }
+
     shouldComponentUpdate() {
-            return false;
-        }
-        // get data from jQuery Query Builder and pass to the react component
+        return false;
+    }
+
+    // get data from jQuery Query Builder and pass to the react component
     handleGetRulesClick() {
-            const rules = window.$(this.refs.queryBuilder).queryBuilder('getRules');
-            this.setState({ rules: rules });
-            this.forceUpdate();
-        }
-        // reinitialize jQuery Query Builder based on react state
+        const rules = window.$(this.refs.queryBuilder).queryBuilder('getRules');
+        this.setState({ rules: rules });
+        this.forceUpdate();
+    }
+
+    // reinitialize jQuery Query Builder based on react state
     handleSetRulesClick() {
         const newRules = {...defaultRules };
         newRules.rules[0].value += 10;
         window.$(this.refs.queryBuilder).queryBuilder('setRules', newRules);
         this.setState({ rules: newRules });
+    }
+
+    handleSetFiltersClick() {
+        // TO DO: Write a method based on jQuery-QB docs that changes the QB's filters
     }
 
     render() {
