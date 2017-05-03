@@ -19,7 +19,7 @@ export default class Layout extends React.Component {
 		};
 	}
 
-	changetargetTable(newTable) {
+	changeTargetTable(newTable) {
 		this.setState({targetTable: newTable});
 	}
 
@@ -27,7 +27,7 @@ export default class Layout extends React.Component {
 		return (
 			<div>
 				<Navigation />
-				<LeftPane changetargetTable={this.changetargetTable.bind(this)} />
+				<LeftPane changeTargetTable={this.changeTargetTable.bind(this)} />
 				<MiddlePane table={this.state.targetTable} />
 				<HistoryPane />
 			</div>
