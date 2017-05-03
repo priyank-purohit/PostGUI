@@ -8,14 +8,10 @@ export default class QueryBuilderWrapper extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            rules: {}
+            rules: {},
+            table: this.props.table,
+            columns: this.props.columns
         };
-    }
-
-    initializeQueryBuilder(element, newRules) {
-        const filters = lib.getQBFilters();
-        const rules = newRules ? newRules : defaultRules;
-        window.$(element).queryBuilder({ filters, rules });
     }
 
     componentDidMount() {
@@ -28,7 +24,30 @@ export default class QueryBuilderWrapper extends React.Component {
     }
 
     shouldComponentUpdate() {
-        return false;
+        return true;
+    }
+
+    initializeQueryBuilder(element, newRules) {
+        const filters = lib.getQBFilters(this.state.table, this.state.columns);
+        const rules = newRules ? newRules : defaultRules;
+        window.$(element).queryBuilder({ filters, rules });
+    }
+
+    componentWillReceiveProps(newProps) {
+        this.setState({table: newProps.table, columns: newProps.columns});
+        if (newProps.table && newProps.columns) {
+            const element = this.refs.queryBuilder;
+            this.rebuildQueryBuilder(element, newProps.table, newProps.columns);
+        }
+    }
+
+    rebuildQueryBuilder(element, table, columns, newRules) {
+        window.$(this.refs.queryBuilder).queryBuilder('destroy');
+
+        const rules = newRules ? newRules : defaultRules;
+        const filters = lib.getQBFilters(table, columns);
+        
+        window.$(element).queryBuilder({ filters, rules });
     }
 
     // get data from jQuery Query Builder and pass to the react component

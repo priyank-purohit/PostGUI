@@ -47,29 +47,14 @@ exports.getQBRules = function() {
 }
 
 exports.getQBFilters = function(table, columns) {
-	return [{
-		id: 'column1',
-		label: 'Column 1',
-		type: 'string'
-	},
-	{
-		id: 'column2',
-		label: 'Column 2',
-		type: 'string'
-	},
-	{
-		id: 'column3',
-		label: 'Column 3',
-		type: 'string'
-	},
-	{
-		id: 'column4',
-		label: 'Column 4',
-		type: 'string'
-	},
-	{
-		id: 'column5',
-		label: 'Column 5',
-		type: 'string'
-	}];
+	if (columns.length <= 0) {
+		return [{id: 'error', label: 'Error', type: 'string'}];
+	}
+
+	let plain_strings_query_builder = [];
+	for (let i = 0; i < columns.length; i++) {
+		console.log("Col = " + columns[i]);
+		plain_strings_query_builder.push({id: columns[i], label: columns[i], type: 'string'});
+	}
+	return plain_strings_query_builder;
 }
