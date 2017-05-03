@@ -2,7 +2,8 @@
 	text-align: left;
 	float: left;
 	width: 75%;
-	background: #eee;
+	height: 100vh;
+	background: #D3D3D3;
 }
 
 .MiddlePaneInner {
@@ -14,4 +15,9 @@
 }
 
 .leDivs {
+}
+
+.queryBuilder {
+	width: 80%;
+	background: #D3D3D3;
 }
