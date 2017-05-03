@@ -15,12 +15,12 @@ class MiddlePane extends Component {
 	
 	componentDidMount() {
 		var props = {table: this.state.table, columns: this.state.columns};
-		ReactDOM.render(React.createElement(QueryBuilderWrapper, props), document.getElementById('qb'));
+		ReactDOM.render(React.createElement(QueryBuilderWrapper, props), document.getElementById('queryBuilder'));
 	}
 	
 	updateQueryBuilder(table, columns) {
 		var props = {table: table, columns: columns};
-		ReactDOM.render(React.createElement(QueryBuilderWrapper, props), document.getElementById('qb'));
+		ReactDOM.render(React.createElement(QueryBuilderWrapper, props), document.getElementById('queryBuilder'));
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -34,9 +34,12 @@ class MiddlePane extends Component {
 		return (
 			<div className="MiddlePane" id="middlePane">
 				<div className="MiddlePaneInner">
-					<h2>{this.state.table}</h2>
+					<div className="horizontalDiv">
+						<h2 className="viewName">{this.state.table}</h2>
+						<button id="submit" className="submitButton">Submit</button>
+					</div>
 					<hr color="grey"/>
-					<div id="qb" className="queryBuilder"></div>
+					<div id="queryBuilder" className="queryBuilder"></div>
 				</div>
 			</div>
 		);

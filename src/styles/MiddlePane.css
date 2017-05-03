@@ -21,3 +21,21 @@
 	width: 80%;
 	background: #D3D3D3;
 }
+
+.horizontalDiv {
+	width: 100%;
+	display: inline-block;
+}
+
+.submitButton {
+	float: right;
+	width: 15%;
+	vertical-align: middle;
+	margin-top: 20px;
+	padding: 5px;
+}
+
+.viewName {
+	width: 80%;
+	float: left;
+}
