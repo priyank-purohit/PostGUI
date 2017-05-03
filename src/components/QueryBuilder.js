@@ -64,7 +64,7 @@ export default class QueryBuilderWrapper extends React.Component {
     }
 
     handleSubmitClick() {
-        window.alert("test");
+        // TO DO
     }
 
     render() {
