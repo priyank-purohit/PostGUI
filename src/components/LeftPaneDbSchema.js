@@ -11,20 +11,21 @@ class LeftPaneDbSchema extends Component {
 
 	handleClick(e) {
 		var buttonClicked = e.target.id;
-		
+
 		//Can use the below to propogate table change back to index.js
-		this.props.changeTargetTag(buttonClicked);
+		this.props.changeTargetTable(buttonClicked);
 
 		// If the columns are already known and displayed, then hide them
 		if (this.state[buttonClicked]) {
-			this.setState({[buttonClicked] : null});
-			this.props.changeTargetTag(lib.getFromConfig("noTableMsg"));
-		}
-		else {
+			this.setState({
+				[buttonClicked]: null });
+			this.props.changeTargetTable(lib.getFromConfig("noTableMsg"));
+			this.props.changeTargetTableColumns([]);
+		} else {
 			// before showing any table's columns, hide any other open tables
 			for (let i = 0; i < this.state.tables.length; i++) {
-				console.log(i);
-				this.setState({[this.state.tables[i]] : null})
+				this.setState({
+					[this.state.tables[i]]: null })
 			}
 			this.fetchTableColumns(buttonClicked);
 		}
@@ -75,7 +76,9 @@ class LeftPaneDbSchema extends Component {
 			columns.push(rawResp[i].name);
 		}
 		this.setState({
-			[table]: columns });
+			[table]: columns
+		});
+		this.props.changeTargetTableColumns(columns);
 	}
 
 	// Makes a GET call to '/' to retrieve the db schema from PostgREST

@@ -8,7 +8,8 @@ class MiddlePane extends Component {
 		return (
 			<div className="MiddlePane" id="middlePane">
 				<div className="MiddlePaneInner">
-					<h2>{this.props.tag}</h2>
+					<h2>{this.props.table}</h2>
+					<p>{this.props.columns.join(', ')}</p>
 					<hr color="grey"/>
 					<div id="queryBuilder" ref="queryBuilder" className="queryBuilder"></div>
 					<QueryBuilderWrapper />
@@ -19,4 +20,3 @@ class MiddlePane extends Component {
 }
 
 export default MiddlePane;
-

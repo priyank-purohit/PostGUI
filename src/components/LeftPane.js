@@ -6,7 +6,7 @@ class LeftPane extends Component {
 	render() {
 		return (
 			<div className="LeftPane">
-				<LeftPaneDbSchema changeTargetTag={this.props.changeTargetTag}/>
+				<LeftPaneDbSchema changeTargetTable={this.props.changeTargetTable} changeTargetTableColumns={this.props.changeTargetTableColumns} />
 			</div>
 		);
 	}
