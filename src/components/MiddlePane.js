@@ -20,4 +20,3 @@ class MiddlePane extends Component {
 }
 
 export default MiddlePane;
-

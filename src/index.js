@@ -21,11 +21,11 @@ export default class Layout extends React.Component {
 	}
 
 	changeTargetTable(newTable) {
-		this.setState({targetTable: newTable});
+		this.setState({ targetTable: newTable });
 	}
 
 	changeTargetTableColumns(newTableColumns) {
-		this.setState({targetTableColumns: newTableColumns});
+		this.setState({ targetTableColumns: newTableColumns });
 	}
 
 	render() {
