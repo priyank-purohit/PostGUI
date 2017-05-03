@@ -21,6 +21,13 @@ exports.getQBRules = function() {
 	return {
 		condition: 'AND',
 		rules: [{
+			empty: true
+		}]
+	};
+	// This return statment shows example for having default query
+	/*return {
+		condition: 'AND',
+		rules: [{
 			id: 'price',
 			operator: 'less',
 			value: 10.25
@@ -36,54 +43,33 @@ exports.getQBRules = function() {
 				value: 1
 			}]
 		}]
-	};
+	};*/
 }
 
-exports.getQBFilters = function() {
+exports.getQBFilters = function(table, columns) {
 	return [{
-		id: 'name',
-		label: 'Name',
+		id: 'column1',
+		label: 'Column 1',
 		type: 'string'
-	}, {
-		id: 'category',
-		label: 'Category',
-		type: 'integer',
-		input: 'select',
-		values: {
-			1: 'Books',
-			2: 'Movies',
-			3: 'Music',
-			4: 'Tools',
-			5: 'Goodies',
-			6: 'Clothes'
-		},
-		operators: ['equal', 'not_equal', 'in', 'not_in', 'is_null', 'is_not_null']
-	}, {
-		id: 'in_stock',
-		label: 'In stock',
-		type: 'integer',
-		input: 'radio',
-		values: {
-			1: 'Yes',
-			0: 'No'
-		},
-		operators: ['equal']
-	}, {
-		id: 'price',
-		label: 'Price',
-		type: 'double',
-		validation: {
-			min: 0,
-			step: 0.01
-		}
-	}, {
-		id: 'id',
-		label: 'Identifier',
-		type: 'string',
-		placeholder: '____-____-____',
-		operators: ['equal', 'not_equal'],
-		validation: {
-			format: /^.{4}-.{4}-.{4}$/
-		}
+	},
+	{
+		id: 'column2',
+		label: 'Column 2',
+		type: 'string'
+	},
+	{
+		id: 'column3',
+		label: 'Column 3',
+		type: 'string'
+	},
+	{
+		id: 'column4',
+		label: 'Column 4',
+		type: 'string'
+	},
+	{
+		id: 'column5',
+		label: 'Column 5',
+		type: 'string'
 	}];
 }
