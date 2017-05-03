@@ -30,11 +30,13 @@
 .submitButton {
 	float: right;
 	width: 15%;
-	vertical-align: middle;
-	margin-top: 20px;
+	margin-top: 25px;
 	padding: 5px;
-}
 
+	color: #FFF;
+	background-color: #286090;
+	border-color: #204D74;
+}
 .viewName {
 	width: 80%;
 	float: left;
