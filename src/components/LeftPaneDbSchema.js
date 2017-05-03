@@ -23,7 +23,6 @@ class LeftPaneDbSchema extends Component {
 		else {
 			// before showing any table's columns, hide any other open tables
 			for (let i = 0; i < this.state.tables.length; i++) {
-				console.log(i);
 				this.setState({[this.state.tables[i]] : null})
 			}
 			this.fetchTableColumns(buttonClicked);
