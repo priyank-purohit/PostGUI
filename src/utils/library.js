@@ -47,10 +47,8 @@ exports.getQBRules = function() {
 }
 
 exports.getQBFilters = function(table, columns) {
-	console.log("lib->getQBFilters table = " + table + " and columns = " + columns.join(', '));
-	
 	if (columns.length <= 0) {
-		return [{id: 'column1',label: 'Column 1',type: 'string'},{id: 'column2',label: 'Column 2',type: 'string'},{id: 'column3',label: 'Column 3',type: 'string'},{id: 'column4',label: 'Column 4',type: 'string'},{id: 'column5',label: 'Column 5',type: 'string'}];
+		return [{id: 'error', label: 'Error', type: 'string'}];
 	}
 
 	let plain_strings_query_builder = [];
@@ -58,6 +56,5 @@ exports.getQBFilters = function(table, columns) {
 		console.log("Col = " + columns[i]);
 		plain_strings_query_builder.push({id: columns[i], label: columns[i], type: 'string'});
 	}
-	console.log(JSON.stringify(plain_strings_query_builder));
 	return plain_strings_query_builder;
 }
