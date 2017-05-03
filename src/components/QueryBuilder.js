@@ -23,10 +23,6 @@ export default class QueryBuilderWrapper extends React.Component {
         window.$(this.refs.queryBuilder).queryBuilder('destroy');
     }
 
-    shouldComponentUpdate() {
-        return true;
-    }
-
     initializeQueryBuilder(element, newRules) {
         const filters = lib.getQBFilters(this.state.table, this.state.columns);
         const rules = newRules ? newRules : defaultRules;
@@ -63,10 +59,6 @@ export default class QueryBuilderWrapper extends React.Component {
         newRules.rules[0].value += 10;
         window.$(this.refs.queryBuilder).queryBuilder('setRules', newRules);
         this.setState({ rules: newRules });
-    }
-
-    handleSetFiltersClick() {
-        // TO DO: Write a method based on jQuery-QB docs that changes the QB's filters
     }
 
     render() {
