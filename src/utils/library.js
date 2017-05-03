@@ -53,7 +53,6 @@ exports.getQBFilters = function(table, columns) {
 
 	let plain_strings_query_builder = [];
 	for (let i = 0; i < columns.length; i++) {
-		console.log("Col = " + columns[i]);
 		plain_strings_query_builder.push({id: columns[i], label: columns[i], type: 'string'});
 	}
 	return plain_strings_query_builder;
