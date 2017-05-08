@@ -58,7 +58,7 @@ export default class QueryBuilderWrapper extends React.Component {
 
     // reinitialize jQuery Query Builder based on react state
     handleSetRulesClick() {
-        const newRules = {...defaultRules };
+        const newRules = lib.getQBRulesDELETEME();
         window.$(this.refs.queryBuilder).queryBuilder('setRules', newRules);
         this.setState({ rules: newRules });
     }
@@ -72,18 +72,18 @@ export default class QueryBuilderWrapper extends React.Component {
             <div>
                 <div id='query-builder' ref='queryBuilder'/>
                 <button onClick={this.handleSubmitClick.bind(this)} id="submit" className="submitButton btn-primary">Submit</button>
-                {/*<div className='row'>
+                <div className='row'>
                     <div className='col-md-4'>
                         <button className='btn btn-success' onClick={this.handleGetRulesClick.bind(this)}>GET RULES FROM QUERY BUILDER</button>
                     </div>
                     <div className='col-md-4'>
                         <button className='btn btn-success' onClick={this.handleSetRulesClick.bind(this)}>SET RULES FROM REACT</button>
                     </div>
-                </div>*/}
-                {/*<pre>
+                </div>
+                <pre>
                     Component state:
                     {JSON.stringify(this.state.rules, undefined, 2)}
-                </pre>*/}
+                </pre>
             </div>
         );
     }

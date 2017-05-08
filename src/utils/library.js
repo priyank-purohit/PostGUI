@@ -26,24 +26,78 @@ exports.getQBRules = function() {
 	};
 	// This return statment shows example for having default query
 	/*return {
-		condition: 'AND',
-		rules: [{
-			id: 'price',
-			operator: 'less',
-			value: 10.25
-		}, {
-			condition: 'OR',
-			rules: [{
-				id: 'category',
-				operator: 'equal',
-				value: 2
-			}, {
-				id: 'category',
-				operator: 'equal',
-				value: 1
-			}]
-		}]
+	  "condition": "AND",
+	  "rules": [
+	    {
+	      "id": "feature_id",
+	      "field": "feature_id",
+	      "type": "string",
+	      "input": "text",
+	      "operator": "equal",
+	      "value": "1"
+	    },
+	    {
+	      "condition": "OR",
+	      "rules": [
+	        {
+	          "id": "feature_type",
+	          "field": "feature_type",
+	          "type": "string",
+	          "input": "text",
+	          "operator": "equal",
+	          "value": "1"
+	        },
+	        {
+	          "id": "feature_type",
+	          "field": "feature_type",
+	          "type": "string",
+	          "input": "text",
+	          "operator": "equal",
+	          "value": "2"
+	        }
+	      ]
+	    }
+	  ],
+	  "valid": true
 	};*/
+}
+
+exports.getQBRulesDELETEME = function() {
+	return {
+	  "condition": "AND",
+	  "rules": [
+	    {
+	      "id": "feature_id",
+	      "field": "feature_id",
+	      "type": "string",
+	      "input": "text",
+	      "operator": "equal",
+	      "value": "1"
+	    },
+	    {
+	      "condition": "OR",
+	      "rules": [
+	        {
+	          "id": "feature_type",
+	          "field": "feature_type",
+	          "type": "string",
+	          "input": "text",
+	          "operator": "equal",
+	          "value": "1"
+	        },
+	        {
+	          "id": "feature_type",
+	          "field": "feature_type",
+	          "type": "string",
+	          "input": "text",
+	          "operator": "equal",
+	          "value": "2"
+	        }
+	      ]
+	    }
+	  ],
+	  "valid": true
+	};
 }
 
 exports.getQBFilters = function(table, columns) {
