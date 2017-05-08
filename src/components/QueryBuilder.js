@@ -58,13 +58,15 @@ export default class QueryBuilderWrapper extends React.Component {
 
     // reinitialize jQuery Query Builder based on react state
     handleSetRulesClick() {
+        // To Do: get rid of this...
         const newRules = lib.getQBRulesDELETEME();
-        window.$(this.refs.queryBuilder).queryBuilder('setRules', newRules);
         this.setState({ rules: newRules });
+        window.$(this.refs.queryBuilder).queryBuilder('setRules', newRules);
     }
 
     handleSubmitClick() {
-        // TO DO
+        let rules = window.$(this.refs.queryBuilder).queryBuilder('getSQL');
+        window.alert(JSON.stringify(rules));
     }
 
     render() {
