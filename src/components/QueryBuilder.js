@@ -1,4 +1,5 @@
 import React from 'react';
+import DataTable from './DataTable';
 
 let lib = require('../utils/library.js');
 
@@ -10,7 +11,28 @@ export default class QueryBuilderWrapper extends React.Component {
         this.state = {
             rules: {},
             table: this.props.table,
-            columns: this.props.columns
+            columns: this.props.columns,
+            response: [{
+                "userId": 1,
+                "id": 1,
+                "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+                "body": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
+            }, {
+                "userId": 1,
+                "id": 2,
+                "title": "qui est esse",
+                "body": "est rerum tempore vitae\nsequi sint nihil reprehenderit dolor beatae ea dolores neque\nfugiat blanditiis voluptate porro vel nihil molestiae ut reiciendis\nqui aperiam non debitis possimus qui neque nisi nulla"
+            }, {
+                "userId": 1,
+                "id": 3,
+                "title": "ea molestias quasi exercitationem repellat qui ipsa sit aut",
+                "body": "et iusto sed quo iure\nvoluptatem occaecati omnis eligendi aut ad\nvoluptatem doloribus vel accusantium quis pariatur\nmolestiae porro eius odio et labore et velit aut"
+            }, {
+                "userId": 1,
+                "id": 4,
+                "title": "eum et est occaecati",
+                "body": "ullam et saepe reiciendis voluptatem adipisci\nsit amet autem assumenda provident rerum culpa\nquis hic commodi nesciunt rem tenetur doloremque ipsam iure\nquis sunt voluptatem rerum illo velit"
+            }]
         };
     }
 
@@ -32,7 +54,7 @@ export default class QueryBuilderWrapper extends React.Component {
 
     // Called when new props are received by the QB component
     componentWillReceiveProps(newProps) {
-        this.setState({table: newProps.table, columns: newProps.columns});
+        this.setState({ table: newProps.table, columns: newProps.columns });
         if (newProps.table && newProps.columns) {
             const element = this.refs.queryBuilder;
             this.rebuildQueryBuilder(element, newProps.table, newProps.columns);
@@ -45,7 +67,7 @@ export default class QueryBuilderWrapper extends React.Component {
 
         const rules = newRules ? newRules : defaultRules;
         const filters = lib.getQBFilters(table, columns);
-        
+
         window.$(element).queryBuilder({ filters, rules });
     }
 
@@ -84,6 +106,8 @@ export default class QueryBuilderWrapper extends React.Component {
                     Component state:
                     {JSON.stringify(this.state.rules, undefined, 2)}
                 </pre>*/}
+
+                <DataTable response={this.state.response} />
             </div>
         );
     }
