@@ -108,7 +108,7 @@ exports.getQBFilters = function(table, columns) {
 
 exports.translateOperatorToPostgrest = function(operator) {
 	let dict = [
-		['equals', 'eq'],
+		['equal', 'eq'],
 		['not_equal', 'neq'],
 		['greater', 'gt'],
 		['less', 'lt'],
