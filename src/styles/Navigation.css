@@ -21,8 +21,14 @@
 	font-weight: bold;
 }
 
+.leftPaneTitle {
+	float: left;
+}
+
 .logoAndTitle {
 	display: inline-block;
+	margin: 0px;
+	padding: 0px;
 }
 
 .leftPaneLogo {
@@ -31,8 +37,14 @@
 	width: 75px;
 	float: left;
 	vertical-align: middle;
+	margin-left: -40px;
 }
 
-.leftPaneTitle {
-	float: left;
+@keyframes leftPane-logo-spin {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
 }
