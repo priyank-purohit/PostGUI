@@ -13,6 +13,26 @@
     width: 80%;
     max-width: 90%;
     word-wrap: break-word;
+    background: none;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+}
+
+.tablesButtons:hover {
+    background: grey;
+}
+
+.columnsButtons {
+    margin: 5px;
+    padding: 10px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    width: 80%;
+    max-width: 90%;
+    word-wrap: break-word;
+    background: none;
+    border: none;
 }
 
 .indent {

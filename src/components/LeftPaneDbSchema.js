@@ -40,7 +40,7 @@ class LeftPaneDbSchema extends Component {
 			for (let i = 0; i < columns.length; i++) {
 				ret.push(
 					<div key={i}>
-					<button key={i} id={columns[i]} className="tablesButtons indent">{columns[i]}</button>
+					<button key={i} id={columns[i]} className="columnsButtons">{columns[i]}</button>
 				</div>
 				);
 			}
