@@ -32,8 +32,8 @@ class MiddlePane extends Component {
 
 	render() {
 		return (
-			<div className="MiddlePane" id="middlePane">
-				<div className="MiddlePaneInner">
+			<div className="middlePane" id="middlePane">
+				<div className="middlePaneInner">
 					<h2>{this.state.table}</h2>
 					<hr color="grey"/>
 					<div id="queryBuilder" className="queryBuilder"></div>

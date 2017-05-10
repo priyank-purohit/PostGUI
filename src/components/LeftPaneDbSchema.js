@@ -15,16 +15,13 @@ class LeftPaneDbSchema extends Component {
 		//Can use the below to propogate table change back to index.js
 		this.props.changeTargetTable(buttonClicked);
 
-
 		// If the columns are already known and displayed, then hide them
 		if (this.state[buttonClicked]) {
 			this.setState({
 				[buttonClicked]: null
 			});
 			this.props.changeTargetTable(lib.getFromConfig("noTableMsg"));
-
 			this.props.changeTargetTableColumns([]);
-
 		} else {
 			// before showing any table's columns, hide any other open tables
 			for (let i = 0; i < this.state.tables.length; i++) {

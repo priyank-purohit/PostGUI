@@ -26,8 +26,8 @@ class DataTable extends Component {
 		for (let i in this.state.data) {
 			let val = this.state.data[i];
 			for (let j in val) {
-				let sub_key = j;
-				keys.push(sub_key);
+				let subKey = j;
+				keys.push(subKey);
 			}
 		}
 

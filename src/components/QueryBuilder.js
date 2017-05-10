@@ -167,6 +167,7 @@ export default class QueryBuilderWrapper extends React.Component {
     // When user presses the submit button, makes the APi call
     handleSubmitClick() {
         let rules = window.$(this.refs.queryBuilder).queryBuilder('getRules');
+        this.processRules(rules);
     }
 
     render() {

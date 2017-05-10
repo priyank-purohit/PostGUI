@@ -9,9 +9,9 @@ class Navigation extends Component {
 		return (
 			<div className="navigation">
 				<div className="navigationElement titleElement">
-					<div className="LogoAndTitle">
-						<img src={logo} className="LeftPaneLogo" alt="logo" />
-						<h3 className="LeftPaneTitle">{lib.getFromConfig('title')}</h3>
+					<div className="logoAndTitle">
+						<img src={logo} className="leftPaneLogo" alt="logo" />
+						<h3 className="leftPaneTitle">{lib.getFromConfig('title')}</h3>
 					</div>
 				</div>
 				{/*<p className="navigationElement">Data Visualization</p>

@@ -1,4 +1,4 @@
-.HistoryPane {
+.historyPane {
 	text-align: center;
 	float: right;
 	width: 10%;
@@ -7,7 +7,7 @@
 	color: white;
 }
 
-.HistoryPaneInner {
+.historyPaneInner {
 	margin: 0px;
 	padding: 0px;
 	line-height: 0px;

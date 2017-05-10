@@ -21,18 +21,18 @@
 	font-weight: bold;
 }
 
-.LogoAndTitle {
+.logoAndTitle {
 	display: inline-block;
 }
 
-.LeftPaneLogo {
-	animation: LeftPane-logo-spin infinite 20s linear;
+.leftPaneLogo {
+	animation: leftPane-logo-spin infinite 20s linear;
 	height: 60px;
 	width: 75px;
 	float: left;
 	vertical-align: middle;
 }
 
-.LeftPaneTitle {
+.leftPaneTitle {
 	float: left;
 }

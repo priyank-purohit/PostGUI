@@ -1,4 +1,4 @@
-.LeftPane {
+.leftPane {
     text-align: center;
     float: left;
     width: 15%;
@@ -7,13 +7,13 @@
     color: white;
 }
 
-.LogoAndTitle {
+.logoAndTitle {
     display: inline-block;
     margin: 0px;
     padding: 0px;
 }
 
-.LeftPaneLogo {
+.leftPaneLogo {
     animation: LeftPane-logo-spin infinite 20s linear;
     height: 60px;
     width: 75px;
@@ -22,7 +22,7 @@
     margin-left: -40px;
 }
 
-.LeftPaneTitle {
+.leftPaneTitle {
     float: left;
 }
 
@@ -39,7 +39,7 @@
     width: 60%;
 }
 
-@keyframes LeftPane-logo-spin {
+@keyframes leftPane-logo-spin {
     from {
         transform: rotate(0deg);
     }

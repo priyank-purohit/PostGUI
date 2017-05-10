@@ -4,8 +4,8 @@ import '../styles/HistoryPane.css';
 class HistoryPane extends Component {
 	render() {
 		return (
-			<div className="HistoryPane">
-				<div className="HistoryPaneInner">
+			<div className="historyPane">
+				<div className="historyPaneInner">
 					<p>History</p>
 				</div>
 			</div>

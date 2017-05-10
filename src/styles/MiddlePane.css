@@ -1,4 +1,4 @@
-.MiddlePane {
+.middlePane {
 	text-align: left;
 	float: left;
 	width: 75%;
@@ -6,11 +6,11 @@
 	background: #D3D3D3;
 }
 
-.MiddlePaneInner {
+.middlePaneInner {
 	margin: 10px;
 }
 
-.MiddlePane-intro {
+.middlePane-intro {
 	font-size: large;
 }
 
