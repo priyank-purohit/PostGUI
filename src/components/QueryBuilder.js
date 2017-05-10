@@ -13,27 +13,7 @@ export default class QueryBuilderWrapper extends React.Component {
             rules: {},
             table: this.props.table,
             columns: this.props.columns,
-            response: [{
-                "userId": 1,
-                "id": 1,
-                "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
-                "body": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
-            }, {
-                "userId": 1,
-                "id": 2,
-                "title": "qui est esse",
-                "body": "est rerum tempore vitae\nsequi sint nihil reprehenderit dolor beatae ea dolores neque\nfugiat blanditiis voluptate porro vel nihil molestiae ut reiciendis\nqui aperiam non debitis possimus qui neque nisi nulla"
-            }, {
-                "userId": 1,
-                "id": 3,
-                "title": "ea molestias quasi exercitationem repellat qui ipsa sit aut",
-                "body": "et iusto sed quo iure\nvoluptatem occaecati omnis eligendi aut ad\nvoluptatem doloribus vel accusantium quis pariatur\nmolestiae porro eius odio et labore et velit aut"
-            }, {
-                "userId": 1,
-                "id": 4,
-                "title": "eum et est occaecati",
-                "body": "ullam et saepe reiciendis voluptatem adipisci\nsit amet autem assumenda provident rerum culpa\nquis hic commodi nesciunt rem tenetur doloremque ipsam iure\nquis sunt voluptatem rerum illo velit"
-            }]
+            response: []
         };
     }
 
@@ -82,7 +62,6 @@ export default class QueryBuilderWrapper extends React.Component {
         if (!this.isArray(rules)) {
             for (let key in rules) {
                 if (rules.hasOwnProperty(key)) {
-                    let val = rules[key];
                     if (key === "id") {
                         plainArray.push([rules['id'], rules['operator'], rules['value']]);
                     } else if (key === "rules") {
@@ -127,7 +106,7 @@ export default class QueryBuilderWrapper extends React.Component {
     buildURL(rules) {
         console.log(JSON.stringify(rules));
         let url = lib.getFromConfig("baseUrl") + "/" + this.state.table + "?";
-        for (let i = 0; i < rules.length; i = i + 3) {
+        for (let i = 0; i < rules.length; i += 3) {
             url += rules[i] + "=" + lib.translateOperatorToPostgrest(rules[i + 1]);
             if (rules[i + 2] != null) {
                 url += "." + rules[i + 2];
@@ -144,6 +123,10 @@ export default class QueryBuilderWrapper extends React.Component {
         axios.get(url, { params: {} })
             .then((response) => {
                 console.log("RESPONSE = " + JSON.stringify(response.data));
+                this.setState({
+                    response: response.data
+                });
+                this.forceUpdate();
             })
             .catch(function(error) {
                 console.log(error);

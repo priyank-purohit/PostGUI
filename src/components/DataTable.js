@@ -11,6 +11,15 @@ class DataTable extends Component {
 		};
 	}
 
+
+    // Called when new props are received by the QB component
+    componentWillReceiveProps(newProps) {
+        this.setState({ data: newProps.response });
+        if (newProps.response) {
+            this.extractColumns();
+        }
+    }
+
 	extractColumns() {
 		let keys = [];
 		for (let i in this.state.data) {
