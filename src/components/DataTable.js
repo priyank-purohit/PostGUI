@@ -12,13 +12,13 @@ class DataTable extends Component {
 	}
 
 
-    // Called when new props are received by the QB component
-    componentWillReceiveProps(newProps) {
-        this.setState({ data: newProps.response });
-        if (newProps.response) {
-            this.extractColumns();
-        }
-    }
+	// Called when new props are received by the QB component
+	componentWillReceiveProps(newProps) {
+		this.setState({ data: newProps.response });
+		if (newProps.response) {
+			this.extractColumns();
+		}
+	}
 
 	extractColumns() {
 		let keys = [];
@@ -42,19 +42,19 @@ class DataTable extends Component {
 	}
 
 	rowsGenerated() {
-        let cols = this.state.columns,  // [{key, label}]
-            data = this.state.data;
+		let cols = this.state.columns, // [{key, label}]
+			data = this.state.data;
 
-        return data.map(function(item) {
-            // handle the column data within each row
-            let cells = cols.map(function(colData, key) {
+		return data.map(function(item) {
+			// handle the column data within each row
+			let cells = cols.map(function(colData, key) {
 
-                // colData.key might be "firstName"
-                return <td key={key}>{item[colData]}</td>;
-            });
-            return <tr key={item.id}>{cells}</tr>;
-        });
-    }
+				// colData.key might be "firstName"
+				return <td key={key}>{item[colData]}</td>;
+			});
+			return <tr key={item.id}>{cells}</tr>;
+		});
+	}
 
 	render() {
 		return (

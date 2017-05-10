@@ -66,29 +66,12 @@ exports.getQBRulesDELETEME = function() {
 	return {
 		"condition": "AND",
 		"rules": [{
-			"id": "feature_id",
-			"field": "feature_id",
+			"id": "genome_index_id",
+			"field": "genome_index_id",
 			"type": "string",
 			"input": "text",
 			"operator": "equal",
 			"value": "1"
-		}, {
-			"condition": "OR",
-			"rules": [{
-				"id": "feature_type",
-				"field": "feature_type",
-				"type": "string",
-				"input": "text",
-				"operator": "equal",
-				"value": "1"
-			}, {
-				"id": "feature_type",
-				"field": "feature_type",
-				"type": "string",
-				"input": "text",
-				"operator": "equal",
-				"value": "2"
-			}]
 		}],
 		"valid": true
 	};
