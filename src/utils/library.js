@@ -13,10 +13,14 @@ exports.getFromConfig = function(key = "title") {
 	return config[key]
 }
 
+// Opens the specified URL in a different tab
 exports.visitPage = function(url = "http://www.google.ca") {
 	window.open(url, "_blank");
 }
 
+// Returns the initial query (i.e. pre-formatted default query for a table)
+// Convert this into a function that loads a default entry for ALL tables
+// If no rules are defined, it will return a blank default entry.
 exports.getQBRules = function() {
 	return {
 		condition: 'AND',
@@ -24,44 +28,9 @@ exports.getQBRules = function() {
 			empty: true
 		}]
 	};
-	// This return statment shows example for having default query
-	/*return {
-	  "condition": "AND",
-	  "rules": [
-	    {
-	      "id": "feature_id",
-	      "field": "feature_id",
-	      "type": "string",
-	      "input": "text",
-	      "operator": "equal",
-	      "value": "1"
-	    },
-	    {
-	      "condition": "OR",
-	      "rules": [
-	        {
-	          "id": "feature_type",
-	          "field": "feature_type",
-	          "type": "string",
-	          "input": "text",
-	          "operator": "equal",
-	          "value": "1"
-	        },
-	        {
-	          "id": "feature_type",
-	          "field": "feature_type",
-	          "type": "string",
-	          "input": "text",
-	          "operator": "equal",
-	          "value": "2"
-	        }
-	      ]
-	    }
-	  ],
-	  "valid": true
-	};*/
 }
 
+// TODO: DELETE THIS ***********************************************************
 exports.getQBRulesDELETEME = function() {
 	return {
 		"condition": "AND",
@@ -77,6 +46,7 @@ exports.getQBRulesDELETEME = function() {
 	};
 }
 
+// Returns a list of columns
 exports.getQBFilters = function(table, columns) {
 	if (columns.length <= 0) {
 		return [{ id: 'error', label: 'ERROR: select a view...', type: 'string' }];
@@ -89,6 +59,7 @@ exports.getQBFilters = function(table, columns) {
 	return plain_strings_query_builder;
 }
 
+// Accepts jQB operator, and returns PostgREST equivalent of it
 exports.translateOperatorToPostgrest = function(operator) {
 	let dict = [
 		['equal', 'eq'],
