@@ -20,6 +20,7 @@ class DataTable extends Component {
 		}
 	}
 
+	// Extracts columns from state.data and stores the list in state.columns for use in table head
 	extractColumns() {
 		let keys = [];
 		for (let i in this.state.data) {
@@ -37,10 +38,12 @@ class DataTable extends Component {
 		this.setState({ columns: keys });
 	}
 
+	// After mounting, extracts columns
 	componentDidMount() {
 		this.extractColumns();
 	}
 
+	// Generates the data rows
 	rowsGenerated() {
 		let cols = this.state.columns, // [{key, label}]
 			data = this.state.data;

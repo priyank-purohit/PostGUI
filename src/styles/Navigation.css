@@ -22,17 +22,17 @@
 }
 
 .LogoAndTitle {
-    display: inline-block;
+	display: inline-block;
 }
 
 .LeftPaneLogo {
-    animation: LeftPane-logo-spin infinite 20s linear;
-    height: 60px;
-    width: 75px;
-    float: left;
-    vertical-align: middle;
+	animation: LeftPane-logo-spin infinite 20s linear;
+	height: 60px;
+	width: 75px;
+	float: left;
+	vertical-align: middle;
 }
 
 .LeftPaneTitle {
-    float: left;
+	float: left;
 }

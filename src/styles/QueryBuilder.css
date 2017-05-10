@@ -57,7 +57,9 @@
   border-color: #4CAE4C;
 }
 
+
 /*AND OR SELECTOR*/
+
 .query-builder .btn-primary {
   color: #FFF;
   background-color: darkgrey;
@@ -168,7 +170,9 @@
   vertical-align: middle
 }
 
+
 /*Query Builder BACKGROUND*/
+
 .query-builder .rules-group-container {
   padding: 10px 10px 6px;
   border: 1px solid #999999;

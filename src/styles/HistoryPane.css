@@ -1,14 +1,14 @@
 .HistoryPane {
-    text-align: center;
-    float: right;
-    width: 10%;
-    background-color: #aaa;
-    height: 100vh;
-    color: white;
+	text-align: center;
+	float: right;
+	width: 10%;
+	background-color: #aaa;
+	height: 100vh;
+	color: white;
 }
 
 .HistoryPaneInner {
-    margin: 0px;
-    padding: 0px;
-    line-height: 0px;
+	margin: 0px;
+	padding: 0px;
+	line-height: 0px;
 }

@@ -52,11 +52,13 @@ export default class QueryBuilderWrapper extends React.Component {
         window.$(element).queryBuilder({ filters, rules });
     }
 
+    // Returns true if what is an array object
     isArray(what) {
         return Object.prototype.toString.call(what) === '[object Array]';
     }
 
-    // this whole method will be redone when OR and complex logic is possible...
+    // TODO: this whole method will be redone when OR and complex logic is possible...
+    // Retrieves the relevant info from the raw rules extracted from jQB
     extractRules(rules) {
         let plainArray = [];
         if (!this.isArray(rules)) {
@@ -77,6 +79,7 @@ export default class QueryBuilderWrapper extends React.Component {
         return plainArray;
     }
 
+    // Takes n dimentional array as input, and returns a 2D array...
     flatten(array, mutable) {
         var toString = Object.prototype.toString;
         var arrayTypeStr = '[object Array]';
@@ -103,8 +106,8 @@ export default class QueryBuilderWrapper extends React.Component {
         return result;
     }
 
+    // Based on the extracted rules, it builds a PostgREST compliant URL for API call
     buildURL(rules) {
-        console.log(JSON.stringify(rules));
         let url = lib.getFromConfig("baseUrl") + "/" + this.state.table + "?";
         for (let i = 0; i < rules.length; i += 3) {
             url += rules[i] + "=" + lib.translateOperatorToPostgrest(rules[i + 1]);
@@ -118,11 +121,10 @@ export default class QueryBuilderWrapper extends React.Component {
         return url;
     }
 
+    // Makes an API call to the PostgREST server specified in confic.json
     fetchOutput(url) {
-        console.log("Making HTTP request to get url = " + url);
         axios.get(url, { params: {} })
             .then((response) => {
-                console.log("RESPONSE = " + JSON.stringify(response.data));
                 this.setState({
                     response: response.data
                 });
@@ -133,6 +135,8 @@ export default class QueryBuilderWrapper extends React.Component {
             });
     }
 
+    // Processes the raw jQB rules output, extracts rules, keeps only the 
+    // relevant rules, and makes API call to get the requested information
     processRules(rules) {
         let extractedRules = this.extractRules(rules);
         let flattenedRules = this.flatten(extractedRules);
@@ -160,9 +164,9 @@ export default class QueryBuilderWrapper extends React.Component {
         window.$(this.refs.queryBuilder).queryBuilder('setRules', newRules);
     }
 
+    // When user presses the submit button, makes the APi call
     handleSubmitClick() {
         let rules = window.$(this.refs.queryBuilder).queryBuilder('getRules');
-        console.log(JSON.stringify(this.processRules(rules)));
     }
 
     render() {

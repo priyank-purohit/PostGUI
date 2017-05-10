@@ -8,23 +8,23 @@ class MiddlePane extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			table: this.props.table, 
+			table: this.props.table,
 			columns: []
 		};
 	}
-	
+
 	componentDidMount() {
-		var props = {table: this.state.table, columns: this.state.columns};
+		var props = { table: this.state.table, columns: this.state.columns };
 		ReactDOM.render(React.createElement(QueryBuilderWrapper, props), document.getElementById('queryBuilder'));
 	}
-	
+
 	updateQueryBuilder(table, columns) {
-		var props = {table: table, columns: columns};
+		var props = { table: table, columns: columns };
 		ReactDOM.render(React.createElement(QueryBuilderWrapper, props), document.getElementById('queryBuilder'));
 	}
 
 	componentWillReceiveProps(newProps) {
-		this.setState({table: newProps.table, columns: newProps.columns});
+		this.setState({ table: newProps.table, columns: newProps.columns });
 		if (newProps.table && newProps.columns) {
 			this.updateQueryBuilder(newProps.table, newProps.columns);
 		}

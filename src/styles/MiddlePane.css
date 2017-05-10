@@ -14,8 +14,7 @@
 	font-size: large;
 }
 
-.leDivs {
-}
+.leDivs {}
 
 .queryBuilder {
 	width: 80%;
@@ -32,11 +31,11 @@
 	width: 15%;
 	margin-top: 25px;
 	padding: 5px;
-
 	color: #FFF;
 	background-color: #286090;
 	border-color: #204D74;
 }
+
 .viewName {
 	width: 80%;
 	float: left;
