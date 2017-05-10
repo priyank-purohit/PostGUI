@@ -2,7 +2,7 @@
     text-align: center;
     float: left;
     width: 15%;
-    background-color: #555;
+    background-color: #aaa;
     height: 100vh;
     color: white;
 }
@@ -17,6 +17,7 @@
     border: none;
     text-align: left;
     cursor: pointer;
+    font-size: 1.05em;
 }
 
 .tablesButtons:hover {
