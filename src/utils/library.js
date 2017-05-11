@@ -35,6 +35,42 @@ exports.getQBRulesDELETEME = function() {
 	return {
 		"condition": "AND",
 		"rules": [{
+			"id": "description",
+			"field": "description",
+			"type": "string",
+			"input": "text",
+			"operator": "contains",
+			"value": "*hopz*"
+		}, {
+			"id": "description",
+			"field": "description",
+			"type": "string",
+			"input": "text",
+			"operator": "contains",
+			"value": "*effector*"
+		}, {
+			"id": "description",
+			"field": "description",
+			"type": "string",
+			"input": "text",
+			"operator": "contains",
+			"value": "*type*"
+		}, {
+			"id": "description",
+			"field": "description",
+			"type": "string",
+			"input": "text",
+			"operator": "contains",
+			"value": "*iii*"
+		}],
+		"valid": true
+	};
+}
+
+exports.getQBRulesDELETEMEOLD = function() {
+	return {
+		"condition": "AND",
+		"rules": [{
 			"id": "genome_index_id",
 			"field": "genome_index_id",
 			"type": "string",
@@ -54,7 +90,7 @@ exports.getQBFilters = function(table, columns) {
 
 	let plain_strings_query_builder = [];
 	for (let i = 0; i < columns.length; i++) {
-		plain_strings_query_builder.push({ id: columns[i], label: columns[i], type: 'string', operators: ['equal', 'not_equal', 'greater', 'less', 'greater_or_equal', 'less_or_equal', 'is_not_null', 'in', 'is_null'] });
+		plain_strings_query_builder.push({ id: columns[i], label: columns[i], type: 'string', operators: ['equal', 'not_equal', 'greater', 'less', 'greater_or_equal', 'less_or_equal', 'is_not_null', 'is_null', 'in', 'contains'] });
 	}
 	return plain_strings_query_builder;
 }
@@ -70,6 +106,7 @@ exports.translateOperatorToPostgrest = function(operator) {
 		['less_or_equal', 'lte'],
 		['is_not_null', 'not.is.null'],
 		['in', 'in'],
+		['contains', 'ilike'],
 		['is_null', 'is.null']
 	];
 

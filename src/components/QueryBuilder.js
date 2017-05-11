@@ -123,6 +123,7 @@ export default class QueryBuilderWrapper extends React.Component {
 
     // Makes an API call to the PostgREST server specified in confic.json
     fetchOutput(url) {
+        console.log("GET " + url);
         axios.get(url, { params: {} })
             .then((response) => {
                 this.setState({
