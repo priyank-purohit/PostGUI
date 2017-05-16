@@ -2,7 +2,7 @@
 	text-align: left;
 	float: left;
 	width: 75%;
-	height: 100vh;
+	min-height: 100vh;
 	background: #D3D3D3;
 }
 

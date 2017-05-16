@@ -53,7 +53,7 @@ class DataTable extends Component {
 			let cells = cols.map(function(colData, key) {
 
 				// colData.key might be "firstName"
-				return <td key={key}>{item[colData]}</td>;
+				return <td key={key} className="fontSize8">{item[colData]}</td>;
 			});
 			return <tr key={item.id}>{cells}</tr>;
 		});
@@ -66,7 +66,7 @@ class DataTable extends Component {
 					<tr key="head">
 					{
 						this.state.columns.map( function (columnTitle, key) {
-							return (<th key={key}>{columnTitle}</th>);
+							return (<th key={key} className="fontSize8">{columnTitle}</th>);
 						})
 					}
 					</tr>

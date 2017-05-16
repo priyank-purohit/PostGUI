@@ -3,7 +3,7 @@
     float: left;
     width: 15%;
     background-color: #aaa;
-    height: 100vh;
+    min-height: 100vh;
     color: white;
 }
 
@@ -34,9 +34,15 @@
     word-wrap: break-word;
     background: none;
     border: none;
+    text-align: left;
+    margin-left: 50px;
 }
 
 .indent {
     margin-left: 20%;
     width: 60%;
+}
+
+.fontSize8 {
+    font-size: 8pt;
 }
