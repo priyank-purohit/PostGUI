@@ -65,14 +65,15 @@ class LeftPaneDbSchema extends Component {
 	// Extract the names of db tables and update state
 	parseTables(rawResp = this.state.rawResp) {
 		let dbTables = [];
-		for (let i = 0; i < rawResp.length; i++) {
-			dbTables.push(rawResp[i].name);
+		for (let i in rawResp.definitions) {
+			dbTables.push(i);
 		}
 		this.setState({ tables: dbTables });
 	}
 
 	// Extract the names of db tables and update state
 	parseTableColumns(rawResp, table) {
+		console.log("json = " + rawResp + " table = " + table);
 		let columns = [];
 		for (let i = 0; i < rawResp.length; i++) {
 			columns.push(rawResp[i].name);
@@ -96,6 +97,7 @@ class LeftPaneDbSchema extends Component {
 
 	// Gets the columns of the specified table, uses the OPTIONS method
 	fetchTableColumns(table) {
+		console.log(table);
 		let url = lib.getFromConfig("baseUrl") + "/" + table;
 		axios.options(url, { params: {} })
 			.then((response) => {
