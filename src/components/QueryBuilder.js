@@ -57,18 +57,44 @@ export default class QueryBuilderWrapper extends React.Component {
         return Object.prototype.toString.call(what) === '[object Array]';
     }
 
+    recursiveRulesExtraction(condition, rules) {
+        console.log("RULES  length = " + rules.length);
+        let select = condition.toLowerCase() + "(";
+        for (let i = 0; i < rules.length; i++) {
+            // iterating over the first rules
+            if (rules[i]['condition'] === "OR" || rules[i]['condition'] === "AND") {
+                console.log("Recursing!");
+                if (i == (rules.length - 1)) {
+                    select += this.recursiveRulesExtraction(rules[i]['condition'], rules[i]['rules']);
+                } else {
+                    select += this.recursiveRulesExtraction(rules[i]['condition'], rules[i]['rules']) + ",";
+                }
+            } else {
+                console.log("ADDING....");
+                if (i == (rules.length - 1)) {
+                    select += rules[i]['id'] + "." + lib.translateOperatorToPostgrest(rules[i]['operator']) + "." + rules[i]['value'];
+                } else {
+                    select += rules[i]['id'] + "." + lib.translateOperatorToPostgrest(rules[i]['operator']) + "." + rules[i]['value'] + ",";
+                }
+            }
+        }
+        select += ")"
+        return select;
+    }
+
     // Based on the extracted rules, it builds a PostgREST compliant URL for API call
     buildURL(rules) {
         let url = lib.getFromConfig("baseUrl") + "/" + this.state.table + "?";
-        for (let i = 0; i < rules.length; i += 3) {
-            url += rules[i] + "=" + lib.translateOperatorToPostgrest(rules[i + 1]);
-            if (rules[i + 2] != null) {
-                url += "." + rules[i + 2];
-            }
-            if (i !== (rules.length - 3)) {
-                url += "&";
-            }
+
+        // if it is valid, proceed
+        if (rules && rules['valid'] && rules['valid'] === true) {
+            let firstCondition = rules['condition'];
+            let firstRules = rules['rules'];
+            let conds = this.recursiveRulesExtraction(firstCondition + "=", firstRules);
+            console.log("CONDITIONS = " + conds);
+            url += conds;
         }
+
         return url;
     }
 
@@ -90,7 +116,7 @@ export default class QueryBuilderWrapper extends React.Component {
     // Processes the raw jQB rules output, extracts rules, keeps only the 
     // relevant rules, and makes API call to get the requested information
     processRules(rules) {
-        console.log("Extracted rules = " + JSON.stringify(extractedRules));
+        //console.log("Rules = " + JSON.stringify(rules));
         let url = this.buildURL(rules);
 
         if (url !== null) {
