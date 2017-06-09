@@ -57,55 +57,6 @@ export default class QueryBuilderWrapper extends React.Component {
         return Object.prototype.toString.call(what) === '[object Array]';
     }
 
-    // TODO: this whole method will be redone when OR and complex logic is possible...
-    // Retrieves the relevant info from the raw rules extracted from jQB
-    extractRules(rules) {
-        let plainArray = [];
-        if (!this.isArray(rules)) {
-            for (let key in rules) {
-                if (rules.hasOwnProperty(key)) {
-                    if (key === "id") {
-                        plainArray.push([rules['id'], rules['operator'], rules['value']]);
-                    } else if (key === "rules") {
-                        plainArray.push(this.extractRules(rules[key]));
-                    }
-                }
-            }
-        } else {
-            for (let i = 0; i < rules.length; i++) {
-                plainArray.push(this.extractRules(rules[i]));
-            }
-        }
-        return plainArray;
-    }
-
-    // Takes n dimentional array as input, and returns a 2D array...
-    flatten(array, mutable) {
-        var toString = Object.prototype.toString;
-        var arrayTypeStr = '[object Array]';
-
-        var result = [];
-        var nodes = (mutable && array) || array.slice();
-        var node;
-
-        if (!array.length) {
-            return result;
-        }
-
-        node = nodes.pop();
-
-        do {
-            if (toString.call(node) === arrayTypeStr) {
-                nodes.push.apply(nodes, node);
-            } else {
-                result.push(node);
-            }
-        } while (nodes.length && (node = nodes.pop()) !== undefined);
-
-        result.reverse(); // we reverse result to restore the original order
-        return result;
-    }
-
     // Based on the extracted rules, it builds a PostgREST compliant URL for API call
     buildURL(rules) {
         let url = lib.getFromConfig("baseUrl") + "/" + this.state.table + "?";
@@ -139,10 +90,8 @@ export default class QueryBuilderWrapper extends React.Component {
     // Processes the raw jQB rules output, extracts rules, keeps only the 
     // relevant rules, and makes API call to get the requested information
     processRules(rules) {
-        let extractedRules = this.extractRules(rules);
         console.log("Extracted rules = " + JSON.stringify(extractedRules));
-        let flattenedRules = this.flatten(extractedRules);
-        let url = this.buildURL(flattenedRules);
+        let url = this.buildURL(rules);
 
         if (url !== null) {
             this.fetchOutput(url);
