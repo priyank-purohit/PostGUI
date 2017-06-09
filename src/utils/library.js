@@ -40,28 +40,62 @@ exports.getQBRulesDELETEME = function() {
 			"type": "string",
 			"input": "text",
 			"operator": "contains",
-			"value": "*hopz*"
+			"value": "5"
 		}, {
 			"id": "description",
 			"field": "description",
 			"type": "string",
 			"input": "text",
 			"operator": "contains",
-			"value": "*effector*"
+			"value": "6"
 		}, {
-			"id": "description",
-			"field": "description",
+			"condition": "OR",
+			"rules": [{
+				"id": "feature_type",
+				"field": "feature_type",
+				"type": "string",
+				"input": "text",
+				"operator": "equal",
+				"value": "1"
+			}, {
+				"id": "genome_name",
+				"field": "genome_name",
+				"type": "string",
+				"input": "text",
+				"operator": "equal",
+				"value": "2"
+			}, {
+				"id": "feature_id",
+				"field": "feature_id",
+				"type": "string",
+				"input": "text",
+				"operator": "equal",
+				"value": "3"
+			}, {
+				"condition": "AND",
+				"rules": [{
+					"id": "genome_id",
+					"field": "genome_id",
+					"type": "string",
+					"input": "text",
+					"operator": "equal",
+					"value": "7"
+				}, {
+					"id": "feature_end",
+					"field": "feature_end",
+					"type": "string",
+					"input": "text",
+					"operator": "equal",
+					"value": "8"
+				}]
+			}]
+		}, {
+			"id": "nuc_length",
+			"field": "nuc_length",
 			"type": "string",
 			"input": "text",
-			"operator": "contains",
-			"value": "*type*"
-		}, {
-			"id": "description",
-			"field": "description",
-			"type": "string",
-			"input": "text",
-			"operator": "contains",
-			"value": "*iii*"
+			"operator": "equal",
+			"value": "4"
 		}],
 		"valid": true
 	};

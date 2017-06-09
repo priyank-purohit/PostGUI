@@ -140,6 +140,7 @@ export default class QueryBuilderWrapper extends React.Component {
     // relevant rules, and makes API call to get the requested information
     processRules(rules) {
         let extractedRules = this.extractRules(rules);
+        console.log("Extracted rules = " + JSON.stringify(extractedRules));
         let flattenedRules = this.flatten(extractedRules);
         let url = this.buildURL(flattenedRules);
 
