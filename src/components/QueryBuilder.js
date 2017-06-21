@@ -84,9 +84,13 @@ export default class QueryBuilderWrapper extends React.Component {
 
     // Based on the extracted rules, it builds a PostgREST compliant URL for API call
     buildURL(rules) {
-        let url = lib.getFromConfig("baseUrl") + "/" + this.state.table + "?";
+        let url = lib.getFromConfig("baseUrl") + "/" + this.state.table;
 
         // if it is valid, proceed
+        if (rules && rules['valid'] && rules['valid'] === true) {
+            url += "?"
+        }
+
         if (rules && rules['valid'] && rules['valid'] === true) {
             let firstCondition = rules['condition'];
             let firstRules = rules['rules'];
