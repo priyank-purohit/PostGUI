@@ -13,6 +13,7 @@ export default class QueryBuilderWrapper extends React.Component {
             rules: {},
             table: this.props.table,
             columns: this.props.columns,
+            selectColumns: this.props.selectColumns,
             response: []
         };
     }
@@ -35,8 +36,9 @@ export default class QueryBuilderWrapper extends React.Component {
 
     // Called when new props are received by the QB component
     componentWillReceiveProps(newProps) {
-        this.setState({ table: newProps.table, columns: newProps.columns });
-        if (newProps.table && newProps.columns) {
+        this.setState({ table: newProps.table, columns: newProps.columns, selectColumns: newProps.selectColumns });
+        console.log(newProps.table + "==" + this.state.table + " = " + (newProps.table == this.state.table));
+        if (newProps.table && newProps.columns && (newProps.table != this.state.table || newProps.columns != this.state.columns)) {
             const element = this.refs.queryBuilder;
             this.rebuildQueryBuilder(element, newProps.table, newProps.columns);
         }
@@ -97,6 +99,12 @@ export default class QueryBuilderWrapper extends React.Component {
             let conds = this.recursiveRulesExtraction(firstCondition + "=", firstRules);
             console.log("CONDITIONS = " + conds);
             url += conds;
+
+            // Add SELECT columns... i.e. which columsn to retrieve
+            url += "&select=" + this.state.selectColumns;
+        } else {
+            // Add SELECT columns... but this time, only selected columns, NO FILTERS
+            url += "?select=" + this.state.selectColumns;
         }
 
         return url;
