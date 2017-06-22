@@ -17,11 +17,22 @@
     border: none;
     text-align: left;
     cursor: pointer;
-    font-size: 1.025em;
+    font-size: 1.6vh;
+    background-image: url("../resources/table.png");
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding-left: 35px;
+    background-position: 2%;
+    display: block;
 }
 
 .tablesButtons:hover {
     background: grey;
+    background-image: url("../resources/table.png");
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-position: 2.5%;
+    padding-left: 35px;
 }
 
 .columnsButtons {
@@ -36,7 +47,13 @@
     border: none;
     text-align: left;
     margin-left: 40px;
-    font-size: 0.9em;
+    font-size: 1.5vh;
+    background-image: url("../resources/eye.png");
+    background-repeat: no-repeat;
+    background-size: 20px;
+    background-position: left center;
+    padding-left: 35px;
+    background-position: 2%;
 }
 
 .indent {
