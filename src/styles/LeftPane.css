@@ -67,8 +67,10 @@
 
 .strikeOut {
     text-decoration: line-through;
+    background-image: url("../resources/eyeCrossedOut.png");
 }
 
 .notStrikeOut {
     text-decoration: none;
+    background-image: url("../resources/eye.png");
 }
