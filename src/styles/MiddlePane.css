@@ -1,7 +1,8 @@
 .middlePane {
 	text-align: left;
 	float: left;
-	width: 74%;
+	/*width: 74%; FOR WHEN HISTORY PANE IS VISIBLE*/
+	width: 84%;
 	min-height: 100vh;
 	background: #D3D3D3;
 }
@@ -19,6 +20,8 @@
 .queryBuilder {
 	width: 90%;
 	background: #D3D3D3;
+	position: relative;
+	z-index: 1000;
 }
 
 .horizontalDiv {

@@ -64,7 +64,7 @@ export default class Layout extends React.Component {
 				<MiddlePane table={this.state.targetTable}
 							columns={this.state.targetTableColumns}
 							selectColumns={this.state.selectTableColumns} />
-				<HistoryPane />
+				{/*<HistoryPane />*/}
 			</div>
 		);
 	}
