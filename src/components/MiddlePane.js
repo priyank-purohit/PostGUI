@@ -15,19 +15,19 @@ class MiddlePane extends Component {
 	}
 
 	componentDidMount() {
-		var props = { table: this.state.table, columns: this.state.columns };
+		var props = { table: this.state.table, columns: this.state.columns, selectColumns: this.state.selectColumns };
 		ReactDOM.render(React.createElement(QueryBuilderWrapper, props), document.getElementById('queryBuilder'));
 	}
 
-	updateQueryBuilder(table, columns) {
-		var props = { table: table, columns: columns };
+	updateQueryBuilder(table, columns, selectColumns) {
+		var props = { table: table, columns: columns, selectColumns: selectColumns };
 		ReactDOM.render(React.createElement(QueryBuilderWrapper, props), document.getElementById('queryBuilder'));
 	}
 
 	componentWillReceiveProps(newProps) {
-		this.setState({ table: newProps.table, columns: newProps.columns });
-		if (newProps.table && newProps.columns) {
-			this.updateQueryBuilder(newProps.table, newProps.columns);
+		this.setState({ table: newProps.table, columns: newProps.columns, selectColumns: newProps.selectColumns });
+		if (newProps.table && newProps.columns && newProps.selectColumns) {
+			this.updateQueryBuilder(newProps.table, newProps.columns, newProps.selectColumns);
 		}
 	}
 

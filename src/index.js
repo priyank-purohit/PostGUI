@@ -43,11 +43,14 @@ export default class Layout extends React.Component {
 		if (index >= 0) {
 			// remove it
 			currentColumns.splice(index, 1);
+			this.setState({ selectTableColumns: currentColumns });
+			return false;
 		} else {
 			// add it
 			currentColumns.push(column);
+			this.setState({ selectTableColumns: currentColumns });
+			return true;
 		}
-		this.setState({ selectTableColumns: currentColumns });
 	}
 
 	render() {

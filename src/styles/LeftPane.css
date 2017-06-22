@@ -64,3 +64,11 @@
 .fontSize8 {
     font-size: 8pt;
 }
+
+.strikeOut {
+    text-decoration: line-through;
+}
+
+.notStrikeOut {
+    text-decoration: none;
+}

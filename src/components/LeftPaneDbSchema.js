@@ -6,10 +6,19 @@ let lib = require('../utils/library.js');
 class LeftPaneDbSchema extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { rawResp: "", tables: [] };
+		this.state = { rawResp: "", tables: [], cleanUp: [] };
 	}
 
 	handleTableClick(e) {
+		let cleanUp = this.state.cleanUp;
+		console.log("CLEANING UP " + cleanUp);
+		for (let i = 0; i < cleanUp.length; i++) {
+			this.setState({
+				[cleanUp[i]]: "notStrikeOut"
+			});
+		}
+		this.setState({ cleanUp: [] });
+
 		let buttonClicked = e.target.id;
 
 		//Can use the below to propogate table change back to index.js
@@ -20,6 +29,7 @@ class LeftPaneDbSchema extends Component {
 			this.setState({
 				[buttonClicked]: null
 			});
+			// clear out the columns and their styling properties
 			this.props.changeTargetTable(lib.getFromConfig("noTableMsg"));
 			this.props.changeTargetTableColumns([]);
 			this.props.changeSelectTableColumns([]);
@@ -36,7 +46,27 @@ class LeftPaneDbSchema extends Component {
 
 	handleColumnClick(e) {
 		let columnClicked = e.target.id;
-		this.props.addRemoveSelectTableColumns(columnClicked);
+		let status = this.props.addRemoveSelectTableColumns(columnClicked); // true = added, false = removed
+		console.log("status is now " + status);
+		if (!status) {
+			// strike it out
+			this.setState({
+				[e.target.id]: "strikeOut"
+			});
+		} else {
+			// unstrike it
+			this.setState({
+				[e.target.id]: "notStrikeOut"
+			});
+		}
+
+		let cleanUp = this.state.cleanUp;
+		cleanUp.push(e.target.id);
+
+		this.setState({
+			"cleanUp": cleanUp
+		});
+		console.log("cleanUp = " + this.state.cleanUp);
 	}
 
 	// Prudces the buttons for the COLUMNS
@@ -47,7 +77,7 @@ class LeftPaneDbSchema extends Component {
 			for (let i = 0; i < columns.length; i++) {
 				ret.push(
 					<div key={i}>
-					<button key={i} id={columns[i]} className="columnsButtons" onClick={this.handleColumnClick.bind(this)}>{columns[i]}</button>
+					<button key={i} id={columns[i]} className={"columnsButtons " + this.state[columns[i]]} onClick={this.handleColumnClick.bind(this)}>{columns[i]}</button>
 				</div>
 				);
 			}
