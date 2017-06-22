@@ -10,14 +10,14 @@
 .tablesButtons {
     margin: 5px;
     padding: 10px;
-    width: 80%;
-    max-width: 90%;
+    width: 95%;
+    max-width: 95%;
     word-wrap: break-word;
     background: none;
     border: none;
     text-align: left;
     cursor: pointer;
-    font-size: 1.05em;
+    font-size: 1.025em;
 }
 
 .tablesButtons:hover {
@@ -29,13 +29,14 @@
     padding: 10px;
     padding-top: 2px;
     padding-bottom: 2px;
-    width: 80%;
-    max-width: 90%;
+    width: 85%;
+    max-width: 85%;
     word-wrap: break-word;
     background: none;
     border: none;
     text-align: left;
-    margin-left: 50px;
+    margin-left: 40px;
+    font-size: 0.9em;
 }
 
 .indent {
