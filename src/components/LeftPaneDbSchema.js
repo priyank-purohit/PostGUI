@@ -9,8 +9,8 @@ class LeftPaneDbSchema extends Component {
 		this.state = { rawResp: "", tables: [] };
 	}
 
-	handleClick(e) {
-		var buttonClicked = e.target.id;
+	handleTableClick(e) {
+		let buttonClicked = e.target.id;
 
 		//Can use the below to propogate table change back to index.js
 		this.props.changeTargetTable(buttonClicked);
@@ -22,6 +22,7 @@ class LeftPaneDbSchema extends Component {
 			});
 			this.props.changeTargetTable(lib.getFromConfig("noTableMsg"));
 			this.props.changeTargetTableColumns([]);
+			this.props.changeSelectTableColumns([]);
 		} else {
 			// before showing any table's columns, hide any other open tables
 			for (let i = 0; i < this.state.tables.length; i++) {
@@ -33,6 +34,12 @@ class LeftPaneDbSchema extends Component {
 		}
 	}
 
+	handleColumnClick(e) {
+		let columnClicked = e.target.id;
+		this.props.addRemoveSelectTableColumns(columnClicked);
+	}
+
+	// Prudces the buttons for the COLUMNS
 	displayColumns(table) {
 		let ret = [];
 		let columns = this.state[table];
@@ -40,7 +47,7 @@ class LeftPaneDbSchema extends Component {
 			for (let i = 0; i < columns.length; i++) {
 				ret.push(
 					<div key={i}>
-					<button key={i} id={columns[i]} className="columnsButtons">{columns[i]}</button>
+					<button key={i} id={columns[i]} className="columnsButtons" onClick={this.handleColumnClick.bind(this)}>{columns[i]}</button>
 				</div>
 				);
 			}
@@ -48,13 +55,13 @@ class LeftPaneDbSchema extends Component {
 		return ret;
 	}
 
-	// Produces buttons for the UI
+	// Produces buttons for the TABLES
 	displayTables(listOfTables = this.state.tables) {
 		let ret = [];
 		for (let i = 0; i < listOfTables.length; i++) {
 			ret.push(
 				<div key={i}>
-					<button key={i} id={listOfTables[i]} className="tablesButtons" onClick={this.handleClick.bind(this)}>{listOfTables[i]}</button>
+					<button key={i} id={listOfTables[i]} className="tablesButtons" onClick={this.handleTableClick.bind(this)}>{listOfTables[i]}</button>
 					{this.displayColumns(listOfTables[i])}
 				</div>
 			);
@@ -74,13 +81,16 @@ class LeftPaneDbSchema extends Component {
 	// Extract the names of db tables and update state
 	parseTableColumns(rawResp, table) {
 		let columns = [];
+		let selectColumns = [];
 		for (let i in rawResp) {
 			columns.push(i);
+			selectColumns.push(i);
 		}
 		this.setState({
 			[table]: columns
 		});
 		this.props.changeTargetTableColumns(columns);
+		this.props.changeSelectTableColumns(selectColumns);
 	}
 
 	// Makes a GET call to '/' to retrieve the db schema from PostgREST

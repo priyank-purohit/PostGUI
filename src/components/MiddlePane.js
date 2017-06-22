@@ -9,7 +9,8 @@ class MiddlePane extends Component {
 		super(props);
 		this.state = {
 			table: this.props.table,
-			columns: []
+			columns: this.props.columns,
+			selectColumns: this.props.selectColumns
 		};
 	}
 
@@ -37,6 +38,8 @@ class MiddlePane extends Component {
 					<h2>{this.state.table}</h2>
 					<hr color="grey"/>
 					<div id="queryBuilder" className="queryBuilder"></div>
+					<div><p>Columns = {this.props.columns.join(", ")}</p></div>
+					<div><p>Selecte = {this.props.selectColumns.join(", ")}</p></div>
 				</div>
 			</div>
 		);
