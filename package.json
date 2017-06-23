@@ -1,6 +1,6 @@
 {
   "name": "postgui",
-  "version": "0.3.1",
+  "version": "0.4.2",
   "private": true,
   "dependencies": {
     "axios": "^0.16.1",
