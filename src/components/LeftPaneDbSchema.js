@@ -9,6 +9,7 @@ class LeftPaneDbSchema extends Component {
 		this.state = { rawResp: "", tables: [], columnsNotVisible: [] };
 	}
 
+	// When a table is clicked, close any open ones, and load the columns of the selected table
 	handleTableClick(e) {
 		let columnsNotVisible = this.state.columnsNotVisible;
 		for (let i = 0; i < columnsNotVisible.length; i++) {
@@ -43,6 +44,7 @@ class LeftPaneDbSchema extends Component {
 		}
 	}
 
+	// When a column is clicked, hide it from output if shown, and vice versa
 	handleColumnClick(e) {
 		let columnClicked = e.target.id;
 		let status = this.props.addRemoveSelectTableColumns(columnClicked); // true = added, false = removed
@@ -66,7 +68,7 @@ class LeftPaneDbSchema extends Component {
 		});
 	}
 
-	// Prudces the buttons for the COLUMNS
+	// Produces the displayed buttons for the COLUMNS
 	displayColumns(table) {
 		let ret = [];
 		let columns = this.state[table];
@@ -82,7 +84,7 @@ class LeftPaneDbSchema extends Component {
 		return ret;
 	}
 
-	// Produces buttons for the TABLES
+	// Produces the displayed buttons for the TABLES
 	displayTables(listOfTables = this.state.tables) {
 		let ret = [];
 		for (let i = 0; i < listOfTables.length; i++) {
@@ -96,7 +98,7 @@ class LeftPaneDbSchema extends Component {
 		return ret;
 	}
 
-	// Extract the names of db tables and update state
+	// From the JSON resp, extract the names of db tables and update state
 	parseTables(rawResp = this.state.rawResp) {
 		let dbTables = [];
 		for (let i in rawResp.definitions) {
@@ -105,7 +107,7 @@ class LeftPaneDbSchema extends Component {
 		this.setState({ tables: dbTables });
 	}
 
-	// Extract the names of db tables and update state
+	// From JSON resp, extract the names of table columns and update state
 	parseTableColumns(rawResp, table) {
 		let columns = [];
 		let selectColumns = [];

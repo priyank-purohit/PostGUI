@@ -19,6 +19,7 @@ class MiddlePane extends Component {
 		ReactDOM.render(React.createElement(QueryBuilderWrapper, props), document.getElementById('queryBuilder'));
 	}
 
+	// When updated table and column names are received, update the QB
 	updateQueryBuilder(table, columns, selectColumns) {
 		var props = { table: table, columns: columns, selectColumns: selectColumns };
 		ReactDOM.render(React.createElement(QueryBuilderWrapper, props), document.getElementById('queryBuilder'));

@@ -37,7 +37,6 @@ export default class QueryBuilderWrapper extends React.Component {
     // Called when new props are received by the QB component
     componentWillReceiveProps(newProps) {
         this.setState({ table: newProps.table, columns: newProps.columns, selectColumns: newProps.selectColumns });
-        console.log(newProps.table + "==" + this.state.table + " = " + (newProps.table == this.state.table));
         if (newProps.table && newProps.columns && (newProps.table != this.state.table || newProps.columns != this.state.columns)) {
             const element = this.refs.queryBuilder;
             this.rebuildQueryBuilder(element, newProps.table, newProps.columns);
@@ -59,6 +58,7 @@ export default class QueryBuilderWrapper extends React.Component {
         return Object.prototype.toString.call(what) === '[object Array]';
     }
 
+    // Extracts the rules recursively
     recursiveRulesExtraction(condition, rules) {
         console.log("RULES  length = " + rules.length);
         let select = condition.toLowerCase() + "(";

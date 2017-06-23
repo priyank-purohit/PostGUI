@@ -33,6 +33,8 @@ export default class Layout extends React.Component {
 		this.setState({ selectTableColumns: newSelectColumns });
 	}
 
+	// Depending on current state of selectTableColumns, it will add or remove a column
+	// This is used to pick out which columns user wants to see
 	addRemoveSelectTableColumns(column) {
 		console.log("Adding or removing column " + column);
 
