@@ -1,7 +1,7 @@
 .leftPane {
     text-align: center;
     float: left;
-    width: 15%;
+    width: 16%;
     background-color: #aaa;
     min-height: 100vh;
     color: white;
@@ -10,18 +10,29 @@
 .tablesButtons {
     margin: 5px;
     padding: 10px;
-    width: 80%;
-    max-width: 90%;
+    width: 95%;
+    max-width: 95%;
     word-wrap: break-word;
     background: none;
     border: none;
     text-align: left;
     cursor: pointer;
-    font-size: 1.05em;
+    font-size: 1.6vh;
+    background-image: url("../resources/table.png");
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding-left: 35px;
+    background-position: 2%;
+    display: block;
 }
 
 .tablesButtons:hover {
     background: grey;
+    background-image: url("../resources/table.png");
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-position: 2.5%;
+    padding-left: 35px;
 }
 
 .columnsButtons {
@@ -30,12 +41,19 @@
     padding-top: 2px;
     padding-bottom: 2px;
     width: 80%;
-    max-width: 90%;
+    max-width: 80%;
     word-wrap: break-word;
     background: none;
     border: none;
     text-align: left;
-    margin-left: 50px;
+    margin-left: 40px;
+    font-size: 1.5vh;
+    background-image: url("../resources/eye.png");
+    background-repeat: no-repeat;
+    background-size: 20px;
+    background-position: left center;
+    padding-left: 35px;
+    background-position: 2%;
 }
 
 .indent {
@@ -45,4 +63,14 @@
 
 .fontSize8 {
     font-size: 8pt;
+}
+
+.strikeOut {
+    text-decoration: line-through;
+    background-image: url("../resources/eyeCrossedOut.png");
+}
+
+.notStrikeOut {
+    text-decoration: none;
+    background-image: url("../resources/eye.png");
 }

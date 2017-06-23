@@ -6,11 +6,20 @@ let lib = require('../utils/library.js');
 class LeftPaneDbSchema extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { rawResp: "", tables: [] };
+		this.state = { rawResp: "", tables: [], columnsNotVisible: [] };
 	}
 
-	handleClick(e) {
-		var buttonClicked = e.target.id;
+	// When a table is clicked, close any open ones, and load the columns of the selected table
+	handleTableClick(e) {
+		let columnsNotVisible = this.state.columnsNotVisible;
+		for (let i = 0; i < columnsNotVisible.length; i++) {
+			this.setState({
+				[columnsNotVisible[i]]: "notStrikeOut"
+			});
+		}
+		this.setState({ columnsNotVisible: [] });
+
+		let buttonClicked = e.target.id;
 
 		//Can use the below to propogate table change back to index.js
 		this.props.changeTargetTable(buttonClicked);
@@ -20,8 +29,10 @@ class LeftPaneDbSchema extends Component {
 			this.setState({
 				[buttonClicked]: null
 			});
+			// clear out the columns and their styling properties
 			this.props.changeTargetTable(lib.getFromConfig("noTableMsg"));
 			this.props.changeTargetTableColumns([]);
+			this.props.changeSelectTableColumns([]);
 		} else {
 			// before showing any table's columns, hide any other open tables
 			for (let i = 0; i < this.state.tables.length; i++) {
@@ -33,6 +44,31 @@ class LeftPaneDbSchema extends Component {
 		}
 	}
 
+	// When a column is clicked, hide it from output if shown, and vice versa
+	handleColumnClick(e) {
+		let columnClicked = e.target.id;
+		let status = this.props.addRemoveSelectTableColumns(columnClicked); // true = added, false = removed
+		if (!status) {
+			// strike it out
+			this.setState({
+				[e.target.id]: "strikeOut"
+			});
+		} else {
+			// unstrike it
+			this.setState({
+				[e.target.id]: "notStrikeOut"
+			});
+		}
+
+		let columnsNotVisible = this.state.columnsNotVisible;
+		columnsNotVisible.push(e.target.id);
+
+		this.setState({
+			"columnsNotVisible": columnsNotVisible
+		});
+	}
+
+	// Produces the displayed buttons for the COLUMNS
 	displayColumns(table) {
 		let ret = [];
 		let columns = this.state[table];
@@ -40,7 +76,7 @@ class LeftPaneDbSchema extends Component {
 			for (let i = 0; i < columns.length; i++) {
 				ret.push(
 					<div key={i}>
-					<button key={i} id={columns[i]} className="columnsButtons">{columns[i]}</button>
+					<button key={i} id={columns[i]} className={"columnsButtons " + this.state[columns[i]]} onClick={this.handleColumnClick.bind(this)}>{columns[i]}</button>
 				</div>
 				);
 			}
@@ -48,13 +84,13 @@ class LeftPaneDbSchema extends Component {
 		return ret;
 	}
 
-	// Produces buttons for the UI
+	// Produces the displayed buttons for the TABLES
 	displayTables(listOfTables = this.state.tables) {
 		let ret = [];
 		for (let i = 0; i < listOfTables.length; i++) {
 			ret.push(
 				<div key={i}>
-					<button key={i} id={listOfTables[i]} className="tablesButtons" onClick={this.handleClick.bind(this)}>{listOfTables[i]}</button>
+					<button key={i} id={listOfTables[i]} className="tablesButtons" onClick={this.handleTableClick.bind(this)}>{listOfTables[i]}</button>
 					{this.displayColumns(listOfTables[i])}
 				</div>
 			);
@@ -62,7 +98,7 @@ class LeftPaneDbSchema extends Component {
 		return ret;
 	}
 
-	// Extract the names of db tables and update state
+	// From the JSON resp, extract the names of db tables and update state
 	parseTables(rawResp = this.state.rawResp) {
 		let dbTables = [];
 		for (let i in rawResp.definitions) {
@@ -71,16 +107,19 @@ class LeftPaneDbSchema extends Component {
 		this.setState({ tables: dbTables });
 	}
 
-	// Extract the names of db tables and update state
+	// From JSON resp, extract the names of table columns and update state
 	parseTableColumns(rawResp, table) {
 		let columns = [];
+		let selectColumns = [];
 		for (let i in rawResp) {
 			columns.push(i);
+			selectColumns.push(i);
 		}
 		this.setState({
 			[table]: columns
 		});
 		this.props.changeTargetTableColumns(columns);
+		this.props.changeSelectTableColumns(selectColumns);
 	}
 
 	// Makes a GET call to '/' to retrieve the db schema from PostgREST
