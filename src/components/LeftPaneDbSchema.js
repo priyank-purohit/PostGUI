@@ -6,18 +6,17 @@ let lib = require('../utils/library.js');
 class LeftPaneDbSchema extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { rawResp: "", tables: [], cleanUp: [] };
+		this.state = { rawResp: "", tables: [], columnsNotVisible: [] };
 	}
 
 	handleTableClick(e) {
-		let cleanUp = this.state.cleanUp;
-		console.log("CLEANING UP " + cleanUp);
-		for (let i = 0; i < cleanUp.length; i++) {
+		let columnsNotVisible = this.state.columnsNotVisible;
+		for (let i = 0; i < columnsNotVisible.length; i++) {
 			this.setState({
-				[cleanUp[i]]: "notStrikeOut"
+				[columnsNotVisible[i]]: "notStrikeOut"
 			});
 		}
-		this.setState({ cleanUp: [] });
+		this.setState({ columnsNotVisible: [] });
 
 		let buttonClicked = e.target.id;
 
@@ -47,7 +46,6 @@ class LeftPaneDbSchema extends Component {
 	handleColumnClick(e) {
 		let columnClicked = e.target.id;
 		let status = this.props.addRemoveSelectTableColumns(columnClicked); // true = added, false = removed
-		console.log("status is now " + status);
 		if (!status) {
 			// strike it out
 			this.setState({
@@ -60,13 +58,12 @@ class LeftPaneDbSchema extends Component {
 			});
 		}
 
-		let cleanUp = this.state.cleanUp;
-		cleanUp.push(e.target.id);
+		let columnsNotVisible = this.state.columnsNotVisible;
+		columnsNotVisible.push(e.target.id);
 
 		this.setState({
-			"cleanUp": cleanUp
+			"columnsNotVisible": columnsNotVisible
 		});
-		console.log("cleanUp = " + this.state.cleanUp);
 	}
 
 	// Prudces the buttons for the COLUMNS
