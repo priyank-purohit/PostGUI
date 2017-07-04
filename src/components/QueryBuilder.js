@@ -41,7 +41,7 @@ export default class QueryBuilderWrapper extends React.Component {
             const element = this.refs.queryBuilder;
             this.rebuildQueryBuilder(element, newProps.table, newProps.columns);
             // Load sample data too
-            this.fetchOutput(lib.getFromConfig("baseUrl") + "/" + newProps.table);
+            this.fetchOutput(lib.getFromConfig("baseUrl") + "/" + newProps.table + "?limit=25");
         }
     }
 
