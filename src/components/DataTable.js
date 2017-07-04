@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import '../styles/DataTable.css';
+
 //let lib = require('../utils/library.js');
 
 class DataTable extends Component {
