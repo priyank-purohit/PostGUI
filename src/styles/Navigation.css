@@ -11,10 +11,11 @@
 .navigationElement {
 	line-height: 20px;
 	font-size: 18px;
+	font-weight: normal;
 	float: left;
 	width: wrap;
 	vertical-align: middle;
-	padding-left: 25px;
+	padding-left: 30px;
 }
 
 .titleElement {

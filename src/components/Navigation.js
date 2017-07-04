@@ -14,6 +14,9 @@ class Navigation extends Component {
 						<h3 className="leftPaneTitle">{lib.getFromConfig('title')}</h3>
 					</div>
 				</div>
+				{/*<div className="navigationElement">
+					<h3 className="">Data Visualization</h3>
+				</div>*/}
 				{/*<p className="navigationElement">Data Visualization</p>
 				<p className="navigationElement">Custom Query</p>*/}
 			</div>
