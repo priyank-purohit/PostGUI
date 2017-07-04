@@ -12,13 +12,14 @@
 	line-height: 20px;
 	font-size: 18px;
 	float: left;
-	width: 15%;
-	/*border: 1px solid pink;*/
+	width: wrap;
 	vertical-align: middle;
+	padding-left: 25px;
 }
 
 .titleElement {
 	font-weight: bold;
+	text-align: left;
 }
 
 .leftPaneTitle {
