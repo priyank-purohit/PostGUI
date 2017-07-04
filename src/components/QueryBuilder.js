@@ -40,6 +40,8 @@ export default class QueryBuilderWrapper extends React.Component {
         if (newProps.table && newProps.columns && (newProps.table != this.state.table || newProps.columns != this.state.columns)) {
             const element = this.refs.queryBuilder;
             this.rebuildQueryBuilder(element, newProps.table, newProps.columns);
+            // Load sample data too
+            this.fetchOutput(lib.getFromConfig("baseUrl") + "/" + newProps.table);
         }
     }
 
@@ -102,7 +104,7 @@ export default class QueryBuilderWrapper extends React.Component {
 
             // Add SELECT columns... i.e. which columsn to retrieve
             url += "&select=" + this.state.selectColumns;
-        } else {
+        } else if (this.state.selectColumns != null && this.state.selectColumns != [] && this.state.selectColumns != "") {
             // Add SELECT columns... but this time, only selected columns, NO FILTERS
             url += "?select=" + this.state.selectColumns;
         }
@@ -112,17 +114,24 @@ export default class QueryBuilderWrapper extends React.Component {
 
     // Makes an API call to the PostgREST server specified in confic.json
     fetchOutput(url) {
-        console.log("GET " + url);
-        axios.get(url, { params: {} })
-            .then((response) => {
-                this.setState({
-                    response: response.data
+        if (url != lib.getFromConfig("baseUrl") + "/" + lib.getFromConfig("noTableMsg")) {
+            console.log("GET " + url);
+            axios.get(url, { params: {} })
+                .then((response) => {
+                    this.setState({
+                        response: response.data
+                    });
+                    this.forceUpdate();
+                })
+                .catch(function(error) {
+                    console.log(error);
                 });
-                this.forceUpdate();
-            })
-            .catch(function(error) {
-                console.log(error);
+        } else {
+            this.setState({
+                response: []
             });
+            this.forceUpdate();
+        }
     }
 
     // Processes the raw jQB rules output, extracts rules, keeps only the 

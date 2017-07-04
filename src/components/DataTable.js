@@ -14,10 +14,9 @@ class DataTable extends Component {
 
 	// Called when new props are received by the QB component
 	componentWillReceiveProps(newProps) {
-		this.setState({ data: newProps.response });
-		if (newProps.response) {
+		this.setState({ data: newProps.response }, function() {
 			this.extractColumns();
-		}
+		});
 	}
 
 	// Extracts columns from state.data and stores the list in state.columns for use in table head
@@ -48,14 +47,14 @@ class DataTable extends Component {
 		let cols = this.state.columns, // [{key, label}]
 			data = this.state.data;
 
-		return data.map(function(item) {
+		return data.map(function(item, i) {
 			// handle the column data within each row
 			let cells = cols.map(function(colData, key) {
 
 				// colData.key might be "firstName"
 				return <td key={key} className="fontSize8">{item[colData]}</td>;
 			});
-			return <tr key={item.id}>{cells}</tr>;
+			return <tr key={i}>{cells}</tr>;
 		});
 	}
 
