@@ -5,7 +5,7 @@ import Navigation from './components/Navigation';
 import LeftPane from './components/LeftPane';
 import MiddlePane from './components/MiddlePane';
 
-import HistoryPane from './components/HistoryPane';
+//import HistoryPane from './components/HistoryPane';
 
 import './styles/index.css';
 
