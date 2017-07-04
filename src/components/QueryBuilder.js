@@ -37,9 +37,11 @@ export default class QueryBuilderWrapper extends React.Component {
     // Called when new props are received by the QB component
     componentWillReceiveProps(newProps) {
         this.setState({ table: newProps.table, columns: newProps.columns, selectColumns: newProps.selectColumns });
-        if (newProps.table && newProps.columns && (newProps.table != this.state.table || newProps.columns != this.state.columns)) {
+        if (newProps.table && newProps.columns && (newProps.table !== this.state.table || newProps.columns !== this.state.columns)) {
             const element = this.refs.queryBuilder;
             this.rebuildQueryBuilder(element, newProps.table, newProps.columns);
+            // Load sample data too
+            this.fetchOutput(lib.getFromConfig("baseUrl") + "/" + newProps.table + "?limit=25");
         }
     }
 
@@ -60,20 +62,17 @@ export default class QueryBuilderWrapper extends React.Component {
 
     // Extracts the rules recursively
     recursiveRulesExtraction(condition, rules) {
-        console.log("RULES  length = " + rules.length);
         let select = condition.toLowerCase() + "(";
         for (let i = 0; i < rules.length; i++) {
             // iterating over the first rules
             if (rules[i]['condition'] === "OR" || rules[i]['condition'] === "AND") {
-                console.log("Recursing!");
-                if (i == (rules.length - 1)) {
+                if (i === (rules.length - 1)) {
                     select += this.recursiveRulesExtraction(rules[i]['condition'], rules[i]['rules']);
                 } else {
                     select += this.recursiveRulesExtraction(rules[i]['condition'], rules[i]['rules']) + ",";
                 }
             } else {
-                console.log("ADDING....");
-                if (i == (rules.length - 1)) {
+                if (i === (rules.length - 1)) {
                     select += rules[i]['id'] + "." + lib.translateOperatorToPostgrest(rules[i]['operator']) + "." + rules[i]['value'];
                 } else {
                     select += rules[i]['id'] + "." + lib.translateOperatorToPostgrest(rules[i]['operator']) + "." + rules[i]['value'] + ",";
@@ -97,12 +96,11 @@ export default class QueryBuilderWrapper extends React.Component {
             let firstCondition = rules['condition'];
             let firstRules = rules['rules'];
             let conds = this.recursiveRulesExtraction(firstCondition + "=", firstRules);
-            console.log("CONDITIONS = " + conds);
             url += conds;
 
             // Add SELECT columns... i.e. which columsn to retrieve
             url += "&select=" + this.state.selectColumns;
-        } else {
+        } else if (this.state.selectColumns !== null && this.state.selectColumns !== [] && this.state.selectColumns !== "") {
             // Add SELECT columns... but this time, only selected columns, NO FILTERS
             url += "?select=" + this.state.selectColumns;
         }
@@ -112,17 +110,24 @@ export default class QueryBuilderWrapper extends React.Component {
 
     // Makes an API call to the PostgREST server specified in confic.json
     fetchOutput(url) {
-        console.log("GET " + url);
-        axios.get(url, { params: {} })
-            .then((response) => {
-                this.setState({
-                    response: response.data
+        if (!url.includes(lib.getFromConfig("noTableMsg"))) {
+            console.log("GET " + url);
+            axios.get(url, { params: {} })
+                .then((response) => {
+                    this.setState({
+                        response: response.data
+                    });
+                    this.forceUpdate();
+                })
+                .catch(function(error) {
+                    console.log(error);
                 });
-                this.forceUpdate();
-            })
-            .catch(function(error) {
-                console.log(error);
+        } else {
+            this.setState({
+                response: []
             });
+            this.forceUpdate();
+        }
     }
 
     // Processes the raw jQB rules output, extracts rules, keeps only the 
