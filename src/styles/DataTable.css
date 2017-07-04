@@ -1,6 +1,6 @@
 table {
-	border-collapse: collapse;
 	border: 2px solid black;
+	border-collapse: collapse;
 }
 
 tr {
@@ -26,8 +26,4 @@ td {
 thead {
 	background: darkgrey;
 	border-bottom: 2px solid black;
-}
-
-tbody {
-	border-bottom: 1px solid yellow;
 }
