@@ -5,13 +5,22 @@ import '../styles/Navigation.css';
 let lib = require('../utils/library.js');
 
 class Navigation extends Component {
+	// If logoUrl is specified in config.json, use that; else use the logo in resources folder
+	getImageElement() {
+		if (lib.getFromConfig("logoUrl") && lib.getFromConfig("logoUrl") !== '') {
+			return (<img src={lib.getFromConfig("logoUrl")} className="leftPaneLogo" alt="logo" />);
+		} else {
+			return (<img src={logo} className="leftPaneLogo" alt="logo" />);
+		}
+	}
+
 	render() {
 		return (
 			<div className="navigation">
 				<div className="navigationElement titleElement">
 					<div className="logoAndTitle">
-						<img src={logo} className="leftPaneLogo" alt="logo" />
-						<h3 className="leftPaneTitle">{lib.getFromConfig('title')}</h3>
+						{this.getImageElement()}
+						<h3 className="leftPaneTitle">{lib.getFromConfig("title")}</h3>
 					</div>
 				</div>
 				{/*<div className="navigationElement">
