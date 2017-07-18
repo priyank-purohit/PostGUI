@@ -17,7 +17,9 @@ exports.getFromConfig = function(key = "title") {
 exports.getTableConfig = function(table = "error", option = "error") {
 	let configFile = require("../data/config.json");
 	let config = JSON.parse(JSON.stringify(configFile));
-	console.log(table, " ", option);
+	
+	// If the table option is found, return; else return null
+	// NOTE: check for null value when this function is used
 	if (table !== this.getFromConfig("noTableMsg")) {
 		if (config["tableRules"][table] && config["tableRules"][table][option]) {
 			return config["tableRules"][table][option];
@@ -26,6 +28,27 @@ exports.getTableConfig = function(table = "error", option = "error") {
 		}
 	} else {
 		return this.getFromConfig("noTableMsg");
+	}
+}
+
+// Retrieves value of key from the config file
+exports.getColumnConfig = function(table = "error", column = "error", option = "error") {
+	let configFile = require("../data/config.json");
+	let config = JSON.parse(JSON.stringify(configFile));
+
+	// If the table column option is found, return; else return null
+	// NOTE: check for null value when this function is used
+	if (table !== this.getFromConfig("noTableMsg") && table !== "error" && column !== "error") {
+		if (config["tableRules"][table] && 
+			config["tableRules"][table]["columnRules"] && 
+			config["tableRules"][table]["columnRules"][column] && 
+			config["tableRules"][table]["columnRules"][column][option]) {
+			return config["tableRules"][table]["columnRules"][column][option];
+		} else {
+			return null;
+		}
+	} else {
+		return null;
 	}
 }
 

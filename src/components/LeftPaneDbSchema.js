@@ -74,9 +74,10 @@ class LeftPaneDbSchema extends Component {
 		let columns = this.state[table];
 		if (columns) {
 			for (let i = 0; i < columns.length; i++) {
+				let columnName = lib.getColumnConfig(table, columns[i], "rename");
 				ret.push(
 					<div key={i}>
-					<button key={i} id={columns[i]} className={"columnsButtons " + this.state[columns[i]]} onClick={this.handleColumnClick.bind(this)}>{columns[i]}</button>
+					<button key={i} id={columns[i]} className={"columnsButtons " + this.state[columns[i]]} onClick={this.handleColumnClick.bind(this)}>{columnName ? columnName : columns[i]}</button>
 				</div>
 				);
 			}
