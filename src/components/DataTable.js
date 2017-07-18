@@ -62,7 +62,6 @@ class DataTable extends Component {
 
 	render() {
 		let table = this.props.table;
-		console.log("Table = " + table);
 		return (
 			<table id="dataTable">
 				<thead>
