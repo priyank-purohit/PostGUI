@@ -13,6 +13,22 @@ exports.getFromConfig = function(key = "title") {
 	return config[key]
 }
 
+// Retrieves value of key from the config file
+exports.getTableConfig = function(table = "error", option = "error") {
+	let configFile = require("../data/config.json");
+	let config = JSON.parse(JSON.stringify(configFile));
+	console.log(table, " ", option);
+	if (table !== this.getFromConfig("noTableMsg")) {
+		if (config["tableRules"][table] && config["tableRules"][table][option]) {
+			return config["tableRules"][table][option];
+		} else {
+			return null;
+		}
+	} else {
+		return this.getFromConfig("noTableMsg");
+	}
+}
+
 // Opens the specified URL in a different tab
 exports.visitPage = function(url = "http://www.google.ca") {
 	window.open(url, "_blank");
