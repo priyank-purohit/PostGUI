@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import '../styles/DataTable.css';
 
-//let lib = require('../utils/library.js');
+let lib = require('../utils/library.js');
 
 class DataTable extends Component {
 	constructor(props) {
@@ -61,13 +61,15 @@ class DataTable extends Component {
 	}
 
 	render() {
+		let table = this.props.table;
+		console.log("Table = " + table);
 		return (
 			<table id="dataTable">
 				<thead>
 					<tr key="head">
 					{
 						this.state.columns.map( function (columnTitle, key) {
-							return (<th key={key} className="fontSize8">{columnTitle}</th>);
+							return (<th key={key} className="fontSize8">{lib.getColumnConfig(table, columnTitle, "rename") ? lib.getColumnConfig(table, columnTitle, "rename") : columnTitle}</th>);
 						})
 					}
 					</tr>

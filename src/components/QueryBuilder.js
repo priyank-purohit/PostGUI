@@ -170,7 +170,7 @@ export default class QueryBuilderWrapper extends React.Component {
                 <div id='query-builder' ref='queryBuilder'/>
                 <button onClick={this.handleSubmitClick.bind(this)} id="submit" className="submitButton btn-primary">Submit Query</button>
                 <br/><br/><br/>
-                <DataTable response={this.state.response} />
+                <DataTable response={this.state.response} table={this.state.table} />
             </div>
         );
     }
