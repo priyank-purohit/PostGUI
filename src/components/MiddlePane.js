@@ -39,7 +39,7 @@ class MiddlePane extends Component {
 			<div className="middlePane" id="middlePane">
 				<div className="middlePaneInner">
 					<h2>{this.state.table}</h2>
-					<hr color="grey"/>
+					{/*Show the query builder if a table/view is selected; otherwise hide it*/}
 					{ this.state.table !== lib.getFromConfig("noTableMsg") ? <div id="queryBuilder" className="queryBuilder" style={{visibility: "visible"}}></div> : <div id="queryBuilder" className="queryBuilder" style={{visibility: "hidden"}}></div> }
 				</div>
 			</div>
