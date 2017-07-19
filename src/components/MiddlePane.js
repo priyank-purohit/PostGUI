@@ -35,11 +35,14 @@ class MiddlePane extends Component {
 	}
 
 	render() {
-		let tableName = lib.getTableConfig(this.state.table, "rename");
-		let tableDesc = lib.getTableConfig(this.state.table, "description");
+		let tableName = lib.getTableConfig(this.state.table, "rename"); // name of the table
+		let tableDesc = lib.getTableConfig(this.state.table, "description"); // description of the table
+
+		// If table description is the no table message, wipe it off...
 		if (tableDesc === lib.getFromConfig("noTableMsg")) {
 			tableDesc = "";
 		}
+		
 		return (
 			<div className="middlePane" id="middlePane">
 				<div className="middlePaneInner">
