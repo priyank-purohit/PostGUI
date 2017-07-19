@@ -36,10 +36,15 @@ class MiddlePane extends Component {
 
 	render() {
 		let tableName = lib.getTableConfig(this.state.table, "rename");
+		let tableDesc = lib.getTableConfig(this.state.table, "description");
+		if (tableDesc === lib.getFromConfig("noTableMsg")) {
+			tableDesc = "";
+		}
 		return (
 			<div className="middlePane" id="middlePane">
 				<div className="middlePaneInner">
 					<h2>{tableName ? tableName : this.state.table}</h2>
+					{tableDesc ? (<h4>{tableDesc}</h4>) : (<h4></h4>)}
 					<hr color="grey"/>
 					<div id="queryBuilder" className="queryBuilder"></div>
 				</div>
