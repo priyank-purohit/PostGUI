@@ -14,7 +14,10 @@ export default class QueryBuilderWrapper extends React.Component {
             table: this.props.table,
             columns: this.props.columns,
             selectColumns: this.props.selectColumns,
-            response: []
+            response: [],
+            progressBarClassNames: ["mdl-spinner", "mdl-js-spinner is-active", "hidden"],
+            progressBarClassNames2: ["mdl-progress", "mdl-js-progress", "mdl-progress__indeterminate", "hidden"],
+            submitButtonClassNames: ["submitButton", "btn-primary", "hidden"]
         };
     }
 
@@ -118,15 +121,18 @@ export default class QueryBuilderWrapper extends React.Component {
                         response: response.data
                     });
                     this.forceUpdate();
+                    this.setProgressBarVisibility(false);
                 })
                 .catch(function(error) {
                     console.log(error);
+                    this.setProgressBarVisibility(false);
                 });
         } else {
             this.setState({
                 response: []
             });
             this.forceUpdate();
+            this.setProgressBarVisibility(false);
         }
     }
 
@@ -160,18 +166,49 @@ export default class QueryBuilderWrapper extends React.Component {
 
     // When user presses the submit button, makes the APi call
     handleSubmitClick() {
+        this.setProgressBarVisibility(true);
         let rules = window.$(this.refs.queryBuilder).queryBuilder('getRules');
         this.processRules(rules);
+    }
+
+    toggleProgressBarVisibility() {
+        let hiddenClassNames = ["mdl-progress", "mdl-js-progress", "mdl-progress__indeterminate", "hidden"];
+
+        if (this.state.progressBarClassNames.length === hiddenClassNames.length && this.state.progressBarClassNames.every((v,i) => v === hiddenClassNames[i])) {
+            // make progress bar visible
+            this.setState({progressBarClassNames: ["mdl-progress", "mdl-js-progress", "mdl-progress__indeterminate", "visible"]});
+            this.setState({submitButtonClassNames: ["submitButton", "btn-primary", "hidden"]});
+        } else {
+            // make progress bar hidden
+            this.setState({progressBarClassNames: ["mdl-progress", "mdl-js-progress", "mdl-progress__indeterminate", "hidden"]});
+            this.setState({submitButtonClassNames: ["submitButton", "btn-primary", "visible"]});
+        }
+    }
+
+    setProgressBarVisibility(visible) {
+        let hiddenClassNames = ["mdl-spinner", "mdl-js-spinner is-active", "hidden"];
+
+        if (visible === true) { // make progress bar visible
+            this.setState({progressBarClassNames: ["mdl-spinner", "mdl-js-spinner is-active", "visible"]});
+            this.setState({submitButtonClassNames: ["submitButton", "btn-primary", "hidden"]});
+        } else { // make progress bar hidden
+            this.setState({progressBarClassNames: ["mdl-spinner", "mdl-js-spinner is-active", "hidden"]});
+            this.setState({submitButtonClassNames: ["submitButton", "btn-primary", "visible"]});
+        }
     }
 
     render() {
         return (
             <div>
-                <hr color="grey"/> 
-                <div className="mdl-progress mdl-js-progress mdl-progress__indeterminate" style={{width: 100 + '%'}}></div>
+                {/*<div  className={this.state.progressBarClassNames.join(' ')} style={{width: 100 + '%'}} ></div>*/}
+                <div id="progressBar" className={this.state.progressBarClassNames.join(' ')}></div>
+
+                <hr id="hrBar" color="grey" style={{width: 100 + '%'}} />
+
                 <div id='query-builder' ref='queryBuilder'/>
-                <button onClick={this.handleSubmitClick.bind(this)} id="submit" className="submitButton btn-primary">Submit Query</button>
+                <button onClick={this.handleSubmitClick.bind(this)} id="submit" className={this.state.submitButtonClassNames.join(' ')}>Submit Query</button>
                 <br/><br/><br/>
+
                 <DataTable response={this.state.response} />
             </div>
         );
