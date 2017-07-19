@@ -78,7 +78,7 @@ class LeftPaneDbSchema extends Component {
 				ret.push(
 					<div key={i}>
 					<button key={i} id={columns[i]} className={"columnsButtons " + this.state[columns[i]]} onClick={this.handleColumnClick.bind(this)}>{columnName ? columnName : columns[i]}</button>
-				</div>
+					</div>
 				);
 			}
 		}
@@ -114,8 +114,10 @@ class LeftPaneDbSchema extends Component {
 		let columns = [];
 		let selectColumns = [];
 		for (let i in rawResp) {
-			columns.push(i);
-			selectColumns.push(i);
+			if (lib.getColumnConfig(table, i, "visible") !== false) {
+				columns.push(i);
+				selectColumns.push(i);
+			}
 		}
 		this.setState({
 			[table]: columns

@@ -42,7 +42,7 @@ exports.getColumnConfig = function(table = "error", column = "error", option = "
 		if (config["tableRules"][table] && 
 			config["tableRules"][table]["columnRules"] && 
 			config["tableRules"][table]["columnRules"][column] && 
-			config["tableRules"][table]["columnRules"][column][option]) {
+			config["tableRules"][table]["columnRules"][column][option] !== null) {
 			return config["tableRules"][table]["columnRules"][column][option];
 		} else {
 			return null;
