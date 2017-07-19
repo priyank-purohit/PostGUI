@@ -4,6 +4,8 @@ import '../styles/MiddlePane.css';
 import '../styles/QueryBuilder.css';
 import QueryBuilderWrapper from '../components/QueryBuilder.js';
 
+let lib = require('../utils/library.js');
+
 class MiddlePane extends Component {
 	constructor(props) {
 		super(props);
@@ -37,8 +39,8 @@ class MiddlePane extends Component {
 			<div className="middlePane" id="middlePane">
 				<div className="middlePaneInner">
 					<h2>{this.state.table}</h2>
-					<hr color="grey"/>
-					<div id="queryBuilder" className="queryBuilder"></div>
+					{ this.state.table !== lib.getFromConfig("noTableMsg") ? <hr color="grey"/> : <hr color="grey" style={{visibility: "hidden"}} />}
+					{ this.state.table !== lib.getFromConfig("noTableMsg") ? <div id="queryBuilder" className="queryBuilder" style={{visibility: "visible"}}></div> : <div id="queryBuilder" className="queryBuilder" style={{visibility: "hidden"}}></div> }
 				</div>
 			</div>
 		);
