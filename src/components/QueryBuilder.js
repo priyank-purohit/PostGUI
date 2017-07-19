@@ -167,6 +167,8 @@ export default class QueryBuilderWrapper extends React.Component {
     render() {
         return (
             <div>
+                <hr color="grey"/> 
+                <div className="mdl-progress mdl-js-progress mdl-progress__indeterminate" style={{width: 100 + '%'}}></div>
                 <div id='query-builder' ref='queryBuilder'/>
                 <button onClick={this.handleSubmitClick.bind(this)} id="submit" className="submitButton btn-primary">Submit Query</button>
                 <br/><br/><br/>
