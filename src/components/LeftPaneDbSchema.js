@@ -74,10 +74,11 @@ class LeftPaneDbSchema extends Component {
 		let columns = this.state[table];
 		if (columns) {
 			for (let i = 0; i < columns.length; i++) {
+				let columnName = lib.getColumnConfig(table, columns[i], "rename");
 				ret.push(
 					<div key={i}>
-					<button key={i} id={columns[i]} className={"columnsButtons " + this.state[columns[i]]} onClick={this.handleColumnClick.bind(this)}>{columns[i]}</button>
-				</div>
+					<button key={i} id={columns[i]} className={"columnsButtons " + this.state[columns[i]]} onClick={this.handleColumnClick.bind(this)}>{columnName ? columnName : columns[i]}</button>
+					</div>
 				);
 			}
 		}
@@ -88,9 +89,10 @@ class LeftPaneDbSchema extends Component {
 	displayTables(listOfTables = this.state.tables) {
 		let ret = [];
 		for (let i = 0; i < listOfTables.length; i++) {
+			let tableName = lib.getTableConfig(listOfTables[i], "rename");
 			ret.push(
 				<div key={i}>
-					<button key={i} id={listOfTables[i]} className="tablesButtons" onClick={this.handleTableClick.bind(this)}>{listOfTables[i]}</button>
+					<button key={i} id={listOfTables[i]} className="tablesButtons" onClick={this.handleTableClick.bind(this)}>{tableName ? tableName : listOfTables[i]}</button>
 					{this.displayColumns(listOfTables[i])}
 				</div>
 			);
@@ -112,8 +114,10 @@ class LeftPaneDbSchema extends Component {
 		let columns = [];
 		let selectColumns = [];
 		for (let i in rawResp) {
-			columns.push(i);
-			selectColumns.push(i);
+			if (lib.getColumnConfig(table, i, "visible") !== false) {
+				columns.push(i);
+				selectColumns.push(i);
+			}
 		}
 		this.setState({
 			[table]: columns

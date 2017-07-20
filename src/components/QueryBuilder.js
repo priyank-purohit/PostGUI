@@ -41,7 +41,7 @@ export default class QueryBuilderWrapper extends React.Component {
             const element = this.refs.queryBuilder;
             this.rebuildQueryBuilder(element, newProps.table, newProps.columns);
             // Load sample data too
-            this.fetchOutput(lib.getFromConfig("baseUrl") + "/" + newProps.table + "?limit=25");
+            this.fetchOutput(lib.getFromConfig("baseUrl") + "/" + newProps.table + "?limit=25&select=" + newProps.columns);
         }
     }
 
@@ -170,7 +170,7 @@ export default class QueryBuilderWrapper extends React.Component {
                 <div id='query-builder' ref='queryBuilder'/>
                 <button onClick={this.handleSubmitClick.bind(this)} id="submit" className="submitButton btn-primary">Submit Query</button>
                 <br/><br/><br/>
-                <DataTable response={this.state.response} />
+                <DataTable response={this.state.response} table={this.state.table} />
             </div>
         );
     }

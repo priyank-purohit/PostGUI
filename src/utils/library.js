@@ -13,6 +13,45 @@ exports.getFromConfig = function(key = "title") {
 	return config[key]
 }
 
+// Retrieves value of key from the config file
+exports.getTableConfig = function(table = "error", option = "error") {
+	let configFile = require("../data/config.json");
+	let config = JSON.parse(JSON.stringify(configFile));
+	
+	// If the table option is found, return; else return null
+	// NOTE: check for null value when this function is used
+	if (table !== this.getFromConfig("noTableMsg")) {
+		if (config["tableRules"][table] && config["tableRules"][table][option]) {
+			return config["tableRules"][table][option];
+		} else {
+			return null;
+		}
+	} else {
+		return this.getFromConfig("noTableMsg");
+	}
+}
+
+// Retrieves value of key from the config file
+exports.getColumnConfig = function(table = "error", column = "error", option = "error") {
+	let configFile = require("../data/config.json");
+	let config = JSON.parse(JSON.stringify(configFile));
+
+	// If the table column option is found, return; else return null
+	// NOTE: check for null value when this function is used
+	if (table !== this.getFromConfig("noTableMsg") && table !== "error" && column !== "error") {
+		if (config["tableRules"][table] && 
+			config["tableRules"][table]["columnRules"] && 
+			config["tableRules"][table]["columnRules"][column] && 
+			config["tableRules"][table]["columnRules"][column][option] !== null) {
+			return config["tableRules"][table]["columnRules"][column][option];
+		} else {
+			return null;
+		}
+	} else {
+		return null;
+	}
+}
+
 // Opens the specified URL in a different tab
 exports.visitPage = function(url = "http://www.google.ca") {
 	window.open(url, "_blank");
@@ -38,7 +77,7 @@ exports.getQBFilters = function(table, columns) {
 
 	let plain_strings_query_builder = [];
 	for (let i = 0; i < columns.length; i++) {
-		plain_strings_query_builder.push({ id: columns[i], label: columns[i], type: 'string', operators: ['equal', 'not_equal', 'greater', 'less', 'greater_or_equal', 'less_or_equal', 'is_not_null', 'is_null', 'in', 'contains'] });
+		plain_strings_query_builder.push({ id: columns[i], label: this.getColumnConfig(table, columns[i], "rename"), type: 'string', operators: ['equal', 'not_equal', 'greater', 'less', 'greater_or_equal', 'less_or_equal', 'is_not_null', 'is_null', 'in', 'contains'] });
 	}
 	return plain_strings_query_builder;
 }

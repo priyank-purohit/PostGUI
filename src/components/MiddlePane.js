@@ -4,6 +4,8 @@ import '../styles/MiddlePane.css';
 import '../styles/QueryBuilder.css';
 import QueryBuilderWrapper from '../components/QueryBuilder.js';
 
+let lib = require('../utils/library.js');
+
 class MiddlePane extends Component {
 	constructor(props) {
 		super(props);
@@ -19,12 +21,6 @@ class MiddlePane extends Component {
 		ReactDOM.render(React.createElement(QueryBuilderWrapper, props), document.getElementById('queryBuilder'));
 	}
 
-	// When updated table and column names are received, update the QB
-	updateQueryBuilder(table, columns, selectColumns) {
-		var props = { table: table, columns: columns, selectColumns: selectColumns };
-		ReactDOM.render(React.createElement(QueryBuilderWrapper, props), document.getElementById('queryBuilder'));
-	}
-
 	componentWillReceiveProps(newProps) {
 		this.setState({ table: newProps.table, columns: newProps.columns, selectColumns: newProps.selectColumns });
 		if (newProps.table && newProps.columns && newProps.selectColumns) {
@@ -32,11 +28,26 @@ class MiddlePane extends Component {
 		}
 	}
 
+	// When updated table and column names are received, update the QB
+	updateQueryBuilder(table, columns, selectColumns) {
+		var props = { table: table, columns: columns, selectColumns: selectColumns };
+		ReactDOM.render(React.createElement(QueryBuilderWrapper, props), document.getElementById('queryBuilder'));
+	}
+
 	render() {
+		let tableName = lib.getTableConfig(this.state.table, "rename"); // name of the table
+		let tableDesc = lib.getTableConfig(this.state.table, "description"); // description of the table
+
+		// If table description is the no table message, wipe it off...
+		if (tableDesc === lib.getFromConfig("noTableMsg")) {
+			tableDesc = "";
+		}
+		
 		return (
 			<div className="middlePane" id="middlePane">
 				<div className="middlePaneInner">
-					<h2>{this.state.table}</h2>
+					<h2>{tableName ? tableName : this.state.table}</h2>
+					{tableDesc ? (<h4>{tableDesc}</h4>) : (<h4></h4>)}
 					<hr color="grey"/>
 					<div id="queryBuilder" className="queryBuilder"></div>
 				</div>
