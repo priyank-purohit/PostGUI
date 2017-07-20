@@ -4,6 +4,12 @@ import DataTable from './DataTable';
 
 let lib = require('../utils/library.js');
 
+let visibleProgressBar = ["mdl-spinner", "mdl-js-spinner", "rightAlign", "is-active"];
+//let visibleProgressBar = ["mdl-progress", "mdl-js-progress", "mdl-progress__indeterminate", "visible"];
+
+let hiddenProgressBar = ["mdl-spinner", "mdl-js-spinner", "rightAlign"];
+//let hiddenProgressBar = ["mdl-progress", "mdl-js-progress", "mdl-progress__indeterminate", "hidden"];
+
 const defaultRules = lib.getQBRules();
 
 export default class QueryBuilderWrapper extends React.Component {
@@ -14,7 +20,9 @@ export default class QueryBuilderWrapper extends React.Component {
             table: this.props.table,
             columns: this.props.columns,
             selectColumns: this.props.selectColumns,
-            response: []
+            response: [],
+            progressBarClassNames: visibleProgressBar,
+            submitButtonClassNames: ["submitButton", "btn-primary", "hidden"]
         };
     }
 
@@ -118,15 +126,18 @@ export default class QueryBuilderWrapper extends React.Component {
                         response: response.data
                     });
                     this.forceUpdate();
+                    this.setProgressBarVisibility(false);
                 })
                 .catch(function(error) {
                     console.log(error);
+                    this.setProgressBarVisibility(false);
                 });
         } else {
             this.setState({
                 response: []
             });
             this.forceUpdate();
+            this.setProgressBarVisibility(false);
         }
     }
 
@@ -160,15 +171,43 @@ export default class QueryBuilderWrapper extends React.Component {
 
     // When user presses the submit button, makes the APi call
     handleSubmitClick() {
+        this.setProgressBarVisibility(true);
         let rules = window.$(this.refs.queryBuilder).queryBuilder('getRules');
         this.processRules(rules);
+    }
+
+    toggleProgressBarVisibility() {
+
+        if (this.state.progressBarClassNames.length === hiddenProgressBar.length && this.state.progressBarClassNames.every((v,i) => v === hiddenProgressBar[i])) {
+            // make progress bar visible
+            this.setState({progressBarClassNames: visibleProgressBar});
+            this.setState({submitButtonClassNames: ["submitButton", "btn-primary", "hidden"]});
+        } else {
+            // make progress bar hidden
+            this.setState({progressBarClassNames: hiddenProgressBar});
+            this.setState({submitButtonClassNames: ["submitButton", "btn-primary", "visible"]});
+        }
+    }
+
+    setProgressBarVisibility(visible) {
+        if (visible === true) { // make progress bar visible
+            this.setState({progressBarClassNames: visibleProgressBar});
+            this.setState({submitButtonClassNames: ["submitButton", "btn-primary", "hidden"]});
+        } else { // make progress bar hidden
+            this.setState({progressBarClassNames: hiddenProgressBar});
+            this.setState({submitButtonClassNames: ["submitButton", "btn-primary", "visible"]});
+        }
     }
 
     render() {
         return (
             <div>
+                {/*<div  className={this.state.progressBarClassNames.join(' ')} style={{width: 100 + '%'}} ></div>*/}
+                <hr id="hrBar" color="grey" style={{width: 100 + '%'}} />
+
                 <div id='query-builder' ref='queryBuilder'/>
-                <button onClick={this.handleSubmitClick.bind(this)} id="submit" className="submitButton btn-primary">Submit Query</button>
+                <button onClick={this.handleSubmitClick.bind(this)} id="submit" className={this.state.submitButtonClassNames.join(' ')}>Submit Query</button>
+                <div id="progressBar" className={this.state.progressBarClassNames.join(' ')}></div>
                 <br/><br/><br/>
                 <DataTable response={this.state.response} table={this.state.table} />
             </div>

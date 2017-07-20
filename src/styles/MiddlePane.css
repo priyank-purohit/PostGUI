@@ -43,3 +43,16 @@
 	width: 80%;
 	float: left;
 }
+
+.hidden {
+	visibility: hidden;
+}
+
+.visible {
+	visibility: visible;
+}
+
+.rightAlign {
+	float: right;
+	margin-right: -75px;
+}
