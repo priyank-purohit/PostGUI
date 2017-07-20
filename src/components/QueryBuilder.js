@@ -4,6 +4,12 @@ import DataTable from './DataTable';
 
 let lib = require('../utils/library.js');
 
+let visibleProgressBar = ["mdl-spinner", "mdl-js-spinner", "rightAlign", "is-active"];
+//let visibleProgressBar = ["mdl-progress", "mdl-js-progress", "mdl-progress__indeterminate", "visible"];
+
+let hiddenProgressBar = ["mdl-spinner", "mdl-js-spinner", "rightAlign"];
+//let hiddenProgressBar = ["mdl-progress", "mdl-js-progress", "mdl-progress__indeterminate", "hidden"];
+
 const defaultRules = lib.getQBRules();
 
 export default class QueryBuilderWrapper extends React.Component {
@@ -15,8 +21,7 @@ export default class QueryBuilderWrapper extends React.Component {
             columns: this.props.columns,
             selectColumns: this.props.selectColumns,
             response: [],
-            progressBarClassNames: ["mdl-spinner", "mdl-js-spinner is-active", "hidden"],
-            progressBarClassNames2: ["mdl-progress", "mdl-js-progress", "mdl-progress__indeterminate", "hidden"],
+            progressBarClassNames: visibleProgressBar,
             submitButtonClassNames: ["submitButton", "btn-primary", "hidden"]
         };
     }
@@ -172,27 +177,24 @@ export default class QueryBuilderWrapper extends React.Component {
     }
 
     toggleProgressBarVisibility() {
-        let hiddenClassNames = ["mdl-progress", "mdl-js-progress", "mdl-progress__indeterminate", "hidden"];
 
-        if (this.state.progressBarClassNames.length === hiddenClassNames.length && this.state.progressBarClassNames.every((v,i) => v === hiddenClassNames[i])) {
+        if (this.state.progressBarClassNames.length === hiddenProgressBar.length && this.state.progressBarClassNames.every((v,i) => v === hiddenProgressBar[i])) {
             // make progress bar visible
-            this.setState({progressBarClassNames: ["mdl-progress", "mdl-js-progress", "mdl-progress__indeterminate", "visible"]});
+            this.setState({progressBarClassNames: visibleProgressBar});
             this.setState({submitButtonClassNames: ["submitButton", "btn-primary", "hidden"]});
         } else {
             // make progress bar hidden
-            this.setState({progressBarClassNames: ["mdl-progress", "mdl-js-progress", "mdl-progress__indeterminate", "hidden"]});
+            this.setState({progressBarClassNames: hiddenProgressBar});
             this.setState({submitButtonClassNames: ["submitButton", "btn-primary", "visible"]});
         }
     }
 
     setProgressBarVisibility(visible) {
-        let hiddenClassNames = ["mdl-spinner", "mdl-js-spinner is-active", "hidden"];
-
         if (visible === true) { // make progress bar visible
-            this.setState({progressBarClassNames: ["mdl-spinner", "mdl-js-spinner is-active", "visible"]});
+            this.setState({progressBarClassNames: visibleProgressBar});
             this.setState({submitButtonClassNames: ["submitButton", "btn-primary", "hidden"]});
         } else { // make progress bar hidden
-            this.setState({progressBarClassNames: ["mdl-spinner", "mdl-js-spinner is-active", "hidden"]});
+            this.setState({progressBarClassNames: hiddenProgressBar});
             this.setState({submitButtonClassNames: ["submitButton", "btn-primary", "visible"]});
         }
     }
@@ -201,12 +203,11 @@ export default class QueryBuilderWrapper extends React.Component {
         return (
             <div>
                 {/*<div  className={this.state.progressBarClassNames.join(' ')} style={{width: 100 + '%'}} ></div>*/}
-                <div id="progressBar" className={this.state.progressBarClassNames.join(' ')}></div>
-
                 <hr id="hrBar" color="grey" style={{width: 100 + '%'}} />
 
                 <div id='query-builder' ref='queryBuilder'/>
                 <button onClick={this.handleSubmitClick.bind(this)} id="submit" className={this.state.submitButtonClassNames.join(' ')}>Submit Query</button>
+                <div id="progressBar" className={this.state.progressBarClassNames.join(' ')}></div>
                 <br/><br/><br/>
 
                 <DataTable response={this.state.response} />

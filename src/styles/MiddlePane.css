@@ -51,3 +51,8 @@
 .visible {
 	visibility: visible;
 }
+
+.rightAlign {
+	float: right;
+	margin-right: -75px;
+}
