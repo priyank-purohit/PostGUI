@@ -47,14 +47,14 @@ class DataTable extends Component {
 	// Generates the data rows
 	rowsGenerated() {
 		let cols = this.state.columns, // [{key, label}]
-			data = this.state.data;
+			data = this.state.data,
+			table = this.props.table;
 
 		return data.map(function(item, i) {
 			// handle the column data within each row
 			let cells = cols.map(function(colData, key) {
-
 				// colData.key might be "firstName"
-				return <td key={key} className="fontSize8">{item[colData]}</td>;
+				return <td key={key} style={{ maxWidth: lib.getColumnConfig(table, colData, "maxWidthPx"), textAlign: lib.getColumnConfig(table, colData, "textAlign")}} className="fontSize8">{item[colData]}</td>;
 			});
 			return <tr key={i}>{cells}</tr>;
 		});
