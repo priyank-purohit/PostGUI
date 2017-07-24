@@ -47,28 +47,32 @@ class DataTable extends Component {
 	// Generates the data rows
 	rowsGenerated() {
 		let cols = this.state.columns, // [{key, label}]
-			data = this.state.data;
+			data = this.state.data,
+			table = this.props.table,
+			tableMaxWidth = lib.getTableConfig(table, "defaultMaxWidthPx");
 
 		return data.map(function(item, i) {
 			// handle the column data within each row
 			let cells = cols.map(function(colData, key) {
-
 				// colData.key might be "firstName"
-				return <td key={key} className="fontSize8">{item[colData]}</td>;
+				let columnMaxWidth = lib.getColumnConfig(table, colData, "maxWidthPx");
+				return <td key={key} style={{ maxWidth: columnMaxWidth ? columnMaxWidth : tableMaxWidth, textAlign: lib.getColumnConfig(table, colData, "textAlign")}} className="fontSize8">{item[colData]}</td>;
 			});
 			return <tr key={i}>{cells}</tr>;
 		});
 	}
 
 	render() {
-		let table = this.props.table;
+		let table = this.props.table,
+			tableMaxWidth = lib.getTableConfig(table, "defaultMaxWidthPx");
 		return (
 			<table id="dataTable">
 				<thead>
 					<tr key="head">
 					{
 						this.state.columns.map( function (columnTitle, key) {
-							return (<th key={key} className="fontSize8">{lib.getColumnConfig(table, columnTitle, "rename") ? lib.getColumnConfig(table, columnTitle, "rename") : columnTitle}</th>);
+							let columnMaxWidth = lib.getColumnConfig(table, columnTitle, "maxWidthPx");
+							return (<th key={key} style={{ maxWidth: columnMaxWidth ? columnMaxWidth : tableMaxWidth, textAlign: lib.getColumnConfig(table, columnTitle, "textAlign")}} className="fontSize8">{lib.getColumnConfig(table, columnTitle, "rename") ? lib.getColumnConfig(table, columnTitle, "rename") : columnTitle}</th>);
 						})
 					}
 					</tr>

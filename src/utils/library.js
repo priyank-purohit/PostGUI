@@ -21,7 +21,7 @@ exports.getTableConfig = function(table = "error", option = "error") {
 	// If the table option is found, return; else return null
 	// NOTE: check for null value when this function is used
 	if (table !== this.getFromConfig("noTableMsg")) {
-		if (config["tableRules"][table] && config["tableRules"][table][option]) {
+		if (config["tableRules"][table] && config["tableRules"][table][option] !== null) {
 			return config["tableRules"][table][option];
 		} else {
 			return null;
