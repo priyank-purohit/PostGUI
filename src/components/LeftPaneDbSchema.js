@@ -104,7 +104,9 @@ class LeftPaneDbSchema extends Component {
 	parseTables(rawResp = this.state.rawResp) {
 		let dbTables = [];
 		for (let i in rawResp.definitions) {
-			dbTables.push(i);
+			if (lib.getTableConfig(i, "visible") !== false) {
+			    dbTables.push(i);
+			}
 		}
 		this.setState({ tables: dbTables });
 	}
