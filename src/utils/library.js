@@ -52,6 +52,24 @@ exports.getColumnConfig = function(table = "error", column = "error", option = "
 	}
 }
 
+// returns true if the element is in array
+exports.inArray = function(element, array) {
+  return array.indexOf(element) > -1;
+}
+
+// return true iff table.column is part of the default columns defined
+exports.isColumnDefaultView = function(table, column) {
+    if (table && column) {
+		console.log("Checking column = " + column + " of table = " + table);
+        let defaultColumns = this.getTableConfig(table, "defaultViewColumns");
+		console.log("default columns = " + defaultColumns);
+        if (this.inArray(column, defaultColumns) === true) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
 // Opens the specified URL in a different tab
 exports.visitPage = function(url = "http://www.google.ca") {
 	window.open(url, "_blank");
