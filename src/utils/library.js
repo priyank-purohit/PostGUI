@@ -63,9 +63,7 @@ exports.inArray = function(element, array) {
 // return true iff table.column is part of the default columns defined
 exports.isColumnDefaultView = function(table, column) {
     if (table && column) {
-        console.log("Checking column = " + column + " of table = " + table);
         let defaultColumns = this.getTableConfig(table, "defaultViewColumns");
-        console.log("default columns = " + defaultColumns);
         if (this.inArray(column, defaultColumns) === true) {
             return true;
         } else {

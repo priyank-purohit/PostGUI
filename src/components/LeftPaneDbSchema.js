@@ -120,18 +120,11 @@ class LeftPaneDbSchema extends Component {
                 columns.push(i);
 
                 let columnDefaultVisibility = lib.isColumnDefaultView(table, i);
-                console.log(i + " should be visible == " + columnDefaultVisibility);
+                
                 if (columnDefaultVisibility === false) {
                     this.setState({
                         [i]: "strikeOut"
                     });
-/*
-                    let columnsNotVisible = this.state.columnsNotVisible;
-                    columnsNotVisible.push(i);
-
-                    this.setState({
-                        "columnsNotVisible": columnsNotVisible
-                    });*/
                 } else {
                     selectColumns.push(i);
                 }
