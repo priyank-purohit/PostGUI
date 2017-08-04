@@ -48,8 +48,17 @@ export default class QueryBuilderWrapper extends React.Component {
         if (newProps.table && newProps.columns && (newProps.table !== this.state.table || newProps.columns !== this.state.columns)) {
             const element = this.refs.queryBuilder;
             this.rebuildQueryBuilder(element, newProps.table, newProps.columns);
-            // Load sample data too
-            this.fetchOutput(lib.getFromConfig("baseUrl") + "/" + newProps.table + "?limit=25&select=" + newProps.columns);
+
+            // Load sample data with default columns only (if default cols defined)
+            let defaultCols = lib.getTableConfig(newProps.table, "defaultViewColumns");
+            
+            if (defaultCols !== null && defaultCols !== lib.getFromConfig("noTableMsg")) {
+                defaultCols = "&select=" + (defaultCols.join(','));
+            } else {
+                defaultCols = "";
+            }
+            
+            this.fetchOutput(lib.getFromConfig("baseUrl") + "/" + newProps.table + "?limit=25" + defaultCols);
         }
     }
 
