@@ -120,7 +120,6 @@ class LeftPaneDbSchema extends Component {
                 columns.push(i);
 
                 let columnDefaultVisibility = lib.isColumnDefaultView(table, i);
-                
                 if (columnDefaultVisibility === false) {
                     this.setState({
                         [i]: "strikeOut"

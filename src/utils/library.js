@@ -64,10 +64,14 @@ exports.inArray = function(element, array) {
 exports.isColumnDefaultView = function(table, column) {
     if (table && column) {
         let defaultColumns = this.getTableConfig(table, "defaultViewColumns");
-        if (this.inArray(column, defaultColumns) === true) {
-            return true;
+        if (defaultColumns === null) {
+            return null;
         } else {
-            return false;
+            if (this.inArray(column, defaultColumns) === true) {
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 }
