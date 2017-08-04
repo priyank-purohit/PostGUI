@@ -57,7 +57,7 @@ export default class QueryBuilderWrapper extends React.Component {
             } else {
                 defaultCols = "";
             }
-            
+
             this.fetchOutput(lib.getFromConfig("baseUrl") + "/" + newProps.table + "?limit=25" + defaultCols);
         }
     }
@@ -128,7 +128,7 @@ export default class QueryBuilderWrapper extends React.Component {
     // Makes an API call to the PostgREST server specified in confic.json
     fetchOutput(url) {
         if (!url.includes(lib.getFromConfig("noTableMsg"))) {
-            console.log("GET " + url);
+            //console.log("GET " + url);
             axios.get(url, { params: {} })
                 .then((response) => {
                     this.setState({
