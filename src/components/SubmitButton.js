@@ -30,16 +30,21 @@ const styleSheet = createStyleSheet({
 });
 
 class CircularFab extends Component {
-	state = {
-		loading: false,
-		success: false,
-	};
+	timer = undefined;
+
+	constructor(props) {
+		super(props);
+		this.state = {
+			loading: false,
+			success: false,
+		};
+	}
 
 	componentWillUnmount() {
 		clearTimeout(this.timer);
 	}
 
-	handleButtonClick = () => {
+	handleButtonClick() {
 		if (!this.state.loading) {
 			this.setState({
 					success: false,
@@ -50,14 +55,19 @@ class CircularFab extends Component {
 						this.setState({
 							loading: false,
 							success: true,
+						}, () => {
+							this.timer = setTimeout(() => { 
+								this.setState({ 
+									loading: false, 
+									success: false 
+								}) 
+							}, 2500);
 						});
-					}, 2e3);
+					}, 1000);
 				},
 			);
 		}
 	};
-
-	timer = undefined;
 
 	render() {
 		const { loading, success } = this.state;
@@ -70,7 +80,7 @@ class CircularFab extends Component {
 
 		return (
 			<div className={classes.wrapper}>
-				<Button fab color="accent" className={buttonClass} onClick={this.handleButtonClick}>{success ? <CheckIcon /> : <ArrowForwardIcon />}</Button>
+				<Button fab color="accent" className={buttonClass} onClick={this.handleButtonClick.bind(this)}>{success ? <CheckIcon /> : <ArrowForwardIcon />}</Button>
 				{loading && <CircularProgress size={60} className={classes.progress} />}
 			</div>
 		);
