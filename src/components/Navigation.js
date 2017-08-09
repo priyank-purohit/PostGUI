@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
@@ -12,17 +13,26 @@ import '../styles/Navigation.css';
 
 let lib = require('../utils/library.js');
 
+const styleSheet = createStyleSheet(theme => ({
+	root: {
+		width: '100%'
+	},
+	flex: {
+		flex: 1
+	}
+}));
 
-export default class Navigation extends Component {
+class Navigation extends Component {
 	render() {
+		const classes = this.props.classes;
 		return (
-			<div className="root">
+			<div className={classes.root}>
 				<AppBar position="static">
 					<Toolbar>
 						<IconButton color="contrast" aria-label="Menu">
 							<MenuIcon />
 						</IconButton>
-						<Typography type="title" color="inherit" className="flex">
+						<Typography type="title" color="inherit" className={classes.flex}>
 							{lib.getFromConfig("title")}
 						</Typography>
 						{/*<IconButton color="contrast" aria-label="Menu">
@@ -34,3 +44,9 @@ export default class Navigation extends Component {
 		);
 	}
 }
+
+Navigation.propTypes = {
+	classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styleSheet)(Navigation);
