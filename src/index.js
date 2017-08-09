@@ -1,11 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import Navigation from './components/Navigation';
+import AppBar from './components/AppBar';
 import LeftPane from './components/LeftPane';
-import MiddlePane from './components/MiddlePane';
-
-//import HistoryPane from './components/HistoryPane';
 
 import './styles/index.css';
 
@@ -57,16 +54,9 @@ export default class Layout extends React.Component {
 
 	render() {
 		return (
-			<div>
-				<Navigation />
-				<LeftPane 	changeTargetTable={this.changeTargetTable.bind(this)}
-							changeTargetTableColumns={this.changeTargetTableColumns.bind(this)}
-							changeSelectTableColumns={this.changeSelectTableColumns.bind(this)}
-							addRemoveSelectTableColumns={this.addRemoveSelectTableColumns.bind(this)} />
-				<MiddlePane table={this.state.targetTable}
-							columns={this.state.targetTableColumns}
-							selectColumns={this.state.selectTableColumns} />
-				{/*<HistoryPane />*/}
+			<div className="bodyDiv">
+				<AppBar />
+				<LeftPane />
 			</div>
 		);
 	}
