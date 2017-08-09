@@ -1,5 +1,3 @@
-// @flow weak
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
@@ -7,80 +5,62 @@ import List, { ListItem, ListItemText } from 'material-ui/List';
 import Menu, { MenuItem } from 'material-ui/Menu';
 
 const styleSheet = createStyleSheet(theme => ({
-  root: {
-    width: '100%',
-    maxWidth: 300
-  },
+	root: {
+		width: '100%',
+		maxWidth: 300
+	},
 }));
 
-const options = [
-  'P. syringae Database',
-  'Burkholderia Database',
-  'C. albicans Database',
+const databaseOptions = [
+	'P. syringae Database',
+	'Burkholderia Database',
+	'C. albicans Database',
 ];
 
-class SimpleListMenu extends Component {
-  state = {
-    anchorEl: undefined,
-    open: false,
-    selectedIndex: 0,
-  };
+class DbPicker extends Component {
+	state = {
+		anchorEl: undefined,
+		open: false,
+		selectedIndex: 0,
+	};
 
-  button = undefined;
+	button = undefined;
 
-  handleClickListItem = event => {
-    this.setState({ open: true, anchorEl: event.currentTarget });
-  };
+	handleClickListItem = (event) => {
+		this.setState({ open: true, anchorEl: event.currentTarget });
+	};
 
-  handleMenuItemClick = (event, index) => {
-    this.setState({ selectedIndex: index, open: false });
-  };
+	handleMenuItemClick = (event, index) => {
+		this.setState({ selectedIndex: index, open: false });
+	};
 
-  handleRequestClose = () => {
-    this.setState({ open: false });
-  };
+	handleRequestClose = () => {
+		this.setState({ open: false });
+	};
 
-  render() {
-    const classes = this.props.classes;
-    return (
-      <div className={classes.root}>
-        <List>
-          <ListItem
-            button
-            aria-haspopup="true"
-            aria-controls="lock-menu"
-            aria-label="Database"
-            onClick={this.handleClickListItem}
-          >
-            <ListItemText
-              primary="Database"
-              secondary={options[this.state.selectedIndex]}
-            />
-          </ListItem>
-        </List>
-        <Menu
-          id="lock-menu"
-          anchorEl={this.state.anchorEl}
-          open={this.state.open}
-          onRequestClose={this.handleRequestClose}
-        >
-          {options.map((option, index) =>
-            <MenuItem
-              key={option}
-              selected={index === this.state.selectedIndex}
-              onClick={event => this.handleMenuItemClick(event, index)}
-            >
-              {option}
-            </MenuItem>,
-          )}
-        </Menu>
-      </div>
-    );
-  }
+	render() {
+		const classes = this.props.classes;
+		return (
+			<div className={classes.root}>
+				<List>
+					<ListItem button aria-haspopup="true" aria-controls="lock-menu" aria-label="Database" onClick={this.handleClickListItem} >
+						<ListItemText primary="Database" secondary={databaseOptions[this.state.selectedIndex]} />
+					</ListItem>
+				</List>
+				<Menu id="lock-menu" anchorEl={this.state.anchorEl} open={this.state.open} onRequestClose={this.handleRequestClose} >
+					{databaseOptions.map((option, index) =>
+						<MenuItem key={option} selected={index === this.state.selectedIndex} onClick={event => this.handleMenuItemClick(event, index)} >
+							{option}
+						</MenuItem>
+					)}
+				</Menu>
+			</div>
+		);
+	}
 }
 
-SimpleListMenu.propTypes = {
-  classes: PropTypes.object.isRequired,
+DbPicker.propTypes = {
+	classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styleSheet)(SimpleListMenu);
+export default withStyles(styleSheet)(DbPicker);

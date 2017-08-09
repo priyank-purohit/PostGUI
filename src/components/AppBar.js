@@ -6,7 +6,7 @@ import Typography from 'material-ui/Typography';
 //import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
-import HomeIcon from 'material-ui-icons/Home';
+//import HomeIcon from 'material-ui-icons/Home';
 
 let lib = require('../utils/library.js');
 
