@@ -21,44 +21,14 @@ export default class Layout extends React.Component {
 		};
 	}
 
-	changeTargetTable(newTable) {
-		this.setState({ targetTable: newTable });
-	}
-
-	changeTargetTableColumns(newTableColumns) {
-		this.setState({ targetTableColumns: newTableColumns });
-	}
-
-	changeSelectTableColumns(newSelectColumns) {
-		this.setState({ selectTableColumns: newSelectColumns });
-	}
-
-	// Depending on current state of selectTableColumns, it will add or remove a column
-	// This is used to pick out which columns user wants to see
-	addRemoveSelectTableColumns(column) {
-		console.log("Adding or removing column " + column);
-
-		let currentColumns = this.state.selectTableColumns;
-		let index = currentColumns.indexOf(column);
-		console.log("index = " + index);
-
-		if (index >= 0) {
-			// remove it
-			currentColumns.splice(index, 1);
-			this.setState({ selectTableColumns: currentColumns });
-			return false;
-		} else {
-			// add it
-			currentColumns.push(column);
-			this.setState({ selectTableColumns: currentColumns });
-			return true;
-		}
+	toggleLeftPane() {
+		console.log("Closing left pane.");
 	}
 
 	render() {
 		return (
 			<div>
-				<Navigation />
+				<Navigation toggleLeftPane={this.toggleLeftPane} />
 				<div className="bodyDiv">
 					<LeftPane />
 					<RightPane />
