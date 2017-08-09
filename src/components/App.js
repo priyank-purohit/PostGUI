@@ -28,7 +28,7 @@ export default class Layout extends React.Component {
 	render() {
 		return (
 			<div>
-				<Navigation toggleLeftPane={this.toggleLeftPane} />
+				<Navigation toggleLeftPane={this.toggleLeftPane.bind(this)} />
 				<div className="bodyDiv">
 					<LeftPane />
 					<RightPane />
