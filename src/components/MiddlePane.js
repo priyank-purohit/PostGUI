@@ -4,8 +4,14 @@ import PropTypes from 'prop-types';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
 import { CardHeader } from 'material-ui/Card';
+import TextField from 'material-ui/TextField';
 import SubmitButton from './SubmitButton.js';
 import Typography from 'material-ui/Typography';
+import '../styles/QueryBuilder.css';
+
+let lib = require('../utils/library.js');
+
+const defaultRules = lib.getQBRules();
 
 const styleSheet = createStyleSheet(theme => ({
 	root: theme.mixins.gutters({
@@ -18,15 +24,47 @@ const styleSheet = createStyleSheet(theme => ({
 		marginTop: -450
 	},
 	cardMarginLeft: { // For items within the same section
-		marginLeft: 16
+		marginLeft: 32
 	},
 	cardMarginLeftTop: { // For a new section
 		marginLeft: 16,
 		marginTop: 16 // want a bit more space at top to clearly indicate new section...
+	},
+	textField: {
+		marginLeft: theme.spacing.unit,
+		marginRight: theme.spacing.unit,
+		width: 300
 	}
 }));
 
 class PaperSheet extends Component {
+
+    componentDidMount() {
+        const element = this.refs.queryBuilder;
+        this.initializeQueryBuilder(element);
+    }
+
+    componentWillUnmount() {
+        window.$(this.refs.queryBuilder).queryBuilder('destroy');
+    }
+
+    // Creates the QB on first render with default table (error msg for now)
+    initializeQueryBuilder(element, newRules) {
+        const filters = lib.getQBFilters("", []);
+        const rules = newRules ? newRules : defaultRules;
+        window.$(element).queryBuilder({ filters, rules });
+    }
+
+    // Destroys the old one, and creates a new QB based on the selected view's attributes
+    rebuildQueryBuilder(element, table, columns, newRules) {
+        window.$(this.refs.queryBuilder).queryBuilder('destroy');
+
+        const rules = newRules ? newRules : defaultRules;
+        const filters = lib.getQBFilters(table, columns);
+
+        window.$(element).queryBuilder({ filters, rules });
+    }
+
 	render() {
 		const classes = this.props.classes;
 		return (
@@ -36,33 +74,12 @@ class PaperSheet extends Component {
 
 					<Typography type="subheading" className={classes.cardMarginLeftTop}>Query Builder</Typography>
 					<div id='query-builder' ref='queryBuilder'/>
-						<Typography type="headline" component="h3">This is a sheet of paper.</Typography>
-						<Typography type="body1" component="p">Paper can be used to build surface or other elements for your application.</Typography>
-						<Typography type="headline" component="h3">This is a sheet of paper.</Typography>
-						<Typography type="body1" component="p">Paper can be used to build surface or other elements for your application.</Typography>
-						<Typography type="headline" component="h3">This is a sheet of paper.</Typography>
-						<Typography type="body1" component="p">Paper can be used to build surface or other elements for your application.</Typography>
-						<Typography type="headline" component="h3">This is a sheet of paper.</Typography>
-						<Typography type="body1" component="p">Paper can be used to build surface or other elements for your application.</Typography>
-						<Typography type="headline" component="h3">This is a sheet of paper.</Typography>
-						<Typography type="body1" component="p">Paper can be used to build surface or other elements for your application.</Typography>
 
 					<Typography type="body1" className={classes.cardMarginLeftTop}>Options</Typography>
 					<SubmitButton />
-						<Typography type="headline" component="h3">This is a sheet of paper.</Typography>
-						<Typography type="body1" component="p">Paper can be used to build surface or other elements for your application.</Typography>
-						<Typography type="headline" component="h3">This is a sheet of paper.</Typography>
-						<Typography type="body1" component="p">Paper can be used to build surface or other elements for your application.</Typography>
-
+					<TextField required id="rowLimit" label="Row-limit" defaultValue="10000" className={classes.textField && classes.cardMarginLeft} margin="normal" />
 
 					<Typography type="subheading" className={classes.cardMarginLeftTop}>Sample Data</Typography>
-						<Typography type="headline" component="h3">This is a sheet of paper.</Typography>
-						<Typography type="body1" component="p">Paper can be used to build surface or other elements for your application.</Typography>
-						<Typography type="headline" component="h3">This is a sheet of paper.</Typography>
-						<Typography type="body1" component="p">Paper can be used to build surface or other elements for your application.</Typography>
-						<Typography type="headline" component="h3">This is a sheet of paper.</Typography>
-						<Typography type="body1" component="p">Paper can be used to build surface or other elements for your application.</Typography>
-
 				</Paper>
 			</div>
 		);

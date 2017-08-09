@@ -8,6 +8,8 @@
 .query-builder {
   background: transparent;
   font-family: sans-serif;
+  width: 90%;
+  margin-left: 32px;
 }
 
 .query-builder .hide {
