@@ -1,7 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import 'typeface-roboto';
+
 import AppBar from './components/AppBar';
+import MiddlePane from './components/MiddlePane';
 import LeftPane from './components/LeftPane';
 
 import './styles/index.css';
@@ -57,6 +60,7 @@ export default class Layout extends React.Component {
 			<div className="bodyDiv">
 				<AppBar />
 				<LeftPane />
+				<MiddlePane />
 			</div>
 		);
 	}
