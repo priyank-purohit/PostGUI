@@ -12,7 +12,7 @@ const styleSheet = createStyleSheet(theme => ({
         paddingBottom: 16,
     }),
     middlePaper: {
-        width: 1000,
+        width: '73%',
         marginLeft: 350,
         marginTop: -450
     }
