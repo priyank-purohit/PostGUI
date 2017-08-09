@@ -14,14 +14,14 @@ let lib = require('../utils/library.js');
 const defaultRules = lib.getQBRules();
 
 const styleSheet = createStyleSheet(theme => ({
-	root: theme.mixins.gutters({
-		paddingTop: 16,
-		paddingBottom: 16
-	}),
+	root: {
+		paddingBottom: 50,
+		marginLeft: '30%',
+	},
 	middlePaperSection: {
-		width: '70%',
-		marginLeft: 350,
-		marginTop: -450
+		width: '99%',
+		height: '100%',
+		marginTop: 75
 	},
 	cardMarginLeft: { // For items within the same section
 		marginLeft: 32

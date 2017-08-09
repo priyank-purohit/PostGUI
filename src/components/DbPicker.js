@@ -6,8 +6,7 @@ import Menu, { MenuItem } from 'material-ui/Menu';
 
 const styleSheet = createStyleSheet(theme => ({
 	root: {
-		width: '100%',
-		maxWidth: 300
+		width: '99%'
 	},
 }));
 

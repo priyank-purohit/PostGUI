@@ -57,10 +57,12 @@ export default class Layout extends React.Component {
 
 	render() {
 		return (
-			<div className="bodyDiv">
+			<div>
 				<Navigation />
-				<LeftPane />
-				<MiddlePane />
+				<div className="bodyDiv">
+					<LeftPane />
+					<MiddlePane />
+				</div>
 			</div>
 		);
 	}
