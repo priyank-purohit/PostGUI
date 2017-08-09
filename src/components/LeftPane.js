@@ -9,8 +9,9 @@ import DbPicker from './DbPicker.js'
 
 const styleSheet = createStyleSheet({
 	root: {
-		width: '50%',
-		maxWidth: 300
+		width: '75%',
+		maxWidth: 300,
+		marginTop: 60
 	},
 	column: {
 		marginLeft: 27

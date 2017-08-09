@@ -37,7 +37,7 @@ const styleSheet = createStyleSheet(theme => ({
 	}
 }));
 
-class PaperSheet extends Component {
+class MiddlePane extends Component {
 
     componentDidMount() {
         const element = this.refs.queryBuilder;
@@ -88,8 +88,8 @@ class PaperSheet extends Component {
 	}
 }
 
-PaperSheet.propTypes = {
+MiddlePane.propTypes = {
 	classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styleSheet)(PaperSheet);
+export default withStyles(styleSheet)(MiddlePane);
