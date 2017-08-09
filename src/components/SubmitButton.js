@@ -12,7 +12,7 @@ const styleSheet = createStyleSheet({
 	wrapper: {
 		position: 'relative',
 		float: 'right',
-		marginTop: -36,
+		marginTop: -16,
 		marginRight: 16
 	},
 	successButton: {
