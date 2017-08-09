@@ -11,7 +11,7 @@ const styleSheet = createStyleSheet(theme => ({
         paddingTop: 16,
         paddingBottom: 16,
     }),
-    middlePaper: {
+    middlePaperSection: {
         width: '73%',
         marginLeft: 350,
         marginTop: -450
@@ -28,7 +28,7 @@ const styleSheet = createStyleSheet(theme => ({
 function PaperSheet(props) {
     const classes = props.classes;
     return (
-        <div className={classes.middlePaper}>
+        <div className={classes.middlePaperSection}>
         <Paper className={classes.root} elevation={4}>
           <CardHeader
                 title="Table"
@@ -36,6 +36,12 @@ function PaperSheet(props) {
               />
           <Typography type="subheading" className={classes.cardMarginLeftTop}>
             Query Builder
+          </Typography>
+          <Typography type="body1" className={classes.cardMarginLeftTop}>
+            Options
+          </Typography>
+          <Typography type="subheading" className={classes.cardMarginLeftTop}>
+            Query Response // Sample Data
           </Typography>
       </Paper>
     </div>
