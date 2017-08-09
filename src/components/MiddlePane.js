@@ -9,7 +9,7 @@ import Typography from 'material-ui/Typography';
 const styleSheet = createStyleSheet(theme => ({
 	root: theme.mixins.gutters({
 		paddingTop: 16,
-		paddingBottom: 16,
+		paddingBottom: 16
 	}),
 	middlePaperSection: {
 		width: '70%',
@@ -22,7 +22,7 @@ const styleSheet = createStyleSheet(theme => ({
 	cardMarginLeftTop: { // For a new section
 		marginLeft: 16,
 		marginTop: 16 // want a bit more space at top to clearly indicate new section...
-	},
+	}
 }));
 
 function PaperSheet(props) {
