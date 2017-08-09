@@ -15,7 +15,14 @@ const styleSheet = createStyleSheet(theme => ({
         width: '73%',
         marginLeft: 350,
         marginTop: -450
-    }
+    },
+    cardMarginLeft: { // For items within the same section
+      marginLeft: 16
+    },
+    cardMarginLeftTop: { // For a new section
+      marginLeft: 16,
+      marginTop: 16 // want a bit more space at top to clearly indicate new section...
+    },
 }));
 
 function PaperSheet(props) {
@@ -27,7 +34,7 @@ function PaperSheet(props) {
                 title="Table"
                 subheader="A somewhat short description for the table. Could include helpful info about the data, or how to query the table."
               />
-          <Typography type="subheading" color="primary">
+          <Typography type="subheading" className={classes.cardMarginLeftTop}>
             Query Builder
           </Typography>
       </Paper>
