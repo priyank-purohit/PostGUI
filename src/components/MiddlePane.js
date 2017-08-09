@@ -32,70 +32,36 @@ function PaperSheet(props) {
 		<div className={classes.middlePaperSection}>
 			<Paper className={classes.root} elevation={4}>
 				<CardHeader title="Table" subheader="A somewhat short description for the table. Could include helpful info about the data, or how to query the table." />
-				
+
 				<Typography type="subheading" className={classes.cardMarginLeftTop}>Query Builder</Typography>
-                <div id='query-builder' ref='queryBuilder'/>
-                <Typography type="headline" component="h3">
-          This is a sheet of paper.
-        </Typography>
-        <Typography type="body1" component="p">
-          Paper can be used to build surface or other elements for your application.
-        </Typography><Typography type="headline" component="h3">
-          This is a sheet of paper.
-        </Typography>
-        <Typography type="body1" component="p">
-          Paper can be used to build surface or other elements for your application.
-        </Typography><Typography type="headline" component="h3">
-          This is a sheet of paper.
-        </Typography>
-        <Typography type="body1" component="p">
-          Paper can be used to build surface or other elements for your application.
-        </Typography><Typography type="headline" component="h3">
-          This is a sheet of paper.
-        </Typography>
-        <Typography type="body1" component="p">
-          Paper can be used to build surface or other elements for your application.
-        </Typography><Typography type="headline" component="h3">
-          This is a sheet of paper.
-        </Typography>
-        <Typography type="body1" component="p">
-          Paper can be used to build surface or other elements for your application.
-        </Typography>
+				<div id='query-builder' ref='queryBuilder'/>
+					<Typography type="headline" component="h3">This is a sheet of paper.</Typography>
+					<Typography type="body1" component="p">Paper can be used to build surface or other elements for your application.</Typography>
+					<Typography type="headline" component="h3">This is a sheet of paper.</Typography>
+					<Typography type="body1" component="p">Paper can be used to build surface or other elements for your application.</Typography>
+					<Typography type="headline" component="h3">This is a sheet of paper.</Typography>
+					<Typography type="body1" component="p">Paper can be used to build surface or other elements for your application.</Typography>
+					<Typography type="headline" component="h3">This is a sheet of paper.</Typography>
+					<Typography type="body1" component="p">Paper can be used to build surface or other elements for your application.</Typography>
+					<Typography type="headline" component="h3">This is a sheet of paper.</Typography>
+					<Typography type="body1" component="p">Paper can be used to build surface or other elements for your application.</Typography>
 
 				<Typography type="body1" className={classes.cardMarginLeftTop}>Options</Typography>
 				<SubmitButton />
-<Typography type="headline" component="h3">
-          This is a sheet of paper.
-        </Typography>
-        <Typography type="body1" component="p">
-          Paper can be used to build surface or other elements for your application.
-        </Typography><Typography type="headline" component="h3">
-          This is a sheet of paper.
-        </Typography>
-        <Typography type="body1" component="p">
-          Paper can be used to build surface or other elements for your application.
-        </Typography>
+					<Typography type="headline" component="h3">This is a sheet of paper.</Typography>
+					<Typography type="body1" component="p">Paper can be used to build surface or other elements for your application.</Typography>
+					<Typography type="headline" component="h3">This is a sheet of paper.</Typography>
+					<Typography type="body1" component="p">Paper can be used to build surface or other elements for your application.</Typography>
 
 
 				<Typography type="subheading" className={classes.cardMarginLeftTop}>Sample Data</Typography>
+					<Typography type="headline" component="h3">This is a sheet of paper.</Typography>
+					<Typography type="body1" component="p">Paper can be used to build surface or other elements for your application.</Typography>
+					<Typography type="headline" component="h3">This is a sheet of paper.</Typography>
+					<Typography type="body1" component="p">Paper can be used to build surface or other elements for your application.</Typography>
+					<Typography type="headline" component="h3">This is a sheet of paper.</Typography>
+					<Typography type="body1" component="p">Paper can be used to build surface or other elements for your application.</Typography>
 
-		<Typography type="headline" component="h3">
-          This is a sheet of paper.
-        </Typography>
-        <Typography type="body1" component="p">
-          Paper can be used to build surface or other elements for your application.
-        </Typography><Typography type="headline" component="h3">
-          This is a sheet of paper.
-        </Typography>
-        <Typography type="body1" component="p">
-          Paper can be used to build surface or other elements for your application.
-        </Typography><Typography type="headline" component="h3">
-          This is a sheet of paper.
-        </Typography>
-        <Typography type="body1" component="p">
-          Paper can be used to build surface or other elements for your application.
-        </Typography>
-        
 			</Paper>
 		</div>
 	);
