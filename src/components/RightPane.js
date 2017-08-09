@@ -19,6 +19,10 @@ const styleSheet = createStyleSheet(theme => ({
 		paddingBottom: 50,
 		marginLeft: '30%',
 	},
+	rootInvisibleLeft: {
+		paddingBottom: 50,
+		marginLeft: '1%',
+	},
 	middlePaperSection: {
 		width: '99%',
 		height: '100%',
@@ -70,7 +74,7 @@ class RightPane extends Component {
 		const classes = this.props.classes;
 		return (
 			<div className={classes.middlePaperSection}>
-				<Paper className={classes.root} elevation={5}>
+				<Paper className={this.props.leftPaneVisibility ? classes.root : classes.rootInvisibleLeft} elevation={5}>
 					<CardHeader title="Table" subheader="A somewhat short description for the table. Could include helpful info about the data, or how to query the table." />
 
 					<Typography type="subheading" className={classes.cardMarginLeftTop}>Query Builder</Typography>

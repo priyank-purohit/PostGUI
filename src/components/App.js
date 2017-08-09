@@ -37,7 +37,7 @@ export default class Layout extends React.Component {
 				<Navigation toggleLeftPane={this.toggleLeftPane.bind(this)} />
 				<div className="bodyDiv">
 					{this.state.leftPaneVisibility ? <LeftPane /> : <div></div>}
-					<RightPane />
+					<RightPane leftPaneVisibility={this.state.leftPaneVisibility}/>
 				</div>
 			</div>
 		);
