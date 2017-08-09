@@ -27,7 +27,7 @@ class Navigation extends Component {
 			<div className={classes.root}>
 				<AppBar position="fixed">
 					<Toolbar>
-						<IconButton color="contrast" aria-label="Menu" onClick={this.props.toggleLeftPane()}>
+						<IconButton color="contrast" aria-label="Menu" onClick={this.props.toggleLeftPane.bind(this)}>
 							<MenuIcon />
 						</IconButton>
 						<Typography type="title" color="inherit" className={classes.flex}>

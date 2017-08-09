@@ -15,14 +15,20 @@ export default class Layout extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			targetTable: lib.getFromConfig("noTableMsg"),
-			targetTableColumns: [],
-			selectTableColumns: []
+			leftPaneVisibility: true
 		};
 	}
 
 	toggleLeftPane() {
-		console.log("Closing left pane.");
+		if (this.state.leftPaneVisibility) {
+			this.setState({
+				leftPaneVisibility: false
+			});
+		} else {
+			this.setState({
+				leftPaneVisibility: true
+			});
+		}
 	}
 
 	render() {
@@ -30,7 +36,7 @@ export default class Layout extends React.Component {
 			<div>
 				<Navigation toggleLeftPane={this.toggleLeftPane.bind(this)} />
 				<div className="bodyDiv">
-					<LeftPane />
+					{this.state.leftPaneVisibility ? <LeftPane/> : <div></div>}
 					<RightPane />
 				</div>
 			</div>
