@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import 'typeface-roboto';
 
 import Navigation from './Navigation.js';
-import MiddlePane from './MiddlePane.js';
+import RightPane from './RightPane.js';
 import LeftPane from './LeftPane.js';
 
 import '../styles/index.css';
@@ -61,7 +61,7 @@ export default class Layout extends React.Component {
 				<Navigation />
 				<div className="bodyDiv">
 					<LeftPane />
-					<MiddlePane />
+					<RightPane />
 				</div>
 			</div>
 		);

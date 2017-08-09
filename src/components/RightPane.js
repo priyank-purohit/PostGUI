@@ -7,6 +7,7 @@ import { CardHeader } from 'material-ui/Card';
 import TextField from 'material-ui/TextField';
 import SubmitButton from './SubmitButton.js';
 import Typography from 'material-ui/Typography';
+
 import '../styles/QueryBuilder.css';
 
 let lib = require('../utils/library.js');
@@ -37,7 +38,7 @@ const styleSheet = createStyleSheet(theme => ({
 	}
 }));
 
-class MiddlePane extends Component {
+class RightPane extends Component {
 
     componentDidMount() {
         const element = this.refs.queryBuilder;
@@ -88,8 +89,8 @@ class MiddlePane extends Component {
 	}
 }
 
-MiddlePane.propTypes = {
+RightPane.propTypes = {
 	classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styleSheet)(MiddlePane);
+export default withStyles(styleSheet)(RightPane);
