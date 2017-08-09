@@ -69,11 +69,13 @@ class PaperSheet extends Component {
 		const classes = this.props.classes;
 		return (
 			<div className={classes.middlePaperSection}>
-				<Paper className={classes.root} elevation={4}>
+				<Paper className={classes.root} elevation={5}>
 					<CardHeader title="Table" subheader="A somewhat short description for the table. Could include helpful info about the data, or how to query the table." />
 
 					<Typography type="subheading" className={classes.cardMarginLeftTop}>Query Builder</Typography>
-					<div id='query-builder' ref='queryBuilder'/>
+					{/*<Paper className={classes.root} elevation={3}>*/}
+						<div id='query-builder' ref='queryBuilder'/>
+					{/*</Paper>*/}
 
 					<Typography type="body1" className={classes.cardMarginLeftTop}>Options</Typography>
 					<SubmitButton />
