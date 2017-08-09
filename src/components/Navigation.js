@@ -8,27 +8,21 @@ import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
 //import HomeIcon from 'material-ui-icons/Home';
 
+import '../styles/Navigation.css';
+
 let lib = require('../utils/library.js');
 
-const styleSheet = createStyleSheet({
-	root: {
-		width: '100%',
-	},
-	flex: {
-		flex: 1,
-	},
-});
 
-class AppBarA extends Component {
+export default class Navigation extends Component {
 	render() {
 		return (
-			<div className={styleSheet.root}>
+			<div className="root">
 				<AppBar position="static">
 					<Toolbar>
 						<IconButton color="contrast" aria-label="Menu">
 							<MenuIcon />
 						</IconButton>
-						<Typography type="title" color="inherit" className={styleSheet.flex}>
+						<Typography type="title" color="inherit" className="flex">
 							{lib.getFromConfig("title")}
 						</Typography>
 						{/*<IconButton color="contrast" aria-label="Menu">
@@ -40,5 +34,3 @@ class AppBarA extends Component {
 		);
 	}
 }
-
-export default withStyles(styleSheet)(AppBarA);

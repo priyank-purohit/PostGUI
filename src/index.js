@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 
 import 'typeface-roboto';
 
-import AppBar from './components/AppBar';
+import Navigation from './components/Navigation';
 import MiddlePane from './components/MiddlePane';
 import LeftPane from './components/LeftPane';
 
@@ -58,7 +58,7 @@ export default class Layout extends React.Component {
 	render() {
 		return (
 			<div className="bodyDiv">
-				<AppBar />
+				<Navigation />
 				<LeftPane />
 				<MiddlePane />
 			</div>
