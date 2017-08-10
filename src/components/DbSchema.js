@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import FolderIcon from 'material-ui-icons/Folder';
+import FolderIconOpen from 'material-ui-icons/FolderOpen';
 import VisibilityIcon from 'material-ui-icons/Visibility';
 import axios from 'axios';
 
@@ -20,7 +21,8 @@ class DbSchema extends Component {
 		this.state = {
 			dbIndex: 0,
 			url: lib.getDbConfig(0, "url"),
-			tables: []
+			tables: [],
+			displayTable: ''
 		};
 	}
 
@@ -65,7 +67,7 @@ class DbSchema extends Component {
 	}
 
 	// Gets the columns of the specified table, uses the OPTIONS method
-	/*getDbTableColumns(table) {
+	getDbTableColumns(table) {
 		console.log("table = " + table);
 		let url = this.state.url + "/";
 		axios.get(url, { params: {} })
@@ -75,7 +77,7 @@ class DbSchema extends Component {
 			.catch(function(error) {
 				console.log(error);
 			});
-	}*/
+	}
 
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -97,7 +99,7 @@ class DbSchema extends Component {
 	}
 
 	// From JSON resp, extract the names of table columns and update state
-	/*parseTableColumns(rawResp, table) {
+	parseTableColumns(rawResp, table) {
 		let columns = [];
 		let selectColumns = [];
 		for (let i in rawResp) {
@@ -117,13 +119,17 @@ class DbSchema extends Component {
 		this.setState({
 			[table]: columns
 		}, function () {
-			console.log(this.state[table]);
+			console.log("State is now " + this.state[table].join(', '));
 		});
-	}*/
+	}
 
 	handleTableClick(table) {
-		console.log("Clicked on " + table);
-		//this.getDbTableColumns(event.target.id);
+		//let buttonClicked = event.target.id;
+		//console.log("Clicked on " + table);
+		this.getDbTableColumns(table);
+		this.setState({
+			displayTable: table
+		});
 	}
 
 	displayTables() {
@@ -136,14 +142,17 @@ class DbSchema extends Component {
 
 		let tableElements = [];
 		for (let i = 0; i < this.state.tables.length; i++) {
-			let tableRename = lib.getTableConfig(this.state.dbIndex, this.state.tables[i], "rename");
+			let tableName = this.state.tables[i];
+			let tableRename = lib.getTableConfig(this.state.dbIndex, tableName, "rename");
+			let tableDisplayName = tableRename ? tableRename : tableName;
+
 			tableElements.push(
-				<ListItem button key={this.state.tables[i]} id={this.state.tables[i]}
-					onClick={(event) => this.handleTableClick(this.state.tables[i])}>
+				<ListItem button key={tableName} id={tableName}
+					 title={tableDisplayName} onClick={(event) => this.handleTableClick(tableName)}>
 					<ListItemIcon>
-						<FolderIcon />
+						{this.state.displayTable === tableName ? <FolderIconOpen /> : <FolderIcon /> }
 					</ListItemIcon>
-					<ListItemText primary={tableRename ? tableRename : this.state.tables[i]} style={truncTextStyle} />
+					<ListItemText primary={tableDisplayName} style={truncTextStyle} />
 				</ListItem>
 			);
 		}
