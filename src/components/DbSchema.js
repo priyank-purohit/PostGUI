@@ -121,37 +121,41 @@ class DbSchema extends Component {
 		});
 	}*/
 
-	handleTableClick(event) {
-		console.log("Clicked on " + event.target.id);
+	handleTableClick(table) {
+		console.log("Clicked on " + table);
 		//this.getDbTableColumns(event.target.id);
 	}
 
-	render() {
-		const classes = this.props.classes;
-		// We can use inline-style
-		const style = {
+	displayTables() {
+		const truncTextStyle = {
 			textOverflow: 'clip',
 			overflow: 'hidden',
 			width: '29%',
 			height: 20
 		};
 
+		let tableElements = [];
+		for (let i = 0; i < this.state.tables.length; i++) {
+			let tableRename = lib.getTableConfig(this.state.dbIndex, this.state.tables[i], "rename");
+			tableElements.push(
+				<ListItem button key={this.state.tables[i]} id={this.state.tables[i]}
+					onClick={(event) => this.handleTableClick(this.state.tables[i])}>
+					<ListItemIcon>
+						<FolderIcon />
+					</ListItemIcon>
+					<ListItemText primary={tableRename ? tableRename : this.state.tables[i]} style={truncTextStyle} />
+				</ListItem>
+			);
+		}
+		return tableElements;
+	}
+
+	render() {
+		const classes = this.props.classes;
+
 		return (
 			<List>
-				{
-					this.state.tables.map((tableName) => {
-						let tableRename = lib.getTableConfig(this.state.dbIndex, tableName, "rename");
-						return(
-							<ListItem button key={tableName} id={tableName}
-								onClick={this.handleTableClick.bind(this)}>
-								<ListItemIcon>
-								<FolderIcon />
-								</ListItemIcon>
-								<ListItemText primary={tableRename ? tableRename : tableName} style={style} />
-							</ListItem>
-						);
-					})
-				}
+				{ this.displayTables() }
 			</List>
 		);
 	}
