@@ -5,6 +5,7 @@ import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import FolderIcon from 'material-ui-icons/Folder';
 import FolderIconOpen from 'material-ui-icons/FolderOpen';
 import VisibilityIcon from 'material-ui-icons/Visibility';
+import VisibilityOffIcon from 'material-ui-icons/VisibilityOff';
 import axios from 'axios';
 
 let lib = require("../utils/library.js");
@@ -68,7 +69,6 @@ class DbSchema extends Component {
 
 	// Gets the columns of the specified table, uses the OPTIONS method
 	getDbTableColumns(table) {
-		console.log("table = " + table);
 		let url = this.state.url + "/";
 		axios.get(url, { params: {} })
 			.then((response) => {
@@ -102,14 +102,16 @@ class DbSchema extends Component {
 	parseTableColumns(rawResp, table) {
 		let columns = [];
 		let selectColumns = [];
+
 		for (let i in rawResp) {
 			if (lib.getColumnConfig(this.state.dbIndex, table, i, "visible") !== false) {
 				columns.push(i);
 
 				let columnDefaultVisibility = lib.isColumnInDefaultView(this.state.dbIndex, table, i);
+
 				if (columnDefaultVisibility === false) {
 					this.setState({
-						[i]: "strikeOut"
+						[table + i]: "hide"
 					});
 				} else {
 					selectColumns.push(i);
@@ -118,9 +120,8 @@ class DbSchema extends Component {
 		}
 		this.setState({
 			[table]: columns
-		}, function () {
-			console.log("State is now " + this.state[table].join(', '));
 		});
+		this.displayColumns(table);
 	}
 
 	handleTableClick(table) {
@@ -132,7 +133,7 @@ class DbSchema extends Component {
 		});
 	}
 
-	displayTables() {
+	createLeftPaneElement(name, displayName, isColumn = false, columnVisibility = true) {
 		const truncTextStyle = {
 			textOverflow: 'clip',
 			overflow: 'hidden',
@@ -140,6 +141,18 @@ class DbSchema extends Component {
 			height: 20
 		};
 
+		return (
+			<ListItem button key={name} id={name}
+				 title={displayName} onClick={(event) => this.handleTableClick(name)}>
+				<ListItemIcon>
+					{this.state.displayTable === name ? <FolderIconOpen /> : <FolderIcon /> }
+				</ListItemIcon>
+				<ListItemText primary={displayName} style={truncTextStyle} />
+			</ListItem>
+		);
+	}
+
+	displayTables() {
 		let tableElements = [];
 		for (let i = 0; i < this.state.tables.length; i++) {
 			let tableName = this.state.tables[i];
@@ -147,25 +160,51 @@ class DbSchema extends Component {
 			let tableDisplayName = tableRename ? tableRename : tableName;
 
 			tableElements.push(
-				<ListItem button key={tableName} id={tableName}
-					 title={tableDisplayName} onClick={(event) => this.handleTableClick(tableName)}>
-					<ListItemIcon>
-						{this.state.displayTable === tableName ? <FolderIconOpen /> : <FolderIcon /> }
-					</ListItemIcon>
-					<ListItemText primary={tableDisplayName} style={truncTextStyle} />
-				</ListItem>
+				this.createLeftPaneElement(tableName, tableDisplayName)
 			);
 		}
 		return tableElements;
+	}
+
+	displayColumns(table) {
+		console.log("Displaying columsn for table = " + table);
+		let columns = this.state[table];
+		let columnElements = [];
+
+		for (let i = 0; i < columns.length; i++) {
+			let columnName = columns[i];
+			let columnRename = lib.getColumnConfig(this.state.dbIndex, this.state.displayTable,columnName, "rename");
+			let columnDisplayName = columnRename ? columnRename : columnName;
+
+			let columnVisibility = this.state[table + columns[i]] === "hide" ? false : true;
+
+			columnElements.push(
+				<ListItem button key={columnName} id={columnName}
+					 title={columnDisplayName} className={this.props.classes.column} >
+					<ListItemIcon>
+						{columnVisibility ? <VisibilityIcon /> : <VisibilityOffIcon /> }
+					</ListItemIcon>
+					<ListItemText secondary={columnDisplayName} />
+				</ListItem>
+			);
+		}
+		this.setState({
+			columnsTest: columnElements
+		});
+
+		//return columnElements;
 	}
 
 	render() {
 		const classes = this.props.classes;
 
 		return (
-			<List>
-				{ this.displayTables() }
-			</List>
+			<div>
+				<List>
+					{ this.state.columnsTest }
+					{ this.displayTables() }
+				</List>
+			</div>
 		);
 	}
 }
