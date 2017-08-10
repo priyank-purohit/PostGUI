@@ -5,6 +5,8 @@ import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import FolderIcon from 'material-ui-icons/Folder';
 import VisibilityIcon from 'material-ui-icons/Visibility';
 
+let lib = require("../utils/library.js");
+
 const styleSheet = createStyleSheet({
 	column: {
 		marginLeft: 27
@@ -15,16 +17,18 @@ class DbSchema extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			dbIndex: 0
+			dbIndex: 0,
+			url: lib.getDbConfig(0, "url"),
+			tables: []
 		};
 	}
 
-	// Changes the index of DB in state + App.js state
-	changeDbIndex(newIndex) {
-		this.setState({
-			dbIndex: newIndex
+	// Called when new props are received
+	componentWillReceiveProps(newProps) {
+		this.setState({ 
+			dbIndex: newProps.dbIndex,
+			url: lib.getDbConfig(newProps.dbIndex, "url")
 		});
-		this.props.changeDbIndex(newIndex);
 	}
 
 	render() {

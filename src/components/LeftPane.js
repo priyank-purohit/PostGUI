@@ -38,7 +38,7 @@ class LeftPane extends Component {
 			<div className={classes.root}>
 				<DbPicker changeDbIndex={this.changeDbIndex.bind(this)} />
 				<Divider />
-				<DbSchema />
+				<DbSchema dbIndex={this.state.dbIndex}/>
 			</div>
 		);
 	}

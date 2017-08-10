@@ -4,8 +4,8 @@
 
 // Returns value of KEY from config file
 exports.getValueFromConfig = function(key) {
-	let file, config;
 	try {
+		let file, config;
 		file = require("../data/config.json");
 		config = JSON.parse(JSON.stringify(file));
 		if (config[key] !== undefined) {
@@ -22,15 +22,34 @@ exports.getValueFromConfig = function(key) {
 
 // Returns value of OPTION for specific TABLE and DBINDEX
 // NOTE: check for null value when this function is used
+exports.getDbConfig = function(dbIndex, option) {
+	if (dbIndex !== null && option !== null) {
+		try {
+			let dbConfig = this.getValueFromConfig("databases");
+
+			if (dbConfig[dbIndex][option] !== undefined) {
+				return dbConfig[dbIndex][option];
+			} else {
+				return null;
+			}
+		} catch (error) {
+			console.log("Error in  getDbConfig: " + error.message);
+			return null;
+		}
+	} else {
+		return null;
+	}
+}
+
+// Returns value of OPTION for specific TABLE and DBINDEX
+// NOTE: check for null value when this function is used
 exports.getTableConfig = function(dbIndex, table, option) {
 	if (dbIndex !== null && table !== null && option !== null) {
 		try {
-			let file, config;
-			file = require("../data/config.json");
-			config = JSON.parse(JSON.stringify(file));
+			let tableConfig = this.getDbConfig(dbIndex, "tableRules");
 
-			if (config["databases"][dbIndex]["tableRules"][table][option] !== undefined) {
-				return config["databases"][dbIndex]["tableRules"][table][option];
+			if (tableConfig[table][option] !== undefined) {
+				return tableConfig[table][option];
 			} else {
 				return null;
 			}
