@@ -22,13 +22,14 @@ class LeftPane extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			databaseIndex: 0
+			dbIndex: 0
 		};
 	}
 
+	// Changes the index of DB in state + App.js state
 	changeDbIndex(newIndex) {
 		this.setState({
-			databaseIndex: newIndex
+			dbIndex: newIndex
 		});
 		this.props.changeDbIndex(newIndex);
 	}
@@ -51,7 +52,7 @@ class LeftPane extends Component {
 						<ListItemIcon>
 						<VisibilityIcon />
 						</ListItemIcon>
-						<ListItemText secondary={this.state.databaseIndex} />
+						<ListItemText secondary={this.state.dbIndex} />
 					</ListItem>
 					<ListItem button className={classes.column}>
 						<ListItemIcon>
