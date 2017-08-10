@@ -76,7 +76,7 @@ class RightPane extends Component {
 		return (
 			<div className={classes.middlePaperSection}>
 				<Paper className={this.props.leftPaneVisibility ? classes.root : classes.rootInvisibleLeft} elevation={5}>
-					<CardHeader title="Table" subheader="A somewhat short description for the table. Could include helpful info about the data, or how to query the table." />
+					<CardHeader title={lib.getTableConfig(this.props.dbIndex, this.props.table, "rename")} subheader={lib.getTableConfig(this.props.dbIndex, this.props.table, "description")} />
 
 					<Typography type="subheading" className={classes.cardMarginLeftTop}>Query Builder</Typography>
 					{/*<Paper className={classes.root} elevation={3}>*/}

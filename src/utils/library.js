@@ -14,15 +14,15 @@ exports.getFromConfig = function(key = "title") {
 }
 
 // Retrieves value of key from the config file
-exports.getTableConfig = function(table = "error", option = "error") {
+exports.getTableConfig = function(dbIndex = 0, table = "error", option = "error") {
     let configFile = require("../data/config.json");
     let config = JSON.parse(JSON.stringify(configFile));
 
     // If the table option is found, return; else return null
     // NOTE: check for null value when this function is used
-    if (table !== this.getFromConfig("noTableMsg")) {
-        if (config["tableRules"][table] && config["tableRules"][table][option] !== null) {
-            return config["tableRules"][table][option];
+    if (table !== this.getFromConfig("noTableMsg") && table !== "error" && table !== null) {
+        if (config["databases"][dbIndex]["tableRules"] && config["databases"][dbIndex]["tableRules"][table] && config["databases"][dbIndex]["tableRules"][table][option] !== null) {
+            return config["databases"][dbIndex]["tableRules"][table][option];
         } else {
             return null;
         }
