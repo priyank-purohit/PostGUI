@@ -1,36 +1,50 @@
 import React, { Component } from 'react';
-import logo from '../resources/logo.svg';
+import PropTypes from 'prop-types';
+import { withStyles, createStyleSheet } from 'material-ui/styles';
+import AppBar from 'material-ui/AppBar';
+import Toolbar from 'material-ui/Toolbar';
+import Typography from 'material-ui/Typography';
+import IconButton from 'material-ui/IconButton';
+import MenuIcon from 'material-ui-icons/Menu';
+
 import '../styles/Navigation.css';
 
 let lib = require('../utils/library.js');
 
-class Navigation extends Component {
-	// If logoUrl is specified in config.json, use that; else use the logo in resources folder
-	getImageElement() {
-		if (lib.getFromConfig("logoUrl") && lib.getFromConfig("logoUrl") !== '') {
-			return (<img src={lib.getFromConfig("logoUrl")} className="leftPaneLogo" alt="logo" />);
-		} else {
-			return (<img src={logo} className="leftPaneLogo" alt="logo" />);
-		}
+const styleSheet = createStyleSheet(theme => ({
+	root: {
+		width: '100%'
+	},
+	flex: {
+		flex: 1
 	}
+}));
 
+class Navigation extends Component {
 	render() {
+		const classes = this.props.classes;
 		return (
-			<div className="navigation">
-				<div className="navigationElement titleElement">
-					<div className="logoAndTitle">
-						{this.getImageElement()}
-						<h3 className="leftPaneTitle">{lib.getFromConfig("title")}</h3>
-					</div>
-				</div>
-				{/*<div className="navigationElement">
-					<h3 className="">Data Visualization</h3>
-				</div>*/}
-				{/*<p className="navigationElement">Data Visualization</p>
-				<p className="navigationElement">Custom Query</p>*/}
+			<div className={classes.root}>
+				<AppBar position="fixed">
+					<Toolbar>
+						<IconButton color="contrast" aria-label="Menu" onClick={this.props.toggleLeftPane.bind(this)}>
+							<MenuIcon />
+						</IconButton>
+						<Typography type="title" color="inherit" className={classes.flex}>
+							{lib.getFromConfig("title")}
+						</Typography>
+						{/*<IconButton color="contrast" aria-label="Menu">
+							<HomeIcon />
+						</IconButton>*/}
+					</Toolbar>
+				</AppBar>
 			</div>
 		);
 	}
 }
 
-export default Navigation;
+Navigation.propTypes = {
+	classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styleSheet)(Navigation);

@@ -8,6 +8,8 @@
 .query-builder {
   background: transparent;
   font-family: sans-serif;
+  width: 90%;
+  margin-left: 32px;
 }
 
 .query-builder .hide {
@@ -175,7 +177,8 @@
 
 .query-builder .rules-group-container {
   padding: 10px 10px 6px;
-  border: 1px solid #999999;
+  border: 1px solid #d3d3d3;
+  box-shadow: 1px 2px 3px #999999;
   background: rgba(250, 250, 250, .5)
 }
 

@@ -6,8 +6,11 @@
     "axios": "^0.16.1",
     "dot": "^1.1.1",
     "jQuery-QueryBuilder": "^2.4.3",
+    "material-ui": "^1.0.0-beta.4",
+    "material-ui-icons": "^1.0.0-alpha.19",
     "react": "^15.5.4",
-    "react-dom": "^15.5.4"
+    "react-dom": "^15.5.4",
+    "typeface-roboto": "0.0.35"
   },
   "devDependencies": {
     "react-scripts": "0.9.5"
