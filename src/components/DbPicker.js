@@ -14,14 +14,17 @@ const styleSheet = createStyleSheet(theme => ({
 
 
 class DbPicker extends Component {
-	state = {
-		anchorEl: undefined,
-		open: false,
-		selectedIndex: 0,
-		databases: []
-	};
+	constructor(props) {
+		super(props);
+		this.state = {
+			anchorEl: undefined,
+			open: false,
+			selectedIndex: 0,
+			databases: []
+		};
+	}
 
-	button = undefined;
+	//button = undefined;
 
 	handleClickListItem = (event) => {
 		this.setState({ open: true, anchorEl: event.currentTarget });
@@ -46,6 +49,7 @@ class DbPicker extends Component {
 
 	render() {
 		const classes = this.props.classes;
+		
 		return (
 			<div className={classes.root}>
 				<List>
