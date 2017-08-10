@@ -49,7 +49,7 @@ exports.getColumnConfig = function(dbIndex, table, column, option) {
 	if (dbIndex !== null && table !== null && option !== null && option !== null) {
 		try {
 			let columnRules = this.getTableConfig(dbIndex, table, "columnRules");
-			
+
 			if (columnRules[column][option] !== undefined) {
 				return columnRules[column][option];
 			} else {
@@ -64,28 +64,30 @@ exports.getColumnConfig = function(dbIndex, table, column, option) {
 	}
 }
 
+// Returns true iff COLUMN is part of the default columns defined for TABLE and DBINDEX
+exports.isColumnInDefaultView = function(dbIndex, table, column) {
+	if (dbIndex !== null && table !== null && column !== null) {
+		try {
+			let defaultColumns = this.getTableConfig(dbIndex, table, "defaultViewColumns");
+
+			if (defaultColumns === null || defaultColumns === undefined) {
+				return null;
+			} else {
+				return this.inArray(column, defaultColumns);
+			}
+		} catch (error) {
+			console.log("Error in  isColumnInDefaultView: " + error.message);
+			return null;
+		}
+	}
+}
+
 // returns true if ELEMENT is in ARRAY
 exports.inArray = function(element, array) {
 	if (array && element)
 		return array.indexOf(element) > -1;
 	else
 		return false;
-}
-
-// return true iff table.column is part of the default columns defined
-exports.isColumnDefaultView = function(table, column) {
-	if (table && column) {
-		let defaultColumns = this.getTableConfig(table, "defaultViewColumns");
-		if (defaultColumns === null) {
-			return null;
-		} else {
-			if (this.inArray(column, defaultColumns) === true) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-	}
 }
 // Opens the specified URL in a different tab
 exports.visitPage = function(url = "http://www.google.ca") {
