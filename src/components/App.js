@@ -15,7 +15,8 @@ export default class Layout extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			leftPaneVisibility: true
+			leftPaneVisibility: true,
+			databaseIndex: 0
 		};
 	}
 
@@ -31,12 +32,18 @@ export default class Layout extends React.Component {
 		}
 	}
 
+	changeDatabaseIndex(newIndex) {
+		this.setState({
+			databaseIndex: newIndex
+		});
+	}
+
 	render() {
 		return (
 			<div>
-				<Navigation toggleLeftPane={this.toggleLeftPane.bind(this)} />
+				<Navigation toggleLeftPane={this.toggleLeftPane.bind(this)} databaseIndex={this.state.databaseIndex} />
 				<div className="bodyDiv">
-					{this.state.leftPaneVisibility ? <LeftPane /> : <div></div>}
+					{this.state.leftPaneVisibility ? <LeftPane changeDatabaseIndex={this.changeDatabaseIndex.bind(this)} /> : <div></div>}
 					<RightPane leftPaneVisibility={this.state.leftPaneVisibility}/>
 				</div>
 			</div>

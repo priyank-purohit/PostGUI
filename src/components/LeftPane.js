@@ -19,11 +19,25 @@ const styleSheet = createStyleSheet({
 });
 
 class LeftPane extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			databaseIndex: 0
+		};
+	}
+
+	changeDatabaseIndex(newIndex) {
+		this.setState({
+			databaseIndex: newIndex
+		});
+		this.props.changeDatabaseIndex(newIndex);
+	}
+
 	render() {
 		const classes = this.props.classes;
 		return (
 			<div className={classes.root}>
-				<DbPicker />
+				<DbPicker changeDatabaseIndex={this.changeDatabaseIndex.bind(this)} />
 				<Divider />
 				<List>
 					<ListItem button>
@@ -37,7 +51,7 @@ class LeftPane extends Component {
 						<ListItemIcon>
 						<VisibilityIcon />
 						</ListItemIcon>
-						<ListItemText secondary="Column" />
+						<ListItemText secondary={this.state.databaseIndex} />
 					</ListItem>
 					<ListItem button className={classes.column}>
 						<ListItemIcon>
