@@ -9,7 +9,7 @@ import LeftPane from './LeftPane.js';
 
 import '../styles/index.css';
 
-let lib = require("../utils/library.js");
+//let lib = require("../utils/library.js");
 
 export default class Layout extends React.Component {
 	constructor() {
