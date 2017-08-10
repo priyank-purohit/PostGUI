@@ -128,10 +128,28 @@ class DbSchema extends Component {
 	handleTableClick(table) {
 		//let buttonClicked = event.target.id;
 		//console.log("Clicked on " + table);
-		this.getDbTableColumns(table);
-		this.setState({
-			displayTable: table
-		});
+		if (this.state.displayTable !== table) {
+			this.getDbTableColumns(table);
+			this.setState({
+				displayTable: table
+			});	
+		} else {
+			this.setState({
+				displayTable: ""
+			});
+		}
+	}
+
+	handleColumnClick(column, table) {
+		if (this.state[table+column] === "hide") {
+			this.setState({
+				[table+column]: ""
+			});
+		} else {
+			this.setState({
+				[table+column]: "hide"
+			});
+		}
 	}
 
 	createTableElementsForLeftPane(name, displayName) {
@@ -153,10 +171,10 @@ class DbSchema extends Component {
 		);
 	}
 
-	createColumnElementsForLeftPane(name, displayName, visibility) {
+	createColumnElementsForLeftPane(name, displayName, visibility, table) {
 		return (
 			<ListItem button key={name} id={name}
-				 title={displayName} className={this.props.classes.column} >
+				 title={displayName} className={this.props.classes.column} onClick={(event) => this.handleColumnClick(name, table)}>
 				<ListItemIcon>
 					{visibility ? <VisibilityIcon /> : <VisibilityOffIcon /> }
 				</ListItemIcon>
@@ -183,7 +201,6 @@ class DbSchema extends Component {
 	}
 
 	displayColumns(table) {
-		console.log("Displaying columsn for table = " + table);
 		let columns = this.state[table];
 		let columnElements = [];
 
@@ -199,7 +216,7 @@ class DbSchema extends Component {
 			let columnVisibility = this.state[table + columns[i]] === "hide" ? false : true;
 
 			columnElements.push(
-				this.createColumnElementsForLeftPane(columnName, columnDisplayName, columnVisibility)
+				this.createColumnElementsForLeftPane(columnName, columnDisplayName, columnVisibility, table)
 			);
 		}
 		/*this.setState({
