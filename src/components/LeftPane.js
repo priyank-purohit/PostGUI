@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
-import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
-import FolderIcon from 'material-ui-icons/Folder';
-import VisibilityIcon from 'material-ui-icons/Visibility';
 import DbPicker from './DbPicker.js'
+import DbSchema from './DbSchema.js'
 
 const styleSheet = createStyleSheet({
 	root: {
@@ -40,33 +38,7 @@ class LeftPane extends Component {
 			<div className={classes.root}>
 				<DbPicker changeDbIndex={this.changeDbIndex.bind(this)} />
 				<Divider />
-				<List>
-					<ListItem button>
-						<ListItemIcon>
-						<FolderIcon />
-						</ListItemIcon>
-						<ListItemText primary="Table" />
-					</ListItem>
-
-					<ListItem button className={classes.column}>
-						<ListItemIcon>
-						<VisibilityIcon />
-						</ListItemIcon>
-						<ListItemText secondary={this.state.dbIndex} />
-					</ListItem>
-					<ListItem button className={classes.column}>
-						<ListItemIcon>
-						<VisibilityIcon />
-						</ListItemIcon>
-						<ListItemText secondary="Column" />
-					</ListItem>
-					<ListItem button className={classes.column}>
-						<ListItemIcon>
-						<VisibilityIcon />
-						</ListItemIcon>
-						<ListItemText secondary="Column" />
-					</ListItem>
-				</List>
+				<DbSchema />
 			</div>
 		);
 	}
