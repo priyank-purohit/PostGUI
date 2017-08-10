@@ -65,32 +65,6 @@ class LeftPane extends Component {
 						</ListItemIcon>
 						<ListItemText secondary="Column" />
 					</ListItem>
-
-
-					<ListItem button>
-						<ListItemIcon>
-						<FolderIcon />
-						</ListItemIcon>
-						<ListItemText primary="Table"/>
-					</ListItem>
-					<ListItem button>
-						<ListItemIcon>
-						<FolderIcon />
-						</ListItemIcon>
-						<ListItemText primary="Table" />
-					</ListItem>
-					<ListItem button>
-						<ListItemIcon>
-						<FolderIcon />
-						</ListItemIcon>
-						<ListItemText primary="Table" />
-					</ListItem>
-					<ListItem button>
-						<ListItemIcon>
-						<FolderIcon />
-						</ListItemIcon>
-						<ListItemText primary="Table" />
-					</ListItem>
 				</List>
 			</div>
 		);
