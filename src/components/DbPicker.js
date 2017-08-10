@@ -42,7 +42,7 @@ class DbPicker extends Component {
 	// get a list of databases in the config.json
 	componentWillMount() {
 		let databasesMapped = [];
-		lib.getFromConfig("databases").map((obj, index) => databasesMapped[index] = obj.title);
+		lib.getValueFromConfig("databases").map((obj, index) => databasesMapped[index] = obj.title);
 		this.setState({
 			databases: databasesMapped
 		});

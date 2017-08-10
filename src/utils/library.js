@@ -1,44 +1,36 @@
-exports.rot13ED = function(str) {
-    // eslint-disable-next-line
-    return str.replace(/[a-zA-Z]/g, function(c) {
-        // eslint-disable-next-line
-        return String.fromCharCode((c <= "Z" ? 90 : 122) >= (c = c.charCodeAt(0) + 13) ? c : c - 26);
-    });
+// Returns value of KEY from config file
+exports.getValueFromConfig = function(key = "title") {
+    let file = require("../data/config.json");
+    let config = JSON.parse(JSON.stringify(file));
+    return config[key];
 }
 
-// Retrieves value of key from the config file
-exports.getFromConfig = function(key = "title") {
-    let configFile = require("../data/config.json");
-    let config = JSON.parse(JSON.stringify(configFile));
-    return config[key]
-}
-
-// Retrieves value of key from the config file
+// Returns value of OPTION for specific TABLE and DBINDEX
+// NOTE: check for null value when this function is used
 exports.getTableConfig = function(dbIndex = 0, table = "error", option = "error") {
-    let configFile = require("../data/config.json");
-    let config = JSON.parse(JSON.stringify(configFile));
+    let file = require("../data/config.json");
+    let config = JSON.parse(JSON.stringify(file));
 
     // If the table option is found, return; else return null
-    // NOTE: check for null value when this function is used
-    if (table !== this.getFromConfig("noTableMsg") && table !== "error" && table !== null) {
+    if (table !== this.getValueFromConfig("noTableMsg") && table !== "error" && table !== null) {
         if (config["databases"][dbIndex]["tableRules"] && config["databases"][dbIndex]["tableRules"][table] && config["databases"][dbIndex]["tableRules"][table][option] !== null) {
             return config["databases"][dbIndex]["tableRules"][table][option];
         } else {
             return null;
         }
     } else {
-        return this.getFromConfig("noTableMsg");
+        return this.getValueFromConfig("noTableMsg");
     }
 }
 
 // Retrieves value of key from the config file
 exports.getColumnConfig = function(table = "error", column = "error", option = "error") {
-    let configFile = require("../data/config.json");
-    let config = JSON.parse(JSON.stringify(configFile));
+    let file = require("../data/config.json");
+    let config = JSON.parse(JSON.stringify(file));
 
     // If the table column option is found, return; else return null
     // NOTE: check for null value when this function is used
-    if (table !== this.getFromConfig("noTableMsg") && table !== "error" && column !== "error") {
+    if (table !== this.getValueFromConfig("noTableMsg") && table !== "error" && column !== "error") {
         if (config["tableRules"][table] &&
             config["tableRules"][table]["columnRules"] &&
             config["tableRules"][table]["columnRules"][column] &&
@@ -52,7 +44,7 @@ exports.getColumnConfig = function(table = "error", column = "error", option = "
     }
 }
 
-// returns true if the element is in array
+// returns true if ELEMENT is in ARRAY
 exports.inArray = function(element, array) {
 	if (array && element)
     	return array.indexOf(element) > -1;
