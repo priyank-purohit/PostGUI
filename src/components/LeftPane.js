@@ -26,18 +26,18 @@ class LeftPane extends Component {
 		};
 	}
 
-	changeDatabaseIndex(newIndex) {
+	changeDbIndex(newIndex) {
 		this.setState({
 			databaseIndex: newIndex
 		});
-		this.props.changeDatabaseIndex(newIndex);
+		this.props.changeDbIndex(newIndex);
 	}
 
 	render() {
 		const classes = this.props.classes;
 		return (
 			<div className={classes.root}>
-				<DbPicker changeDatabaseIndex={this.changeDatabaseIndex.bind(this)} />
+				<DbPicker changeDbIndex={this.changeDbIndex.bind(this)} />
 				<Divider />
 				<List>
 					<ListItem button>

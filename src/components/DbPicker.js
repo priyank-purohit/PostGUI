@@ -32,7 +32,7 @@ class DbPicker extends Component {
 
 	handleMenuItemClick = (event, index) => {
 		this.setState({ selectedIndex: index, open: false });
-		this.props.changeDatabaseIndex(index);
+		this.props.changeDbIndex(index);
 	};
 
 	handleRequestClose = () => {
