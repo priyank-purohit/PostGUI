@@ -120,8 +120,9 @@ class DbSchema extends Component {
 		}
 		this.setState({
 			[table]: columns
+		}, () => {
+			this.displayColumns(table);
 		});
-		this.displayColumns(table);
 	}
 
 	handleTableClick(table) {
@@ -133,7 +134,7 @@ class DbSchema extends Component {
 		});
 	}
 
-	createLeftPaneElement(name, displayName, isColumn = false, columnVisibility = true) {
+	createTableElementsForLeftPane(name, displayName) {
 		const truncTextStyle = {
 			textOverflow: 'clip',
 			overflow: 'hidden',
@@ -152,6 +153,18 @@ class DbSchema extends Component {
 		);
 	}
 
+	createColumnElementsForLeftPane(name, displayName, visibility) {
+		return (
+			<ListItem button key={name} id={name}
+				 title={displayName} className={this.props.classes.column} >
+				<ListItemIcon>
+					{visibility ? <VisibilityIcon /> : <VisibilityOffIcon /> }
+				</ListItemIcon>
+				<ListItemText secondary={displayName} />
+			</ListItem>
+		);
+	}
+
 	displayTables() {
 		let tableElements = [];
 		for (let i = 0; i < this.state.tables.length; i++) {
@@ -160,8 +173,11 @@ class DbSchema extends Component {
 			let tableDisplayName = tableRename ? tableRename : tableName;
 
 			tableElements.push(
-				this.createLeftPaneElement(tableName, tableDisplayName)
+				this.createTableElementsForLeftPane(tableName, tableDisplayName)
 			);
+			if (this.state.displayTable === tableName) {
+				tableElements.push(this.displayColumns(tableName));
+			}
 		}
 		return tableElements;
 	}
@@ -171,6 +187,10 @@ class DbSchema extends Component {
 		let columns = this.state[table];
 		let columnElements = [];
 
+		if (!columns) {
+			return null;
+		}
+
 		for (let i = 0; i < columns.length; i++) {
 			let columnName = columns[i];
 			let columnRename = lib.getColumnConfig(this.state.dbIndex, this.state.displayTable,columnName, "rename");
@@ -179,20 +199,15 @@ class DbSchema extends Component {
 			let columnVisibility = this.state[table + columns[i]] === "hide" ? false : true;
 
 			columnElements.push(
-				<ListItem button key={columnName} id={columnName}
-					 title={columnDisplayName} className={this.props.classes.column} >
-					<ListItemIcon>
-						{columnVisibility ? <VisibilityIcon /> : <VisibilityOffIcon /> }
-					</ListItemIcon>
-					<ListItemText secondary={columnDisplayName} />
-				</ListItem>
+				this.createColumnElementsForLeftPane(columnName, columnDisplayName, columnVisibility)
 			);
 		}
-		this.setState({
+		/*this.setState({
 			columnsTest: columnElements
 		});
 
-		//return columnElements;
+		//*/
+		return columnElements;
 	}
 
 	render() {
@@ -201,7 +216,6 @@ class DbSchema extends Component {
 		return (
 			<div>
 				<List>
-					{ this.state.columnsTest }
 					{ this.displayTables() }
 				</List>
 			</div>
