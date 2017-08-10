@@ -8,11 +8,16 @@ exports.getValueFromConfig = function(key) {
 	try {
 		file = require("../data/config.json");
 		config = JSON.parse(JSON.stringify(file));
+		if (config[key] !== undefined) {
+			return config[key];
+		}
+		else {
+			return null;
+		}
 	} catch (error) {
 		console.log("Error in getValueFromConfig: " + error.message);
 		return null;
 	}
-	return config[key];
 }
 
 // Returns value of OPTION for specific TABLE and DBINDEX
@@ -24,7 +29,11 @@ exports.getTableConfig = function(dbIndex, table, option) {
 			file = require("../data/config.json");
 			config = JSON.parse(JSON.stringify(file));
 
-			return config["databases"][dbIndex]["tableRules"][table][option];
+			if (config["databases"][dbIndex]["tableRules"][table][option] !== undefined) {
+				return config["databases"][dbIndex]["tableRules"][table][option];
+			} else {
+				return null;
+			}
 		} catch (error) {
 			console.log("Error in  getTableConfig: " + error.message);
 			return null;
@@ -40,7 +49,12 @@ exports.getColumnConfig = function(dbIndex, table, column, option) {
 	if (dbIndex !== null && table !== null && option !== null && option !== null) {
 		try {
 			let columnRules = this.getTableConfig(dbIndex, table, "columnRules");
-			return columnRules[column][option];
+			
+			if (columnRules[column][option] !== undefined) {
+				return columnRules[column][option];
+			} else {
+				return null;
+			}
 		} catch (error) {
 			console.log("Error in  getColumnConfig: " + error.message);
 			return null;
