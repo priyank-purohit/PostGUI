@@ -18,6 +18,7 @@ const styleSheet = createStyleSheet(theme => ({
 	root: {
 		paddingBottom: 50,
 		marginLeft: '30%',
+		marginBottom: '2%'
 	},
 	rootInvisibleLeft: {
 		paddingBottom: 50,
