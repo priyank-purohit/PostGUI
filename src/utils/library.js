@@ -82,18 +82,6 @@ exports.isColumnInDefaultView = function(dbIndex, table, column) {
 	}
 }
 
-// returns true if ELEMENT is in ARRAY
-exports.inArray = function(element, array) {
-	if (array && element)
-		return array.indexOf(element) > -1;
-	else
-		return false;
-}
-// Opens the specified URL in a different tab
-exports.visitPage = function(url = "http://www.google.ca") {
-	window.open(url, "_blank");
-}
-
 // Returns the initial query (i.e. pre-formatted default query for a table)
 // Convert this into a function that loads a default entry for ALL tables
 // If no rules are defined, it will return a blank default entry.
@@ -140,4 +128,16 @@ exports.translateOperatorToPostgrest = function(operator) {
 		}
 	}
 	return "eq";
+}
+
+// returns true if ELEMENT is in ARRAY
+exports.inArray = function(element, array) {
+	if (array && element)
+		return array.indexOf(element) > -1;
+	else
+		return false;
+}
+// Opens the specified URL in a different tab
+exports.visitPage = function(url = "http://www.google.ca") {
+	window.open(url, "_blank");
 }
