@@ -123,7 +123,7 @@ class RightPane extends Component {
 					<div id='query-builder' ref='queryBuilder'/>
 
 					<Typography type="body1" className={classes.cardMarginLeftTop}>Options</Typography>
-					<SubmitButton />
+					<SubmitButton dbIndex={this.state.dbIndex} table={this.state.table} leftPaneVisibility={this.state.leftPaneVisibility} />
 					<TextField required id="rowLimit" label="Row-limit" defaultValue="10000" className={classes.textField && classes.cardMarginLeft} margin="normal" />
 
 					<Typography type="subheading" className={classes.cardMarginLeftTop}>Sample Data</Typography>

@@ -35,8 +35,10 @@ class CircularFab extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			dbIndex: props.dbIndex,
+			table: props.table,
 			loading: false,
-			success: false,
+			success: false
 		};
 	}
 
