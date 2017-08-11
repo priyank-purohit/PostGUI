@@ -106,8 +106,10 @@ class DbSchema extends Component {
 			tables: dbTables
 		});
 
-		if (dbTables[0] !== undefined && dbTables[0] !== null && dbTables[0] !== "") {
+		if (dbTables[0] !== undefined && dbTables[0] !== null && dbTables[0] !== "" && this.state.table === "") {
 			this.handleTableClick(dbTables[0]);
+		} else {
+			this.handleTableClick(this.state.table, true);
 		}
 	}
 
@@ -138,10 +140,10 @@ class DbSchema extends Component {
 		});
 	}
 
-	handleTableClick(clickedTable) {
+	handleTableClick(clickedTable, skipCheck = false) {
 		//let buttonClicked = event.target.id;
 		//console.log("Clicked on " + table);
-		if (this.state.table !== clickedTable) {
+		if (this.state.table !== clickedTable || skipCheck) {
 			this.getDbTableColumns(clickedTable);
 			this.props.changeTable(clickedTable);
 			this.setState({
