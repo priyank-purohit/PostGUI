@@ -141,8 +141,6 @@ class DbSchema extends Component {
 	}
 
 	handleTableClick(clickedTable, skipCheck = false) {
-		//let buttonClicked = event.target.id;
-		//console.log("Clicked on " + table);
 		if (this.state.table !== clickedTable || skipCheck) {
 			this.getDbTableColumns(clickedTable);
 			this.props.changeTable(clickedTable);
