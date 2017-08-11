@@ -9,3 +9,8 @@ body {
 	max-width: 2500px;
 	margin: auto;
 }
+
+.hide {
+	visibility: hidden;
+	background: red;
+}
