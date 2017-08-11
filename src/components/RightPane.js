@@ -40,6 +40,10 @@ const styleSheet = createStyleSheet(theme => ({
 		marginLeft: theme.spacing.unit,
 		marginRight: theme.spacing.unit,
 		width: 300
+	},
+	hide: {
+		opacity: 0.0,
+		marginTop: 75
 	}
 }));
 
@@ -99,39 +103,28 @@ class RightPane extends Component {
         window.$(element).queryBuilder({ filters, rules });
     }
 
-    renderQueryBuilder() {
+	render() {
 		const classes = this.props.classes;
 		let tableRename = lib.getTableConfig(this.state.dbIndex, this.state.table, "rename");
 		let tableDisplayName = tableRename ? tableRename : this.state.table;
 
 		let tableDescription = lib.getTableConfig(this.props.dbIndex, this.props.table, "description") ? lib.getTableConfig(this.props.dbIndex, this.props.table, "description") : "";
-    	return (
-    		<Paper className={this.state.leftPaneVisibility ? classes.root : classes.rootInvisibleLeft} elevation={5}>
-				<CardHeader title={tableDisplayName} subheader={tableDescription} />
-
-				<Typography type="subheading" className={classes.cardMarginLeftTop}>Query Builder</Typography>
-				{/*<Paper className={classes.root} elevation={3}>*/}
-					<div id='query-builder' ref='queryBuilder'/>
-				{/*</Paper>*/}
-
-				<Typography type="body1" className={classes.cardMarginLeftTop}>Options</Typography>
-				<SubmitButton />
-				<TextField required id="rowLimit" label="Row-limit" defaultValue="10000" className={classes.textField && classes.cardMarginLeft} margin="normal" />
-
-				<Typography type="subheading" className={classes.cardMarginLeftTop}>Sample Data</Typography>
-			</Paper>
-		);
-    }
-
-    renderHelpfulMessage() {
-    	return null;
-    }
-
-	render() {
-		const classes = this.props.classes;
 		return (
 			<div className={classes.middlePaperSection}>
-				{this.state.table === "" ? this.renderHelpfulMessage() : this.renderQueryBuilder()}
+				<Paper className={this.state.leftPaneVisibility ? classes.root : classes.rootInvisibleLeft} elevation={5}>
+					<CardHeader title={tableDisplayName} subheader={tableDescription} />
+
+					<Typography type="subheading" className={classes.cardMarginLeftTop}>Query Builder</Typography>
+					{/*<Paper className={classes.root} elevation={3}>*/}
+						<div id='query-builder' ref='queryBuilder'/>
+					{/*</Paper>*/}
+
+					<Typography type="body1" className={classes.cardMarginLeftTop}>Options</Typography>
+					<SubmitButton />
+					<TextField required id="rowLimit" label="Row-limit" defaultValue="10000" className={classes.textField && classes.cardMarginLeft} margin="normal" />
+
+					<Typography type="subheading" className={classes.cardMarginLeftTop}>Sample Data</Typography>
+				</Paper>
 			</div>
 		);
 	}
