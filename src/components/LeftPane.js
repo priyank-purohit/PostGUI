@@ -48,11 +48,6 @@ class LeftPane extends Component {
 		const classes = this.props.classes;
 		return (
 			<div className={classes.root}>
-				<div>
-					<p><b>LeftPane.js state</b></p>
-					<p>left, db, table = {this.state.leftPaneVisibility.toString()} {this.state.dbIndex} {this.state.table}</p>
-				</div>
-
 				<DbPicker changeDbIndex={this.changeDbIndex.bind(this)} dbIndex={this.state.dbIndex} table={this.state.table} leftPaneVisibility={this.state.leftPaneVisibility} />
 				<Divider />
 				<DbSchema changeTable={this.changeTable.bind(this)} dbIndex={this.state.dbIndex} table={this.state.table} leftPaneVisibility={this.state.leftPaneVisibility} />

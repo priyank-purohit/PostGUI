@@ -63,12 +63,6 @@ class DbPicker extends Component {
 		
 		return (
 			<div className={classes.root}>
-
-				<div>
-					<p><b>DbPicker.js state</b></p>
-					<p>db, table = {this.state.dbIndex} {this.state.table}</p>
-				</div>
-
 				<List>
 					<ListItem button aria-haspopup="true" aria-controls="lock-menu" aria-label="Database" onClick={this.handleClickListItem} >
 						<ListItemText primary="Database" secondary={this.state.databases[this.state.dbIndex]} />

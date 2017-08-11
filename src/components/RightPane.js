@@ -128,14 +128,6 @@ class RightPane extends Component {
 
 					<Typography type="subheading" className={classes.cardMarginLeftTop}>Sample Data</Typography>
 				</Paper>
-
-				<div>
-					<p><b>RightPane.js state</b></p>
-					<p>leftPaneVisibility = {this.state.leftPaneVisibility.toString()}</p>
-					<p>dbIndex = {this.state.dbIndex}</p>
-					<p>table = {this.state.table}</p>
-				</div>
-
 			</div>
 		);
 	}
