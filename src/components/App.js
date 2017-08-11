@@ -15,9 +15,9 @@ export default class Layout extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			leftPaneVisibility: true,
 			dbIndex: 0,
-			table: ""
+			table: "",
+			leftPaneVisibility: true
 		};
 	}
 
@@ -50,13 +50,15 @@ export default class Layout extends React.Component {
 			<div>
 				<Navigation toggleLeftPane={this.toggleLeftPane.bind(this)} dbIndex={this.state.dbIndex} />
 				<div className="bodyDiv">
-					{this.state.leftPaneVisibility ? <LeftPane changeDbIndex={this.changeDbIndex.bind(this)} changeTable={this.changeTable.bind(this)} /> : <div></div>}
+					{this.state.leftPaneVisibility ? <LeftPane changeDbIndex={this.changeDbIndex.bind(this)} changeTable={this.changeTable.bind(this)} dbIndex={this.state.dbIndex} table={this.state.table} leftPaneVisibility={this.state.leftPaneVisibility} /> : <div></div>}
 					<RightPane  dbIndex={this.state.dbIndex} table={this.state.table} leftPaneVisibility={this.state.leftPaneVisibility} />
 				</div>
-				<p><b>App.js state</b></p>
-				<p>leftPaneVisibility = {this.state.leftPaneVisibility.toString()}</p>
-				<p>dbIndex = {this.state.dbIndex}</p>
-				<p>table = {this.state.table}</p>
+				<div>
+					<p><b>App.js state</b></p>
+					<p>leftPaneVisibility = {this.state.leftPaneVisibility.toString()}</p>
+					<p>dbIndex = {this.state.dbIndex}</p>
+					<p>table = {this.state.table}</p>
+				</div>
 			</div>
 		);
 	}

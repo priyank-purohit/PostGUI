@@ -20,16 +20,25 @@ class DbSchema extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			dbIndex: 0,
-			url: lib.getDbConfig(0, "url"),
-			tables: [],
-			displayTable: ""
+			dbIndex: props.dbIndex,
+			table: props.table,
+			leftPaneVisibility: props.leftPaneVisibility,
+			url: lib.getDbConfig(props.dbIndex, "url"),
+			tables: []
 		};
 	}
 
 	// Make the API call when the basic UI has been rendered
 	componentDidMount() {
 		this.getDbTables(this.state.url);
+	}
+
+	componentWillReceiveProps(newProps) {
+		this.setState({
+			dbIndex: newProps.dbIndex,
+			leftPaneVisibility: newProps.leftPaneVisibility,
+			table: newProps.table
+		});
 	}
 
 	// Called when new props are received
@@ -129,19 +138,19 @@ class DbSchema extends Component {
 		});
 	}
 
-	handleTableClick(table) {
+	handleTableClick(clickedTable) {
 		//let buttonClicked = event.target.id;
 		//console.log("Clicked on " + table);
-		if (this.state.displayTable !== table) {
-			this.getDbTableColumns(table);
-			this.props.changeTable(table);
+		if (this.state.table !== clickedTable) {
+			this.getDbTableColumns(clickedTable);
+			this.props.changeTable(clickedTable);
 			this.setState({
-				displayTable: table
+				table: clickedTable
 			});
 		} else {
 			this.props.changeTable("");
 			this.setState({
-				displayTable: ""
+				table: ""
 			});
 		}
 	}
@@ -170,7 +179,7 @@ class DbSchema extends Component {
 			<ListItem button key={name} id={name}
 				 title={displayName} onClick={(event) => this.handleTableClick(name)}>
 				<ListItemIcon>
-					{this.state.displayTable === name ? <FolderIconOpen /> : <FolderIcon /> }
+					{this.state.table === name ? <FolderIconOpen /> : <FolderIcon /> }
 				</ListItemIcon>
 				<ListItemText primary={displayName} style={truncTextStyle} />
 			</ListItem>
@@ -189,7 +198,7 @@ class DbSchema extends Component {
 		);
 	}
 
-	displayTables() {
+	showTables() {
 		let tableElements = [];
 		for (let i = 0; i < this.state.tables.length; i++) {
 			let tableName = this.state.tables[i];
@@ -199,7 +208,7 @@ class DbSchema extends Component {
 			tableElements.push(
 				this.createTableElementsForLeftPane(tableName, tableDisplayName)
 			);
-			if (this.state.displayTable === tableName) {
+			if (this.state.table === tableName) {
 				tableElements.push(this.displayColumns(tableName));
 			}
 		}
@@ -216,7 +225,7 @@ class DbSchema extends Component {
 
 		for (let i = 0; i < columns.length; i++) {
 			let columnName = columns[i];
-			let columnRename = lib.getColumnConfig(this.state.dbIndex, this.state.displayTable,columnName, "rename");
+			let columnRename = lib.getColumnConfig(this.state.dbIndex, this.state.table,columnName, "rename");
 			let columnDisplayName = columnRename ? columnRename : columnName;
 
 			let columnVisibility = this.state[table + columns[i]] === "hide" ? false : true;
@@ -239,7 +248,7 @@ class DbSchema extends Component {
 		return (
 			<div>
 				<List>
-					{ this.displayTables() }
+					{ this.showTables() }
 				</List>
 			</div>
 		);

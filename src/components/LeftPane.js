@@ -19,36 +19,43 @@ const styleSheet = createStyleSheet({
 class LeftPane extends Component {
 	constructor(props) {
 		super(props);
+		console.log("Left pane reconstructed.....");
 		this.state = {
-			dbIndex: 0,
-			table: ""
+			dbIndex: props.dbIndex,
+			table: props.table,
+			leftPaneVisibility: props.leftPaneVisibility
 		};
 	}
 
 	// Changes the index of DB in state + App.js state
 	changeDbIndex(newIndex) {
+		this.props.changeDbIndex(newIndex);
 		this.setState({
 			dbIndex: newIndex
 		});
-		this.props.changeDbIndex(newIndex);
 	}
 
 
 	// Changes the index of DB in state + App.js state
 	changeTable(newTable) {
+		this.props.changeTable(newTable);
 		this.setState({
 			table: newTable
 		});
-		this.props.changeTable(newTable);
 	}
 
 	render() {
 		const classes = this.props.classes;
 		return (
 			<div className={classes.root}>
-				<DbPicker changeDbIndex={this.changeDbIndex.bind(this)} />
+				<div>
+					<p><b>LeftPane.js state</b></p>
+					<p>left, db, table = {this.state.leftPaneVisibility.toString()} {this.state.dbIndex} {this.state.table}</p>
+				</div>
+
+				<DbPicker changeDbIndex={this.changeDbIndex.bind(this)} dbIndex={this.state.dbIndex} table={this.state.table} leftPaneVisibility={this.state.leftPaneVisibility} />
 				<Divider />
-				<DbSchema dbIndex={this.state.dbIndex} changeTable={this.changeTable.bind(this)} />
+				<DbSchema changeTable={this.changeTable.bind(this)} dbIndex={this.state.dbIndex} table={this.state.table} leftPaneVisibility={this.state.leftPaneVisibility} />
 			</div>
 		);
 	}
