@@ -96,6 +96,10 @@ class DbSchema extends Component {
 		this.setState({
 			tables: dbTables
 		});
+
+		if (dbTables[0] !== undefined && dbTables[0] !== null && dbTables[0] !== "") {
+			this.handleTableClick(dbTables[0]);
+		}
 	}
 
 	// From JSON resp, extract the names of table columns and update state
