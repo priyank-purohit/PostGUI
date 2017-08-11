@@ -20,7 +20,8 @@ class LeftPane extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			dbIndex: 0
+			dbIndex: 0,
+			table: ""
 		};
 	}
 
@@ -32,13 +33,22 @@ class LeftPane extends Component {
 		this.props.changeDbIndex(newIndex);
 	}
 
+
+	// Changes the index of DB in state + App.js state
+	changeTable(newTable) {
+		this.setState({
+			table: newTable
+		});
+		this.props.changeTable(newTable);
+	}
+
 	render() {
 		const classes = this.props.classes;
 		return (
 			<div className={classes.root}>
 				<DbPicker changeDbIndex={this.changeDbIndex.bind(this)} />
 				<Divider />
-				<DbSchema dbIndex={this.state.dbIndex}/>
+				<DbSchema dbIndex={this.state.dbIndex} changeTable={this.changeTable.bind(this)} />
 			</div>
 		);
 	}

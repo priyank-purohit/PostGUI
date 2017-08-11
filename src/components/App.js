@@ -17,7 +17,7 @@ export default class Layout extends React.Component {
 		this.state = {
 			leftPaneVisibility: true,
 			dbIndex: 0,
-			table: 'annotation_domain'
+			table: ""
 		};
 	}
 
@@ -39,14 +39,24 @@ export default class Layout extends React.Component {
 		});
 	}
 
+	changeTable(newTable) {
+		this.setState({
+			table: newTable
+		});
+	}
+
 	render() {
 		return (
 			<div>
 				<Navigation toggleLeftPane={this.toggleLeftPane.bind(this)} dbIndex={this.state.dbIndex} />
 				<div className="bodyDiv">
-					{this.state.leftPaneVisibility ? <LeftPane changeDbIndex={this.changeDbIndex.bind(this)} /> : <div></div>}
-					<RightPane  dbIndex={this.state.dbIndex} table={this.state.table} leftPaneVisibility={this.state.leftPaneVisibility}/>
+					{this.state.leftPaneVisibility ? <LeftPane changeDbIndex={this.changeDbIndex.bind(this)} changeTable={this.changeTable.bind(this)} /> : <div></div>}
+					<RightPane  dbIndex={this.state.dbIndex} table={this.state.table} leftPaneVisibility={this.state.leftPaneVisibility} />
 				</div>
+				<p><b>App.js state</b></p>
+				<p>leftPaneVisibility = {this.state.leftPaneVisibility.toString()}</p>
+				<p>dbIndex = {this.state.dbIndex}</p>
+				<p>table = {this.state.table}</p>
 			</div>
 		);
 	}

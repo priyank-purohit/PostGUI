@@ -44,6 +44,34 @@ const styleSheet = createStyleSheet(theme => ({
 }));
 
 class RightPane extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			dbIndex : 0,
+			table: "",
+			leftPaneVisibility: true
+		}
+	}
+
+	componentWillReceiveProps(newProps) {
+		if (this.state.dbIndex !== newProps.dbIndex) {
+			this.setState({
+				dbIndex: newProps.dbIndex
+			});
+		}
+		
+		if (this.state.table !== newProps.table) {
+			this.setState({
+				table: newProps.table
+			});
+		}
+
+		if (this.state.leftPaneVisibility !== newProps.leftPaneVisibility) {
+			this.setState({
+				leftPaneVisibility: newProps.leftPaneVisibility
+			});
+		}
+	}
 
     componentDidMount() {
         const element = this.refs.queryBuilder;
@@ -73,10 +101,14 @@ class RightPane extends Component {
 
 	render() {
 		const classes = this.props.classes;
+		let tableRename = lib.getTableConfig(this.state.dbIndex, this.state.table, "rename");
+		let tableDisplayName = tableRename ? tableRename : this.state.table;
+
+		let tableDescription = lib.getTableConfig(this.props.dbIndex, this.props.table, "description") ? lib.getTableConfig(this.props.dbIndex, this.props.table, "description") : "";
 		return (
 			<div className={classes.middlePaperSection}>
-				<Paper className={this.props.leftPaneVisibility ? classes.root : classes.rootInvisibleLeft} elevation={5}>
-					<CardHeader title={lib.getTableConfig(this.props.dbIndex, this.props.table, "rename")} subheader={lib.getTableConfig(this.props.dbIndex, this.props.table, "description")} />
+				<Paper className={this.state.leftPaneVisibility ? classes.root : classes.rootInvisibleLeft} elevation={5}>
+					<CardHeader title={tableDisplayName} subheader={tableDescription} />
 
 					<Typography type="subheading" className={classes.cardMarginLeftTop}>Query Builder</Typography>
 					{/*<Paper className={classes.root} elevation={3}>*/}

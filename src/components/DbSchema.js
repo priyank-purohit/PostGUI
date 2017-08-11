@@ -23,7 +23,7 @@ class DbSchema extends Component {
 			dbIndex: 0,
 			url: lib.getDbConfig(0, "url"),
 			tables: [],
-			displayTable: ''
+			displayTable: ""
 		};
 	}
 
@@ -130,10 +130,12 @@ class DbSchema extends Component {
 		//console.log("Clicked on " + table);
 		if (this.state.displayTable !== table) {
 			this.getDbTableColumns(table);
+			this.props.changeTable(table);
 			this.setState({
 				displayTable: table
-			});	
+			});
 		} else {
+			this.props.changeTable("");
 			this.setState({
 				displayTable: ""
 			});

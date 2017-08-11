@@ -31,7 +31,7 @@ class Navigation extends Component {
 							<MenuIcon />
 						</IconButton>
 						<Typography type="title" color="inherit" className={classes.flex}>
-							{lib.getValueFromConfig("databases")[this.props.dbIndex].title}
+							{lib.getDbConfig(this.props.dbIndex, "title")}
 						</Typography>
 						{/*<IconButton color="contrast" aria-label="Menu">
 							<HomeIcon />
