@@ -109,15 +109,18 @@ class RightPane extends Component {
 		let tableDisplayName = tableRename ? tableRename : this.state.table;
 
 		let tableDescription = lib.getTableConfig(this.props.dbIndex, this.props.table, "description") ? lib.getTableConfig(this.props.dbIndex, this.props.table, "description") : "";
+
+		let paperClasses0 = this.state.table ? "" : classes.hide;
+		let paperClasses1 = this.state.leftPaneVisibility === true ? classes.root : classes.rootInvisibleLeft;
+		let paperClasses = paperClasses0 + " " + paperClasses1;
+
 		return (
 			<div className={classes.middlePaperSection}>
-				<Paper className={this.state.leftPaneVisibility ? classes.root : classes.rootInvisibleLeft} elevation={5}>
+				<Paper className={paperClasses} elevation={5}>
 					<CardHeader title={tableDisplayName} subheader={tableDescription} />
 
 					<Typography type="subheading" className={classes.cardMarginLeftTop}>Query Builder</Typography>
-					{/*<Paper className={classes.root} elevation={3}>*/}
-						<div id='query-builder' ref='queryBuilder'/>
-					{/*</Paper>*/}
+					<div id='query-builder' ref='queryBuilder'/>
 
 					<Typography type="body1" className={classes.cardMarginLeftTop}>Options</Typography>
 					<SubmitButton />
