@@ -13,6 +13,9 @@ let lib = require("../utils/library.js");
 const styleSheet = createStyleSheet({
 	column: {
 		marginLeft: 27
+	},
+	hide: {
+		display: 'none'
 	}
 });
 
@@ -22,16 +25,18 @@ class DbSchema extends Component {
 		this.state = {
 			dbIndex: props.dbIndex,
 			table: props.table,
+			dbSchema: null,
 			leftPaneVisibility: props.leftPaneVisibility,
 			url: lib.getDbConfig(props.dbIndex, "url"),
 			tables: []
 		};
+		// Save the database schema to state for future access
+		if (this.state.url) {
+			this.getDbSchema(this.state.url);
+		}
 	}
 
-	// Make the API call when the basic UI has been rendered
-	componentDidMount() {
-		this.getDbTables(this.state.url);
-	}
+	componentDidMount() {}
 
 	componentWillReceiveProps(newProps) {
 		this.setState({
@@ -66,39 +71,33 @@ class DbSchema extends Component {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Returns a list of tables from URL
-	getDbTables(url) {
+	getDbSchema(url) {
 		axios.get(url + "/", { params: {} })
 			.then((response) => {
-				this.parseTables(response.data);
+				// Save the raw resp + parse tables and columns...
+				this.setState({
+					dbSchema: response.data
+				}, () => {
+					this.parseDbSchema(this.state.dbSchema);
+				});
+				
 			})
 			.catch(function(error) {
 				console.log("Error getting database tables: " + error);
 			});
 	}
 
-	// Gets the columns of the specified table, uses the OPTIONS method
-	getDbTableColumns(table) {
-		let url = this.state.url + "/";
-		axios.get(url, { params: {} })
-			.then((response) => {
-				this.parseTableColumns(response.data.definitions[table].properties, table);
-			})
-			.catch(function(error) {
-				console.log(error);
-			});
-	}
-
-
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Parsing Methods
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// From the JSON resp, extract the names of db tables and update state
-	parseTables(data) {
+	// From the JSON resp, extract the names of db TABLES and update state
+	parseDbSchema(data = this.state.dbSchema) {
 		let dbTables = [];
 		for (let i in data.definitions) {
 			if (lib.getTableConfig(this.state.dbIndex, i, "visible") !== false) {
 				dbTables.push(i);
+				this.parseTableColumns(this.state.dbSchema.definitions[i].properties, i);
 			}
 		}
 
@@ -114,35 +113,35 @@ class DbSchema extends Component {
 	}
 
 	// From JSON resp, extract the names of table columns and update state
-	parseTableColumns(rawResp, table) {
+	parseTableColumns(rawResp = this.state.dbSchema, table) {
 		let columns = [];
-		let selectColumns = [];
 
-		for (let i in rawResp) {
+		for (let i in rawResp) { // I = COLUMN in TABLE
 			if (lib.getColumnConfig(this.state.dbIndex, table, i, "visible") !== false) {
+				// list of columns for TABLE
 				columns.push(i);
 
 				let columnDefaultVisibility = lib.isColumnInDefaultView(this.state.dbIndex, table, i);
 
+				// Each COLUMN's visibility stored in state
 				if (columnDefaultVisibility === false) {
 					this.setState({
-						[table + i]: "hide"
+						[table + i + "Visibility"]: "hide"
 					});
-				} else {
-					selectColumns.push(i);
 				}
 			}
 		}
+
+		// Save state
 		this.setState({
 			[table]: columns
-		}, () => {
-			this.displayColumns(table);
 		});
 	}
 
+	// Set CLICKEDTABLE in state as TABLE
 	handleTableClick(clickedTable, skipCheck = false) {
+		// skipCheck prevents table schema collapse when leftPane toggles
 		if (this.state.table !== clickedTable || skipCheck) {
-			this.getDbTableColumns(clickedTable);
 			this.props.changeTable(clickedTable);
 			this.setState({
 				table: clickedTable
@@ -155,19 +154,20 @@ class DbSchema extends Component {
 		}
 	}
 
+	// Make a column visible or invisible on click
 	handleColumnClick(column, table) {
-		if (this.state[table+column] === "hide") {
+		if (this.state[table + column + "Visibility"] === "hide") {
 			this.setState({
-				[table+column]: ""
+				[table + column + "Visibility"]: ""
 			});
 		} else {
 			this.setState({
-				[table+column]: "hide"
+				[table + column + "Visibility"]: "hide"
 			});
 		}
 	}
 
-	createTableElementsForLeftPane(name, displayName) {
+	createTableElement(tableName) {
 		const truncTextStyle = {
 			textOverflow: 'clip',
 			overflow: 'hidden',
@@ -175,21 +175,46 @@ class DbSchema extends Component {
 			height: 20
 		};
 
-		return (
-			<ListItem button key={name} id={name}
-				 title={displayName} onClick={(event) => this.handleTableClick(name)}>
+		let tableRename = lib.getTableConfig(this.state.dbIndex, tableName, "rename");
+		let displayName = tableRename ? tableRename : tableName;
+
+		let tableColumnElements = [];
+
+		// First push the table itself
+		tableColumnElements.push(
+			<ListItem button key={tableName} id={tableName}
+				 title={displayName} onClick={(event) => this.handleTableClick(tableName)}>
 				<ListItemIcon>
-					{this.state.table === name ? <FolderIconOpen /> : <FolderIcon /> }
+					{this.state.table === tableName ? <FolderIconOpen /> : <FolderIcon /> }
 				</ListItemIcon>
 				<ListItemText primary={displayName} style={truncTextStyle} />
 			</ListItem>
 		);
+
+		// Now push each column as hidden until state.table equals table tableName...
+		for (let i in this.state[tableName]) {
+			let columnName = this.state[tableName][i];
+			tableColumnElements.push(this.createColumnElement(columnName, tableName));
+		}
+
+		return tableColumnElements;
 	}
 
-	createColumnElementsForLeftPane(name, displayName, visibility, table) {
+	createColumnElement(columnName, table) {
+		let columnRename = lib.getColumnConfig(this.state.dbIndex, table, columnName, "rename");
+		let displayName = columnRename ? columnRename : columnName;
+
+		let visibility = this.state[table + columnName + "Visibility"] === "hide" ? false : true;
+
+		// If TABLE is equal to STATE.TABLE (displayed table), show the column element
+		let classNames = this.props.classes.column;
+		if (this.state.table !== table) {
+			classNames = this.props.classes.column + " " + this.props.classes.hide;
+		}
+
 		return (
-			<ListItem button key={name} id={name}
-				 title={displayName} className={this.props.classes.column} onClick={(event) => this.handleColumnClick(name, table)}>
+			<ListItem button key={columnName} id={columnName}
+				 title={displayName} className={classNames} onClick={(event) => this.handleColumnClick(columnName, table)}>
 				<ListItemIcon>
 					{visibility ? <VisibilityIcon /> : <VisibilityOffIcon /> }
 				</ListItemIcon>
@@ -202,44 +227,13 @@ class DbSchema extends Component {
 		let tableElements = [];
 		for (let i = 0; i < this.state.tables.length; i++) {
 			let tableName = this.state.tables[i];
-			let tableRename = lib.getTableConfig(this.state.dbIndex, tableName, "rename");
-			let tableDisplayName = tableRename ? tableRename : tableName;
 
+			// For each table, push TABLE + COLUMN elements
 			tableElements.push(
-				this.createTableElementsForLeftPane(tableName, tableDisplayName)
+				this.createTableElement(tableName)
 			);
-			if (this.state.table === tableName) {
-				tableElements.push(this.displayColumns(tableName));
-			}
 		}
 		return tableElements;
-	}
-
-	displayColumns(table) {
-		let columns = this.state[table];
-		let columnElements = [];
-
-		if (!columns) {
-			return null;
-		}
-
-		for (let i = 0; i < columns.length; i++) {
-			let columnName = columns[i];
-			let columnRename = lib.getColumnConfig(this.state.dbIndex, this.state.table,columnName, "rename");
-			let columnDisplayName = columnRename ? columnRename : columnName;
-
-			let columnVisibility = this.state[table + columns[i]] === "hide" ? false : true;
-
-			columnElements.push(
-				this.createColumnElementsForLeftPane(columnName, columnDisplayName, columnVisibility, table)
-			);
-		}
-		/*this.setState({
-			columnsTest: columnElements
-		});
-
-		//*/
-		return columnElements;
 	}
 
 	render() {
