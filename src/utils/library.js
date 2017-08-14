@@ -1,4 +1,3 @@
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Config Methods
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -16,7 +15,6 @@ exports.getValueFromConfig = function(key) {
 			return null;
 		}
 	} catch (error) {
-		console.log("Error in getValueFromConfig: " + error.message);
 		return null;
 	}
 }
@@ -34,7 +32,6 @@ exports.getDbConfig = function(dbIndex, option) {
 				return null;
 			}
 		} catch (error) {
-			console.log("Error in  getDbConfig: " + error.message);
 			return null;
 		}
 	} else {
@@ -55,7 +52,6 @@ exports.getTableConfig = function(dbIndex, table, option) {
 				return null;
 			}
 		} catch (error) {
-			console.log("Error in  getTableConfig: " + error.message);
 			return null;
 		}
 	} else {
@@ -76,7 +72,6 @@ exports.getColumnConfig = function(dbIndex, table, column, option) {
 				return null;
 			}
 		} catch (error) {
-			console.log("Error in  getColumnConfig: " + error.message);
 			return null;
 		}
 	} else {
@@ -96,7 +91,6 @@ exports.isColumnInDefaultView = function(dbIndex, table, column) {
 				return this.inArray(column, defaultColumns);
 			}
 		} catch (error) {
-			console.log("Error in  isColumnInDefaultView: " + error.message);
 			return null;
 		}
 	}
