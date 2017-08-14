@@ -76,7 +76,7 @@ class RightPane extends Component {
 			});
 		}
 
-		// Update QB iff necessary
+		// Update QB iff both table and columns are received as props
 		if (this.state.table !== newProps.table && this.state.columns !== newProps.columns) {
 			const element = this.refs.queryBuilder;
 			this.rebuildQueryBuilder(element, newProps.table, newProps.columns);
