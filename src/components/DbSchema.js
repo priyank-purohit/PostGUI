@@ -77,11 +77,6 @@ class DbSchema extends Component {
 		}
 	}
 
-	// Update the schema and what not as the db has changed...
-	changeDatabase() {
-		console.log(this.state.dbIndex, this.state.url);
-	}
-
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// HTTP Methods
