@@ -165,11 +165,13 @@ class DbSchema extends Component {
 		// skipCheck prevents table schema collapse when leftPane toggles
 		if (this.state.table !== clickedTable || skipCheck) {
 			this.props.changeTable(clickedTable);
+			this.props.changeColumns(this.state[clickedTable]);
 			this.setState({
 				table: clickedTable
 			});
 		} else {
 			this.props.changeTable("");
+			this.props.changeColumns([]);
 			this.setState({
 				table: ""
 			});

@@ -17,6 +17,7 @@ export default class Layout extends React.Component {
 		this.state = {
 			dbIndex: 0,
 			table: "",
+			columns: [],
 			leftPaneVisibility: true
 		};
 	}
@@ -45,13 +46,19 @@ export default class Layout extends React.Component {
 		});
 	}
 
+	changeColumns(newColumns) {
+		this.setState({
+			columns: newColumns
+		});
+	}
+
 	render() {
 		return (
 			<div>
 				<Navigation toggleLeftPane={this.toggleLeftPane.bind(this)} dbIndex={this.state.dbIndex} />
 				<div className="bodyDiv">
-					{this.state.leftPaneVisibility ? <LeftPane changeDbIndex={this.changeDbIndex.bind(this)} changeTable={this.changeTable.bind(this)} dbIndex={this.state.dbIndex} table={this.state.table} leftPaneVisibility={this.state.leftPaneVisibility} /> : <div></div>}
-					<RightPane  dbIndex={this.state.dbIndex} table={this.state.table} leftPaneVisibility={this.state.leftPaneVisibility} />
+					{this.state.leftPaneVisibility ? <LeftPane changeDbIndex={this.changeDbIndex.bind(this)} changeTable={this.changeTable.bind(this)} changeColumns={this.changeColumns.bind(this)} dbIndex={this.state.dbIndex} table={this.state.table} leftPaneVisibility={this.state.leftPaneVisibility} /> : <div></div>}
+					<RightPane  dbIndex={this.state.dbIndex} table={this.state.table} columns={this.state.columns} leftPaneVisibility={this.state.leftPaneVisibility} />
 				</div>
 			</div>
 		);

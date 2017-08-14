@@ -23,6 +23,7 @@ class LeftPane extends Component {
 		this.state = {
 			dbIndex: props.dbIndex,
 			table: props.table,
+			columns: props.columns,
 			leftPaneVisibility: props.leftPaneVisibility
 		};
 	}
@@ -44,13 +45,21 @@ class LeftPane extends Component {
 		});
 	}
 
+	// Changes the index of DB in state + App.js state
+	changeColumns(newColumns) {
+		this.props.changeColumns(newColumns);
+		this.setState({
+			columns: newColumns
+		});
+	}
+
 	render() {
 		const classes = this.props.classes;
 		return (
 			<div className={classes.root}>
 				<DbPicker changeDbIndex={this.changeDbIndex.bind(this)} dbIndex={this.state.dbIndex} table={this.state.table} leftPaneVisibility={this.state.leftPaneVisibility} />
 				<Divider />
-				<DbSchema changeTable={this.changeTable.bind(this)} changeDbIndex={this.changeDbIndex.bind(this)} dbIndex={this.state.dbIndex} table={this.state.table} leftPaneVisibility={this.state.leftPaneVisibility} />
+				<DbSchema changeTable={this.changeTable.bind(this)} changeColumns={this.changeColumns.bind(this)} changeDbIndex={this.changeDbIndex.bind(this)} dbIndex={this.state.dbIndex} table={this.state.table} columns={this.state.columns} leftPaneVisibility={this.state.leftPaneVisibility} />
 			</div>
 		);
 	}

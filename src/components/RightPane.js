@@ -75,6 +75,12 @@ class RightPane extends Component {
 				leftPaneVisibility: newProps.leftPaneVisibility
 			});
 		}
+
+		// Update QB iff necessary
+		if (this.state.table !== newProps.table && this.state.columns !== newProps.columns) {
+			const element = this.refs.queryBuilder;
+			this.rebuildQueryBuilder(element, newProps.table, newProps.columns);
+		}
 	}
 
     componentDidMount() {
@@ -105,7 +111,7 @@ class RightPane extends Component {
 
 	render() {
 		const classes = this.props.classes;
-		
+
 		let tableRename = lib.getTableConfig(this.state.dbIndex, this.state.table, "rename");
 		let tableDisplayName = tableRename ? tableRename : this.state.table;
 
