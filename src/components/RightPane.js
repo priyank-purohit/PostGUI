@@ -105,14 +105,15 @@ class RightPane extends Component {
 
 	render() {
 		const classes = this.props.classes;
+		
 		let tableRename = lib.getTableConfig(this.state.dbIndex, this.state.table, "rename");
 		let tableDisplayName = tableRename ? tableRename : this.state.table;
 
 		let tableDescription = lib.getTableConfig(this.props.dbIndex, this.props.table, "description") ? lib.getTableConfig(this.props.dbIndex, this.props.table, "description") : "";
 
-		let paperClasses0 = this.state.table ? "" : classes.hide;
-		let paperClasses1 = this.state.leftPaneVisibility === true ? classes.root : classes.rootInvisibleLeft;
-		let paperClasses = paperClasses0 + " " + paperClasses1;
+		let hideClass = this.state.table ? "" : classes.hide;
+		let leftMarginClass = this.state.leftPaneVisibility === true ? classes.root : classes.rootInvisibleLeft;
+		let paperClasses = hideClass + " " + leftMarginClass;
 
 		return (
 			<div className={classes.middlePaperSection}>
