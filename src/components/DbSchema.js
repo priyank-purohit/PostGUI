@@ -2,6 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
+
+import Button from 'material-ui/Button';
+import Snackbar from 'material-ui/Snackbar';
+
+import IconButton from 'material-ui/IconButton';
+import CloseIcon from 'material-ui-icons/Close';
+
 import FolderIcon from 'material-ui-icons/Folder';
 import FolderIconOpen from 'material-ui-icons/FolderOpen';
 import VisibilityIcon from 'material-ui-icons/Visibility';
@@ -10,25 +17,32 @@ import axios from 'axios';
 
 let lib = require("../utils/library.js");
 
-const styleSheet = createStyleSheet({
+const styleSheet = createStyleSheet(theme => ({
 	column: {
 		marginLeft: 27
 	},
 	hide: {
 		display: 'none'
+	},
+	close: {
+		width: theme.spacing.unit * 4,
+		height: theme.spacing.unit * 4,
 	}
-});
+}));
 
 class DbSchema extends Component {
 	constructor(props) {
 		super(props);
+		console.log("Starting props table === " + props.table);
 		this.state = {
 			dbIndex: props.dbIndex,
 			table: props.table,
 			dbSchema: null,
 			leftPaneVisibility: props.leftPaneVisibility,
 			url: lib.getDbConfig(props.dbIndex, "url"),
-			tables: []
+			tables: [],
+			snackBarVisibility: false,
+			snackBarMessage: "Unknown error"
 		};
 		// Save the database schema to state for future access
 		if (this.state.url) {
@@ -47,23 +61,26 @@ class DbSchema extends Component {
 	}
 
 	// Called when new props are received
-	/*componentWillReceiveProps(newProps) {
+	componentWillReceiveProps(newProps) {
 		if (this.state.dbIndex !== newProps.dbIndex) {
 			let newDbIndex = newProps.dbIndex;
 			this.setState({
 				dbIndex: newDbIndex,
+				table: "",
 				url: lib.getDbConfig(newDbIndex, "url"),
 				tables: []
 			}, function() {
-				this.changeDatabase();
+				this.props.changeTable(this.state.table);
+				this.props.changeDbIndex(this.state.dbIndex);
+				this.getDbSchema();
 			});
 		}
-	}*/
+	}
 
 	// Update the schema and what not as the db has changed...
-	/*changeDatabase() {
+	changeDatabase() {
 		console.log(this.state.dbIndex, this.state.url);
-	}*/
+	}
 
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,7 +88,7 @@ class DbSchema extends Component {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Returns a list of tables from URL
-	getDbSchema(url) {
+	getDbSchema(url = this.state.url) {
 		axios.get(url + "/", { params: {} })
 			.then((response) => {
 				// Save the raw resp + parse tables and columns...
@@ -80,10 +97,20 @@ class DbSchema extends Component {
 				}, () => {
 					this.parseDbSchema(this.state.dbSchema);
 				});
-				
 			})
-			.catch(function(error) {
-				console.log("Error getting database tables: " + error);
+			.catch((error) => {
+				// Show error in top-right Snack-Bar
+				this.setState({
+					snackBarVisibility: true,
+					snackBarMessage: "Database does not exist."
+				}, () => {
+					this.timer = setTimeout(() => {
+						this.setState({
+							snackBarVisibility: false,
+							snackBarMessage: "Unknown error"
+						});
+					}, 5000);
+				});
 			});
 	}
 
@@ -236,11 +263,16 @@ class DbSchema extends Component {
 		return tableElements;
 	}
 
+	handleRequestClose = () => {
+		this.setState({ snackBarVisibility: false });
+	};
+
 	render() {
 		const classes = this.props.classes;
 
 		return (
 			<div>
+				<Snackbar anchorOrigin={{vertical: "bottom", horizontal: "center"}} open={this.state.snackBarVisibility} onRequestClose={this.handleRequestClose} SnackbarContentProps={{ 'aria-describedby': 'message-id', }} message={<span id="message-id">{this.state.snackBarMessage}</span>} action={[ <IconButton key="close" aria-label="Close" color="accent" className={classes.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton> ]} />
 				<List>
 					{ this.showTables() }
 				</List>
