@@ -113,14 +113,14 @@ exports.getQBRules = function() {
 }
 
 // Returns a list of columns
-exports.getQBFilters = function(table, columns) {
+exports.getQBFilters = function(dbIndex, table, columns) {
 	if (columns.length <= 0) {
 		return [{ id: 'error', label: 'ERROR: select a view...', type: 'string' }];
 	}
 
 	let plain_strings_query_builder = [];
 	for (let i = 0; i < columns.length; i++) {
-		plain_strings_query_builder.push({ id: columns[i], label: this.getColumnConfig(table, columns[i], "rename"), type: 'string', operators: ['equal', 'not_equal', 'greater', 'less', 'greater_or_equal', 'less_or_equal', 'is_not_null', 'is_null', 'in', 'contains'] });
+		plain_strings_query_builder.push({ id: columns[i], label: this.getColumnConfig(dbIndex, table, columns[i], "rename"), type: 'string', operators: ['equal', 'not_equal', 'greater', 'less', 'greater_or_equal', 'less_or_equal', 'is_not_null', 'is_null', 'in', 'contains'] });
 	}
 	return plain_strings_query_builder;
 }
