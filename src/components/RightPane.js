@@ -9,6 +9,7 @@ import SubmitButton from './SubmitButton.js';
 import Typography from 'material-ui/Typography';
 
 import axios from 'axios';
+import DataTable from './DataTable.js';
 
 import '../styles/QueryBuilder.css';
 
@@ -209,9 +210,10 @@ class RightPane extends Component {
 					<TextField disabled required id="rowLimit" label="Row-limit" defaultValue="10000" className={classes.textField && classes.cardMarginLeft} margin="normal" />
 
 					<Typography type="subheading" className={classes.cardMarginLeftTop}>Sample Data</Typography>
-					<Typography type="subheading" className={classes.cardMarginLeftTop}>Table = {this.state.table}</Typography>
+					{/*<Typography type="subheading" className={classes.cardMarginLeftTop}>Table = {this.state.table}</Typography>
 
-					<Typography type="subheading" className={classes.cardMarginLeftTop}>{JSON.stringify(this.state.rawData)}</Typography>
+					<Typography type="subheading" className={classes.cardMarginLeftTop}>{JSON.stringify(this.state.rawData)}</Typography>*/}
+					<DataTable />
 				</Paper>
 			</div>
 		);
