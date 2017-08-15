@@ -55,7 +55,9 @@ class RightPane extends Component {
 			table: props.table,
 			columns: props.columns,
 			leftPaneVisibility: props.leftPaneVisibility,
-			rules: null
+			rules: null,
+			submitLoading: false,
+			submitSuccess: false
 		}
 	}
 
@@ -121,9 +123,29 @@ class RightPane extends Component {
 	}
 
 	handleGetRulesClick() {
-		const rules = window.$(this.refs.queryBuilder).queryBuilder('getRules');
-		this.setState({ rules: rules });
-		return rules;
+		console.log("Getting rules");
+		this.setState({
+			submitLoading: true
+		}, () => {
+			console.log("Getting rules 2");
+			const rules = window.$(this.refs.queryBuilder).queryBuilder('getRules');
+			this.setState({ rules: rules }, () => {
+				console.log("Got them rules");
+				this.setState({ 
+						submitLoading: false, 
+						submitSuccess: true 
+				}, () => {
+					this.timer = setTimeout(() => {
+						console.log("Return to normal in 2.5 secs"); 
+						this.setState({ 
+							submitLoading: false, 
+							submitSuccess: false
+						}) 
+					}, 2500);
+				});
+			});
+			return rules;
+		});
 	}
 
 	render() {
@@ -148,7 +170,7 @@ class RightPane extends Component {
 
 					<Typography type="body1" className={classes.cardMarginLeftTop}>Options</Typography>
 
-					<SubmitButton dbIndex={this.state.dbIndex} table={this.state.table} leftPaneVisibility={this.state.leftPaneVisibility} getRules={this.handleGetRulesClick.bind(this)} />
+					<SubmitButton dbIndex={this.state.dbIndex} table={this.state.table} leftPaneVisibility={this.state.leftPaneVisibility} getRules={this.handleGetRulesClick.bind(this)} loading={this.state.submitLoading} success={this.state.submitSuccess} />
 
 					<TextField disabled required id="rowLimit" label="Row-limit" defaultValue="10000" className={classes.textField && classes.cardMarginLeft} margin="normal" />
 

@@ -37,9 +37,16 @@ class CircularFab extends Component {
 		this.state = {
 			dbIndex: props.dbIndex,
 			table: props.table,
-			loading: false,
-			success: false
+			loading: props.loading,
+			success: props.success
 		};
+	}
+
+	componentWillReceiveProps(newProps) {
+		this.setState({
+			loading: newProps.loading,
+			success: newProps.success
+		});
 	}
 
 	componentWillUnmount() {
@@ -48,7 +55,7 @@ class CircularFab extends Component {
 
 	handleButtonClick() {
 		this.props.getRules();
-		if (!this.state.loading) {
+		/*if (!this.state.loading) {
 			this.setState({
 					success: false,
 					loading: true,
@@ -69,7 +76,7 @@ class CircularFab extends Component {
 					}, 1000);
 				},
 			);
-		}
+		}*/
 	};
 
 	render() {
