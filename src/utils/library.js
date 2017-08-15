@@ -114,7 +114,7 @@ exports.getQBRules = function() {
 
 // Returns a list of columns
 exports.getQBFilters = function(dbIndex, table, columns) {
-	if (columns.length <= 0) {
+	if (!columns || columns.length <= 0) {
 		return [{ id: 'error', label: 'ERROR: select a view...', type: 'string' }];
 	}
 
