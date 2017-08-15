@@ -47,6 +47,7 @@ class CircularFab extends Component {
 	}
 
 	handleButtonClick() {
+		this.props.getRules();
 		if (!this.state.loading) {
 			this.setState({
 					success: false,

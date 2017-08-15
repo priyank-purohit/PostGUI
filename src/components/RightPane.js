@@ -54,7 +54,8 @@ class RightPane extends Component {
 			dbIndex : props.dbIndex,
 			table: props.table,
 			columns: props.columns,
-			leftPaneVisibility: props.leftPaneVisibility
+			leftPaneVisibility: props.leftPaneVisibility,
+			rules: null
 		}
 	}
 
@@ -119,6 +120,12 @@ class RightPane extends Component {
 		window.$(element).queryBuilder({ filters, rules });
 	}
 
+	handleGetRulesClick() {
+		const rules = window.$(this.refs.queryBuilder).queryBuilder('getRules');
+		this.setState({ rules: rules });
+		return rules;
+	}
+
 	render() {
 		const classes = this.props.classes;
 
@@ -140,7 +147,9 @@ class RightPane extends Component {
 					<div id='query-builder' ref='queryBuilder'/>
 
 					<Typography type="body1" className={classes.cardMarginLeftTop}>Options</Typography>
-					<SubmitButton dbIndex={this.state.dbIndex} table={this.state.table} leftPaneVisibility={this.state.leftPaneVisibility} />
+
+					<SubmitButton dbIndex={this.state.dbIndex} table={this.state.table} leftPaneVisibility={this.state.leftPaneVisibility} getRules={this.handleGetRulesClick.bind(this)} />
+
 					<TextField disabled required id="rowLimit" label="Row-limit" defaultValue="10000" className={classes.textField && classes.cardMarginLeft} margin="normal" />
 
 					<Typography type="subheading" className={classes.cardMarginLeftTop}>Sample Data</Typography>

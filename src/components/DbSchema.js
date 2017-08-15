@@ -42,13 +42,14 @@ class DbSchema extends Component {
 			snackBarVisibility: false,
 			snackBarMessage: "Unknown error"
 		};
+	}
+
+	componentDidMount() {
 		// Save the database schema to state for future access
 		if (this.state.url) {
 			this.getDbSchema(this.state.url);
 		}
 	}
-
-	componentDidMount() {}
 
 	componentWillReceiveProps(newProps) {
 		this.setState({
