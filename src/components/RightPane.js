@@ -53,17 +53,28 @@ class RightPane extends Component {
 		this.state = {
 			dbIndex : props.dbIndex,
 			table: props.table,
+			columns: props.columns,
 			leftPaneVisibility: props.leftPaneVisibility
 		}
 	}
 
 	componentWillReceiveProps(newProps) {
+		if (this.state.columns !== newProps.columns) {
+			this.setState({
+				table: newProps.table,
+				columns: newProps.columns,
+				dbIndex: newProps.dbIndex
+			}, () => {
+				this.rebuildQueryBuilder(this.refs.queryBuilder, newProps.dbIndex, newProps.table, newProps.columns);
+			});
+		}
+
 		if (this.state.dbIndex !== newProps.dbIndex) {
 			this.setState({
 				dbIndex: newProps.dbIndex
 			});
 		}
-		
+
 		if (this.state.table !== newProps.table) {
 			this.setState({
 				table: newProps.table
@@ -75,39 +86,38 @@ class RightPane extends Component {
 				leftPaneVisibility: newProps.leftPaneVisibility
 			});
 		}
+	}
 
-		// Update QB iff both table and columns are received as props
-		if (this.state.table !== newProps.table && this.state.columns !== newProps.columns) {
-			const element = this.refs.queryBuilder;
-			this.rebuildQueryBuilder(element, this.state.dbIndex, newProps.table, newProps.columns);
+	componentDidMount() {
+		const element = this.refs.queryBuilder;
+		this.initializeQueryBuilder(element);
+	}
+
+	componentWillUnmount() {
+		window.$(this.refs.queryBuilder).queryBuilder('destroy');
+	}
+
+	// Creates the QB on first render with default table (error msg for now)
+	initializeQueryBuilder(element, newRules = null) {
+		try {
+			const filters = lib.getQBFilters(this.state.dbIndex, this.state.table, this.state.columns);
+			const rules = newRules ? newRules : defaultRules;
+
+			window.$(element).queryBuilder({ filters, rules });
+		} catch (error) {
+			console.log(error);
 		}
 	}
 
-    componentDidMount() {
-        const element = this.refs.queryBuilder;
-        this.initializeQueryBuilder(element, this.state.dbIndex);
-    }
+	// Destroys the old one, and creates a new QB based on the selected view's attributes
+	rebuildQueryBuilder(element, dbIndex, table, columns, newRules) {
+		window.$(this.refs.queryBuilder).queryBuilder('destroy');
 
-    componentWillUnmount() {
-        window.$(this.refs.queryBuilder).queryBuilder('destroy');
-    }
+		const rules = newRules ? newRules : defaultRules;
+		const filters = lib.getQBFilters(dbIndex, table, columns);
 
-    // Creates the QB on first render with default table (error msg for now)
-    initializeQueryBuilder(element, dbIndex, newRules) {
-        const filters = lib.getQBFilters(dbIndex, "", []);
-        const rules = newRules ? newRules : defaultRules;
-        window.$(element).queryBuilder({ filters, rules });
-    }
-
-    // Destroys the old one, and creates a new QB based on the selected view's attributes
-    rebuildQueryBuilder(element, dbIndex, table, columns, newRules) {
-        window.$(this.refs.queryBuilder).queryBuilder('destroy');
-
-        const rules = newRules ? newRules : defaultRules;
-        const filters = lib.getQBFilters(dbIndex, table, columns);
-
-        window.$(element).queryBuilder({ filters, rules });
-    }
+		window.$(element).queryBuilder({ filters, rules });
+	}
 
 	render() {
 		const classes = this.props.classes;
