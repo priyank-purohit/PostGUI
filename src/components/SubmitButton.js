@@ -4,8 +4,10 @@ import PropTypes from 'prop-types';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
 import { CircularProgress } from 'material-ui/Progress';
 import green from 'material-ui/colors/green';
+import blue from 'material-ui/colors/blue';
 import Button from 'material-ui/Button';
 import CheckIcon from 'material-ui-icons/Check';
+import CloseIcon from 'material-ui-icons/Close';
 import ArrowForwardIcon from 'material-ui-icons/ArrowForward';
 
 const styleSheet = createStyleSheet({
@@ -19,6 +21,12 @@ const styleSheet = createStyleSheet({
 		backgroundColor: green[500],
 		'&:hover': {
 			backgroundColor: green[700],
+		},
+	},
+	errorButton: {
+		backgroundColor: blue[500],
+		'&:hover': {
+			backgroundColor: blue[700],
 		},
 	},
 	progress: {
@@ -38,14 +46,16 @@ class CircularFab extends Component {
 			dbIndex: props.dbIndex,
 			table: props.table,
 			loading: props.loading,
-			success: props.success
+			success: props.success,
+			error: props.error
 		};
 	}
 
 	componentWillReceiveProps(newProps) {
 		this.setState({
 			loading: newProps.loading,
-			success: newProps.success
+			success: newProps.success,
+			error: newProps.error
 		});
 	}
 
@@ -55,32 +65,10 @@ class CircularFab extends Component {
 
 	handleButtonClick() {
 		this.props.getRules();
-		/*if (!this.state.loading) {
-			this.setState({
-					success: false,
-					loading: true,
-				},
-				() => {
-					this.timer = setTimeout(() => {
-						this.setState({
-							loading: false,
-							success: true,
-						}, () => {
-							this.timer = setTimeout(() => { 
-								this.setState({ 
-									loading: false, 
-									success: false 
-								}) 
-							}, 2500);
-						});
-					}, 1000);
-				},
-			);
-		}*/
 	};
 
 	render() {
-		const { loading, success } = this.state;
+		const { loading, success, error } = this.state;
 		const classes = this.props.classes;
 		let buttonClass = '';
 
@@ -88,9 +76,13 @@ class CircularFab extends Component {
 			buttonClass = classes.successButton;
 		}
 
+		if (success && error) {
+			buttonClass = classes.errorButton;
+		}
+
 		return (
 			<div className={classes.wrapper}>
-				<Button fab color="accent" className={buttonClass} onClick={this.handleButtonClick.bind(this)}>{success ? <CheckIcon /> : <ArrowForwardIcon />}</Button>
+				<Button fab color="accent" className={buttonClass} onClick={this.handleButtonClick.bind(this)}>{success ? (error ? <CloseIcon /> : <CheckIcon />) : <ArrowForwardIcon />}</Button>
 				{loading && <CircularProgress size={60} className={classes.progress} />}
 			</div>
 		);

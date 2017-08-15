@@ -16,6 +16,8 @@ let lib = require('../utils/library.js');
 
 const defaultRules = lib.getQBRules();
 
+const timeout = 4000;
+
 const styleSheet = createStyleSheet(theme => ({
 	root: {
 		paddingBottom: 50,
@@ -59,6 +61,7 @@ class RightPane extends Component {
 			leftPaneVisibility: props.leftPaneVisibility,
 			rules: null,
 			submitLoading: false,
+			submitError: false,
 			submitSuccess: false
 		}
 	}
@@ -148,18 +151,34 @@ class RightPane extends Component {
 				this.setState({
 					rawData: response.data,
 					submitLoading: false,
+					submitError: false,
 					submitSuccess: true
 				}, () => {
 					this.timer = setTimeout(() => { 
 						this.setState({ 
 							submitLoading: false, 
-							submitSuccess: false
+							submitSuccess: false,
+							submitError: false
 						}) 
-					}, 5000);
+					}, timeout);
 				});
 			})
 			.catch((error) => {
 				console.log(error);
+				this.setState({
+					rawData: [],
+					submitLoading: false,
+					submitSuccess: true,
+					submitError: true
+				}, () => {
+					this.timer = setTimeout(() => { 
+						this.setState({ 
+							submitLoading: false, 
+							submitSuccess: false,
+							submitError: false
+						}) 
+					}, timeout);
+				});
 			});
 	}
 
@@ -185,7 +204,7 @@ class RightPane extends Component {
 
 					<Typography type="body1" className={classes.cardMarginLeftTop}>Options</Typography>
 
-					<SubmitButton dbIndex={this.state.dbIndex} table={this.state.table} leftPaneVisibility={this.state.leftPaneVisibility} getRules={this.handleGetRulesClick.bind(this)} loading={this.state.submitLoading} success={this.state.submitSuccess} />
+					<SubmitButton dbIndex={this.state.dbIndex} table={this.state.table} leftPaneVisibility={this.state.leftPaneVisibility} getRules={this.handleGetRulesClick.bind(this)} loading={this.state.submitLoading} success={this.state.submitSuccess} error={this.state.submitError} />
 
 					<TextField disabled required id="rowLimit" label="Row-limit" defaultValue="10000" className={classes.textField && classes.cardMarginLeft} margin="normal" />
 
