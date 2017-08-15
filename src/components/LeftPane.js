@@ -19,7 +19,6 @@ const styleSheet = createStyleSheet({
 class LeftPane extends Component {
 	constructor(props) {
 		super(props);
-		console.log("Left pane constructed.");
 		this.state = {
 			dbIndex: props.dbIndex,
 			table: props.table,

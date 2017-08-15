@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 
-import Button from 'material-ui/Button';
 import Snackbar from 'material-ui/Snackbar';
 
 import IconButton from 'material-ui/IconButton';
@@ -57,10 +56,7 @@ class DbSchema extends Component {
 			leftPaneVisibility: newProps.leftPaneVisibility,
 			table: newProps.table
 		});
-	}
-
-	// Called when new props are received
-	componentWillReceiveProps(newProps) {
+		
 		if (this.state.dbIndex !== newProps.dbIndex) {
 			let newDbIndex = newProps.dbIndex;
 			this.setState({
@@ -94,7 +90,6 @@ class DbSchema extends Component {
 				});
 			})
 			.catch((error) => {
-				console.log("Database does not exist error =", error);
 				// Show error in top-right Snack-Bar
 				this.setState({
 					snackBarVisibility: true,
@@ -272,7 +267,6 @@ class DbSchema extends Component {
 
 	render() {
 		const classes = this.props.classes;
-
 		return (
 			<div>
 				<Snackbar anchorOrigin={{vertical: "bottom", horizontal: "center"}} open={this.state.snackBarVisibility} onRequestClose={this.handleRequestClose} SnackbarContentProps={{ 'aria-describedby': 'message-id', }} message={<span id="message-id">{this.state.snackBarMessage}</span>} action={[ <IconButton key="close" aria-label="Close" color="accent" className={classes.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton> ]} />
