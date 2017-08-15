@@ -8,6 +8,8 @@ import TextField from 'material-ui/TextField';
 import SubmitButton from './SubmitButton.js';
 import Typography from 'material-ui/Typography';
 
+import axios from 'axios';
+
 import '../styles/QueryBuilder.css';
 
 let lib = require('../utils/library.js');
@@ -123,29 +125,42 @@ class RightPane extends Component {
 	}
 
 	handleGetRulesClick() {
-		console.log("Getting rules");
 		this.setState({
 			submitLoading: true
 		}, () => {
-			console.log("Getting rules 2");
 			const rules = window.$(this.refs.queryBuilder).queryBuilder('getRules');
 			this.setState({ rules: rules }, () => {
-				console.log("Got them rules");
 				this.setState({ 
-						submitLoading: false, 
-						submitSuccess: true 
+						submitLoading: true, 
+						submitSuccess: false 
 				}, () => {
-					this.timer = setTimeout(() => {
-						console.log("Return to normal in 2.5 secs"); 
-						this.setState({ 
-							submitLoading: false, 
-							submitSuccess: false
-						}) 
-					}, 2500);
+					// fetchout
+					this.fetchOutput("http://hopper.csb.utoronto.ca:3001/gene_feature");
 				});
 			});
 			return rules;
 		});
+	}
+
+	fetchOutput(url) {
+		axios.get(url, { params: {} })
+			.then((response) => {
+				this.setState({
+					rawData: response.data,
+					submitLoading: false,
+					submitSuccess: true
+				}, () => {
+					this.timer = setTimeout(() => { 
+						this.setState({ 
+							submitLoading: false, 
+							submitSuccess: false
+						}) 
+					}, 5000);
+				});
+			})
+			.catch((error) => {
+				console.log(error);
+			});
 	}
 
 	render() {
@@ -175,6 +190,8 @@ class RightPane extends Component {
 					<TextField disabled required id="rowLimit" label="Row-limit" defaultValue="10000" className={classes.textField && classes.cardMarginLeft} margin="normal" />
 
 					<Typography type="subheading" className={classes.cardMarginLeftTop}>Sample Data</Typography>
+
+					<Typography type="subheading" className={classes.cardMarginLeftTop}>{JSON.stringify(this.state.rawData)}</Typography>
 				</Paper>
 			</div>
 		);
