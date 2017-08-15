@@ -33,7 +33,6 @@ const styleSheet = createStyleSheet(theme => ({
 class DbSchema extends Component {
 	constructor(props) {
 		super(props);
-		console.log("Starting props table === " + props.table);
 		this.state = {
 			dbIndex: props.dbIndex,
 			table: props.table,
@@ -71,6 +70,7 @@ class DbSchema extends Component {
 				tables: []
 			}, function() {
 				this.props.changeTable(this.state.table);
+				this.props.changeColumns(this.state[this.state.table]);
 				this.props.changeDbIndex(this.state.dbIndex);
 				this.getDbSchema();
 			});
@@ -94,6 +94,7 @@ class DbSchema extends Component {
 				});
 			})
 			.catch((error) => {
+				console.log("Database does not exist error =", error);
 				// Show error in top-right Snack-Bar
 				this.setState({
 					snackBarVisibility: true,
@@ -135,10 +136,10 @@ class DbSchema extends Component {
 	}
 
 	// From JSON resp, extract the names of table columns and update state
-	parseTableColumns(rawResp = this.state.dbSchema, table) {
+	parseTableColumns(rawColProperties = this.state.dbSchema, table) {
 		let columns = [];
 
-		for (let i in rawResp) { // I = COLUMN in TABLE
+		for (let i in rawColProperties) { // I = COLUMN in TABLE
 			if (lib.getColumnConfig(this.state.dbIndex, table, i, "visible") !== false) {
 				// list of columns for TABLE
 				columns.push(i);
@@ -157,6 +158,11 @@ class DbSchema extends Component {
 		// Save state
 		this.setState({
 			[table]: columns
+		}, () => {
+			if (table === this.state.table) {
+				this.props.changeTable(this.state.table);
+				this.props.changeColumns(this.state[this.state.table]);
+			}
 		});
 	}
 
@@ -164,11 +170,11 @@ class DbSchema extends Component {
 	handleTableClick(clickedTable, skipCheck = false) {
 		// skipCheck prevents table schema collapse when leftPane toggles
 		if (this.state.table !== clickedTable || skipCheck) {
-			this.props.changeTable(clickedTable);
-			this.props.changeColumns(this.state[clickedTable]);
 			this.setState({
 				table: clickedTable
 			});
+			this.props.changeTable(clickedTable);
+			this.props.changeColumns(this.state[clickedTable]);
 		} else {
 			this.props.changeTable("");
 			this.props.changeColumns([]);
