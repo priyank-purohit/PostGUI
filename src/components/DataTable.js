@@ -47,7 +47,7 @@ class DataTable extends Component {
 						});
 		}));
 
-		console.log(JSON.stringify(parsedColumns));
+		console.log("Parsed columns =" , JSON.stringify(parsedColumns));
 
 		return (
 			<div>
