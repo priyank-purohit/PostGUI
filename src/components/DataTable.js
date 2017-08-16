@@ -42,9 +42,11 @@ class DataTable extends Component {
         if (columns) {
             parsedColumns = columns.map((columnName) => {
             	let columnRename = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "rename");
+            	let columnVisibility = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "visible");
                 return ({
                     Header: columnRename ? columnRename : columnName,
-                    accessor: columnName
+                    accessor: columnName,
+                    show: columnVisibility !== null ? columnVisibility : true
                 });
             });
         }
