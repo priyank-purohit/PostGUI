@@ -139,7 +139,8 @@ class RightPane extends Component {
 						submitSuccess: false 
 				}, () => {
 					// fetchout
-					this.fetchOutput("http://hopper.csb.utoronto.ca:3001/" + this.state.table);
+					let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
+					this.fetchOutput(url);
 				});
 			});
 			return rules;
