@@ -209,10 +209,9 @@ class RightPane extends Component {
 
 					<TextField disabled required id="rowLimit" label="Row-limit" defaultValue="10000" className={classes.textField && classes.cardMarginLeft} margin="normal" />
 
-					<Typography type="subheading" className={classes.cardMarginLeftTop}>Sample Data</Typography>
+					<Typography type="subheading" className={classes.cardMarginLeftTop}>Query Results</Typography>
 
-					{/*<Typography type="subheading" className={classes.cardMarginLeftTop}>{JSON.stringify(this.state.rawData)}</Typography>*/}
-					<DataTable dbIndex={this.state.dbIndex} table={this.state.table} columns={this.state.columns} data={[]} />
+					<DataTable dbIndex={this.state.dbIndex} table={this.state.table} columns={this.state.columns} data={this.state.rawData} />
 				</Paper>
 			</div>
 		);

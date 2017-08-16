@@ -44,6 +44,7 @@ class DataTable extends Component {
             	let columnRename = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "rename");
             	let columnVisibility = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "visible");
                 return ({
+                    id: columnName,
                     Header: columnRename ? columnRename : columnName,
                     accessor: columnName,
                     show: columnVisibility !== null ? columnVisibility : true
