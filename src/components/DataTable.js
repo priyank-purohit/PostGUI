@@ -5,6 +5,8 @@ import { withStyles, createStyleSheet } from 'material-ui/styles';
 
 import "react-table/react-table.css";
 
+let lib = require('../utils/library.js');
+
 const styleSheet = createStyleSheet({
     root: {
         width: '29%',
@@ -26,6 +28,8 @@ class DataTable extends Component {
 
     componentWillReceiveProps(newProps) {
         this.setState({
+        	dbIndex: newProps.dbIndex,
+        	table: newProps.table,
             columns: newProps.columns,
             data: newProps.data
         });
@@ -37,8 +41,9 @@ class DataTable extends Component {
 
         if (columns) {
             parsedColumns = columns.map((columnName) => {
+            	let columnRename = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "rename");
                 return ({
-                    Header: columnName,
+                    Header: columnRename ? columnRename : columnName,
                     accessor: columnName
                 });
             });

@@ -212,7 +212,7 @@ class RightPane extends Component {
 					<Typography type="subheading" className={classes.cardMarginLeftTop}>Sample Data</Typography>
 
 					{/*<Typography type="subheading" className={classes.cardMarginLeftTop}>{JSON.stringify(this.state.rawData)}</Typography>*/}
-					<DataTable columns={this.state.columns} data={[]} />
+					<DataTable dbIndex={this.state.dbIndex} table={this.state.table} columns={this.state.columns} data={[]} />
 				</Paper>
 			</div>
 		);
