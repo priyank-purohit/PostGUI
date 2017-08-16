@@ -16,45 +16,42 @@ const styleSheet = createStyleSheet({
 class DataTable extends Component {
 	constructor(props) {
 		super(props);
+		console.log(props.columns.join(','));
 		this.state = {
 			dbIndex: props.dbIndex,
 			table: props.table,
-			data: [{
-				firstName: 'Tanner',
-				lastName: 'Linsley',
-				age: 26,
-				status: 'Unknown',
-				visits: 23,
-			}],
-			columns: [{
-					Header: "First Name",
-					accessor: "firstName"
-				},
-				{
-					Header: "Last Name",
-					accessor: "lastName"
-				},
-				{
-					Header: "Age",
-					accessor: "age"
-				},
-				{
-					Header: "Status",
-					accessor: "status"
-				}, {
-					Header: "Visits",
-					accessor: "visits"
-				}
-			]
+			columns: props.columns,
+			data: props.data
 		};
 	}
 
+	componentWillReceiveProps(newProps) {
+		this.setState({
+			columns: newProps.columns,
+			data: newProps.data
+		});
+	}
+
 	render() {
-		const { columns, data } = this.state;
+
+		console.log(this.state.columns, this.state.data);
+
+
+		let { columns, data } = this.state;
+
+		let parsedColumns = [];
+		parsedColumns.push(columns.map((columnName) => {
+			return ({
+							Header: columnName,
+							accessor: columnName
+						});
+		}));
+
+		console.log(JSON.stringify(parsedColumns));
 
 		return (
 			<div>
-				<ReactTable data={data} columns={ columns } defaultPageSize={10} className="-striped -highlight" />
+				<ReactTable data={data} columns={ parsedColumns } defaultPageSize={10} className="-striped -highlight" />
 				<br />
 				<br />
 				<div style={{ textAlign: "center" }}>
