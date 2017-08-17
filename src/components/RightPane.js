@@ -87,6 +87,8 @@ class RightPane extends Component {
 			rows: null
 		}, () => {
 			this.rebuildQueryBuilder(this.refs.queryBuilder, newProps.dbIndex, newProps.table, newProps.columns);
+			let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
+			this.fetchOutput(url + "?limit=10");
 		});
 	}
 
