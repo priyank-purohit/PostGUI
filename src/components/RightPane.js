@@ -171,7 +171,7 @@ class RightPane extends Component {
 	fetchOutput(url) {
 		axios.get(url, { params: {} })
 			.then((response) => {
-				let responseRows = 1 + parseInt(response.headers["content-range"].replace("/*","").replace("0-", ""));
+				let responseRows = 1 + parseInt(response.headers["content-range"].replace("/*","").replace("0-", ""), 10);
 				this.setState({
 					rawData: response.data,
 					rows: responseRows,
