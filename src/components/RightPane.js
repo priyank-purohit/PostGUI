@@ -17,7 +17,7 @@ let lib = require('../utils/library.js');
 
 const defaultRules = lib.getQBRules();
 
-const timeout = 4000;
+const timeout = 2000;
 
 const styleSheet = createStyleSheet(theme => ({
 	root: {
@@ -64,6 +64,7 @@ class RightPane extends Component {
 			dbIndex : props.dbIndex,
 			table: props.table,
 			columns: props.columns,
+			visibleColumns: props.visibleColumns,
 			leftPaneVisibility: props.leftPaneVisibility,
 			rules: null,
 			submitLoading: false,
@@ -74,22 +75,29 @@ class RightPane extends Component {
 	}
 
 	componentWillReceiveProps(newProps) {
-		this.setState({
-			dbIndex: newProps.dbIndex,
-			table: newProps.table,
-			columns: newProps.columns,
-			leftPaneVisibility: newProps.leftPaneVisibility,
-			rules: null,
-			submitLoading: false,
-			submitError: false,
-			submitSuccess: false,
-			rawData: [],
-			rows: null
-		}, () => {
-			this.rebuildQueryBuilder(this.refs.queryBuilder, newProps.dbIndex, newProps.table, newProps.columns);
-			let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
-			this.fetchOutput(url + "?limit=10");
-		});
+		if (this.state.visibleColumns !== newProps.visibleColumns && this.state.columns === newProps.columns && newProps.visibleColumns !== undefined) {
+			this.setState({
+				visibleColumns: newProps.visibleColumns
+			});
+		} else {
+			this.setState({
+				dbIndex: newProps.dbIndex,
+				table: newProps.table,
+				columns: newProps.columns,
+				visibleColumns: newProps.visibleColumns,
+				leftPaneVisibility: newProps.leftPaneVisibility,
+				rules: null,
+				submitLoading: false,
+				submitError: false,
+				submitSuccess: false,
+				rawData: [],
+				rows: null
+			}, () => {
+				this.rebuildQueryBuilder(this.refs.queryBuilder, newProps.dbIndex, newProps.table, newProps.columns);
+				let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
+				this.fetchOutput(url + "?limit=10");
+			});
+		}
 	}
 
 	componentDidMount() {
@@ -173,7 +181,10 @@ class RightPane extends Component {
 	fetchOutput(url) {
 		axios.get(url, { params: {} })
 			.then((response) => {
-				let responseRows = 1 + parseInt(response.headers["content-range"].replace("/*","").replace("0-", ""), 10);
+				let responseRows = null;
+				if (response.headers["content-range"] !== undefined && response.headers["content-range"] !== null) {
+					responseRows = 1 + parseInt(response.headers["content-range"].replace("/*","").replace("0-", ""), 10);
+				}
 				this.setState({
 					rawData: response.data,
 					rows: responseRows,
@@ -245,6 +256,7 @@ class RightPane extends Component {
 			<div className={classes.middlePaperSection}>
 				<Paper className={paperClasses} elevation={5}>
 					<CardHeader title={tableDisplayName} subheader={tableDescription} />
+					{/*<CardHeader subheader={JSON.stringify(this.state.visibleColumns)} />*/}
 
 					<Typography type="subheading" className={classes.cardMarginLeftTop} >Query Builder</Typography>
 					<div id='query-builder' ref='queryBuilder'/>
@@ -260,7 +272,7 @@ class RightPane extends Component {
 					<CardHeader type="subheading" subheader={this.state.rows ? "Displaying " + JSON.stringify(this.state.rows) + " rows." : ""} />
 
 					<div className={ classes.cardMarginLeftRightTop } >
-						<DataTable dbIndex={this.state.dbIndex} table={this.state.table} columns={this.state.columns} data={this.state.rawData} />
+						<DataTable dbIndex={this.state.dbIndex} table={this.state.table} columns={this.state.visibleColumns ? this.state.visibleColumns : this.state.columns} data={this.state.rawData} />
 					</div>
 				</Paper>
 			</div>

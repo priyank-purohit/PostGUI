@@ -164,6 +164,7 @@ class DbSchema extends Component {
 
 	// Set CLICKEDTABLE in state as TABLE
 	handleTableClick(clickedTable, skipCheck = false) {
+		this.updateVisibleColumns();
 		// skipCheck prevents table schema collapse when leftPane toggles
 		if (this.state.table !== clickedTable || skipCheck) {
 			this.setState({
@@ -185,10 +186,14 @@ class DbSchema extends Component {
 		if (this.state[table + column + "Visibility"] === "hide") {
 			this.setState({
 				[table + column + "Visibility"]: ""
+			}, () => {
+				this.updateVisibleColumns();
 			});
 		} else {
 			this.setState({
 				[table + column + "Visibility"]: "hide"
+			}, () => {
+				this.updateVisibleColumns();
 			});
 		}
 	}
@@ -265,6 +270,27 @@ class DbSchema extends Component {
 	handleRequestClose = () => {
 		this.setState({ snackBarVisibility: false });
 	};
+
+	updateVisibleColumns() {
+		let columns = this.state[this.state.table];
+		let columnVisibility = {};
+		let visibleColumns = [];
+
+		if (columns !== undefined) {
+			for (let i = 0; i < columns.length; i++) {
+				let visibility = this.state[this.state.table + columns[i] + "Visibility"] === "hide" ? false : true;
+				columnVisibility[columns[i]] = visibility;
+				if (visibility) {
+					visibleColumns.push(columns[i]);
+				}
+			}
+		}
+		this.setState({
+			[this.state.table + "visibleColumns"]: visibleColumns
+		}, () => {
+			this.props.changeVisibleColumns(this.state[this.state.table + "visibleColumns"]);
+		});
+	}
 
 	render() {
 		const classes = this.props.classes;
