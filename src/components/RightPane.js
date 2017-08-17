@@ -68,38 +68,26 @@ class RightPane extends Component {
 			rules: null,
 			submitLoading: false,
 			submitError: false,
-			submitSuccess: false
+			submitSuccess: false,
+			rows: null
 		}
 	}
 
 	componentWillReceiveProps(newProps) {
-		if (this.state.columns !== newProps.columns) {
-			this.setState({
-				table: newProps.table,
-				columns: newProps.columns,
-				dbIndex: newProps.dbIndex
-			}, () => {
-				this.rebuildQueryBuilder(this.refs.queryBuilder, newProps.dbIndex, newProps.table, newProps.columns);
-			});
-		}
-
-		if (this.state.dbIndex !== newProps.dbIndex) {
-			this.setState({
-				dbIndex: newProps.dbIndex
-			});
-		}
-
-		if (this.state.table !== newProps.table) {
-			this.setState({
-				table: newProps.table
-			});
-		}
-
-		if (this.state.leftPaneVisibility !== newProps.leftPaneVisibility) {
-			this.setState({
-				leftPaneVisibility: newProps.leftPaneVisibility
-			});
-		}
+		this.setState({
+			dbIndex: newProps.dbIndex,
+			table: newProps.table,
+			columns: newProps.columns,
+			leftPaneVisibility: newProps.leftPaneVisibility,
+			rules: null,
+			submitLoading: false,
+			submitError: false,
+			submitSuccess: false,
+			rawData: [],
+			rows: null
+		}, () => {
+			this.rebuildQueryBuilder(this.refs.queryBuilder, newProps.dbIndex, newProps.table, newProps.columns);
+		});
 	}
 
 	componentDidMount() {
@@ -204,6 +192,7 @@ class RightPane extends Component {
 				console.log(error);
 				this.setState({
 					rawData: [],
+					rows: null,
 					submitLoading: false,
 					submitSuccess: true,
 					submitError: true // both true implies request successfully reported an error
@@ -219,10 +208,12 @@ class RightPane extends Component {
 			});
 	}
 
-	
-	handleGetRulesClick() {
+
+	handleSubmitButtonClick() {
 		// first show loading
 		this.setState({
+			rawData: [],
+			rows: null,
 			submitLoading: true, 
 			submitError: false,
 			submitSuccess: false
@@ -258,7 +249,7 @@ class RightPane extends Component {
 
 					<Typography type="body1" className={classes.cardMarginLeftTop}>Options</Typography>
 
-					<SubmitButton dbIndex={this.state.dbIndex} table={this.state.table} leftPaneVisibility={this.state.leftPaneVisibility} getRules={this.handleGetRulesClick.bind(this)} loading={this.state.submitLoading} success={this.state.submitSuccess} error={this.state.submitError} />
+					<SubmitButton dbIndex={this.state.dbIndex} table={this.state.table} leftPaneVisibility={this.state.leftPaneVisibility} getRules={this.handleSubmitButtonClick.bind(this)} loading={this.state.submitLoading} success={this.state.submitSuccess} error={this.state.submitError} />
 
 					<TextField disabled required id="rowLimit" label="Row-limit" defaultValue="25000" className={classes.textField && classes.cardMarginLeft} margin="normal" />
 

@@ -27,12 +27,12 @@ class DataTable extends Component {
     }
 
     componentWillReceiveProps(newProps) {
-        this.setState({
-        	dbIndex: newProps.dbIndex,
-        	table: newProps.table,
-            columns: newProps.columns,
-            data: newProps.data
-        });
+		this.setState({
+			dbIndex: newProps.dbIndex,
+			table: newProps.table,
+			columns: newProps.columns,
+			data: newProps.data
+		});
     }
 
     render() {
