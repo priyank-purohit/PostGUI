@@ -181,18 +181,16 @@ class RightPane extends Component {
     }
 
 	handleGetRulesClick() {
+		// first show loading
 		this.setState({
-			submitLoading: true
+			submitLoading: true, 
+			submitError: false,
+			submitSuccess: false
 		}, () => {
 			const rules = window.$(this.refs.queryBuilder).queryBuilder('getRules');
 			this.setState({ rules: rules }, () => {
-				this.setState({ 
-						submitLoading: true, 
-						submitSuccess: false 
-				}, () => {
-					let url = this.buildURLFromRules(rules);
-					this.fetchOutput(url);
-				});
+				let url = this.buildURLFromRules(rules);
+				this.fetchOutput(url);
 			});
 			return rules;
 		});
@@ -222,7 +220,7 @@ class RightPane extends Component {
 					rawData: [],
 					submitLoading: false,
 					submitSuccess: true,
-					submitError: true
+					submitError: true // both true implies request successfully reported an error
 				}, () => {
 					this.timer = setTimeout(() => { 
 						this.setState({ 
