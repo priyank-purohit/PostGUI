@@ -10,6 +10,7 @@
     "material-ui-icons": "^1.0.0-alpha.19",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
+    "react-table": "^6.5.3",
     "typeface-roboto": "0.0.35"
   },
   "devDependencies": {
@@ -22,4 +23,3 @@
     "eject": "react-scripts eject"
   }
 }
-
