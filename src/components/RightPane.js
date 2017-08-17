@@ -180,27 +180,13 @@ class RightPane extends Component {
         return url;
     }
 
-	handleGetRulesClick() {
-		// first show loading
-		this.setState({
-			submitLoading: true, 
-			submitError: false,
-			submitSuccess: false
-		}, () => {
-			const rules = window.$(this.refs.queryBuilder).queryBuilder('getRules');
-			this.setState({ rules: rules }, () => {
-				let url = this.buildURLFromRules(rules);
-				this.fetchOutput(url);
-			});
-			return rules;
-		});
-	}
-
 	fetchOutput(url) {
 		axios.get(url, { params: {} })
 			.then((response) => {
+				let responseRows = 1 + parseInt(response.headers["content-range"].replace("/*","").replace("0-", ""));
 				this.setState({
 					rawData: response.data,
+					rows: responseRows,
 					submitLoading: false,
 					submitError: false,
 					submitSuccess: true
@@ -233,6 +219,23 @@ class RightPane extends Component {
 			});
 	}
 
+	
+	handleGetRulesClick() {
+		// first show loading
+		this.setState({
+			submitLoading: true, 
+			submitError: false,
+			submitSuccess: false
+		}, () => {
+			const rules = window.$(this.refs.queryBuilder).queryBuilder('getRules');
+			this.setState({ rules: rules }, () => {
+				let url = this.buildURLFromRules(rules);
+				this.fetchOutput(url);
+			});
+			return rules;
+		});
+	}
+
 	render() {
 		const classes = this.props.classes;
 
@@ -257,9 +260,12 @@ class RightPane extends Component {
 
 					<SubmitButton dbIndex={this.state.dbIndex} table={this.state.table} leftPaneVisibility={this.state.leftPaneVisibility} getRules={this.handleGetRulesClick.bind(this)} loading={this.state.submitLoading} success={this.state.submitSuccess} error={this.state.submitError} />
 
-					<TextField disabled required id="rowLimit" label="Row-limit" defaultValue="10000" className={classes.textField && classes.cardMarginLeft} margin="normal" />
+					<TextField disabled required id="rowLimit" label="Row-limit" defaultValue="25000" className={classes.textField && classes.cardMarginLeft} margin="normal" />
 
 					<Typography type="subheading" className={classes.cardMarginLeftTop}>Query Results</Typography>
+					
+					<CardHeader type="subheading" subheader={this.state.rows ? "Displaying " + JSON.stringify(this.state.rows) + " rows." : ""} />
+
 					<div className={ classes.cardMarginLeftRightTop } >
 						<DataTable dbIndex={this.state.dbIndex} table={this.state.table} columns={this.state.columns} data={this.state.rawData} />
 					</div>
