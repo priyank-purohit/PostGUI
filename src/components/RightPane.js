@@ -128,6 +128,53 @@ class RightPane extends Component {
 		window.$(element).queryBuilder({ filters, rules });
 	}
 
+	// Extracts the rules recursively
+    recursiveRulesExtraction(condition, rules) {
+        let select = condition.toLowerCase() + "(";
+        for (let i = 0; i < rules.length; i++) {
+            // iterating over the first rules
+            if (rules[i]['condition'] === "OR" || rules[i]['condition'] === "AND") {
+                if (i === (rules.length - 1)) {
+                    select += this.recursiveRulesExtraction(rules[i]['condition'], rules[i]['rules']);
+                } else {
+                    select += this.recursiveRulesExtraction(rules[i]['condition'], rules[i]['rules']) + ",";
+                }
+            } else {
+                if (i === (rules.length - 1)) {
+                    select += rules[i]['id'] + "." + lib.translateOperatorToPostgrest(rules[i]['operator']) + "." + rules[i]['value'];
+                } else {
+                    select += rules[i]['id'] + "." + lib.translateOperatorToPostgrest(rules[i]['operator']) + "." + rules[i]['value'] + ",";
+                }
+            }
+        }
+        select += ")"
+        return select;
+    }
+
+    // Based on the extracted rules, it builds a PostgREST compliant URL for API call
+    buildURLFromRules(rules) {
+        let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
+
+        // if it is valid, proceed
+        if (rules && rules['valid'] && rules['valid'] === true) {
+            url += "?";
+
+            let firstCondition = rules['condition'];
+            let firstRules = rules['rules'];
+            
+            let conds = this.recursiveRulesExtraction(firstCondition + "=", firstRules);
+            url += conds;
+
+            // Add SELECT columns... i.e. which columsn to retrieve
+            //url += "&select=" + this.state.selectColumns;
+        }/* else if (this.state.selectColumns !== null && this.state.selectColumns !== [] && this.state.selectColumns !== "") {
+            // Add SELECT columns... but this time, only selected columns, NO FILTERS
+            url += "?select=" + this.state.selectColumns;
+        }*/
+
+        return url;
+    }
+
 	handleGetRulesClick() {
 		this.setState({
 			submitLoading: true
@@ -138,8 +185,7 @@ class RightPane extends Component {
 						submitLoading: true, 
 						submitSuccess: false 
 				}, () => {
-					// fetchout
-					let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
+					let url = this.buildURLFromRules(rules);
 					this.fetchOutput(url);
 				});
 			});
