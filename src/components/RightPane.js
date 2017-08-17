@@ -37,6 +37,11 @@ const styleSheet = createStyleSheet(theme => ({
 	cardMarginLeft: { // For items within the same section
 		marginLeft: 32
 	},
+	cardMarginLeftRightTop: {
+		marginLeft: 16,
+		marginTop: 16,
+		marginRight: 6
+	},
 	cardMarginLeftTop: { // For a new section
 		marginLeft: 16,
 		marginTop: 16 // want a bit more space at top to clearly indicate new section...
@@ -247,7 +252,7 @@ class RightPane extends Component {
 				<Paper className={paperClasses} elevation={5}>
 					<CardHeader title={tableDisplayName} subheader={tableDescription} />
 
-					<Typography type="subheading" className={classes.cardMarginLeftTop}>Query Builder</Typography>
+					<Typography type="subheading" className={classes.cardMarginLeftTop} >Query Builder</Typography>
 					<div id='query-builder' ref='queryBuilder'/>
 
 					<Typography type="body1" className={classes.cardMarginLeftTop}>Options</Typography>
@@ -257,8 +262,9 @@ class RightPane extends Component {
 					<TextField disabled required id="rowLimit" label="Row-limit" defaultValue="10000" className={classes.textField && classes.cardMarginLeft} margin="normal" />
 
 					<Typography type="subheading" className={classes.cardMarginLeftTop}>Query Results</Typography>
-
-					<DataTable dbIndex={this.state.dbIndex} table={this.state.table} columns={this.state.columns} data={this.state.rawData} />
+					<div className={ classes.cardMarginLeftRightTop } >
+						<DataTable dbIndex={this.state.dbIndex} table={this.state.table} columns={this.state.columns} data={this.state.rawData} />
+					</div>
 				</Paper>
 			</div>
 		);
