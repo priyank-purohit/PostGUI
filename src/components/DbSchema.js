@@ -125,6 +125,7 @@ class DbSchema extends Component {
 			tables: dbTables
 		});
 
+		// Load first table if no table is selected AND if there is no info available about pre-selected table
 		if (dbTables[0] !== undefined && dbTables[0] !== null && dbTables[0] !== "" && this.state.table === "") {
 			this.handleTableClick(dbTables[0]);
 		} else {
@@ -133,7 +134,7 @@ class DbSchema extends Component {
 	}
 
 	// From JSON resp, extract the names of table columns and update state
-	parseTableColumns(rawColProperties = this.state.dbSchema, table) {
+	parseTableColumns(rawColProperties, table) {
 		let columns = [];
 
 		for (let i in rawColProperties) { // I = COLUMN in TABLE
