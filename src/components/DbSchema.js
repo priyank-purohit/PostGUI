@@ -170,16 +170,18 @@ class DbSchema extends Component {
 		if (this.state.table !== clickedTable || skipCheck) {
 			this.setState({
 				table: clickedTable
+			}, () => {
+				this.props.changeTable(clickedTable);
+				this.props.changeColumns(this.state[clickedTable]);
+				this.updateVisibleColumns();
 			});
-			this.props.changeTable(clickedTable);
-			this.props.changeColumns(this.state[clickedTable]);
-			this.updateVisibleColumns();
 		} else {
-			this.props.changeTable("");
-			this.props.changeColumns([]);
-			this.updateVisibleColumns();
 			this.setState({
 				table: ""
+			}, () => {
+				this.props.changeTable("");
+				this.props.changeColumns([]);
+				this.updateVisibleColumns();
 			});
 		}
 	}
@@ -291,7 +293,6 @@ class DbSchema extends Component {
 		this.setState({
 			[this.state.table + "visibleColumns"]: visibleColumns
 		}, () => {
-			console.log("Sent visible columns back to RightPane.js");
 			this.props.changeVisibleColumns(this.state[this.state.table + "visibleColumns"]);
 		});
 	}
