@@ -14,8 +14,8 @@ const styleSheet = createStyleSheet({
 	wrapper: {
 		position: 'relative',
 		float: 'right',
-		marginTop: -16,
-		marginRight: 16
+		marginTop: -8,
+		marginRight: '7%'
 	},
 	successButton: {
 		backgroundColor: green[500],
