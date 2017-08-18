@@ -10,6 +10,7 @@ import Typography from 'material-ui/Typography';
 
 import axios from 'axios';
 import DataTable from './DataTable.js';
+import RightPaneChips from './RightPaneChips.js';
 
 import '../styles/QueryBuilder.css';
 
@@ -256,24 +257,22 @@ class RightPane extends Component {
 			<div className={classes.middlePaperSection}>
 				<Paper className={paperClasses} elevation={5}>
 					<CardHeader title={tableDisplayName} subheader={tableDescription} />
-					{/*<CardHeader subheader={JSON.stringify(this.state.visibleColumns)} />*/}
 
 					<Typography type="subheading" className={classes.cardMarginLeftTop} >Query Builder</Typography>
-					<div id='query-builder' ref='queryBuilder'/>
+						<div id='query-builder' ref='queryBuilder'/>
 
-					<Typography type="body1" className={classes.cardMarginLeftTop}>Options</Typography>
+						<Typography type="body1" className={classes.cardMarginLeftTop}>Options</Typography>
 
-					<SubmitButton dbIndex={this.state.dbIndex} table={this.state.table} leftPaneVisibility={this.state.leftPaneVisibility} getRules={this.handleSubmitButtonClick.bind(this)} loading={this.state.submitLoading} success={this.state.submitSuccess} error={this.state.submitError} />
+						<SubmitButton dbIndex={this.state.dbIndex} table={this.state.table} leftPaneVisibility={this.state.leftPaneVisibility} getRules={this.handleSubmitButtonClick.bind(this)} loading={this.state.submitLoading} success={this.state.submitSuccess} error={this.state.submitError} />
 
-					<TextField disabled required id="rowLimit" label="Row-limit" defaultValue="25000" className={classes.textField && classes.cardMarginLeft} margin="normal" />
+						<TextField disabled required id="rowLimit" label="Row-limit" defaultValue="25000" className={classes.textField && classes.cardMarginLeft} margin="normal" />
 
 					<Typography type="subheading" className={classes.cardMarginLeftTop}>Query Results</Typography>
-					
-					<CardHeader type="subheading" subheader={this.state.rows ? "Displaying " + JSON.stringify(this.state.rows) + " rows." : ""} />
+						<RightPaneChips rows={this.state.rows} />
 
-					<div className={ classes.cardMarginLeftRightTop } >
-						<DataTable dbIndex={this.state.dbIndex} table={this.state.table} columns={this.state.visibleColumns ? this.state.visibleColumns : this.state.columns} data={this.state.rawData} />
-					</div>
+						<div className={ classes.cardMarginLeftRightTop } >
+							<DataTable dbIndex={this.state.dbIndex} table={this.state.table} columns={this.state.visibleColumns ? this.state.visibleColumns : this.state.columns} data={this.state.rawData} />
+						</div>
 				</Paper>
 			</div>
 		);

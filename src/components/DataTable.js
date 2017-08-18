@@ -54,11 +54,6 @@ class DataTable extends Component {
 
         return (<div>
         			<ReactTable data={ data } columns={ parsedColumns } defaultPageSize={ 10 } className="-striped -highlight" />
-        			<br />
-        			<br />
-        			<div style={{ textAlign: "center" }} >
-        				<em>Tip: Hold shift when sorting to multi-sort!</em>
-        			</div>
         		</div>
         );
     }
