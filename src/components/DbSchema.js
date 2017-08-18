@@ -68,9 +68,9 @@ class DbSchema extends Component {
 			}, function() {
 				this.props.changeTable(this.state.table);
 				this.props.changeColumns(this.state[this.state.table]);
-				this.updateVisibleColumns();
 				this.props.changeDbIndex(this.state.dbIndex);
 				this.getDbSchema();
+				this.updateVisibleColumns();
 			});
 		}
 	}
