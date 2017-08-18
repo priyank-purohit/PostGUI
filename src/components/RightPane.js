@@ -75,7 +75,7 @@ class RightPane extends Component {
 	}
 
 	componentWillReceiveProps(newProps) {
-		if (newProps.visibleColumns !== undefined && this.state.dbIndex === newProps.dbIndex && this.state.table === newProps.table && this.state.columns === newProps.columns) {
+		if (newProps.visibleColumns !== undefined && this.state.dbIndex === newProps.dbIndex && this.state.table === newProps.table && this.state.columns === newProps.columns && this.state.leftPaneVisibility === newProps.leftPaneVisibility) {
 			this.setState({
 				visibleColumns: newProps.visibleColumns
 			});
