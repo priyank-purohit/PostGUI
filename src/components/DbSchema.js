@@ -68,6 +68,7 @@ class DbSchema extends Component {
 			}, function() {
 				this.props.changeTable(this.state.table);
 				this.props.changeColumns(this.state[this.state.table]);
+				this.updateVisibleColumns();
 				this.props.changeDbIndex(this.state.dbIndex);
 				this.getDbSchema();
 			});
@@ -116,7 +117,7 @@ class DbSchema extends Component {
 		for (let i in data.definitions) {
 			if (lib.getTableConfig(this.state.dbIndex, i, "visible") !== false) {
 				dbTables.push(i);
-				this.parseTableColumns(this.state.dbSchema.definitions[i].properties, i);
+				this.parseTableColumns(data.definitions[i].properties, i);
 			}
 		}
 
@@ -158,13 +159,13 @@ class DbSchema extends Component {
 			if (table === this.state.table) {
 				this.props.changeTable(this.state.table);
 				this.props.changeColumns(this.state[this.state.table]);
+				this.updateVisibleColumns();
 			}
 		});
 	}
 
 	// Set CLICKEDTABLE in state as TABLE
 	handleTableClick(clickedTable, skipCheck = false) {
-		this.updateVisibleColumns();
 		// skipCheck prevents table schema collapse when leftPane toggles
 		if (this.state.table !== clickedTable || skipCheck) {
 			this.setState({
@@ -172,9 +173,11 @@ class DbSchema extends Component {
 			});
 			this.props.changeTable(clickedTable);
 			this.props.changeColumns(this.state[clickedTable]);
+			this.updateVisibleColumns();
 		} else {
 			this.props.changeTable("");
 			this.props.changeColumns([]);
+			this.updateVisibleColumns();
 			this.setState({
 				table: ""
 			});
@@ -288,6 +291,7 @@ class DbSchema extends Component {
 		this.setState({
 			[this.state.table + "visibleColumns"]: visibleColumns
 		}, () => {
+			console.log("Sent visible columns back to RightPane.js");
 			this.props.changeVisibleColumns(this.state[this.state.table + "visibleColumns"]);
 		});
 	}
