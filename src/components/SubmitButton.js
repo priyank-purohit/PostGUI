@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
 import { CircularProgress } from 'material-ui/Progress';
 import green from 'material-ui/colors/green';
-import blue from 'material-ui/colors/blue';
+import red from 'material-ui/colors/red';
 import Button from 'material-ui/Button';
 import CheckIcon from 'material-ui-icons/Check';
 import CloseIcon from 'material-ui-icons/Close';
@@ -24,9 +24,9 @@ const styleSheet = createStyleSheet({
 		},
 	},
 	errorButton: {
-		backgroundColor: blue[500],
+		backgroundColor: red[500],
 		'&:hover': {
-			backgroundColor: blue[700],
+			backgroundColor: red[700],
 		},
 	},
 	progress: {
