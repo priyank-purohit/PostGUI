@@ -190,6 +190,7 @@ class DbSchema extends Component {
 
 	// Make a column visible or invisible on click
 	handleColumnClick(column, table) {
+		console.log("Column clicked " + column);
 		if (this.state[table + column + "Visibility"] === "hide") {
 			this.setState({
 				[table + column + "Visibility"]: ""
