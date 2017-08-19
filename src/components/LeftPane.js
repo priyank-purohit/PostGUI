@@ -11,6 +11,11 @@ const styleSheet = createStyleSheet({
 		height: '100%',
 		float: 'left',
 	},
+	rootHide: {
+		width: '0%',
+		height: '100%',
+		float: 'left'
+	},
 	column: {
 		marginLeft: 27
 	}
@@ -25,6 +30,12 @@ class LeftPane extends Component {
 			columns: props.columns,
 			leftPaneVisibility: props.leftPaneVisibility
 		};
+	}
+
+	componentWillReceiveProps(newProps) {
+		this.setState({
+			leftPaneVisibility: newProps.leftPaneVisibility
+		});
 	}
 
 	// Changes the index of DB in state + App.js state
@@ -59,8 +70,9 @@ class LeftPane extends Component {
 
 	render() {
 		const classes = this.props.classes;
+		let rootClasses = this.state.leftPaneVisibility === true ? classes.root : classes.rootHide;
 		return (
-			<div className={classes.root}>
+			<div className={rootClasses}>
 				<DbPicker changeDbIndex={this.changeDbIndex.bind(this)} dbIndex={this.state.dbIndex} table={this.state.table} leftPaneVisibility={this.state.leftPaneVisibility} />
 				<Divider />
 				<DbSchema changeTable={this.changeTable.bind(this)} changeColumns={this.changeColumns.bind(this)} changeVisibleColumns={this.changeVisibleColumns.bind(this)} changeDbIndex={this.changeDbIndex.bind(this)} dbIndex={this.state.dbIndex} table={this.state.table} columns={this.state.columns} leftPaneVisibility={this.state.leftPaneVisibility} />
