@@ -12,7 +12,6 @@ const styleSheet = createStyleSheet(theme => ({
 	},
 }));
 
-
 class DbPicker extends Component {
 	constructor(props) {
 		super(props);

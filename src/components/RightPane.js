@@ -80,6 +80,10 @@ class RightPane extends Component {
 			this.setState({
 				visibleColumns: newProps.visibleColumns
 			});
+		} else if (this.state.leftPaneVisibility !== newProps.leftPaneVisibility) {
+			this.setState({
+				leftPaneVisibility: newProps.leftPaneVisibility
+			});
 		} else {
 			this.setState({
 				dbIndex: newProps.dbIndex,
