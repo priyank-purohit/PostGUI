@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
 import Chip from 'material-ui/Chip';
 
-import Typography from 'material-ui/Typography';
+//import Typography from 'material-ui/Typography';
 
-let lib = require('../utils/library.js');
+//let lib = require('../utils/library.js');
 
 const styleSheet = createStyleSheet(theme => ({
   chip: {
