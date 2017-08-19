@@ -135,6 +135,7 @@ class DbSchema extends Component {
 
 	// From JSON resp, extract the names of table columns and update state
 	parseTableColumns(rawColProperties, table) {
+		console.log("parseTableColumns");
 		let columns = [];
 
 		for (let i in rawColProperties) { // I = COLUMN in TABLE
@@ -205,6 +206,7 @@ class DbSchema extends Component {
 	}
 
 	createTableElement(tableName) {
+		console.log("createTableElement");
 		const truncTextStyle = {
 			textOverflow: 'clip',
 			overflow: 'hidden',
@@ -238,6 +240,7 @@ class DbSchema extends Component {
 	}
 
 	createColumnElement(columnName, table) {
+		console.log("createColumnElement");
 		let columnRename = lib.getColumnConfig(this.state.dbIndex, table, columnName, "rename");
 		let displayName = columnRename ? columnRename : columnName;
 
