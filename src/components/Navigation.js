@@ -9,14 +9,6 @@ import MenuIcon from 'material-ui-icons/Menu';
 
 let lib = require('../utils/library.js');
 
-const styleSheet = createStyleSheet(theme => ({
-	root: {
-		width: '100%'
-	},
-	flex: {
-		flex: 1
-	}
-}));
 
 class Navigation extends Component {
 	render() {
@@ -44,5 +36,14 @@ class Navigation extends Component {
 Navigation.propTypes = {
 	classes: PropTypes.object.isRequired,
 };
+
+const styleSheet = createStyleSheet(theme => ({
+	root: {
+		width: '100%'
+	},
+	flex: {
+		flex: 1
+	}
+}));
 
 export default withStyles(styleSheet)(Navigation);

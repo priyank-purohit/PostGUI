@@ -7,13 +7,6 @@ import "react-table/react-table.css";
 
 let lib = require('../utils/library.js');
 
-const styleSheet = createStyleSheet({
-    root: {
-        width: '29%',
-        height: '100%',
-        float: 'left',
-    }
-});
 
 class DataTable extends Component {
     constructor(props) {
@@ -63,4 +56,11 @@ DataTable.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
+const styleSheet = createStyleSheet({
+    root: {
+        width: '29%',
+        height: '100%',
+        float: 'left',
+    }
+});
 export default withStyles(styleSheet)(DataTable);

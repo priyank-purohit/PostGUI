@@ -3,23 +3,6 @@ import PropTypes from 'prop-types';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
 import Chip from 'material-ui/Chip';
 
-//import Typography from 'material-ui/Typography';
-
-//let lib = require('../utils/library.js');
-
-const styleSheet = createStyleSheet(theme => ({
-  chip: {
-    margin: theme.spacing.unit / 2,
-  },
-  row: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-    flexWrap: 'wrap',
-    marginTop: -30,
-    marginRight: '1%'
-  },
-}));
-
 class RightPaneChips extends Component {
 	constructor(props) {
 		super(props);
@@ -49,5 +32,18 @@ class RightPaneChips extends Component {
 RightPaneChips.propTypes = {
 	classes: PropTypes.object.isRequired,
 };
+
+const styleSheet = createStyleSheet(theme => ({
+  chip: {
+    margin: theme.spacing.unit / 2,
+  },
+  row: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    flexWrap: 'wrap',
+    marginTop: -30,
+    marginRight: '1%'
+  },
+}));
 
 export default withStyles(styleSheet)(RightPaneChips);

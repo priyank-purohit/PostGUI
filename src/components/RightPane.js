@@ -20,43 +20,6 @@ const defaultRules = lib.getQBRules();
 
 const timeout = 2000;
 
-const styleSheet = createStyleSheet(theme => ({
-	root: {
-		paddingBottom: 50,
-		marginLeft: '30%',
-		marginBottom: '2%'
-	},
-	rootInvisibleLeft: {
-		paddingBottom: 50,
-		marginLeft: '1%',
-	},
-	middlePaperSection: {
-		width: '99%',
-		height: '100%',
-		marginTop: 75
-	},
-	cardMarginLeft: { // For items within the same section
-		marginLeft: 32
-	},
-	cardMarginLeftRightTop: {
-		marginLeft: 16,
-		marginTop: 16,
-		marginRight: 6
-	},
-	cardMarginLeftTop: { // For a new section
-		marginLeft: 16,
-		marginTop: 16 // want a bit more space at top to clearly indicate new section...
-	},
-	textField: {
-		marginLeft: theme.spacing.unit,
-		marginRight: theme.spacing.unit,
-		width: 300
-	},
-	hide: {
-		opacity: 0.0,
-		marginTop: 75
-	}
-}));
 
 class RightPane extends Component {
 	constructor(props) {
@@ -286,5 +249,43 @@ class RightPane extends Component {
 RightPane.propTypes = {
 	classes: PropTypes.object.isRequired,
 };
+
+const styleSheet = createStyleSheet(theme => ({
+	root: {
+		paddingBottom: 50,
+		marginLeft: '30%',
+		marginBottom: '2%'
+	},
+	rootInvisibleLeft: {
+		paddingBottom: 50,
+		marginLeft: '1%',
+	},
+	middlePaperSection: {
+		width: '99%',
+		height: '100%',
+		marginTop: 75
+	},
+	cardMarginLeft: { // For items within the same section
+		marginLeft: 32
+	},
+	cardMarginLeftRightTop: {
+		marginLeft: 16,
+		marginTop: 16,
+		marginRight: 6
+	},
+	cardMarginLeftTop: { // For a new section
+		marginLeft: 16,
+		marginTop: 16 // want a bit more space at top to clearly indicate new section...
+	},
+	textField: {
+		marginLeft: theme.spacing.unit,
+		marginRight: theme.spacing.unit,
+		width: 300
+	},
+	hide: {
+		opacity: 0.0,
+		marginTop: 75
+	}
+}));
 
 export default withStyles(styleSheet)(RightPane);

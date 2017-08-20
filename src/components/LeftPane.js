@@ -5,21 +5,6 @@ import Divider from 'material-ui/Divider';
 import DbPicker from './DbPicker.js'
 import DbSchema from './DbSchema.js'
 
-const styleSheet = createStyleSheet({
-	root: {
-		width: '29%',
-		height: '100%',
-		float: 'left',
-	},
-	rootHide: {
-		width: '0%',
-		height: '100%',
-		float: 'left'
-	},
-	column: {
-		marginLeft: 27
-	}
-});
 
 class LeftPane extends Component {
 	constructor(props) {
@@ -84,5 +69,21 @@ class LeftPane extends Component {
 LeftPane.propTypes = {
 	classes: PropTypes.object.isRequired,
 };
+
+const styleSheet = createStyleSheet({
+	root: {
+		width: '29%',
+		height: '100%',
+		float: 'left',
+	},
+	rootHide: {
+		width: '0%',
+		height: '100%',
+		float: 'left'
+	},
+	column: {
+		marginLeft: 27
+	}
+});
 
 export default withStyles(styleSheet)(LeftPane);

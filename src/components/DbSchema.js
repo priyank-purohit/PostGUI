@@ -16,18 +16,6 @@ import axios from 'axios';
 
 let lib = require("../utils/library.js");
 
-const styleSheet = createStyleSheet(theme => ({
-	column: {
-		marginLeft: 27
-	},
-	hide: {
-		display: 'none'
-	},
-	close: {
-		width: theme.spacing.unit * 4,
-		height: theme.spacing.unit * 4,
-	}
-}));
 
 class DbSchema extends Component {
 	constructor(props) {
@@ -322,5 +310,18 @@ class DbSchema extends Component {
 DbSchema.propTypes = {
 	classes: PropTypes.object.isRequired,
 };
+
+const styleSheet = createStyleSheet(theme => ({
+	column: {
+		marginLeft: 27
+	},
+	hide: {
+		display: 'none'
+	},
+	close: {
+		width: theme.spacing.unit * 4,
+		height: theme.spacing.unit * 4,
+	}
+}));
 
 export default withStyles(styleSheet)(DbSchema);

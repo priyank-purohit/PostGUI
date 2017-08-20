@@ -10,32 +10,6 @@ import CheckIcon from 'material-ui-icons/Check';
 import CloseIcon from 'material-ui-icons/Close';
 import ArrowForwardIcon from 'material-ui-icons/ArrowForward';
 
-const styleSheet = createStyleSheet({
-	wrapper: {
-		position: 'relative',
-		float: 'right',
-		marginTop: -8,
-		marginRight: '7%'
-	},
-	successButton: {
-		backgroundColor: green[500],
-		'&:hover': {
-			backgroundColor: green[700],
-		},
-	},
-	errorButton: {
-		backgroundColor: red[500],
-		'&:hover': {
-			backgroundColor: red[700],
-		},
-	},
-	progress: {
-		color: green[500],
-		position: 'absolute',
-		top: -2,
-		left: -2,
-	},
-});
 
 class CircularFab extends Component {
 	timer = undefined;
@@ -92,5 +66,32 @@ class CircularFab extends Component {
 CircularFab.propTypes = {
 	classes: PropTypes.object.isRequired,
 };
+
+const styleSheet = createStyleSheet({
+	wrapper: {
+		position: 'relative',
+		float: 'right',
+		marginTop: -8,
+		marginRight: '7%'
+	},
+	successButton: {
+		backgroundColor: green[500],
+		'&:hover': {
+			backgroundColor: green[700],
+		},
+	},
+	errorButton: {
+		backgroundColor: red[500],
+		'&:hover': {
+			backgroundColor: red[700],
+		},
+	},
+	progress: {
+		color: green[500],
+		position: 'absolute',
+		top: -2,
+		left: -2,
+	},
+});
 
 export default withStyles(styleSheet)(CircularFab);

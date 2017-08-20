@@ -6,11 +6,6 @@ import Menu, { MenuItem } from 'material-ui/Menu';
 
 let lib = require("../utils/library.js");
 
-const styleSheet = createStyleSheet(theme => ({
-	root: {
-		width: '99%'
-	},
-}));
 
 class DbPicker extends Component {
 	constructor(props) {
@@ -85,4 +80,9 @@ DbPicker.propTypes = {
 	classes: PropTypes.object.isRequired,
 };
 
+const styleSheet = createStyleSheet(theme => ({
+	root: {
+		width: '99%'
+	},
+}));
 export default withStyles(styleSheet)(DbPicker);
