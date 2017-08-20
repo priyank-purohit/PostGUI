@@ -1,129 +1,166 @@
-exports.rot13ED = function(str) {
-    // eslint-disable-next-line
-    return str.replace(/[a-zA-Z]/g, function(c) {
-        // eslint-disable-next-line
-        return String.fromCharCode((c <= "Z" ? 90 : 122) >= (c = c.charCodeAt(0) + 13) ? c : c - 26);
-    });
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Config Methods
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Returns value of KEY from config file
+exports.getValueFromConfig = function(key) {
+	try {
+		let file, config;
+		file = require("../data/config.json");
+		config = JSON.parse(JSON.stringify(file));
+		if (config[key] !== undefined) {
+			return config[key];
+		}
+		else {
+			return null;
+		}
+	} catch (error) {
+		return null;
+	}
 }
 
-// Retrieves value of key from the config file
-exports.getFromConfig = function(key = "title") {
-    let configFile = require("../data/config.json");
-    let config = JSON.parse(JSON.stringify(configFile));
-    return config[key]
+// Returns value of OPTION for specific TABLE and DBINDEX
+// NOTE: check for null value when this function is used
+exports.getDbConfig = function(dbIndex, option) {
+	if (dbIndex !== null && option !== null) {
+		try {
+			let dbConfig = this.getValueFromConfig("databases");
+
+			if (dbConfig[dbIndex][option] !== undefined) {
+				return dbConfig[dbIndex][option];
+			} else {
+				return null;
+			}
+		} catch (error) {
+			return null;
+		}
+	} else {
+		return null;
+	}
 }
 
-// Retrieves value of key from the config file
-exports.getTableConfig = function(table = "error", option = "error") {
-    let configFile = require("../data/config.json");
-    let config = JSON.parse(JSON.stringify(configFile));
+// Returns value of OPTION for specific TABLE and DBINDEX
+// NOTE: check for null value when this function is used
+exports.getTableConfig = function(dbIndex, table, option) {
+	if (dbIndex !== null && table !== null && option !== null) {
+		try {
+			let tableConfig = this.getDbConfig(dbIndex, "tableRules");
 
-    // If the table option is found, return; else return null
-    // NOTE: check for null value when this function is used
-    if (table !== this.getFromConfig("noTableMsg")) {
-        if (config["tableRules"][table] && config["tableRules"][table][option] !== null) {
-            return config["tableRules"][table][option];
-        } else {
-            return null;
-        }
-    } else {
-        return this.getFromConfig("noTableMsg");
-    }
+			if (tableConfig[table][option] !== undefined) {
+				return tableConfig[table][option];
+			} else {
+				return null;
+			}
+		} catch (error) {
+			return null;
+		}
+	} else {
+		return null;
+	}
 }
 
-// Retrieves value of key from the config file
-exports.getColumnConfig = function(table = "error", column = "error", option = "error") {
-    let configFile = require("../data/config.json");
-    let config = JSON.parse(JSON.stringify(configFile));
+// Returns value of OPTION for specific TABLE and COLUMN and DBINDEX
+// NOTE: check for null value when this function is used
+exports.getColumnConfig = function(dbIndex, table, column, option) {
+	if (dbIndex !== null && table !== null && option !== null && option !== null) {
+		try {
+			let columnRules = this.getTableConfig(dbIndex, table, "columnRules");
 
-    // If the table column option is found, return; else return null
-    // NOTE: check for null value when this function is used
-    if (table !== this.getFromConfig("noTableMsg") && table !== "error" && column !== "error") {
-        if (config["tableRules"][table] &&
-            config["tableRules"][table]["columnRules"] &&
-            config["tableRules"][table]["columnRules"][column] &&
-            config["tableRules"][table]["columnRules"][column][option] !== null) {
-            return config["tableRules"][table]["columnRules"][column][option];
-        } else {
-            return null;
-        }
-    } else {
-        return null;
-    }
-}
-
-// returns true if the element is in array
-exports.inArray = function(element, array) {
-	if (array && element)
-    	return array.indexOf(element) > -1;
-    else
-    	return false;
+			if (columnRules[column][option] !== undefined) {
+				return columnRules[column][option];
+			} else {
+				return null;
+			}
+		} catch (error) {
+			return null;
+		}
+	} else {
+		return null;
+	}
 }
 
-// return true iff table.column is part of the default columns defined
-exports.isColumnDefaultView = function(table, column) {
-    if (table && column) {
-        let defaultColumns = this.getTableConfig(table, "defaultViewColumns");
-        if (defaultColumns === null) {
-            return null;
-        } else {
-            if (this.inArray(column, defaultColumns) === true) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-    }
+// Returns true iff COLUMN is part of the default columns defined for TABLE and DBINDEX
+exports.isColumnInDefaultView = function(dbIndex, table, column) {
+	if (dbIndex !== null && table !== null && column !== null) {
+		try {
+			let defaultColumns = this.getTableConfig(dbIndex, table, "defaultViewColumns");
+
+			if (defaultColumns === null || defaultColumns === undefined) {
+				return null;
+			} else {
+				return this.inArray(column, defaultColumns);
+			}
+		} catch (error) {
+			return null;
+		}
+	}
 }
-// Opens the specified URL in a different tab
-exports.visitPage = function(url = "http://www.google.ca") {
-    window.open(url, "_blank");
-}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Query Builder Methods
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Returns the initial query (i.e. pre-formatted default query for a table)
 // Convert this into a function that loads a default entry for ALL tables
 // If no rules are defined, it will return a blank default entry.
 exports.getQBRules = function() {
-    return {
-        condition: 'AND',
-        rules: [{
-            empty: true
-        }]
-    };
+	return {
+		condition: 'AND',
+		rules: [{
+			empty: true
+		}]
+	};
 }
 
 // Returns a list of columns
-exports.getQBFilters = function(table, columns) {
-    if (columns.length <= 0) {
-        return [{ id: 'error', label: 'ERROR: select a view...', type: 'string' }];
-    }
+exports.getQBFilters = function(dbIndex, table, columns) {
+	if (!columns || columns.length <= 0) {
+		return [{ id: 'error', label: 'ERROR: select a view...', type: 'string' }];
+	}
 
-    let plain_strings_query_builder = [];
-    for (let i = 0; i < columns.length; i++) {
-        plain_strings_query_builder.push({ id: columns[i], label: this.getColumnConfig(table, columns[i], "rename"), type: 'string', operators: ['equal', 'not_equal', 'greater', 'less', 'greater_or_equal', 'less_or_equal', 'is_not_null', 'is_null', 'in', 'contains'] });
-    }
-    return plain_strings_query_builder;
+	let plain_strings_query_builder = [];
+	for (let i = 0; i < columns.length; i++) {
+		plain_strings_query_builder.push({ id: columns[i], label: this.getColumnConfig(dbIndex, table, columns[i], "rename"), type: 'string', operators: ['equal', 'not_equal', 'greater', 'less', 'greater_or_equal', 'less_or_equal', 'is_not_null', 'is_null', 'in', 'contains'] });
+	}
+	return plain_strings_query_builder;
 }
 
 // Accepts jQB operator, and returns PostgREST equivalent of it
 exports.translateOperatorToPostgrest = function(operator) {
-    let dict = [
-        ['equal', 'eq'],
-        ['not_equal', 'neq'],
-        ['greater', 'gt'],
-        ['less', 'lt'],
-        ['greater_or_equal', 'gte'],
-        ['less_or_equal', 'lte'],
-        ['is_not_null', 'not.is.null'],
-        ['in', 'in'],
-        ['contains', 'ilike'],
-        ['is_null', 'is.null']
-    ];
+	let dict = [
+		['equal', 'eq'],
+		['not_equal', 'neq'],
+		['greater', 'gt'],
+		['less', 'lt'],
+		['greater_or_equal', 'gte'],
+		['less_or_equal', 'lte'],
+		['is_not_null', 'not.is.null'],
+		['in', 'in'],
+		['contains', 'ilike'],
+		['is_null', 'is.null']
+	];
 
-    for (let i = 0; i < dict.length; i++) {
-        if (dict[i][0] === operator) {
-            return dict[i][1];
-        }
-    }
-    return "eq";
+	for (let i = 0; i < dict.length; i++) {
+		if (dict[i][0] === operator) {
+			return dict[i][1];
+		}
+	}
+	return "eq";
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Other Methods
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// returns true if ELEMENT is in ARRAY
+exports.inArray = function(element, array) {
+	if (array && element)
+		return array.indexOf(element) > -1;
+	else
+		return false;
+}
+
+// Opens the specified URL in a different tab
+exports.visitPage = function(url = "http://www.google.ca") {
+	window.open(url, "_blank");
 }

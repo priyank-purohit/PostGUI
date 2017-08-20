@@ -1,88 +1,66 @@
 import React, { Component } from 'react';
+import ReactTable from 'react-table';
+import PropTypes from 'prop-types';
+import { withStyles, createStyleSheet } from 'material-ui/styles';
 
-import '../styles/DataTable.css';
+import "react-table/react-table.css";
 
 let lib = require('../utils/library.js');
 
+
 class DataTable extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			data: this.props.response,
-			columns: []
-		};
-	}
+    constructor(props) {
+        super(props);
+        this.state = {
+            dbIndex: props.dbIndex,
+            table: props.table,
+            columns: props.columns,
+            data: props.data
+        };
+    }
 
-
-	// Called when new props are received by the QB component
-	componentWillReceiveProps(newProps) {
-		this.setState({ data: newProps.response }, function() {
-			this.extractColumns();
+    componentWillReceiveProps(newProps) {
+		this.setState({
+			dbIndex: newProps.dbIndex,
+			table: newProps.table,
+			columns: newProps.columns,
+			data: newProps.data
 		});
-	}
+    }
 
-	// Extracts columns from state.data and stores the list in state.columns for use in table head
-	extractColumns() {
-		let keys = [];
-		for (let i in this.state.data) {
-			let val = this.state.data[i];
-			for (let j in val) {
-				let subKey = j;
-				keys.push(subKey);
-			}
-		}
+    render() {
+        let { columns, data } = this.state;
+        let parsedColumns = [];
 
-		keys = keys.filter(function(x, i, a) {
-			return a.indexOf(x) === i;
-		});
+        if (columns) {
+            parsedColumns = columns.map((columnName) => {
+            	let columnRename = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "rename");
+            	let columnVisibility = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "visible");
+                return ({
+                    id: columnName,
+                    Header: columnRename ? columnRename : columnName,
+                    accessor: columnName,
+                    show: columnVisibility !== null ? columnVisibility : true
+                });
+            });
+        }
 
-		this.setState({ columns: keys });
-	}
-
-	// After mounting, extracts columns
-	componentDidMount() {
-		this.extractColumns();
-	}
-
-	// Generates the data rows
-	rowsGenerated() {
-		let cols = this.state.columns, // [{key, label}]
-			data = this.state.data,
-			table = this.props.table,
-			tableMaxWidth = lib.getTableConfig(table, "defaultMaxWidthPx");
-
-		return data.map(function(item, i) {
-			// handle the column data within each row
-			let cells = cols.map(function(colData, key) {
-				// colData.key might be "firstName"
-				let columnMaxWidth = lib.getColumnConfig(table, colData, "maxWidthPx");
-				return <td key={key} style={{ maxWidth: columnMaxWidth ? columnMaxWidth : tableMaxWidth, textAlign: lib.getColumnConfig(table, colData, "textAlign")}} className="fontSize8">{item[colData]}</td>;
-			});
-			return <tr key={i}>{cells}</tr>;
-		});
-	}
-
-	render() {
-		let table = this.props.table,
-			tableMaxWidth = lib.getTableConfig(table, "defaultMaxWidthPx");
-		return (
-			<table id="dataTable">
-				<thead>
-					<tr key="head">
-					{
-						this.state.columns.map( function (columnTitle, key) {
-							let columnMaxWidth = lib.getColumnConfig(table, columnTitle, "maxWidthPx");
-							return (<th key={key} style={{ maxWidth: columnMaxWidth ? columnMaxWidth : tableMaxWidth, textAlign: lib.getColumnConfig(table, columnTitle, "textAlign")}} className="fontSize8">{lib.getColumnConfig(table, columnTitle, "rename") ? lib.getColumnConfig(table, columnTitle, "rename") : columnTitle}</th>);
-						})
-					}
-					</tr>
-				</thead>
-				<tbody>
-					{this.rowsGenerated()}
-				</tbody>
-			</table>
-		);
-	}
+        return (<div>
+        			<ReactTable data={ data } columns={ parsedColumns } defaultPageSize={ 10 } className="-striped -highlight" />
+        		</div>
+        );
+    }
 }
 
-export default DataTable;
+DataTable.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+
+const styleSheet = createStyleSheet({
+    root: {
+        width: '29%',
+        height: '100%',
+        float: 'left',
+    }
+});
+export default withStyles(styleSheet)(DataTable);
