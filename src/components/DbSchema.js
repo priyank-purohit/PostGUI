@@ -135,7 +135,6 @@ class DbSchema extends Component {
 
 	// From JSON resp, extract the names of table columns and update state
 	parseTableColumns(rawColProperties, table) {
-		console.log("parseTableColumns");
 		let columns = [];
 
 		for (let i in rawColProperties) { // I = COLUMN in TABLE
@@ -166,6 +165,10 @@ class DbSchema extends Component {
 		});
 	}
 
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Handle click methods
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	// Set CLICKEDTABLE in state as TABLE
 	handleTableClick(clickedTable, skipCheck = false) {
 		// skipCheck prevents table schema collapse when leftPane toggles
@@ -190,7 +193,6 @@ class DbSchema extends Component {
 
 	// Make a column visible or invisible on click
 	handleColumnClick(column, table) {
-		console.log("Column clicked " + column);
 		if (this.state[table + column + "Visibility"] === "hide") {
 			this.setState({
 				[table + column + "Visibility"]: ""
@@ -206,8 +208,11 @@ class DbSchema extends Component {
 		}
 	}
 
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Create HTML Elements
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	createTableElement(tableName) {
-		console.log("createTableElement");
 		const truncTextStyle = {
 			textOverflow: 'clip',
 			overflow: 'hidden',
@@ -241,7 +246,6 @@ class DbSchema extends Component {
 	}
 
 	createColumnElement(columnName, table) {
-		console.log("createColumnElement");
 		let columnRename = lib.getColumnConfig(this.state.dbIndex, table, columnName, "rename");
 		let displayName = columnRename ? columnRename : columnName;
 
