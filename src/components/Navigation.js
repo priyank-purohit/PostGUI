@@ -7,8 +7,6 @@ import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
 
-import '../styles/Navigation.css';
-
 let lib = require('../utils/library.js');
 
 const styleSheet = createStyleSheet(theme => ({
