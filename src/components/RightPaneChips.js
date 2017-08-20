@@ -26,7 +26,7 @@ class RightPaneChips extends Component {
 
 		this.state = {
 			rows: props.rows ? props.rows : 0,
-			tip: "Tip: Hold shift when sorting to multi-sort!"
+			tip: "Tip: Hold shift and click to multi-sort!"
 		}
 	}
 
