@@ -12,6 +12,8 @@ import FolderIcon from 'material-ui-icons/Folder';
 import FolderIconOpen from 'material-ui-icons/FolderOpen';
 import VisibilityIcon from 'material-ui-icons/Visibility';
 import VisibilityOffIcon from 'material-ui-icons/VisibilityOff';
+import deepPurple from 'material-ui/colors/deepPurple';
+
 import axios from 'axios';
 
 let lib = require("../utils/library.js");
@@ -218,7 +220,7 @@ class DbSchema extends Component {
 			<ListItem button key={tableName} id={tableName}
 				 title={displayName} onClick={(event) => this.handleTableClick(tableName)}>
 				<ListItemIcon>
-					{this.state.table === tableName ? <FolderIconOpen /> : <FolderIcon /> }
+					{this.state.table === tableName ? <FolderIconOpen className={this.props.classes.contrastColoured} /> : <FolderIcon /> }
 				</ListItemIcon>
 				<ListItemText primary={displayName} style={truncTextStyle} />
 			</ListItem>
@@ -249,7 +251,7 @@ class DbSchema extends Component {
 			<ListItem button key={columnName} id={columnName}
 				 title={displayName} className={classNames} onClick={(event) => this.handleColumnClick(columnName, table)}>
 				<ListItemIcon>
-					{visibility ? <VisibilityIcon /> : <VisibilityOffIcon /> }
+					{visibility ? <VisibilityIcon className={this.props.classes.contrastColoured} /> : <VisibilityOffIcon /> }
 				</ListItemIcon>
 				<ListItemText secondary={displayName} />
 			</ListItem>
@@ -321,6 +323,9 @@ const styleSheet = createStyleSheet(theme => ({
 	close: {
 		width: theme.spacing.unit * 4,
 		height: theme.spacing.unit * 4,
+	},
+	contrastColoured: {
+		fill: deepPurple['300']
 	}
 }));
 
