@@ -12,7 +12,7 @@ import FolderIcon from 'material-ui-icons/Folder';
 import FolderIconOpen from 'material-ui-icons/FolderOpen';
 import VisibilityIcon from 'material-ui-icons/Visibility';
 import VisibilityOffIcon from 'material-ui-icons/VisibilityOff';
-import deepPurple from 'material-ui/colors/deepPurple';
+import indigo from 'material-ui/colors/indigo';
 
 import axios from 'axios';
 
@@ -325,7 +325,7 @@ const styleSheet = createStyleSheet(theme => ({
 		height: theme.spacing.unit * 4,
 	},
 	contrastColoured: {
-		fill: deepPurple['400']
+		fill: indigo['400']
 	}
 }));
 
