@@ -325,7 +325,7 @@ const styleSheet = createStyleSheet(theme => ({
 		height: theme.spacing.unit * 4,
 	},
 	contrastColoured: {
-		fill: deepPurple['300']
+		fill: deepPurple['400']
 	}
 }));
 
