@@ -41,9 +41,8 @@ class DbSchema extends Component {
 	componentWillReceiveProps(newProps) {
 		// If the database was changed, re do the whole view and update parent components too
 		if (this.state.dbIndex !== newProps.dbIndex) {
-			let newDbIndex = newProps.dbIndex;
 			this.setState({
-				dbIndex: newDbIndex,
+				dbIndex: newProps.dbIndex,
 				table: "",
 				tables: []
 			}, function() {
