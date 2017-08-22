@@ -7,11 +7,6 @@ import DbSchema from './DbSchema.js'
 
 
 class LeftPane extends Component {
-	constructor(props) {
-		super(props);
-	}
-
-
 	render() {
 		const classes = this.props.classes;
 		let rootClasses = this.props.leftPaneVisibility === true ? classes.root : classes.rootHide;
@@ -24,7 +19,6 @@ class LeftPane extends Component {
 				<DbSchema 
 					dbIndex={this.props.dbIndex} 
 					table={this.props.table} 
-					columns={this.props.columns} 
 					changeTable={this.props.changeTable} 
 					changeColumns={this.props.changeColumns} 
 					changeVisibleColumns={this.props.changeVisibleColumns} /> 

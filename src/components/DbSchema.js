@@ -1,20 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
-import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
+import axios from 'axios';
 
+import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Snackbar from 'material-ui/Snackbar';
 
 import IconButton from 'material-ui/IconButton';
 import CloseIcon from 'material-ui-icons/Close';
-
 import FolderIcon from 'material-ui-icons/Folder';
 import FolderIconOpen from 'material-ui-icons/FolderOpen';
 import VisibilityIcon from 'material-ui-icons/Visibility';
-import VisibilityOffIcon from 'material-ui-icons/VisibilityOff';
-import indigo from 'material-ui/colors/indigo';
+import VisibilityOffIcon from 'material-ui-icons/VisibilityOff';;
 
-import axios from 'axios';
 
 let lib = require("../utils/library.js");
 
