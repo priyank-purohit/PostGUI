@@ -220,7 +220,7 @@ class DbSchema extends Component {
 			<ListItem button key={tableName} id={tableName}
 				 title={displayName} onClick={(event) => this.handleTableClick(tableName)}>
 				<ListItemIcon>
-					{this.state.table === tableName ? <FolderIconOpen className={this.props.classes.contrastColoured} /> : <FolderIcon /> }
+					{this.state.table === tableName ? <FolderIconOpen className={this.props.classes.primaryColoured} /> : <FolderIcon /> }
 				</ListItemIcon>
 				<ListItemText primary={displayName} style={truncTextStyle} />
 			</ListItem>
@@ -251,7 +251,7 @@ class DbSchema extends Component {
 			<ListItem button key={columnName} id={columnName}
 				 title={displayName} className={classNames} onClick={(event) => this.handleColumnClick(columnName, table)}>
 				<ListItemIcon>
-					{visibility ? <VisibilityIcon className={this.props.classes.contrastColoured} /> : <VisibilityOffIcon /> }
+					{visibility ? <VisibilityIcon className={this.props.classes.primaryColoured} /> : <VisibilityOffIcon /> }
 				</ListItemIcon>
 				<ListItemText secondary={displayName} />
 			</ListItem>
@@ -324,8 +324,8 @@ const styleSheet = createStyleSheet(theme => ({
 		width: theme.spacing.unit * 4,
 		height: theme.spacing.unit * 4,
 	},
-	contrastColoured: {
-		fill: indigo['400']
+	primaryColoured: {
+		fill: theme.palette.primary[400]
 	}
 }));
 
