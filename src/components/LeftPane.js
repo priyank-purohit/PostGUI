@@ -25,7 +25,6 @@ class LeftPane extends Component {
 					dbIndex={this.props.dbIndex} 
 					table={this.props.table} 
 					columns={this.props.columns} 
-					leftPaneVisibility={this.props.leftPaneVisibility}
 					changeDbIndex={this.props.changeDbIndex}
 					changeTable={this.props.changeTable} 
 					changeColumns={this.props.changeColumns} 

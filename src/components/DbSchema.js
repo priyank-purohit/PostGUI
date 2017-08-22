@@ -26,7 +26,6 @@ class DbSchema extends Component {
 			dbIndex: props.dbIndex,
 			table: props.table,
 			dbSchema: null,
-			leftPaneVisibility: props.leftPaneVisibility,
 			url: lib.getDbConfig(props.dbIndex, "url"),
 			tables: [],
 			snackBarVisibility: false,
@@ -44,7 +43,6 @@ class DbSchema extends Component {
 	componentWillReceiveProps(newProps) {
 		this.setState({
 			dbIndex: newProps.dbIndex,
-			leftPaneVisibility: newProps.leftPaneVisibility,
 			table: newProps.table
 		});
 		
