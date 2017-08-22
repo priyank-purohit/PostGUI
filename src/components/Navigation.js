@@ -15,7 +15,7 @@ class Navigation extends Component {
 		const classes = this.props.classes;
 		return (
 			<div className={classes.root}>
-				<AppBar position="fixed">
+				<AppBar position="absolute">
 					<Toolbar>
 						<IconButton color="contrast" aria-label="Menu" onClick={this.props.toggleLeftPane.bind(this)}>
 							<MenuIcon />
