@@ -17,9 +17,19 @@ class LeftPane extends Component {
 		let rootClasses = this.props.leftPaneVisibility === true ? classes.root : classes.rootHide;
 		return (
 			<div className={rootClasses}>
-				<DbPicker changeDbIndex={this.props.changeDbIndex} dbIndex={this.props.dbIndex} table={this.props.table} leftPaneVisibility={this.props.leftPaneVisibility} />
+				<DbPicker 
+					dbIndex={this.props.dbIndex} 
+					changeDbIndex={this.props.changeDbIndex} />
 				<Divider />
-				<DbSchema changeTable={this.props.changeTable} changeColumns={this.props.changeColumns} changeVisibleColumns={this.props.changeVisibleColumns} changeDbIndex={this.props.changeDbIndex} dbIndex={this.props.dbIndex} table={this.props.table} columns={this.props.columns} leftPaneVisibility={this.props.leftPaneVisibility} />
+				<DbSchema 
+					dbIndex={this.props.dbIndex} 
+					table={this.props.table} 
+					columns={this.props.columns} 
+					leftPaneVisibility={this.props.leftPaneVisibility}
+					changeDbIndex={this.props.changeDbIndex}
+					changeTable={this.props.changeTable} 
+					changeColumns={this.props.changeColumns} 
+					changeVisibleColumns={this.props.changeVisibleColumns} /> 
 			</div>
 		);
 	}

@@ -12,8 +12,6 @@ class DbPicker extends Component {
 		super(props);
 		this.state = {
 			dbIndex: props.dbIndex,
-			table: props.table,
-			leftPaneVisibility: props.leftPaneVisibility,
 			anchorEl: undefined,
 			open: false,
 			databases: []
@@ -46,9 +44,7 @@ class DbPicker extends Component {
 
 	componentWillReceiveProps(newProps) {
 		this.setState({
-			dbIndex: newProps.dbIndex,
-			leftPaneVisibility: newProps.leftPaneVisibility,
-			table: newProps.table
+			dbIndex: newProps.dbIndex
 		});
 	}
 
