@@ -50,7 +50,7 @@ class DbPicker extends Component {
 
 	render() {
 		const classes = this.props.classes;
-		
+
 		return (
 			<div className={classes.root}>
 				<List>
