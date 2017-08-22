@@ -24,38 +24,38 @@ class DbSchema extends Component {
 			dbIndex: props.dbIndex,
 			table: props.table,
 			dbSchema: null,
-			url: lib.getDbConfig(props.dbIndex, "url"),
 			tables: [],
 			snackBarVisibility: false,
-			snackBarMessage: "Unknown error"
+			snackBarMessage: "Unknown error occured"
 		};
 	}
 
 	componentDidMount() {
 		// Save the database schema to state for future access
-		if (this.state.url) {
-			this.getDbSchema(this.state.url);
+		let url = lib.getDbConfig(this.state.dbIndex, "url");
+		if (url) {
+			this.getDbSchema(url);
 		}
 	}
 
 	componentWillReceiveProps(newProps) {
-		this.setState({
-			dbIndex: newProps.dbIndex,
-			table: newProps.table
-		});
-		
+		// If the database was changed, re do the whole view and update parent components too
 		if (this.state.dbIndex !== newProps.dbIndex) {
 			let newDbIndex = newProps.dbIndex;
 			this.setState({
 				dbIndex: newDbIndex,
 				table: "",
-				url: lib.getDbConfig(newDbIndex, "url"),
 				tables: []
 			}, function() {
 				this.props.changeTable(this.state.table);
 				this.props.changeColumns(this.state[this.state.table]);
 				this.getDbSchema();
 				this.updateVisibleColumns();
+			});
+		} else {
+			this.setState({
+				dbIndex: newProps.dbIndex,
+				table: newProps.table
 			});
 		}
 	}
@@ -66,7 +66,7 @@ class DbSchema extends Component {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Returns a list of tables from URL
-	getDbSchema(url = this.state.url) {
+	getDbSchema(url = lib.getDbConfig(this.state.dbIndex, "url")) {
 		axios.get(url + "/", { params: {} })
 			.then((response) => {
 				// Save the raw resp + parse tables and columns...
