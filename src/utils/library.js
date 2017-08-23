@@ -137,10 +137,10 @@ exports.translateOperatorToPostgrest = function(operator) {
 		['less', 'lt'],
 		['greater_or_equal', 'gte'],
 		['less_or_equal', 'lte'],
-		['is_not_null', 'not.is.null'],
+		['is_not_null', 'not.is'],
 		['in', 'in'],
 		['contains', 'ilike'],
-		['is_null', 'is.null']
+		['is_null', 'is']
 	];
 
 	for (let i = 0; i < dict.length; i++) {
