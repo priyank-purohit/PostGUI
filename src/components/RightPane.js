@@ -23,6 +23,7 @@ let lib = require('../utils/library.js');
 const defaultRules = lib.getQBRules();
 
 const timeout = 2000;
+const maxRowsInOutput = 100000;
 
 
 class RightPane extends Component {
@@ -40,7 +41,8 @@ class RightPane extends Component {
 			submitSuccess: false,
 			rows: null,
 			snackBarVisibility: false,
-			snackBarMessage: "Unknown error occured"
+			snackBarMessage: "Unknown error occured",
+			rowLimit: 2500
 		}
 	}
 
@@ -159,6 +161,7 @@ class RightPane extends Component {
             
             let conds = this.recursiveRulesExtraction(firstCondition + "=", firstRules);
             url += conds;
+            url += "&limit=" + this.state.rowLimit;
 
             // Add SELECT columns... i.e. which columsn to retrieve
             //url += "&select=" + this.state.selectColumns;
@@ -167,7 +170,7 @@ class RightPane extends Component {
             url += "?select=" + this.state.selectColumns;
         }*/
         else {
-        	url += "?limit=10"
+        	url += "?limit=" + this.state.rowLimit;
         	// TODO: display a Snack bar showing an error!!!
         	this.setState({
 				snackBarVisibility: true,
@@ -252,6 +255,18 @@ class RightPane extends Component {
 		this.setState({ snackBarVisibility: false });
 	};
 
+	handleRowLimitChange(event) {
+		let newLimit = event.target.value;
+		if (newLimit <= 0) {
+			newLimit = 100;
+		}
+		else if (newLimit > maxRowsInOutput) {
+			newLimit = maxRowsInOutput;
+		}
+		
+		this.setState({rowLimit: newLimit});
+	}
+
 	render() {
 		const classes = this.props.classes;
 
@@ -280,11 +295,11 @@ class RightPane extends Component {
 					<Typography type="subheading" className={classes.cardMarginLeftTop} >Query Builder</Typography>
 						<div id='query-builder' ref='queryBuilder'/>
 
-						<Typography type="body1" className={classes.cardMarginLeftTop}>Options</Typography>
+						<Typography type="body1" className={classes.cardMarginLeftTop}>Options {this.state.rowLimit}</Typography>
 
 						<SubmitButton dbIndex={this.state.dbIndex} table={this.state.table} leftPaneVisibility={this.state.leftPaneVisibility} getRules={this.handleSubmitButtonClick.bind(this)} loading={this.state.submitLoading} success={this.state.submitSuccess} error={this.state.submitError} />
 
-						<TextField disabled required id="rowLimit" label="Row-limit" defaultValue="25000" className={classes.textField && classes.cardMarginLeft} margin="normal" />
+						<TextField required id="rowLimit" type="number" label="Row-limit" value={this.state.rowLimit.toString()} className={classes.textField && classes.cardMarginLeft} margin="normal" onChange={this.handleRowLimitChange.bind(this)} />
 
 					<Typography type="subheading" className={classes.cardMarginLeftTop}>Query Results</Typography>
 						<RightPaneChips rows={this.state.rows} />
