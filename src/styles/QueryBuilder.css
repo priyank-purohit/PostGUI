@@ -228,7 +228,9 @@
 
 .query-builder .rule-value-container label {
   margin-bottom: 0;
-  font-weight: 400
+  font-weight: 400;
+  display: inline-block;
+  width: 75px;
 }
 
 .query-builder .rule-value-container label.block {
@@ -239,6 +241,12 @@
 .query-builder .rule-value-container input[type=text],
 .query-builder .rule-value-container select {
   padding: 1px
+}
+
+.query-builder .rule-value-container input[type=radio] {
+  height: 15px;
+  min-width: 15px;
+  display: inline-block;
 }
 
 .query-builder .error-container {
