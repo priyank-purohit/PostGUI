@@ -50,7 +50,7 @@ class DbSchema extends Component {
 				table: "",
 				tables: []
 			}, function() {
-				this.props.changeTable(this.state.table);
+				this.props.changeTable("");
 				this.props.changeColumns(this.state[this.state.table]);
 				this.getDbSchema();
 				this.updateVisibleColumns();
@@ -221,7 +221,7 @@ class DbSchema extends Component {
 
 		// First push the table itself
 		tableColumnElements.push(
-			<ListItem button key={tableName} id={tableName}
+			<ListItem button key={this.state.dbIndex+tableName} id={tableName}
 				 title={displayName} onClick={(event) => this.handleTableClick(tableName)}>
 				<ListItemIcon>
 					{this.state.table === tableName ? <FolderIconOpen className={this.props.classes.primaryColoured} /> : <FolderIcon /> }
@@ -252,7 +252,7 @@ class DbSchema extends Component {
 		}
 
 		return (
-			<ListItem button key={columnName} id={columnName}
+			<ListItem button key={columnName+table+this.state.dbIndex} id={columnName}
 				 title={displayName} className={classNames} onClick={(event) => this.handleColumnClick(columnName, table)}>
 				<ListItemIcon>
 					{visibility ? <VisibilityIcon className={this.props.classes.primaryColoured} /> : <VisibilityOffIcon /> }
@@ -260,20 +260,6 @@ class DbSchema extends Component {
 				<ListItemText secondary={displayName} />
 			</ListItem>
 		);
-	}
-
-	showTables() {
-		console.log("showTables()");
-		let tableElements = [];
-		for (let i = 0; i < this.state.tables.length; i++) {
-			let tableName = this.state.tables[i];
-
-			// For each table, push TABLE + COLUMN elements
-			tableElements.push(
-				this.createTableElement(tableName)
-			);
-		}
-		return tableElements;
 	}
 
 	handleRequestClose = () => {

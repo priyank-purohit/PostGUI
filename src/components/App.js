@@ -62,10 +62,25 @@ export default class Layout extends React.Component {
 	render() {
 		return (
 			<div>
-				<Navigation toggleLeftPane={this.toggleLeftPane.bind(this)} dbIndex={this.state.dbIndex} />
+				<Navigation
+					dbIndex={this.state.dbIndex}
+					toggleLeftPane={this.toggleLeftPane.bind(this)} />
+
 				<div className="bodyDiv">
-					<LeftPane changeDbIndex={this.changeDbIndex.bind(this)} changeTable={this.changeTable.bind(this)} changeColumns={this.changeColumns.bind(this)} changeVisibleColumns={this.changeVisibleColumns.bind(this)} dbIndex={this.state.dbIndex} table={this.state.table} leftPaneVisibility={this.state.leftPaneVisibility} />
-					<RightPane  dbIndex={this.state.dbIndex} table={this.state.table} columns={this.state.columns} visibleColumns={this.state.visibleColumns} leftPaneVisibility={this.state.leftPaneVisibility} />
+					<LeftPane
+						dbIndex={this.state.dbIndex}
+						table={this.state.table}
+						leftPaneVisibility={this.state.leftPaneVisibility}
+						changeDbIndex={this.changeDbIndex.bind(this)}
+						changeTable={this.changeTable.bind(this)}
+						changeColumns={this.changeColumns.bind(this)}
+						changeVisibleColumns={this.changeVisibleColumns.bind(this)} />
+					<RightPane
+						dbIndex={this.state.dbIndex}
+						table={this.state.table}
+						columns={this.state.columns}
+						visibleColumns={this.state.visibleColumns}
+						leftPaneVisibility={this.state.leftPaneVisibility} />
 				</div>
 			</div>
 		);
