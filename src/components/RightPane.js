@@ -160,6 +160,10 @@ class RightPane extends Component {
             // Add SELECT columns... but this time, only selected columns, NO FILTERS
             url += "?select=" + this.state.selectColumns;
         }*/
+        else {
+        	// TODO: display a Snack bar showing an error!!!
+        	return null;
+        }
 
         return url;
     }
@@ -220,7 +224,25 @@ class RightPane extends Component {
 			const rules = window.$(this.refs.queryBuilder).queryBuilder('getRules');
 			this.setState({ rules: rules }, () => {
 				let url = this.buildURLFromRules(rules);
-				this.fetchOutput(url);
+				if (url) {
+					this.fetchOutput(url);
+				} else {
+					this.setState({
+						rawData: [],
+						rows: null,
+						submitLoading: false,
+						submitSuccess: true,
+						submitError: true // both true implies request successfully reported an error
+					}, () => {
+						this.timer = setTimeout(() => { 
+							this.setState({ 
+								submitLoading: false, 
+								submitSuccess: false,
+								submitError: false
+							}) 
+						}, timeout);
+					});
+				}
 			});
 			return rules;
 		});

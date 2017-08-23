@@ -114,13 +114,26 @@ exports.getQBRules = function() {
 
 // Returns a list of columns
 exports.getQBFilters = function(dbIndex, table, columns) {
+	// allSupportedQBFilters are the ones present in the translateOperatorToPostgrest() method below...
+	let allSupportedQBFilters = ["equal", "not_equal", "greater", "less", "greater_or_equal", "less_or_equal", "is_not_null", "is_null", "in", "contains"];
+
 	if (!columns || columns.length <= 0) {
 		return [{ id: 'error', label: 'ERROR: select a view...', type: 'string' }];
 	}
 
 	let plain_strings_query_builder = [];
 	for (let i = 0; i < columns.length; i++) {
-		plain_strings_query_builder.push({ id: columns[i], label: this.getColumnConfig(dbIndex, table, columns[i], "rename"), type: 'string', operators: ['equal', 'not_equal', 'greater', 'less', 'greater_or_equal', 'less_or_equal', 'is_not_null', 'is_null', 'in', 'contains'] });
+		plain_strings_query_builder.push(
+			{
+				id: columns[i],
+				label: this.getColumnConfig(dbIndex, table, columns[i], "rename"),
+				type: this.getColumnConfig(dbIndex, table, columns[i], "type"),
+				input: this.getColumnConfig(dbIndex, table, columns[i], "input"),
+				values: this.getColumnConfig(dbIndex, table, columns[i], "values"),
+				validation: this.getColumnConfig(dbIndex, table, columns[i], "validation"),
+				default_value: this.getColumnConfig(dbIndex, table, columns[i], "defaultValue"),
+				operators: this.getColumnConfig(dbIndex, table, columns[i], "operators") ? this.getColumnConfig(dbIndex, table, columns[i], "operators") : allSupportedQBFilters
+			});
 	}
 	return plain_strings_query_builder;
 }
@@ -134,10 +147,10 @@ exports.translateOperatorToPostgrest = function(operator) {
 		['less', 'lt'],
 		['greater_or_equal', 'gte'],
 		['less_or_equal', 'lte'],
-		['is_not_null', 'not.is.null'],
+		['is_not_null', 'not.is'],
 		['in', 'in'],
 		['contains', 'ilike'],
-		['is_null', 'is.null']
+		['is_null', 'is']
 	];
 
 	for (let i = 0; i < dict.length; i++) {
