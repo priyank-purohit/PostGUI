@@ -33,30 +33,25 @@ class DbSchema extends Component {
 	componentDidMount() {
 		// Save the database schema to state for future access
 		let url = lib.getDbConfig(this.state.dbIndex, "url");
-		console.log("componentDidMount(), getting schema for URL = ", url);
 		if (url) {
 			this.getDbSchema(url);
 		}
 	}
 
 	componentWillReceiveProps(newProps) {
-		console.log(">>>> componentWillReceiveProps() CURRENT = ", this.state.dbIndex, this.state.table);
-		console.log(">>>> componentWillReceiveProps() NEW = ", newProps.dbIndex, newProps.table);
 		// If the database was changed, re do the whole view and update parent components too
 		if (this.state.dbIndex !== newProps.dbIndex) {
-			console.log("componentWillReceiveProps, dbIndex changed");
 			this.setState({
 				dbIndex: newProps.dbIndex,
 				table: "",
 				tables: []
 			}, function() {
 				this.props.changeTable("");
-				this.props.changeColumns(this.state[this.state.table]);
+				this.props.changeColumns(this.state[""]);
 				this.getDbSchema();
 				this.updateVisibleColumns();
 			});
 		} else if (this.state.table !== newProps.table) {
-			console.log("componentWillReceiveProps, dbIndex did NOT change", this.state.table, newProps.table);
 			this.setState({
 				table: newProps.table
 			});
@@ -70,14 +65,13 @@ class DbSchema extends Component {
 
 	// Returns a list of tables from URL
 	getDbSchema(url = lib.getDbConfig(this.state.dbIndex, "url")) {
-		console.log("getDbSchema() URL = ", url);
 		axios.get(url + "/", { params: {} })
 			.then((response) => {
 				// Save the raw resp + parse tables and columns...
 				this.setState({
 					dbSchema: response.data
 				}, () => {
-					this.parseDbSchema(this.state.dbSchema);
+					this.parseDbSchema(response.data);
 				});
 			})
 			.catch((error) => {
@@ -102,7 +96,6 @@ class DbSchema extends Component {
 
 	// From the JSON resp, extract the names of db TABLES and update state
 	parseDbSchema(data = this.state.dbSchema) {
-		console.log("parseDbSchema()");
 		let dbTables = [];
 		for (let i in data.definitions) {
 			if (lib.getTableConfig(this.state.dbIndex, i, "visible") !== false) {
@@ -125,7 +118,6 @@ class DbSchema extends Component {
 
 	// From JSON resp, extract the names of table columns and update state
 	parseTableColumns(rawColProperties, table) {
-		console.log("parseTableColumns()");
 		let columns = [];
 
 		for (let i in rawColProperties) { // I = COLUMN in TABLE
@@ -162,7 +154,6 @@ class DbSchema extends Component {
 
 	// Set CLICKEDTABLE in state as TABLE
 	handleTableClick(clickedTable, skipCheck = false) {
-		console.log("handleTableClick() clickedTable =", clickedTable);
 		// skipCheck prevents table schema collapse when leftPane toggles
 		if (this.state.table !== clickedTable || skipCheck) {
 			this.setState({
@@ -185,7 +176,6 @@ class DbSchema extends Component {
 
 	// Make a column visible or invisible on click
 	handleColumnClick(column, table) {
-		console.log("handleColumnClick() clickedColumn =", column);
 		if (this.state[table + column + "Visibility"] === "hide") {
 			this.setState({
 				[table + column + "Visibility"]: ""
@@ -206,7 +196,6 @@ class DbSchema extends Component {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	createTableElement(tableName) {
-		console.log("createTableElement() AND createColumnElement()");
 		const truncTextStyle = {
 			textOverflow: 'clip',
 			overflow: 'hidden',
@@ -267,7 +256,6 @@ class DbSchema extends Component {
 	};
 
 	updateVisibleColumns() {
-		console.log("updateVisibleColumns()");
 		let columns = this.state[this.state.table];
 		let columnVisibility = {};
 		let visibleColumns = [];
@@ -290,7 +278,6 @@ class DbSchema extends Component {
 	}
 
 	render() {
-		console.log("render() called");
 		const classes = this.props.classes;
 		return (
 			<div>
