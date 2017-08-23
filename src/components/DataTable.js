@@ -35,12 +35,18 @@ class DataTable extends Component {
         if (columns) {
             parsedColumns = columns.map((columnName) => {
             	let columnRename = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "rename");
-            	let columnVisibility = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "visible");
+                let columnVisibility = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "visible");
+                let columnWidth = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "widthPx");
+                let columnMinWidth = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "minWidthPx");
+            	let columnMaxWidth = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "maxWidthPx");
                 return ({
                     id: columnName,
                     Header: columnRename ? columnRename : columnName,
                     accessor: columnName,
-                    show: columnVisibility !== null ? columnVisibility : true
+                    show: columnVisibility !== null ? columnVisibility : true,
+                    width: columnWidth !== null ? columnWidth : undefined,
+                    maxWidth: columnMaxWidth !== null ? columnMaxWidth : undefined,
+                    minWidth: columnMinWidth !== null ? columnMinWidth : 100
                 });
             });
         }
