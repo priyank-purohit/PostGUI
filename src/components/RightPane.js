@@ -1,14 +1,18 @@
 // @flow weak
 import React, { Component } from 'react';
+import axios from 'axios';
 import PropTypes from 'prop-types';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
 import { CardHeader } from 'material-ui/Card';
+import Snackbar from 'material-ui/Snackbar';
 import TextField from 'material-ui/TextField';
 import SubmitButton from './SubmitButton.js';
 import Typography from 'material-ui/Typography';
 
-import axios from 'axios';
+import IconButton from 'material-ui/IconButton';
+import CloseIcon from 'material-ui-icons/Close';
+
 import DataTable from './DataTable.js';
 import RightPaneChips from './RightPaneChips.js';
 
@@ -34,7 +38,9 @@ class RightPane extends Component {
 			submitLoading: false,
 			submitError: false,
 			submitSuccess: false,
-			rows: null
+			rows: null,
+			snackBarVisibility: false,
+			snackBarMessage: "Unknown error occured"
 		}
 	}
 
@@ -161,8 +167,19 @@ class RightPane extends Component {
             url += "?select=" + this.state.selectColumns;
         }*/
         else {
+        	url += "?limit=10"
         	// TODO: display a Snack bar showing an error!!!
-        	return null;
+        	this.setState({
+				snackBarVisibility: true,
+				snackBarMessage: "Invalid rules in red, displaying sample data."
+			}, () => {
+				this.timer = setTimeout(() => {
+					this.setState({
+						snackBarVisibility: false,
+						snackBarMessage: "Unknown error"
+					});
+				}, 5000);
+			});
         }
 
         return url;
@@ -224,29 +241,16 @@ class RightPane extends Component {
 			const rules = window.$(this.refs.queryBuilder).queryBuilder('getRules');
 			this.setState({ rules: rules }, () => {
 				let url = this.buildURLFromRules(rules);
-				if (url) {
-					this.fetchOutput(url);
-				} else {
-					this.setState({
-						rawData: [],
-						rows: null,
-						submitLoading: false,
-						submitSuccess: true,
-						submitError: true // both true implies request successfully reported an error
-					}, () => {
-						this.timer = setTimeout(() => { 
-							this.setState({ 
-								submitLoading: false, 
-								submitSuccess: false,
-								submitError: false
-							}) 
-						}, timeout);
-					});
-				}
+				this.fetchOutput(url);
 			});
 			return rules;
 		});
 	}
+
+
+	handleRequestClose = () => {
+		this.setState({ snackBarVisibility: false });
+	};
 
 	render() {
 		const classes = this.props.classes;
@@ -262,6 +266,14 @@ class RightPane extends Component {
 
 		return (
 			<div className={classes.middlePaperSection}>
+
+				<Snackbar 	anchorOrigin={{vertical: "bottom", horizontal: "center"}}
+							open={this.state.snackBarVisibility}
+							onRequestClose={this.handleRequestClose}
+							SnackbarContentProps={{ 'aria-describedby': 'message-id', }}
+							message={<span id="message-id">{this.state.snackBarMessage}</span>}
+							action={[ <IconButton key="close" aria-label="Close" color="accent" className={classes.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton> ]} />
+
 				<Paper className={paperClasses} elevation={5}>
 					<CardHeader title={tableDisplayName} subheader={tableDescription} />
 
