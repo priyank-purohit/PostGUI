@@ -39,12 +39,17 @@ class DataTable extends Component {
 
                 let columnWidthDefault = lib.getTableConfig(this.state.dbIndex, this.state.table, "defaultWidthPx");
                 let columnWidth = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "widthPx");
+                
+                let columnMinWidth = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "minWidthPx");
+            	let columnMaxWidth = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "maxWidthPx");
                 return ({
                     id: columnName,
                     Header: columnRename ? columnRename : columnName,
                     accessor: columnName,
                     show: columnVisibility !== null ? columnVisibility : true,
-                    width: columnWidth !== null ? columnWidth : (columnWidthDefault ? columnWidthDefault : undefined)
+                    width: columnWidth !== null ? columnWidth : (columnWidthDefault ? columnWidthDefault : undefined),
+                    maxWidth: columnMaxWidth !== null ? columnMaxWidth : undefined,
+                    minWidth: columnMinWidth !== null ? columnMinWidth : 100
                 });
             });
         }
