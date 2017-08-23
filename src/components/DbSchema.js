@@ -33,14 +33,18 @@ class DbSchema extends Component {
 	componentDidMount() {
 		// Save the database schema to state for future access
 		let url = lib.getDbConfig(this.state.dbIndex, "url");
+		console.log("componentDidMount(), getting schema for URL = ", url);
 		if (url) {
 			this.getDbSchema(url);
 		}
 	}
 
 	componentWillReceiveProps(newProps) {
+		console.log(">>>> componentWillReceiveProps() CURRENT = ", this.state.dbIndex, this.state.table);
+		console.log(">>>> componentWillReceiveProps() NEW = ", newProps.dbIndex, newProps.table);
 		// If the database was changed, re do the whole view and update parent components too
 		if (this.state.dbIndex !== newProps.dbIndex) {
+			console.log("componentWillReceiveProps, dbIndex changed");
 			this.setState({
 				dbIndex: newProps.dbIndex,
 				table: "",
@@ -51,9 +55,9 @@ class DbSchema extends Component {
 				this.getDbSchema();
 				this.updateVisibleColumns();
 			});
-		} else {
+		} else if (this.state.table !== newProps.table) {
+			console.log("componentWillReceiveProps, dbIndex did NOT change", this.state.table, newProps.table);
 			this.setState({
-				dbIndex: newProps.dbIndex,
 				table: newProps.table
 			});
 		}
@@ -66,6 +70,7 @@ class DbSchema extends Component {
 
 	// Returns a list of tables from URL
 	getDbSchema(url = lib.getDbConfig(this.state.dbIndex, "url")) {
+		console.log("getDbSchema() URL = ", url);
 		axios.get(url + "/", { params: {} })
 			.then((response) => {
 				// Save the raw resp + parse tables and columns...
@@ -97,6 +102,7 @@ class DbSchema extends Component {
 
 	// From the JSON resp, extract the names of db TABLES and update state
 	parseDbSchema(data = this.state.dbSchema) {
+		console.log("parseDbSchema()");
 		let dbTables = [];
 		for (let i in data.definitions) {
 			if (lib.getTableConfig(this.state.dbIndex, i, "visible") !== false) {
@@ -119,6 +125,7 @@ class DbSchema extends Component {
 
 	// From JSON resp, extract the names of table columns and update state
 	parseTableColumns(rawColProperties, table) {
+		console.log("parseTableColumns()");
 		let columns = [];
 
 		for (let i in rawColProperties) { // I = COLUMN in TABLE
@@ -155,6 +162,7 @@ class DbSchema extends Component {
 
 	// Set CLICKEDTABLE in state as TABLE
 	handleTableClick(clickedTable, skipCheck = false) {
+		console.log("handleTableClick() clickedTable =", clickedTable);
 		// skipCheck prevents table schema collapse when leftPane toggles
 		if (this.state.table !== clickedTable || skipCheck) {
 			this.setState({
@@ -177,6 +185,7 @@ class DbSchema extends Component {
 
 	// Make a column visible or invisible on click
 	handleColumnClick(column, table) {
+		console.log("handleColumnClick() clickedColumn =", column);
 		if (this.state[table + column + "Visibility"] === "hide") {
 			this.setState({
 				[table + column + "Visibility"]: ""
@@ -197,6 +206,7 @@ class DbSchema extends Component {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	createTableElement(tableName) {
+		console.log("createTableElement() AND createColumnElement()");
 		const truncTextStyle = {
 			textOverflow: 'clip',
 			overflow: 'hidden',
@@ -253,6 +263,7 @@ class DbSchema extends Component {
 	}
 
 	showTables() {
+		console.log("showTables()");
 		let tableElements = [];
 		for (let i = 0; i < this.state.tables.length; i++) {
 			let tableName = this.state.tables[i];
@@ -270,6 +281,7 @@ class DbSchema extends Component {
 	};
 
 	updateVisibleColumns() {
+		console.log("updateVisibleColumns()");
 		let columns = this.state[this.state.table];
 		let columnVisibility = {};
 		let visibleColumns = [];
@@ -283,20 +295,33 @@ class DbSchema extends Component {
 				}
 			}
 		}
-		this.setState({
+		this.props.changeVisibleColumns(visibleColumns);
+		/*this.setState({
 			[this.state.table + "visibleColumns"]: visibleColumns
 		}, () => {
 			this.props.changeVisibleColumns(this.state[this.state.table + "visibleColumns"]);
-		});
+		});*/
 	}
 
 	render() {
+		console.log("render() called");
 		const classes = this.props.classes;
 		return (
 			<div>
-				<Snackbar anchorOrigin={{vertical: "bottom", horizontal: "center"}} open={this.state.snackBarVisibility} onRequestClose={this.handleRequestClose} SnackbarContentProps={{ 'aria-describedby': 'message-id', }} message={<span id="message-id">{this.state.snackBarMessage}</span>} action={[ <IconButton key="close" aria-label="Close" color="accent" className={classes.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton> ]} />
+				<Snackbar 	anchorOrigin={{vertical: "bottom", horizontal: "center"}}
+							open={this.state.snackBarVisibility}
+							onRequestClose={this.handleRequestClose}
+							SnackbarContentProps={{ 'aria-describedby': 'message-id', }}
+							message={<span id="message-id">{this.state.snackBarMessage}</span>}
+							action={[ <IconButton key="close" aria-label="Close" color="accent" className={classes.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton> ]} />
 				<List>
-					{ this.showTables() }
+					{ this.state.tables.map((table) => {
+							// For each table, push TABLE + COLUMN elements
+							return (
+								this.createTableElement(table)
+							);
+						})
+					}
 				</List>
 			</div>
 		);
