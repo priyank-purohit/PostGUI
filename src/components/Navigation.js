@@ -13,6 +13,11 @@ let lib = require('../utils/library.js');
 class Navigation extends Component {
 	render() {
 		const classes = this.props.classes;
+		let dbTitle = lib.getDbConfig(this.props.dbIndex, "title");
+
+		// Set a short window title
+    	document.title = dbTitle.replace("Database", "db").replace("database", "db");
+		
 		return (
 			<div className={classes.root}>
 				<AppBar position="absolute">
@@ -21,7 +26,7 @@ class Navigation extends Component {
 							<MenuIcon />
 						</IconButton>
 						<Typography type="title" color="inherit" className={classes.flex}>
-							{lib.getDbConfig(this.props.dbIndex, "title")}
+							{dbTitle}
 						</Typography>
 						{/*<IconButton color="contrast" aria-label="Menu">
 							<HomeIcon />
