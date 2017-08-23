@@ -47,6 +47,24 @@ class RightPane extends Component {
 			this.setState({
 				leftPaneVisibility: newProps.leftPaneVisibility
 			});
+		} else if (this.state.dbIndex !== newProps.dbIndex) {
+			this.setState({
+				dbIndex: newProps.dbIndex,
+				table: "",
+				columns: [],
+				visibleColumns: [],
+				leftPaneVisibility: true,
+				rules: null,
+				submitLoading: true,
+				submitError: false,
+				submitSuccess: false,
+				rawData: [],
+				rows: null
+			}, () => {
+				this.rebuildQueryBuilder(this.refs.queryBuilder, newProps.dbIndex, newProps.table, newProps.columns);
+				let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
+				this.fetchOutput(url + "?limit=10");
+			});
 		} else {
 			this.setState({
 				dbIndex: newProps.dbIndex,
@@ -147,6 +165,7 @@ class RightPane extends Component {
     }
 
 	fetchOutput(url) {
+		console.log(url);
 		axios.get(url, { params: {} })
 			.then((response) => {
 				let responseRows = null;
@@ -170,7 +189,7 @@ class RightPane extends Component {
 				});
 			})
 			.catch((error) => {
-				console.log(error);
+				console.log("THIS IS THE ERROR", error);
 				this.setState({
 					rawData: [],
 					rows: null,
