@@ -165,7 +165,6 @@ class RightPane extends Component {
     }
 
 	fetchOutput(url) {
-		console.log(url);
 		axios.get(url, { params: {} })
 			.then((response) => {
 				let responseRows = null;
