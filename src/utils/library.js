@@ -123,7 +123,17 @@ exports.getQBFilters = function(dbIndex, table, columns) {
 
 	let plain_strings_query_builder = [];
 	for (let i = 0; i < columns.length; i++) {
-		plain_strings_query_builder.push({ id: columns[i], label: this.getColumnConfig(dbIndex, table, columns[i], "rename"), type: this.getColumnConfig(dbIndex, table, columns[i], "type"), input: this.getColumnConfig(dbIndex, table, columns[i], "input"), values: this.getColumnConfig(dbIndex, table, columns[i], "values"), validation: this.getColumnConfig(dbIndex, table, columns[i], "validation"), operators: this.getColumnConfig(dbIndex, table, columns[i], "operators") ? this.getColumnConfig(dbIndex, table, columns[i], "operators") : allSupportedQBFilters });
+		plain_strings_query_builder.push(
+			{
+				id: columns[i],
+				label: this.getColumnConfig(dbIndex, table, columns[i], "rename"),
+				type: this.getColumnConfig(dbIndex, table, columns[i], "type"),
+				input: this.getColumnConfig(dbIndex, table, columns[i], "input"),
+				values: this.getColumnConfig(dbIndex, table, columns[i], "values"),
+				validation: this.getColumnConfig(dbIndex, table, columns[i], "validation"),
+				default_value: this.getColumnConfig(dbIndex, table, columns[i], "defaultValue"),
+				operators: this.getColumnConfig(dbIndex, table, columns[i], "operators") ? this.getColumnConfig(dbIndex, table, columns[i], "operators") : allSupportedQBFilters
+			});
 	}
 	return plain_strings_query_builder;
 }
