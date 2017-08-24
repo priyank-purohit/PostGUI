@@ -58,7 +58,14 @@ class DataTable extends Component {
         }
 
         return (<div>
-        			<ReactTable data={ data } columns={ parsedColumns } defaultPageSize={ 10 } className="-striped -highlight" pageSizeOptions={ [10, 50, 100, 200, 500, 1000] } previousText="Previous Page" nextText="Next Page" noDataText={this.props.noDataText} />
+        			<ReactTable
+                        data={ data }
+                        columns={ parsedColumns }
+                        defaultPageSize={ 10 } className="-striped -highlight"
+                        pageSizeOptions={ [10, 50, 100, 200, 500, 1000] }
+                        previousText="Previous Page"
+                        nextText="Next Page"
+                        noDataText={this.props.noDataText} />
         		</div>
         );
     }
