@@ -6,6 +6,7 @@ import { withStyles, createStyleSheet } from 'material-ui/styles';
 import "react-table/react-table.css";
 
 let lib = require('../utils/library.js');
+let json2csv = require('json2csv');
 
 
 class DataTable extends Component {
@@ -55,6 +56,15 @@ class DataTable extends Component {
                     headerStyle: {fontWeight: 'bold'}
                 });
             });
+        }
+
+        try {
+            var result = json2csv({ data: data, fields: columns });
+            console.log(result);
+        } catch (err) {
+            // Errors are thrown for bad options, or if the data is empty and no fields are provided. 
+            // Be sure to provide fields if it is possible that your data array will be empty. 
+            console.error(err);
         }
 
         return (<div>
