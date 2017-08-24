@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import ReactTable from 'react-table';
 import PropTypes from 'prop-types';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
+import Button from 'material-ui/Button';
 
 import "react-table/react-table.css";
 
 let lib = require('../utils/library.js');
+let json2csv = require('json2csv');
 
 
 class DataTable extends Component {
@@ -15,7 +17,8 @@ class DataTable extends Component {
             dbIndex: props.dbIndex,
             table: props.table,
             columns: props.columns,
-            data: props.data
+            data: props.data,
+            url: props.url
         };
     }
 
@@ -23,12 +26,38 @@ class DataTable extends Component {
 		this.setState({
 			dbIndex: newProps.dbIndex,
 			table: newProps.table,
-			columns: newProps.columns,
+            columns: newProps.columns,
+			url: newProps.url,
 			data: newProps.data
 		});
     }
 
+    downloadFile(data, fileName, mimeType) {
+        window.download(data, fileName, mimeType);
+    }
+
+    downloadTableWithDelimiter(delimiter) {
+        try {
+            let result = json2csv({ data: this.state.data, fields: this.state.columns, del: delimiter });
+
+            // Create a good file name for the file so user knows what the data in the file is all about
+            let fileName = this.state.url.replace(lib.getDbConfig(this.state.dbIndex, "url") + "/", "").replace("?", "-").replace(/&/g, '-');
+            if (delimiter === ",") {
+                fileName += ".csv";
+            } else if (delimiter === "\t") {
+                fileName += ".tsv";
+            } else {
+                fileName += ".txt";
+            }
+            
+            this.downloadFile(result, fileName, "text/plain");
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
     render() {
+        const classes = this.props.classes;
         let { columns, data } = this.state;
         let parsedColumns = [];
 
@@ -59,13 +88,18 @@ class DataTable extends Component {
 
         return (<div>
         			<ReactTable
-                        data={ data }
+                        data={ data }   
                         columns={ parsedColumns }
                         defaultPageSize={ 10 } className="-striped -highlight"
                         pageSizeOptions={ [10, 50, 100, 200, 500, 1000] }
                         previousText="Previous Page"
                         nextText="Next Page"
                         noDataText={this.props.noDataText} />
+
+                    <div className={classes.topMargin}>
+                        <Button raised color="primary" className={classes.button} onClick={(e) => this.downloadTableWithDelimiter(",")}>Download as .csv</Button>
+                        <Button raised color="primary" className={classes.button} onClick={(e) => this.downloadTableWithDelimiter("\t")}>Download as .tsv</Button>
+                    </div>
         		</div>
         );
     }
@@ -75,7 +109,7 @@ DataTable.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-const styleSheet = createStyleSheet({
+const styleSheet = createStyleSheet(theme => ({
     root: {
         width: '29%',
         height: '100%',
@@ -83,6 +117,14 @@ const styleSheet = createStyleSheet({
     },
     headerClass: {
         fontWeight: "bold"
+    },
+    button: {
+        margin: theme.spacing.unit,
+        float: 'right'
+    },
+    topMargin: {
+        margin: theme.spacing.unit,
+        marginTop: (theme.spacing.unit)*3
     }
-});
+}));
 export default withStyles(styleSheet)(DataTable);
