@@ -73,15 +73,6 @@ class DataTable extends Component {
         }
 
         return (<div>
-                    <CopyToClipboard text={this.state.result}>
-                        <Button raised color="primary" className={classes.button} onClick={(e) => this.downloadTableWithDelimiter(",")}>Copy to clipboard</Button>
-                    </CopyToClipboard>
-
-                    <br/>
-                    <br/>
-                    <p>{this.state.result}</p>
-                    <br/>
-
         			<ReactTable
                         data={ data }   
                         columns={ parsedColumns }
@@ -90,6 +81,11 @@ class DataTable extends Component {
                         previousText="Previous Page"
                         nextText="Next Page"
                         noDataText={this.props.noDataText} />
+
+                    
+                    <CopyToClipboard text={this.state.result}>
+                        <Button raised color="primary" className={classes.button} onClick={(e) => this.downloadTableWithDelimiter(",")}>Copy to clipboard (Click twice)</Button>
+                    </CopyToClipboard>
         		</div>
         );
     }
