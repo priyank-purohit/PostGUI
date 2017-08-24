@@ -32,11 +32,15 @@ class DataTable extends Component {
 		});
     }
 
+    downloadFile(data, fileName, mimeType) {
+        //  for download 
+        window.download(data, fileName, mimeType);
+    }
+
     downloadTableWithDelimiter(delimiter) {
         try {
             var result = json2csv({ data: this.state.data, fields: this.state.columns, del: delimiter });
-            console.log(result);
-            this.setState({result: result});
+            this.downloadFile(result, this.state.table + ".csv", "text/plain");
         } catch (err) {
             console.error(err);
         }
@@ -82,9 +86,9 @@ class DataTable extends Component {
                         nextText="Next Page"
                         noDataText={this.props.noDataText} />
 
-                    
+
                     <CopyToClipboard text={this.state.result}>
-                        <Button raised color="primary" className={classes.button} onClick={(e) => this.downloadTableWithDelimiter(",")}>Copy to clipboard (Click twice)</Button>
+                        <Button raised color="primary" className={classes.button} onClick={(e) => this.downloadTableWithDelimiter(",")}>Download as .csv</Button>
                     </CopyToClipboard>
         		</div>
         );
