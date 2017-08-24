@@ -9,7 +9,8 @@ class RightPaneChips extends Component {
 
 		this.state = {
 			rows: props.rows ? props.rows : 0,
-			tip: "Tip: Hold shift and click to multi-sort!"
+			tip: "Tip: Hold shift and click to multi-sort!",
+			tip2: "Increase row-limit to see full result."
 		}
 	}
 
@@ -24,6 +25,7 @@ class RightPaneChips extends Component {
 			<div className={classes.row}>
 				<Chip label={"Displaying " + this.state.rows + " rows"} key={1} className={classes.chip} />
 				<Chip label={this.state.tip} key={2} className={classes.chip} />
+				<Chip label={this.state.tip2} key={3} className={classes.chip} />
 			</div>
 		);
 	}
