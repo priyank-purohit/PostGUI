@@ -18,8 +18,7 @@ class DataTable extends Component {
             table: props.table,
             columns: props.columns,
             data: props.data,
-            url: props.url,
-            result: ""
+            url: props.url
         };
     }
 
