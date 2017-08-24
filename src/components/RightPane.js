@@ -295,7 +295,7 @@ class RightPane extends Component {
 					<Typography type="subheading" className={classes.cardMarginLeftTop} >Query Builder</Typography>
 						<div id='query-builder' ref='queryBuilder'/>
 
-						<Typography type="body1" className={classes.cardMarginLeftTop}>Options {this.state.rowLimit}</Typography>
+						<Typography type="body1" className={classes.cardMarginLeftTop}>Options</Typography>
 
 						<SubmitButton 
 							dbIndex={this.state.dbIndex} 
