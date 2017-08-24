@@ -3,7 +3,6 @@ import ReactTable from 'react-table';
 import PropTypes from 'prop-types';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
 import Button from 'material-ui/Button';
-import CopyToClipboard from 'react-copy-to-clipboard';
 
 import "react-table/react-table.css";
 
@@ -35,7 +34,6 @@ class DataTable extends Component {
     }
 
     downloadFile(data, fileName, mimeType) {
-        //  for download 
         window.download(data, fileName, mimeType);
     }
 
@@ -43,6 +41,7 @@ class DataTable extends Component {
         try {
             let result = json2csv({ data: this.state.data, fields: this.state.columns, del: delimiter });
             let fileName = this.state.url.replace(lib.getDbConfig(this.state.dbIndex, "url") + "/", "").replace("?", "-").replace(/&/g, '-') + ".csv";
+            
             this.downloadFile(result, fileName, "text/plain");
         } catch (err) {
             console.error(err);
@@ -89,10 +88,7 @@ class DataTable extends Component {
                         nextText="Next Page"
                         noDataText={this.props.noDataText} />
 
-
-                    <CopyToClipboard text={this.state.result}>
-                        <Button raised color="primary" className={classes.button} onClick={(e) => this.downloadTableWithDelimiter(",")}>Download as .csv</Button>
-                    </CopyToClipboard>
+                    <Button raised color="primary" className={classes.button} onClick={(e) => this.downloadTableWithDelimiter(",")}>Download as .csv</Button>
         		</div>
         );
     }
