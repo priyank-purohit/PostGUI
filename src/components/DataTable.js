@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactTable from 'react-table';
 import PropTypes from 'prop-types';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
+import Button from 'material-ui/Button';
 
 import "react-table/react-table.css";
 
@@ -29,12 +30,9 @@ class DataTable extends Component {
 		});
     }
 
-    downloadTableWithDelimiter(data, columns, delimiter) {
-        if (delimiter !== "," || delimiter !== "\t" || delimiter !== "\n" || delimiter !== "|" || delimiter !== ";") {
-            delimiter = ",";
-        }
+    downloadTableWithDelimiter(delimiter) {
         try {
-            var result = json2csv({ data: data, fields: columns, del: delimiter });
+            var result = json2csv({ data: this.state.data, fields: this.state.columns, del: delimiter });
             console.log(result);
         } catch (err) {
             console.error(err);
@@ -42,6 +40,7 @@ class DataTable extends Component {
     }
 
     render() {
+        const classes = this.props.classes;
         let { columns, data } = this.state;
         let parsedColumns = [];
 
@@ -72,13 +71,16 @@ class DataTable extends Component {
 
         return (<div>
         			<ReactTable
-                        data={ data }
+                        data={ data }   
                         columns={ parsedColumns }
                         defaultPageSize={ 10 } className="-striped -highlight"
                         pageSizeOptions={ [10, 50, 100, 200, 500, 1000] }
                         previousText="Previous Page"
                         nextText="Next Page"
                         noDataText={this.props.noDataText} />
+
+                    <Button raised color="accent" className={classes.button} onClick={() => this.downloadTableWithDelimiter(",")} >Download as CSV</Button>
+                    <Button raised color="accent" className={classes.button} onClick={() => this.downloadTableWithDelimiter("\t")} >Download as TSV</Button>
         		</div>
         );
     }
@@ -88,7 +90,7 @@ DataTable.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-const styleSheet = createStyleSheet({
+const styleSheet = createStyleSheet(theme => ({
     root: {
         width: '29%',
         height: '100%',
@@ -96,6 +98,11 @@ const styleSheet = createStyleSheet({
     },
     headerClass: {
         fontWeight: "bold"
+    },
+    button: {
+        margin: theme.spacing.unit,
+        float: 'right'
+
     }
-});
+}));
 export default withStyles(styleSheet)(DataTable);
