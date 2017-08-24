@@ -70,6 +70,12 @@ class DataTable extends Component {
         }
 
         return (<div>
+                    <Button raised color="primary" className={classes.button} onClick={() => this.downloadTableWithDelimiter(",")} >Copy to clipboard</Button>
+
+                    <br/>
+                    <br/>
+                    <br/>
+
         			<ReactTable
                         data={ data }   
                         columns={ parsedColumns }
@@ -78,9 +84,6 @@ class DataTable extends Component {
                         previousText="Previous Page"
                         nextText="Next Page"
                         noDataText={this.props.noDataText} />
-
-                    <Button raised color="accent" className={classes.button} onClick={() => this.downloadTableWithDelimiter(",")} >Download as CSV</Button>
-                    <Button raised color="accent" className={classes.button} onClick={() => this.downloadTableWithDelimiter("\t")} >Download as TSV</Button>
         		</div>
         );
     }
