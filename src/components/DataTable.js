@@ -42,6 +42,8 @@ class DataTable extends Component {
                 
                 let columnMinWidth = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "minWidthPx");
             	let columnMaxWidth = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "maxWidthPx");
+
+
                 return ({
                     id: columnName,
                     Header: columnRename ? columnRename : columnName,
@@ -49,13 +51,14 @@ class DataTable extends Component {
                     show: columnVisibility !== null ? columnVisibility : true,
                     width: columnWidth !== null ? columnWidth : (columnWidthDefault ? columnWidthDefault : undefined),
                     maxWidth: columnMaxWidth !== null ? columnMaxWidth : undefined,
-                    minWidth: columnMinWidth !== null ? columnMinWidth : 100
+                    minWidth: columnMinWidth !== null ? columnMinWidth : 100,
+                    headerStyle: {fontWeight: 'bold'}
                 });
             });
         }
 
         return (<div>
-        			<ReactTable data={ data } columns={ parsedColumns } defaultPageSize={ 10 } className="-striped -highlight" />
+        			<ReactTable data={ data } columns={ parsedColumns } defaultPageSize={ 10 } className="-striped -highlight" pageSizeOptions={ [10, 50, 100, 200, 500, 1000] } previousText="Previous Page" nextText="Next Page" />
         		</div>
         );
     }
@@ -70,6 +73,9 @@ const styleSheet = createStyleSheet({
         width: '29%',
         height: '100%',
         float: 'left',
+    },
+    headerClass: {
+        fontWeight: "bold"
     }
 });
 export default withStyles(styleSheet)(DataTable);

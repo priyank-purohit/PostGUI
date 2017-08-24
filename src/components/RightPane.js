@@ -297,15 +297,34 @@ class RightPane extends Component {
 
 						<Typography type="body1" className={classes.cardMarginLeftTop}>Options {this.state.rowLimit}</Typography>
 
-						<SubmitButton dbIndex={this.state.dbIndex} table={this.state.table} leftPaneVisibility={this.state.leftPaneVisibility} getRules={this.handleSubmitButtonClick.bind(this)} loading={this.state.submitLoading} success={this.state.submitSuccess} error={this.state.submitError} />
+						<SubmitButton 
+							dbIndex={this.state.dbIndex} 
+							table={this.state.table} 
+							leftPaneVisibility={this.state.leftPaneVisibility} 
+							getRules={this.handleSubmitButtonClick.bind(this)} 
+							loading={this.state.submitLoading} 
+							success={this.state.submitSuccess} 
+							error={this.state.submitError} />
 
-						<TextField required id="rowLimit" type="number" label="Row-limit" value={this.state.rowLimit.toString()} className={classes.textField && classes.cardMarginLeft} margin="normal" onChange={this.handleRowLimitChange.bind(this)} />
+						<TextField 
+							required 
+							id="rowLimit" 
+							type="number" 
+							label="Row-limit" 
+							value={this.state.rowLimit.toString()} 
+							className={classes.textField && classes.cardMarginLeft} 
+							margin="normal" 
+							onChange={this.handleRowLimitChange.bind(this)} />
 
 					<Typography type="subheading" className={classes.cardMarginLeftTop}>Query Results</Typography>
 						<RightPaneChips rows={this.state.rows} />
 
 						<div className={ classes.cardMarginLeftRightTop } >
-							<DataTable dbIndex={this.state.dbIndex} table={this.state.table} columns={this.state.visibleColumns ? this.state.visibleColumns : this.state.columns} data={this.state.rawData} />
+							<DataTable
+								dbIndex={this.state.dbIndex}
+								table={this.state.table}
+								columns={this.state.visibleColumns ? this.state.visibleColumns : this.state.columns}
+								data={this.state.rawData} />
 						</div>
 				</Paper>
 			</div>
