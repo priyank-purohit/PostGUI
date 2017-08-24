@@ -87,7 +87,10 @@ class DataTable extends Component {
                         nextText="Next Page"
                         noDataText={this.props.noDataText} />
 
-                    <Button raised color="primary" className={classes.button} onClick={(e) => this.downloadTableWithDelimiter(",")}>Download as .csv</Button>
+                    <div className={classes.topMargin}>
+                        <Button raised color="primary" className={classes.button} onClick={(e) => this.downloadTableWithDelimiter(",")}>Download as .csv</Button>
+                        <Button raised color="primary" className={classes.button} onClick={(e) => this.downloadTableWithDelimiter("\t")}>Download as .tsv</Button>
+                    </div>
         		</div>
         );
     }
@@ -109,7 +112,10 @@ const styleSheet = createStyleSheet(theme => ({
     button: {
         margin: theme.spacing.unit,
         float: 'right'
-
+    },
+    topMargin: {
+        margin: theme.spacing.unit,
+        marginTop: (theme.spacing.unit)*3
     }
 }));
 export default withStyles(styleSheet)(DataTable);
