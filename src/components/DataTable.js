@@ -39,8 +39,9 @@ class DataTable extends Component {
     downloadTableWithDelimiter(delimiter) {
         try {
             let result = json2csv({ data: this.state.data, fields: this.state.columns, del: delimiter });
+
+            // Create a good file name for the file so user knows what the data in the file is all about
             let fileName = this.state.url.replace(lib.getDbConfig(this.state.dbIndex, "url") + "/", "").replace("?", "-").replace(/&/g, '-');
-            
             if (delimiter === ",") {
                 fileName += ".csv";
             } else if (delimiter === "\t") {
