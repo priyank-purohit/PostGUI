@@ -3,6 +3,7 @@ import ReactTable from 'react-table';
 import PropTypes from 'prop-types';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
 import Button from 'material-ui/Button';
+import CopyToClipboard from 'react-copy-to-clipboard';
 
 import "react-table/react-table.css";
 
@@ -17,7 +18,8 @@ class DataTable extends Component {
             dbIndex: props.dbIndex,
             table: props.table,
             columns: props.columns,
-            data: props.data
+            data: props.data,
+            result: ""
         };
     }
 
@@ -34,6 +36,7 @@ class DataTable extends Component {
         try {
             var result = json2csv({ data: this.state.data, fields: this.state.columns, del: delimiter });
             console.log(result);
+            this.setState({result: result});
         } catch (err) {
             console.error(err);
         }
@@ -70,10 +73,13 @@ class DataTable extends Component {
         }
 
         return (<div>
-                    <Button raised color="primary" className={classes.button} onClick={() => this.downloadTableWithDelimiter(",")} >Copy to clipboard</Button>
+                    <CopyToClipboard text={this.state.result}>
+                        <Button raised color="primary" className={classes.button} onClick={(e) => this.downloadTableWithDelimiter(",")}>Copy to clipboard</Button>
+                    </CopyToClipboard>
 
                     <br/>
                     <br/>
+                    <p>{this.state.result}</p>
                     <br/>
 
         			<ReactTable
