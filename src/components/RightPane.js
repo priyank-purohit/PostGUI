@@ -42,7 +42,8 @@ class RightPane extends Component {
 			rows: null,
 			snackBarVisibility: false,
 			snackBarMessage: "Unknown error occured",
-			rowLimit: 2500
+			rowLimit: 2500,
+			url: ""
 		}
 	}
 
@@ -71,6 +72,7 @@ class RightPane extends Component {
 			}, () => {
 				this.rebuildQueryBuilder(this.refs.queryBuilder, newProps.dbIndex, newProps.table, newProps.columns);
 				let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
+				this.setState({url: url + "?limit=10"});
 				this.fetchOutput(url + "?limit=10");
 			});
 		} else {
@@ -89,6 +91,7 @@ class RightPane extends Component {
 			}, () => {
 				this.rebuildQueryBuilder(this.refs.queryBuilder, newProps.dbIndex, newProps.table, newProps.columns);
 				let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
+				this.setState({url: url+"?limit=10"});
 				this.fetchOutput(url + "?limit=10");
 			});
 		}
@@ -245,6 +248,7 @@ class RightPane extends Component {
 			this.setState({ rules: rules }, () => {
 				let url = this.buildURLFromRules(rules);
 				this.fetchOutput(url);
+				this.setState({url: url});
 			});
 			return rules;
 		});
@@ -325,6 +329,7 @@ class RightPane extends Component {
 								table={this.state.table}
 								columns={this.state.visibleColumns ? this.state.visibleColumns : this.state.columns}
 								data={this.state.rawData}
+								url={this.state.url}
 								noDataText={this.state.submitLoading ? "Loading ..." : (this.state.submitError ? "Query error" : (this.state.submitSuccess ? "Success!" : "No rows found"))} />
 						</div>
 				</Paper>

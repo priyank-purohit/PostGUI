@@ -19,6 +19,7 @@ class DataTable extends Component {
             table: props.table,
             columns: props.columns,
             data: props.data,
+            url: props.url,
             result: ""
         };
     }
@@ -27,7 +28,8 @@ class DataTable extends Component {
 		this.setState({
 			dbIndex: newProps.dbIndex,
 			table: newProps.table,
-			columns: newProps.columns,
+            columns: newProps.columns,
+			url: newProps.url,
 			data: newProps.data
 		});
     }
@@ -39,8 +41,9 @@ class DataTable extends Component {
 
     downloadTableWithDelimiter(delimiter) {
         try {
-            var result = json2csv({ data: this.state.data, fields: this.state.columns, del: delimiter });
-            this.downloadFile(result, this.state.table + ".csv", "text/plain");
+            let result = json2csv({ data: this.state.data, fields: this.state.columns, del: delimiter });
+            let fileName = this.state.url.replace(lib.getDbConfig(this.state.dbIndex, "url") + "/", "").replace("?", "-").replace(/&/g, '-') + ".csv";
+            this.downloadFile(result, fileName, "text/plain");
         } catch (err) {
             console.error(err);
         }
