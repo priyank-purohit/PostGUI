@@ -29,6 +29,18 @@ class DataTable extends Component {
 		});
     }
 
+    downloadTableWithDelimiter(data, columns, delimiter) {
+        if (delimiter !== "," || delimiter !== "\t" || delimiter !== "\n" || delimiter !== "|" || delimiter !== ";") {
+            delimiter = ",";
+        }
+        try {
+            var result = json2csv({ data: data, fields: columns, del: delimiter });
+            console.log(result);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
     render() {
         let { columns, data } = this.state;
         let parsedColumns = [];
@@ -56,15 +68,6 @@ class DataTable extends Component {
                     headerStyle: {fontWeight: 'bold'}
                 });
             });
-        }
-
-        try {
-            var result = json2csv({ data: data, fields: columns });
-            console.log(result);
-        } catch (err) {
-            // Errors are thrown for bad options, or if the data is empty and no fields are provided. 
-            // Be sure to provide fields if it is possible that your data array will be empty. 
-            console.error(err);
         }
 
         return (<div>
