@@ -24,8 +24,8 @@ class RightPaneChips extends Component {
 		return (
 			<div className={classes.row}>
 				<Chip label={"Displaying " + this.state.rows + " rows"} key={1} className={classes.chip} />
-				<Chip label={this.state.tip} key={2} className={classes.chip} />
 				<Chip label={this.state.tip2} key={3} className={classes.chip} />
+				<Chip label={this.state.tip} key={2} className={classes.chip} />
 			</div>
 		);
 	}
