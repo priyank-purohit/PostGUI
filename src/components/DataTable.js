@@ -37,7 +37,7 @@ class DataTable extends Component {
     }
 
     downloadTableWithDelimiter(delimiter) {
-        if (JSON.strigify(this.state.data) !== "[]") {
+        if (JSON.stringify(this.state.data) !== "[]") {
             try {
                 let result = json2csv({ data: this.state.data, fields: this.state.columns, del: delimiter });
 
@@ -99,8 +99,8 @@ class DataTable extends Component {
                         noDataText={this.props.noDataText} />
 
                     <div className={classes.topMargin}>
-                        <Button raised color="primary" className={classes.button} onClick={(e) => this.downloadTableWithDelimiter(",")}>Download as .csv</Button>
-                        <Button raised color="primary" className={classes.button} onClick={(e) => this.downloadTableWithDelimiter("\t")}>Download as .tsv</Button>
+                        <Button raised disabled={(JSON.stringify(this.state.data) === "[]") ? true : false} color="primary" className={classes.button} onClick={(e) => this.downloadTableWithDelimiter(",")}>Download as .csv</Button>
+                        <Button raised disabled={(JSON.stringify(this.state.data) === "[]") ? true : false} color="primary" className={classes.button} onClick={(e) => this.downloadTableWithDelimiter("\t")}>Download as .tsv</Button>
                     </div>
         		</div>
         );
