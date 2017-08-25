@@ -356,7 +356,8 @@
 .query-builder input {
   outline-width: 0;
   border: none;
-  border-bottom: 1px solid rgba(0, 0, 0, .12);
+  border-radius: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, .42);
   display: block;
   font-size: 14px;
   margin: 5px;
@@ -395,7 +396,7 @@
 .form-control:focus {
   color: #495057;
   background-color: #fff;
-  border-color: #80bdff;
+  border-color: #E91E63;
   outline: 0
 }
 
