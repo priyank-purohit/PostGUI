@@ -193,7 +193,7 @@ class RightPane extends Component {
     }
 
 	fetchOutput(url) {
-		axios.get(url, { params: {} })
+		axios.get(url, { params: {}, requestId: "qbAxiosReq" })
 			.then((response) => {
 				let responseRows = null;
 				if (response.headers["content-range"] !== undefined && response.headers["content-range"] !== null) {
