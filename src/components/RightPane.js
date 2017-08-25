@@ -1,6 +1,7 @@
 // @flow weak
 import React, { Component } from 'react';
 import axios from 'axios';
+import axiosCancel from 'axios-cancel';
 import PropTypes from 'prop-types';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
