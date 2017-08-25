@@ -359,11 +359,14 @@
   border-bottom: 1px solid rgba(0, 0, 0, .12);
   display: block;
   font-size: 14px;
-  margin: 0;
-  min-width: 175px;
+  margin: 5px;
+  margin-bottom: 0px;
+  margin-top: 10px;
+  width: 170px;
   background: 0 0;
   text-align: left;
   color: black;
+  vertical-align: bottom;
 }
 
 .query-builder input:focus {
