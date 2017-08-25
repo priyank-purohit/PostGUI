@@ -56,7 +56,11 @@ class CircularFab extends Component {
 
 		return (
 			<div className={classes.wrapper}>
-				<Button fab color="accent" className={buttonClass} onClick={this.handleButtonClick.bind(this)}>{success ? (error ? <CloseIcon /> : <CheckIcon />) : <ArrowForwardIcon />}</Button>
+				<Button
+					fab
+					color="accent"
+					className={buttonClass}
+					onClick={this.handleButtonClick.bind(this)}>{success ? (error ? <CloseIcon /> : <CheckIcon />) : <ArrowForwardIcon />}</Button>
 				{loading && <CircularProgress size={60} className={classes.progress} />}
 			</div>
 		);
