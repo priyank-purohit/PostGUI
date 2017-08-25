@@ -370,3 +370,89 @@
   outline-width: 0;
   border-bottom: 2px solid #E91E63;
 }
+
+
+.form-control {
+  display: block;
+  width: 100%;
+  padding: .5rem .75rem;
+  color: #495057;
+  background-color: #fff;
+  background-image: none;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, .15);
+  border-radius: .25rem;
+}
+
+.form-control::-ms-expand {
+  background-color: transparent;
+  border: 0
+}
+
+.form-control:focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: #80bdff;
+  outline: 0
+}
+
+.form-group {
+  margin-bottom: 1rem
+}
+
+.form-text {
+  display: block;
+  margin-top: .25rem
+}
+
+.form-row {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin-right: -5px;
+  margin-left: -5px
+}
+
+.form-row>.col,
+.form-row>[class*=col-] {
+  padding-right: 5px;
+  padding-left: 5px
+}
+
+.form-check {
+  position: relative;
+  display: block;
+  margin-bottom: .5rem
+}
+
+.form-check.disabled .form-check-label {
+  color: #868e96
+}
+
+.form-check-label {
+  padding-left: 1.25rem;
+  margin-bottom: 0
+}
+
+.form-check-input {
+  position: absolute;
+  margin-top: .25rem;
+  margin-left: -1.25rem
+}
+
+.form-check-input:only-child {
+  position: static
+}
+
+.form-check-inline {
+  display: inline-block
+}
+
+.form-check-inline .form-check-label {
+  vertical-align: middle
+}
+
+.form-check-inline+.form-check-inline {
+  margin-left: .75rem
+}
