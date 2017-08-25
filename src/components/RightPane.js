@@ -25,7 +25,9 @@ const defaultRules = lib.getQBRules();
 
 const timeout = 2000;
 const maxRowsInOutput = 100000;
-
+axiosCancel(axios, {
+  debug: false // default 
+});
 
 class RightPane extends Component {
 	constructor(props) {
@@ -105,6 +107,8 @@ class RightPane extends Component {
 
 	componentWillUnmount() {
 		window.$(this.refs.queryBuilder).queryBuilder('destroy');
+		axios.cancel("qbAxiosReq");
+		axios.cancelAll();
 	}
 
 	// Creates the QB on first render with default table (error msg for now)
