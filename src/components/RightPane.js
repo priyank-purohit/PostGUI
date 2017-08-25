@@ -220,7 +220,7 @@ class RightPane extends Component {
 				});
 			})
 			.catch((error) => {
-				console.log("THIS IS THE ERROR", error);
+				console.log("HTTP Req:", error);
 				this.setState({
 					rawData: [],
 					rows: null,
