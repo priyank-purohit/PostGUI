@@ -177,14 +177,14 @@ class RightPane extends Component {
         	// TODO: display a Snack bar showing an error!!!
         	this.setState({
 				snackBarVisibility: true,
-				snackBarMessage: "Invalid rules in red, displaying sample data."
+				snackBarMessage: "Invalid query, showing the first " + this.state.rowLimit.toString() + " rows in table.",
 			}, () => {
 				this.timer = setTimeout(() => {
 					this.setState({
 						snackBarVisibility: false,
 						snackBarMessage: "Unknown error"
 					});
-				}, 5000);
+				}, 7500);
 			});
         }
 
