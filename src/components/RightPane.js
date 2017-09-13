@@ -24,7 +24,7 @@ let lib = require('../utils/library.js');
 const defaultRules = lib.getQBRules();
 
 const timeout = 2000;
-const maxRowsInOutput = 100000;
+const maxRowsInOutput = 250000;
 axiosCancel(axios, {
   debug: false // default 
 });
@@ -267,13 +267,13 @@ class RightPane extends Component {
 	handleRowLimitChange(event) {
 		let newLimit = event.target.value;
 		if (newLimit <= 0) {
-			newLimit = 100;
+			newLimit = 1;
 		}
 		else if (newLimit > maxRowsInOutput) {
 			newLimit = maxRowsInOutput;
 		}
 		
-		this.setState({rowLimit: newLimit});
+		this.setState({rowLimit: parseInt(newLimit)});
 	}
 
 	render() {
@@ -326,7 +326,7 @@ class RightPane extends Component {
 							onChange={this.handleRowLimitChange.bind(this)} />
 
 					<Typography type="subheading" className={classes.cardMarginLeftTop}>Query Results</Typography>
-						<RightPaneChips rows={this.state.rows} />
+						<RightPaneChips rows={this.state.rows} rowLimit={this.state.rowLimit} maxRows={maxRowsInOutput}/>
 
 						<div className={ classes.cardMarginLeftRightTop } >
 							<DataTable
