@@ -372,7 +372,7 @@ const styleSheet = createStyleSheet(theme => ({
 	},
 	cardMarginLeftTop: { // For a new section
 		marginLeft: 16,
-		marginTop: 16 // want a bit more space at top to clearly indicate new section...
+		marginTop: 32 // want a bit more space at top to clearly indicate new section...
 	},
 	textField: {
 		marginLeft: theme.spacing.unit,
