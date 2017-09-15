@@ -8,7 +8,13 @@ import Typography from 'material-ui/Typography';
 import { FormGroup, FormControlLabel } from 'material-ui/Form';
 import Checkbox from 'material-ui/Checkbox';
 
+import TextField from 'material-ui/TextField';
+import { FormControl, FormHelperText } from 'material-ui/Form';
+import Input, { InputLabel } from 'material-ui/Input';
+
 import green from 'material-ui/colors/green';
+
+import SaveButton from './SaveButton.js';
 
 let lib = require('../utils/library.js');
 let json2csv = require('json2csv');
@@ -70,28 +76,56 @@ class Downloads extends Component {
         const classes = this.props.classes;
  
         return (<div className={classes.limitWidth} >
-                    <Typography
-                        type="subheading"
-                        className={classes.cardMarginLeftTop}>Download Query Results</Typography>
-
                     <Paper elevation={2} className={classes.topMargin}>
+                        <Typography type="subheading" className={classes.cardcardMarginLeftTop}>Download Query Results</Typography>
+                        
                         <Typography type="body1" className={classes.cardcardMarginLeftTop}>File Formats</Typography>
-                        <div>
-                            {/*Delimited option*/}
-                        </div>
-
-
+                        
                         <FormGroup column className={classes.cardcardMarginLeftTop}>
-                            <FormControlLabel control={ <Checkbox checked={this.state.checkedA} /*onChange={this.handleChange('checkedA')}*/ value="checkedA" /> } label="Option A" />
-                            <FormControlLabel control={ <Checkbox checked={this.state.checkedB} /*onChange={this.handleChange('checkedB')}*/ value="checkedB" /> } label="Option B" />
-                            <FormControlLabel control={<Checkbox value="checkedC" />} label="Option C" />
+                            <div>
+                                <FormControlLabel control={ <Checkbox checked={this.state.checkedA} /*onChange={this.handleChange('checkedA')}*/ value="checkedA" /> } label="Delimited" />
+
+                                <TextField 
+                                    required 
+                                    id="delimiterInput" 
+                                    type="text" 
+                                    label="Enter delimiter (\t for tsv)"
+                                    value=","
+                                    className={classes.textField && classes.cardMarginLeft} 
+                                    margin="none" />
+                            </div>
+                            
+                            <FormControlLabel control={ <Checkbox checked={this.state.checkedB} /*onChange={this.handleChange('checkedB')}*/ value="checkedB" /> } label="XML" />
+                            <FormControlLabel control={ <Checkbox checked={this.state.checkedB} /*onChange={this.handleChange('checkedB')}*/ value="checkedB" /> } label="FASTA" />
+                            <FormControlLabel control={ <Checkbox checked={this.state.checkedB} /*onChange={this.handleChange('checkedB')}*/ value="checkedB" /> } label="ASN.1" />
+                            {/*<FormControlLabel control={<Checkbox value="checkedC" />} label="Option C" />
                             <FormControlLabel disabled control={<Checkbox value="checkedD" />} label="Disabled" />
-                            <FormControlLabel disabled control={<Checkbox checked value="checkedE" />} label="Disabled" />
-                            <FormControlLabel control={ <Checkbox checked={this.state.checkedF} /*onChange={this.handleChange('checkedF')}*/ value="checkedF" indeterminate /> } label="Indeterminate" />
+                            <FormControlLabel disabled control={<Checkbox checked value="checkedE" />} label="Disabled" />*/}
                         </FormGroup>
 
 
                         <Typography type="body1" className={classes.cardcardMarginLeftTop}>Options</Typography>
+
+
+                        <FormGroup column className={classes.cardcardMarginLeftTop}>
+                            <FormControlLabel control={ <Checkbox checked={true} /*onChange={this.handleChange('checkedB')}*/ value="checkedB" /> } label="Download up-to 2.5 million rows" />
+
+                            <FormControlLabel control={ <Checkbox checked={true} /*onChange={this.handleChange('checkedB')}*/ value="checkedB" /> } label="Re-run query" />
+
+                            <FormControlLabel control={ <Checkbox checked={true} /*onChange={this.handleChange('checkedB')}*/ value="checkedB" /> } label="Include table headers" />
+                        </FormGroup>
+
+                        <FormGroup column className={classes.cardcardMarginLeftTop && classes.cardcardMarginBottomRight}>
+                            <TextField 
+                                required 
+                                id="delimiterInput" 
+                                type="text" 
+                                label="File name"
+                                value="organism_info_limit_100.csv"
+                                className={classes.textField && classes.cardMarginLeft} 
+                                margin="normal" />
+                        </FormGroup>
+
                     </Paper>
 
                 </div>
@@ -112,6 +146,7 @@ const styleSheet = createStyleSheet(theme => ({
     },
     limitWidth: {
         width: '50%',
+        marginLeft: '50%'
     },
     topMargin: {
         marginTop: 16,
@@ -137,6 +172,10 @@ const styleSheet = createStyleSheet(theme => ({
     cardcardMarginLeftTop: { // For a new section
         marginLeft: 16,
         paddingTop: 16
+    },
+    cardcardMarginBottomRight: { // For a new section
+        marginRight: 16,
+        paddingBottom: 16
     },
     cardMarginLeftTop: {
         marginTop: 32
