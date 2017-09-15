@@ -12,9 +12,10 @@ import TextField from 'material-ui/TextField';
 import { FormControl, FormHelperText } from 'material-ui/Form';
 import Input, { InputLabel } from 'material-ui/Input';
 
+import Divider from 'material-ui/Divider';
+
 import green from 'material-ui/colors/green';
 
-import SaveButton from './SaveButton.js';
 
 let lib = require('../utils/library.js');
 let json2csv = require('json2csv');
@@ -125,7 +126,9 @@ class Downloads extends Component {
                                 className={classes.textField && classes.cardMarginLeft} 
                                 margin="normal" />
                         </FormGroup>
-
+                        <Divider />
+                        <Button color="primary" className={classes.button}>Download</Button>
+                        
                     </Paper>
 
                 </div>
@@ -143,6 +146,9 @@ const styleSheet = createStyleSheet(theme => ({
         paddingBottom: 50,
         marginLeft: '30%',
         marginBottom: '2%'
+    },
+    button: {
+        marginBottom: 4
     },
     limitWidth: {
         width: '50%',
@@ -182,8 +188,7 @@ const styleSheet = createStyleSheet(theme => ({
     },
     textField: {
         marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
-        width: 300
+        marginRight: theme.spacing.unit
     },
     hide: {
         opacity: 0.0,
