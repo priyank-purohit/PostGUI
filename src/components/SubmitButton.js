@@ -1,7 +1,7 @@
 // @flow weak
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, createStyleSheet } from 'material-ui/styles';
+import { withStyles } from 'material-ui/styles';
 import { CircularProgress } from 'material-ui/Progress';
 import green from 'material-ui/colors/green';
 import red from 'material-ui/colors/red';
@@ -71,7 +71,7 @@ CircularFab.propTypes = {
 	classes: PropTypes.object.isRequired,
 };
 
-const styleSheet = createStyleSheet({
+const styleSheet = {
 	wrapper: {
 		position: 'relative',
 		float: 'right',
@@ -96,6 +96,6 @@ const styleSheet = createStyleSheet({
 		top: -2,
 		left: -2,
 	},
-});
+};
 
 export default withStyles(styleSheet)(CircularFab);

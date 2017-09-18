@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, createStyleSheet } from 'material-ui/styles';
+import { withStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
 import Paper from 'material-ui/Paper';
 import Typography from 'material-ui/Typography';
 
-import { FormGroup, FormControlLabel } from 'material-ui/Form';
+import Radio, { RadioGroup } from 'material-ui/Radio';
+import { FormLabel, FormGroup, FormControlLabel } from 'material-ui/Form';
 import Checkbox from 'material-ui/Checkbox';
 
 import TextField from 'material-ui/TextField';
@@ -34,6 +35,7 @@ class Downloads extends Component {
             checkedB: false,
             checkedF: true,
             checkedG: true,
+            fileFormatRadioOption: 'delimited'
         };
     }
 
@@ -73,50 +75,41 @@ class Downloads extends Component {
         }
     }
 
+    handleChange = (event, fileFormatRadioOption) => {
+        console.log(this.state.fileFormatRadioOption);
+        this.setState({ fileFormatRadioOption: fileFormatRadioOption });
+    };
+
     render() {
         const classes = this.props.classes;
  
         return (<div className={classes.limitWidth} >
                     <Paper elevation={2} className={classes.topMargin}>
                         <Typography type="subheading" className={classes.cardcardMarginLeftTop}>Download Query Results</Typography>
-                        
                         <Typography type="body1" className={classes.cardcardMarginLeftTop}>File Formats</Typography>
-                        
-                        <FormGroup column className={classes.cardcardMarginLeftTop}>
-                            <div>
-                                <FormControlLabel control={ <Checkbox checked={this.state.checkedA} /*onChange={this.handleChange('checkedA')}*/ value="checkedA" /> } label="Delimited" />
-
-                                <TextField 
-                                    required 
-                                    id="delimiterInput" 
-                                    type="text" 
-                                    label="Enter delimiter (\t for tsv)"
-                                    value=","
-                                    className={classes.textField && classes.cardMarginLeft} 
-                                    margin="none" />
-                            </div>
-                            
-                            <FormControlLabel control={ <Checkbox checked={this.state.checkedB} /*onChange={this.handleChange('checkedB')}*/ value="checkedB" /> } label="XML" />
-                            <FormControlLabel control={ <Checkbox checked={this.state.checkedB} /*onChange={this.handleChange('checkedB')}*/ value="checkedB" /> } label="FASTA" />
-                            <FormControlLabel control={ <Checkbox checked={this.state.checkedB} /*onChange={this.handleChange('checkedB')}*/ value="checkedB" /> } label="ASN.1" />
-                            <FormControlLabel control={ <Checkbox checked={this.state.checkedB} /*onChange={this.handleChange('checkedB')}*/ value="checkedB" /> } label="Newick Tree" />
-                            <FormControlLabel control={ <Checkbox checked={this.state.checkedB} /*onChange={this.handleChange('checkedB')}*/ value="checkedB" /> } label="Nexus Tree" />
-                            <FormControlLabel control={ <Checkbox checked={this.state.checkedB} /*onChange={this.handleChange('checkedB')}*/ value="checkedB" /> } label="PhyloXML" />
-                            {/*<FormControlLabel control={<Checkbox value="checkedC" />} label="Option C" />
-                            <FormControlLabel disabled control={<Checkbox value="checkedD" />} label="Disabled" />
-                            <FormControlLabel disabled control={<Checkbox checked value="checkedE" />} label="Disabled" />*/}
-                        </FormGroup>
+                        <FormControl component="fieldset" required>
+                            <RadioGroup className={classes.cardcardMarginLeftTop} value={this.state.fileFormatRadioOption} onChange={this.handleChange} >
+                                <FormControlLabel control={ <Radio /> } label="Delimited" value="delimited" />
+                                <TextField required id="delimiterInput" type="text" label=", for csv or \t for tsv or any" value="," className={classes.textField && classes.cardMarginLeft && classes.inlineTextField} margin="none" />
+                                <FormControlLabel control={ <Radio /> } label="XML" value="xml" />
+                                <FormControlLabel control={ <Radio /> } label="FASTA" value="fasta" />
+                                <FormControlLabel control={ <Radio /> } label="ASN.1" value="asn1" />
+                                <FormControlLabel control={ <Radio /> } label="Newick Tree" value="newick" />
+                                <FormControlLabel control={ <Radio /> } label="Nexus Tree" value="nexus" />
+                                <FormControlLabel control={ <Radio /> } label="PhyloXML" value="phyloxml" />
+                            </RadioGroup>
+                        </FormControl>
 
 
                         <Typography type="body1" className={classes.cardcardMarginLeftTop}>Options</Typography>
 
 
                         <FormGroup column className={classes.cardcardMarginLeftTop}>
-                            <FormControlLabel control={ <Checkbox checked={true} /*onChange={this.handleChange('checkedB')}*/ value="checkedB" /> } label="Download up-to 2.5 million rows" />
+                            <FormControlLabel control={ <Checkbox /*onChange={this.handleChange('checkedB')}*/ value="checkedB" /> } label="Download up-to 2.5 million rows" />
 
-                            <FormControlLabel control={ <Checkbox checked={true} /*onChange={this.handleChange('checkedB')}*/ value="checkedB" /> } label="Re-run query" />
+                            <FormControlLabel control={ <Checkbox /*onChange={this.handleChange('checkedB')}*/ value="checkedB" /> } label="Re-run query" />
 
-                            <FormControlLabel control={ <Checkbox checked={true} /*onChange={this.handleChange('checkedB')}*/ value="checkedB" /> } label="Include table headers" />
+                            <FormControlLabel control={ <Checkbox /*onChange={this.handleChange('checkedB')}*/ disabled={this.state.fileFormatRadioOption !== 'delimited' ? true : false} value="checkedB" /> } label="Include table headers" />
                         </FormGroup>
 
                         <FormGroup column className={classes.cardcardMarginLeftTop && classes.cardcardMarginBottomRight}>
@@ -131,8 +124,9 @@ class Downloads extends Component {
                         </FormGroup>
                         <Divider />
                         <Button color="primary" className={classes.button}>Download</Button>
-                        <Button color="primary" className={classes.button}>Copy</Button>
+                        <Button className={classes.button}>Copy</Button>
                         <Button className={classes.button}>Reset</Button>
+                        <Button className={classes.button}>Help</Button>
                         
                     </Paper>
 
@@ -146,11 +140,14 @@ Downloads.propTypes = {
 };
 
 
-const styleSheet = createStyleSheet(theme => ({
+const styleSheet = {
     root: {
         paddingBottom: 50,
         marginLeft: '30%',
         marginBottom: '2%'
+    },
+    inlineTextField: {
+        marginLeft: 35
     },
     button: {
         marginBottom: 4
@@ -192,8 +189,8 @@ const styleSheet = createStyleSheet(theme => ({
         marginTop: 32
     },
     textField: {
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit
+        marginLeft: 8,
+        marginRight: 8
     },
     hide: {
         opacity: 0.0,
@@ -202,7 +199,7 @@ const styleSheet = createStyleSheet(theme => ({
     checked: {
         color: green[500],
     }
-}));
+};
 
 
 export default withStyles(styleSheet)(Downloads);

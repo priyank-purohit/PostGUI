@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, createStyleSheet } from 'material-ui/styles';
+import { withStyles } from 'material-ui/styles';
 import Chip from 'material-ui/Chip';
 
 class RightPaneChips extends Component {
@@ -43,9 +43,9 @@ RightPaneChips.propTypes = {
 	classes: PropTypes.object.isRequired,
 };
 
-const styleSheet = createStyleSheet(theme => ({
+const styleSheet = {
   chip: {
-    margin: theme.spacing.unit / 2,
+    margin: 5,
   },
   row: {
     display: 'flex',
@@ -54,6 +54,6 @@ const styleSheet = createStyleSheet(theme => ({
     marginTop: -30,
     marginRight: '1%'
   },
-}));
+};
 
 export default withStyles(styleSheet)(RightPaneChips);

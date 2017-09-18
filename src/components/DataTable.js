@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactTable from 'react-table';
 import PropTypes from 'prop-types';
-import { withStyles, createStyleSheet } from 'material-ui/styles';
+import { withStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
 
@@ -111,7 +111,7 @@ DataTable.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-const styleSheet = createStyleSheet(theme => ({
+const styleSheet = {
     root: {
         width: '29%',
         height: '100%',
@@ -121,12 +121,12 @@ const styleSheet = createStyleSheet(theme => ({
         fontWeight: "bold"
     },
     button: {
-        margin: theme.spacing.unit,
+        margin: 5,
         float: 'right'
     },
     topMargin: {
-        margin: theme.spacing.unit,
-        marginTop: (theme.spacing.unit)*5
+        margin: 5,
+        marginTop: (5)*5
     }
-}));
+};
 export default withStyles(styleSheet)(DataTable);

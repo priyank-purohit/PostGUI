@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import axiosCancel from 'axios-cancel';
 import PropTypes from 'prop-types';
-import { withStyles, createStyleSheet } from 'material-ui/styles';
+import { withStyles } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
 import { CardHeader } from 'material-ui/Card';
 import Snackbar from 'material-ui/Snackbar';
@@ -347,7 +347,7 @@ RightPane.propTypes = {
 	classes: PropTypes.object.isRequired,
 };
 
-const styleSheet = createStyleSheet(theme => ({
+const styleSheet = {
 	root: {
 		paddingBottom: 50,
 		marginLeft: '30%',
@@ -375,14 +375,14 @@ const styleSheet = createStyleSheet(theme => ({
 		marginTop: 32 // want a bit more space at top to clearly indicate new section...
 	},
 	textField: {
-		marginLeft: theme.spacing.unit,
-		marginRight: theme.spacing.unit,
+		marginLeft: 5,
+		marginRight: 5,
 		width: 300
 	},
 	hide: {
 		opacity: 0.0,
 		marginTop: 75
 	}
-}));
+};
 
 export default withStyles(styleSheet)(RightPane);
