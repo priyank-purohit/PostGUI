@@ -99,6 +99,9 @@ class Downloads extends Component {
                             <FormControlLabel control={ <Checkbox checked={this.state.checkedB} /*onChange={this.handleChange('checkedB')}*/ value="checkedB" /> } label="XML" />
                             <FormControlLabel control={ <Checkbox checked={this.state.checkedB} /*onChange={this.handleChange('checkedB')}*/ value="checkedB" /> } label="FASTA" />
                             <FormControlLabel control={ <Checkbox checked={this.state.checkedB} /*onChange={this.handleChange('checkedB')}*/ value="checkedB" /> } label="ASN.1" />
+                            <FormControlLabel control={ <Checkbox checked={this.state.checkedB} /*onChange={this.handleChange('checkedB')}*/ value="checkedB" /> } label="Newick Tree" />
+                            <FormControlLabel control={ <Checkbox checked={this.state.checkedB} /*onChange={this.handleChange('checkedB')}*/ value="checkedB" /> } label="Nexus Tree" />
+                            <FormControlLabel control={ <Checkbox checked={this.state.checkedB} /*onChange={this.handleChange('checkedB')}*/ value="checkedB" /> } label="PhyloXML" />
                             {/*<FormControlLabel control={<Checkbox value="checkedC" />} label="Option C" />
                             <FormControlLabel disabled control={<Checkbox value="checkedD" />} label="Disabled" />
                             <FormControlLabel disabled control={<Checkbox checked value="checkedE" />} label="Disabled" />*/}
@@ -128,6 +131,8 @@ class Downloads extends Component {
                         </FormGroup>
                         <Divider />
                         <Button color="primary" className={classes.button}>Download</Button>
+                        <Button color="primary" className={classes.button}>Copy</Button>
+                        <Button className={classes.button}>Reset</Button>
                         
                     </Paper>
 
