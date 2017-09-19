@@ -26,14 +26,14 @@ const defaultRules = lib.getQBRules();
 const timeout = 2000;
 const maxRowsInOutput = 250000;
 axiosCancel(axios, {
-  debug: false // default 
+	debug: false // default 
 });
 
 class RightPane extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			dbIndex : props.dbIndex,
+			dbIndex: props.dbIndex,
 			table: props.table,
 			columns: props.columns,
 			visibleColumns: props.visibleColumns,
@@ -75,7 +75,7 @@ class RightPane extends Component {
 			}, () => {
 				this.rebuildQueryBuilder(this.refs.queryBuilder, newProps.dbIndex, newProps.table, newProps.columns);
 				let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
-				this.setState({url: url + "?limit=10"});
+				this.setState({ url: url + "?limit=10" });
 				this.fetchOutput(url + "?limit=10");
 			});
 		} else {
@@ -94,7 +94,7 @@ class RightPane extends Component {
 			}, () => {
 				this.rebuildQueryBuilder(this.refs.queryBuilder, newProps.dbIndex, newProps.table, newProps.columns);
 				let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
-				this.setState({url: url+"?limit=10"});
+				this.setState({ url: url + "?limit=10" });
 				this.fetchOutput(url + "?limit=10");
 			});
 		}
@@ -134,53 +134,54 @@ class RightPane extends Component {
 	}
 
 	// Extracts the rules recursively
-    recursiveRulesExtraction(condition, rules) {
-        let select = condition.toLowerCase() + "(";
-        for (let i = 0; i < rules.length; i++) {
-            // iterating over the first rules
-            if (rules[i]['condition'] === "OR" || rules[i]['condition'] === "AND") {
-                if (i === (rules.length - 1)) {
-                    select += this.recursiveRulesExtraction(rules[i]['condition'], rules[i]['rules']);
-                } else {
-                    select += this.recursiveRulesExtraction(rules[i]['condition'], rules[i]['rules']) + ",";
-                }
-            } else {
-                if (i === (rules.length - 1)) {
-                    select += rules[i]['id'] + "." + lib.translateOperatorToPostgrest(rules[i]['operator']) + "." + rules[i]['value'];
-                } else {
-                    select += rules[i]['id'] + "." + lib.translateOperatorToPostgrest(rules[i]['operator']) + "." + rules[i]['value'] + ",";
-                }
-            }
-        }
-        select += ")"
-        return select;
-    }
+	recursiveRulesExtraction(condition, rules) {
+		let select = condition.toLowerCase() + "(";
+		for (let i = 0; i < rules.length; i++) {
+			// iterating over the first rules
+			if (rules[i]['condition'] === "OR" || rules[i]['condition'] === "AND") {
+				if (i === (rules.length - 1)) {
+					select += this.recursiveRulesExtraction(rules[i]['condition'], rules[i]['rules']);
+				} else {
+					select += this.recursiveRulesExtraction(rules[i]['condition'], rules[i]['rules']) + ",";
+				}
+			} else {
+				if (i === (rules.length - 1)) {
+					select += rules[i]['id'] + "." + lib.translateOperatorToPostgrest(rules[i]['operator']) + "." + rules[i]['value'];
+				} else {
+					select += rules[i]['id'] + "." + lib.translateOperatorToPostgrest(rules[i]['operator']) + "." + rules[i]['value'] + ",";
+				}
+			}
+		}
+		select += ")"
+		return select;
+	}
 
-    // Based on the extracted rules, it builds a PostgREST compliant URL for API call
-    buildURLFromRules(rules) {
-        let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
+	// Based on the extracted rules, it builds a PostgREST compliant URL for API call
+	buildURLFromRules(rules) {
+		let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
 
-        // if it is valid, proceed
-        if (rules && rules['valid'] && rules['valid'] === true) {
-            url += "?";
+		// if it is valid, proceed
+		if (rules && rules['valid'] && rules['valid'] === true) {
+			url += "?";
 
-            let firstCondition = rules['condition'];
-            let firstRules = rules['rules'];
-            
-            let conds = this.recursiveRulesExtraction(firstCondition + "=", firstRules);
-            url += conds;
-            url += "&limit=" + this.state.rowLimit;
+			let firstCondition = rules['condition'];
+			let firstRules = rules['rules'];
 
-            // Add SELECT columns... i.e. which columsn to retrieve
-            //url += "&select=" + this.state.selectColumns;
-        }/* else if (this.state.selectColumns !== null && this.state.selectColumns !== [] && this.state.selectColumns !== "") {
-            // Add SELECT columns... but this time, only selected columns, NO FILTERS
-            url += "?select=" + this.state.selectColumns;
-        }*/
-        else {
-        	url += "?limit=" + this.state.rowLimit;
-        	// TODO: display a Snack bar showing an error!!!
-        	this.setState({
+			let conds = this.recursiveRulesExtraction(firstCondition + "=", firstRules);
+			url += conds;
+			url += "&limit=" + this.state.rowLimit;
+
+			// Add SELECT columns... i.e. which columsn to retrieve
+			//url += "&select=" + this.state.selectColumns;
+		}
+		/* else if (this.state.selectColumns !== null && this.state.selectColumns !== [] && this.state.selectColumns !== "") {
+		            // Add SELECT columns... but this time, only selected columns, NO FILTERS
+		            url += "?select=" + this.state.selectColumns;
+		        }*/
+		else {
+			url += "?limit=" + this.state.rowLimit;
+			// TODO: display a Snack bar showing an error!!!
+			this.setState({
 				snackBarVisibility: true,
 				snackBarMessage: "Invalid query, showing the first " + this.state.rowLimit.toString() + " rows in table.",
 			}, () => {
@@ -191,17 +192,17 @@ class RightPane extends Component {
 					});
 				}, 7500);
 			});
-        }
+		}
 
-        return url;
-    }
+		return url;
+	}
 
 	fetchOutput(url) {
 		axios.get(url, { params: {}, requestId: "qbAxiosReq" })
 			.then((response) => {
 				let responseRows = null;
 				if (response.headers["content-range"] !== undefined && response.headers["content-range"] !== null) {
-					responseRows = 1 + parseInt(response.headers["content-range"].replace("/*","").replace("0-", ""), 10);
+					responseRows = 1 + parseInt(response.headers["content-range"].replace("/*", "").replace("0-", ""), 10);
 				}
 				this.setState({
 					rawData: response.data,
@@ -210,12 +211,12 @@ class RightPane extends Component {
 					submitError: false,
 					submitSuccess: true
 				}, () => {
-					this.timer = setTimeout(() => { 
-						this.setState({ 
-							submitLoading: false, 
+					this.timer = setTimeout(() => {
+						this.setState({
+							submitLoading: false,
 							submitSuccess: false,
 							submitError: false
-						}) 
+						})
 					}, timeout);
 				});
 			})
@@ -228,12 +229,12 @@ class RightPane extends Component {
 					submitSuccess: true,
 					submitError: true // both true implies request successfully reported an error
 				}, () => {
-					this.timer = setTimeout(() => { 
-						this.setState({ 
-							submitLoading: false, 
+					this.timer = setTimeout(() => {
+						this.setState({
+							submitLoading: false,
 							submitSuccess: false,
 							submitError: false
-						}) 
+						})
 					}, timeout);
 				});
 			});
@@ -245,7 +246,7 @@ class RightPane extends Component {
 		this.setState({
 			rawData: [],
 			rows: null,
-			submitLoading: true, 
+			submitLoading: true,
 			submitError: false,
 			submitSuccess: false
 		}, () => {
@@ -253,7 +254,7 @@ class RightPane extends Component {
 			this.setState({ rules: rules }, () => {
 				let url = this.buildURLFromRules(rules);
 				this.fetchOutput(url);
-				this.setState({url: url});
+				this.setState({ url: url });
 			});
 			return rules;
 		});
@@ -268,12 +269,11 @@ class RightPane extends Component {
 		let newLimit = event.target.value;
 		if (newLimit <= 0) {
 			newLimit = 1;
-		}
-		else if (newLimit > maxRowsInOutput) {
+		} else if (newLimit > maxRowsInOutput) {
 			newLimit = maxRowsInOutput;
 		}
-		
-		this.setState({rowLimit: parseInt(newLimit)});
+
+		this.setState({ rowLimit: parseInt(newLimit) });
 	}
 
 	render() {

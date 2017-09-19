@@ -44,16 +44,16 @@ RightPaneChips.propTypes = {
 };
 
 const styleSheet = {
-  chip: {
-    margin: 5,
-  },
-  row: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-    flexWrap: 'wrap',
-    marginTop: -30,
-    marginRight: '1%'
-  },
+	chip: {
+		margin: 5,
+	},
+	row: {
+		display: 'flex',
+		justifyContent: 'flex-end',
+		flexWrap: 'wrap',
+		marginTop: -30,
+		marginRight: '1%'
+	},
 };
 
 export default withStyles(styleSheet)(RightPaneChips);

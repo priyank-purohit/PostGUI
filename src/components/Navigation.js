@@ -16,8 +16,8 @@ class Navigation extends Component {
 		let dbTitle = lib.getDbConfig(this.props.dbIndex, "title");
 
 		// Set a short window title
-    	document.title = dbTitle.replace("Database", "db").replace("database", "db");
-		
+		document.title = dbTitle.replace("Database", "db").replace("database", "db");
+
 		return (
 			<div className={classes.root}>
 				<AppBar position="absolute">

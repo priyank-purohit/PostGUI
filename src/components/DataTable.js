@@ -26,13 +26,13 @@ class DataTable extends Component {
     }
 
     componentWillReceiveProps(newProps) {
-		this.setState({
-			dbIndex: newProps.dbIndex,
-			table: newProps.table,
+        this.setState({
+            dbIndex: newProps.dbIndex,
+            table: newProps.table,
             columns: newProps.columns,
-			url: newProps.url,
-			data: newProps.data
-		});
+            url: newProps.url,
+            data: newProps.data
+        });
     }
 
     downloadFile(data, fileName, mimeType) {
@@ -53,7 +53,7 @@ class DataTable extends Component {
                 } else {
                     fileName += ".txt";
                 }
-                
+
                 this.downloadFile(result, fileName, "text/plain");
             } catch (err) {
                 console.error(err);
@@ -68,14 +68,14 @@ class DataTable extends Component {
 
         if (columns) {
             parsedColumns = columns.map((columnName) => {
-            	let columnRename = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "rename");
+                let columnRename = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "rename");
                 let columnVisibility = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "visible");
 
                 let columnWidthDefault = lib.getTableConfig(this.state.dbIndex, this.state.table, "defaultWidthPx");
                 let columnWidth = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "widthPx");
-                
+
                 let columnMinWidth = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "minWidthPx");
-            	let columnMaxWidth = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "maxWidthPx");
+                let columnMaxWidth = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "maxWidthPx");
 
 
                 return ({
@@ -86,13 +86,13 @@ class DataTable extends Component {
                     width: columnWidth !== null ? columnWidth : (columnWidthDefault ? columnWidthDefault : undefined),
                     maxWidth: columnMaxWidth !== null ? columnMaxWidth : undefined,
                     minWidth: columnMinWidth !== null ? columnMinWidth : 100,
-                    headerStyle: {fontWeight: 'bold'}
+                    headerStyle: { fontWeight: 'bold' }
                 });
             });
         }
 
         return (<div>
-        			<ReactTable
+                    <ReactTable
                         data={ data }   
                         columns={ parsedColumns }
                         defaultPageSize={ 10 } className="-striped -highlight"
@@ -102,8 +102,7 @@ class DataTable extends Component {
                         noDataText={this.props.noDataText} />
 
                     <Downloads />
-        		</div>
-        );
+                </div>);
     }
 }
 
@@ -126,7 +125,7 @@ const styleSheet = {
     },
     topMargin: {
         margin: 5,
-        marginTop: (5)*5
+        marginTop: (5) * 5
     }
 };
 export default withStyles(styleSheet)(DataTable);
