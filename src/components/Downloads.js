@@ -40,13 +40,13 @@ class Downloads extends Component {
     }
 
     componentWillReceiveProps(newProps) {
-		this.setState({
-			dbIndex: newProps.dbIndex,
-			table: newProps.table,
+        this.setState({
+            dbIndex: newProps.dbIndex,
+            table: newProps.table,
             columns: newProps.columns,
-			url: newProps.url,
-			data: newProps.data
-		});
+            url: newProps.url,
+            data: newProps.data
+        });
     }
 
     downloadFile(data, fileName, mimeType) {
@@ -67,7 +67,7 @@ class Downloads extends Component {
                 } else {
                     fileName += ".txt";
                 }
-                
+
                 this.downloadFile(result, fileName, "text/plain");
             } catch (err) {
                 console.error(err);
@@ -82,7 +82,7 @@ class Downloads extends Component {
 
     render() {
         const classes = this.props.classes;
- 
+
         return (<div className={classes.limitWidth} >
                     <Paper elevation={2} className={classes.topMargin}>
                         <Typography type="subheading" className={classes.cardcardMarginLeftTop}>Download Query Results</Typography>
@@ -130,8 +130,7 @@ class Downloads extends Component {
                         
                     </Paper>
 
-                </div>
-        );
+                </div>);
     }
 }
 
