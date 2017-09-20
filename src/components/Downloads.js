@@ -122,7 +122,12 @@ class Downloads extends Component {
 
     handleDelimiterChange(event) {
         let newValue = event.target.value;
-        this.setState({ delimiterChoice: newValue });
+        
+        if (newValue.length === 0) {
+            this.setState({ delimiterChoice: ',' });
+        } else if (newValue.length <= 5) {
+            this.setState({ delimiterChoice: newValue });
+        }
     }
 
 
@@ -143,16 +148,16 @@ class Downloads extends Component {
                         <FormControl component="fieldset" required>
                             <RadioGroup className={classes.cardcardMarginLeftTop} value={this.state.fileFormat} onChange={this.handleFileFormatChange} >
                                 <FormControlLabel control={ <Radio /> } label="Delimited" value="delimited" />
-                                <div><TextField
+                                <span><TextField
                                     required
                                     id="delimiterInput"
                                     type="text"
-                                    label="Enter delimiter (, for csv)"
+                                    label={"Enter delimiter (, for csv)=" + this.state.delimiterChoice}
                                     value={this.state.delimiterChoice}
                                     className={classes.textField && classes.cardMarginLeft && classes.inlineTextField}
                                     margin="none"
                                     disabled={this.state.fileFormat !== 'delimited' ? true : false} 
-                                    onChange={this.handleDelimiterChange.bind(this)} /></div>
+                                    onChange={this.handleDelimiterChange.bind(this)} /></span>
                                 <FormControlLabel control={ <Radio /> } label="XML" value="xml" />
                                 <FormControlLabel control={ <Radio /> } label="FASTA" value="fasta" />
                                 <FormControlLabel control={ <Radio /> } label="ASN.1" value="asn1" />
