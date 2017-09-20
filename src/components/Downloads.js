@@ -86,6 +86,8 @@ class Downloads extends Component {
         return (<div className={classes.limitWidth} >
                     <Paper elevation={2} className={classes.topMargin}>
                         <Typography type="subheading" className={classes.cardcardMarginLeftTop}>Download Query Results</Typography>
+                        
+                        {/* FILE FORMAT RADIO GROUP */}
                         <Typography type="body1" className={classes.cardcardMarginLeftTop}>File Format</Typography>
                         <FormControl component="fieldset" required>
                             <RadioGroup className={classes.cardcardMarginLeftTop} value={this.state.fileFormatRadioOption} onChange={this.handleChange} >
@@ -101,10 +103,9 @@ class Downloads extends Component {
                         </FormControl>
 
 
+                        {/* ADDITIONAL DOWNLOADS OPTIONS */}
                         <Typography type="body1" className={classes.cardcardMarginLeftTop}>Options</Typography>
-
-
-                        <FormGroup column className={classes.cardcardMarginLeftTop}>
+                        <FormGroup className={classes.cardcardMarginLeftTop}>
                             <FormControlLabel control={ <Checkbox /*onChange={this.handleChange('checkedB')}*/ value="checkedB" /> } label="Download up-to 2.5 million rows" />
 
                             <FormControlLabel control={ <Checkbox /*onChange={this.handleChange('checkedB')}*/ value="checkedB" /> } label="Re-run query" />
@@ -112,7 +113,8 @@ class Downloads extends Component {
                             <FormControlLabel control={ <Checkbox /*onChange={this.handleChange('checkedB')}*/ disabled={this.state.fileFormatRadioOption !== 'delimited' ? true : false} value="checkedB" /> } label="Include table headers" />
                         </FormGroup>
 
-                        <FormGroup column className={classes.cardcardMarginLeftTop && classes.cardcardMarginBottomRight}>
+                        {/* FILE NAME INPUT */}
+                        <FormGroup className={classes.cardcardMarginLeftTop && classes.cardcardMarginBottomRight}>
                             <TextField 
                                 required 
                                 id="delimiterInput" 
@@ -122,7 +124,9 @@ class Downloads extends Component {
                                 className={classes.textField && classes.cardMarginLeft} 
                                 margin="normal" />
                         </FormGroup>
+
                         <Divider />
+                        
                         <Button color="primary" className={classes.button}>Download</Button>
                         <Button className={classes.button}>Copy</Button>
                         <Button className={classes.button}>Reset</Button>
