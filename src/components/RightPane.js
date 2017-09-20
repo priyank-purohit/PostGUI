@@ -273,7 +273,7 @@ class RightPane extends Component {
 			newLimit = maxRowsInOutput;
 		}
 
-		this.setState({ rowLimit: parseInt(newLimit) });
+		this.setState({ rowLimit: parseInt(newLimit, 10) });
 	}
 
 	render() {

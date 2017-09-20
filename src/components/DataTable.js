@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import ReactTable from 'react-table';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
-import Button from 'material-ui/Button';
-import Typography from 'material-ui/Typography';
 
 import Downloads from './Downloads.js';
 
@@ -62,7 +60,7 @@ class DataTable extends Component {
     }
 
     render() {
-        const classes = this.props.classes;
+        //const classes = this.props.classes;
         let { columns, data } = this.state;
         let parsedColumns = [];
 

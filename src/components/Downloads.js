@@ -6,12 +6,11 @@ import Paper from 'material-ui/Paper';
 import Typography from 'material-ui/Typography';
 
 import Radio, { RadioGroup } from 'material-ui/Radio';
-import { FormLabel, FormGroup, FormControlLabel } from 'material-ui/Form';
+import { FormGroup, FormControlLabel } from 'material-ui/Form';
 import Checkbox from 'material-ui/Checkbox';
 
 import TextField from 'material-ui/TextField';
-import { FormControl, FormHelperText } from 'material-ui/Form';
-import Input, { InputLabel } from 'material-ui/Input';
+import { FormControl } from 'material-ui/Form';
 
 import Divider from 'material-ui/Divider';
 
@@ -130,10 +129,8 @@ class Downloads extends Component {
                         <Button color="primary" className={classes.button}>Download</Button>
                         <Button className={classes.button}>Copy</Button>
                         <Button className={classes.button}>Reset</Button>
-                        <Button className={classes.button}>Help</Button>
-                        
+                        <Button className={classes.button}>Help</Button>                        
                     </Paper>
-
                 </div>);
     }
 }
