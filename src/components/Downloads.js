@@ -86,7 +86,7 @@ class Downloads extends Component {
         return (<div className={classes.limitWidth} >
                     <Paper elevation={2} className={classes.topMargin}>
                         <Typography type="subheading" className={classes.cardcardMarginLeftTop}>Download Query Results</Typography>
-                        <Typography type="body1" className={classes.cardcardMarginLeftTop}>File Formats</Typography>
+                        <Typography type="body1" className={classes.cardcardMarginLeftTop}>File Format</Typography>
                         <FormControl component="fieldset" required>
                             <RadioGroup className={classes.cardcardMarginLeftTop} value={this.state.fileFormatRadioOption} onChange={this.handleChange} >
                                 <FormControlLabel control={ <Radio /> } label="Delimited" value="delimited" />
