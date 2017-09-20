@@ -34,7 +34,10 @@ class Downloads extends Component {
             checkedB: false,
             checkedF: true,
             checkedG: true,
-            fileFormatRadioOption: 'delimited'
+            fileFormat: 'delimited',
+            tableHeader: false,
+            reRunQuery: false,
+            getFullResult: false
         };
     }
 
@@ -55,7 +58,7 @@ class Downloads extends Component {
     downloadTableWithDelimiter(delimiter) {
         if (JSON.stringify(this.state.data) !== "[]") {
             try {
-                let result = json2csv({ data: this.state.data, fields: this.state.columns, del: delimiter });
+                let result = json2csv({ data: this.state.data, fields: this.state.columns, del: delimiter, hasCSVColumnTitle: this.state.tableHeader });
 
                 // Create a good file name for the file so user knows what the data in the file is all about
                 let fileName = this.state.url.replace(lib.getDbConfig(this.state.dbIndex, "url") + "/", "").replace("?", "-").replace(/&/g, '-');
@@ -74,10 +77,45 @@ class Downloads extends Component {
         }
     }
 
-    handleChange = (event, fileFormatRadioOption) => {
-        console.log(this.state.fileFormatRadioOption);
-        this.setState({ fileFormatRadioOption: fileFormatRadioOption });
+    handleFileFormatChange = (event, fileFormat) => {
+        this.setState({ fileFormat: fileFormat });
     };
+
+    handleTableHeaderToggle() {
+        if (this.state.tableHeader === true) {
+            this.setState({
+                tableHeader: false
+            });
+        } else {
+            this.setState({
+                tableHeader: true
+            });
+        }
+    }
+
+    handleReRunQueryToggle() {
+        if (this.state.reRunQuery === true) {
+            this.setState({
+                reRunQuery: false
+            });
+        } else {
+            this.setState({
+                reRunQuery: true
+            });
+        }
+    }
+
+    handleGetFullResultToggle() {
+        if (this.state.getFullResult === true) {
+            this.setState({
+                getFullResult: false
+            });
+        } else {
+            this.setState({
+                getFullResult: true
+            });
+        }
+    }
 
     render() {
         const classes = this.props.classes;
@@ -87,9 +125,9 @@ class Downloads extends Component {
                         <Typography type="subheading" className={classes.cardcardMarginLeftTop}>Download Query Results</Typography>
                         
                         {/* FILE FORMAT RADIO GROUP */}
-                        <Typography type="body1" className={classes.cardcardMarginLeftTop}>File Format</Typography>
+                        <Typography type="body1" className={classes.cardcardMarginLeftTop}>File Format = {this.state.fileFormat}</Typography>
                         <FormControl component="fieldset" required>
-                            <RadioGroup className={classes.cardcardMarginLeftTop} value={this.state.fileFormatRadioOption} onChange={this.handleChange} >
+                            <RadioGroup className={classes.cardcardMarginLeftTop} value={this.state.fileFormat} onChange={this.handleFileFormatChange} >
                                 <FormControlLabel control={ <Radio /> } label="Delimited" value="delimited" />
                                 <TextField required id="delimiterInput" type="text" label=", for csv or \t for tsv or any" value="," className={classes.textField && classes.cardMarginLeft && classes.inlineTextField} margin="none" />
                                 <FormControlLabel control={ <Radio /> } label="XML" value="xml" />
@@ -105,11 +143,11 @@ class Downloads extends Component {
                         {/* ADDITIONAL DOWNLOADS OPTIONS */}
                         <Typography type="body1" className={classes.cardcardMarginLeftTop}>Options</Typography>
                         <FormGroup className={classes.cardcardMarginLeftTop}>
-                            <FormControlLabel control={ <Checkbox /*onChange={this.handleChange('checkedB')}*/ value="checkedB" /> } label="Download up-to 2.5 million rows" />
+                            <FormControlLabel control={ <Checkbox onChange={this.handleGetFullResultToggle.bind(this)} value="checkedB" /> } label={"Download up-to 2.5 million rows = " + this.state.getFullResult} />
 
-                            <FormControlLabel control={ <Checkbox /*onChange={this.handleChange('checkedB')}*/ value="checkedB" /> } label="Re-run query" />
+                            <FormControlLabel control={ <Checkbox onChange={this.handleReRunQueryToggle.bind(this)} value="checkedB" /> } label={"Re-run query = " + this.state.reRunQuery} />
 
-                            <FormControlLabel control={ <Checkbox /*onChange={this.handleChange('checkedB')}*/ disabled={this.state.fileFormatRadioOption !== 'delimited' ? true : false} value="checkedB" /> } label="Include table headers" />
+                            <FormControlLabel control={ <Checkbox onChange={this.handleTableHeaderToggle.bind(this)} disabled={this.state.fileFormat !== 'delimited' ? true : false} value="tableHeader" /> } label={"Include table headers = " + this.state.tableHeader} />
                         </FormGroup>
 
                         {/* FILE NAME INPUT */}
