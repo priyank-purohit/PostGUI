@@ -37,7 +37,8 @@ class Downloads extends Component {
             fileFormat: 'delimited',
             tableHeader: false,
             reRunQuery: false,
-            getFullResult: false
+            getFullResult: false,
+            delimiterChoice: ','
         };
     }
 
@@ -78,7 +79,9 @@ class Downloads extends Component {
     }
 
     handleFileFormatChange = (event, fileFormat) => {
-        this.setState({ fileFormat: fileFormat });
+        if (event.target.id !== 'delimiterInput') {
+            this.setState({ fileFormat: fileFormat });
+        }
     };
 
     handleTableHeaderToggle() {
@@ -117,6 +120,11 @@ class Downloads extends Component {
         }
     }
 
+    handleDelimiterChange(event) {
+        let newValue = event.target.value;
+        this.setState({ delimiterChoice: newValue });
+    }
+
     render() {
         const classes = this.props.classes;
 
@@ -129,7 +137,7 @@ class Downloads extends Component {
                         <FormControl component="fieldset" required>
                             <RadioGroup className={classes.cardcardMarginLeftTop} value={this.state.fileFormat} onChange={this.handleFileFormatChange} >
                                 <FormControlLabel control={ <Radio /> } label="Delimited" value="delimited" />
-                                <TextField required id="delimiterInput" type="text" label=", for csv or \t for tsv or any" value="," className={classes.textField && classes.cardMarginLeft && classes.inlineTextField} margin="none" />
+                                <div><div><TextField required id="delimiterInput" type="text" label={", for csv or \t for tsv or any" + this.state.delimiterChoice} value={this.state.delimiterChoice} className={classes.textField && classes.cardMarginLeft && classes.inlineTextField} margin="none" onChange={this.handleDelimiterChange.bind(this)} /></div></div>
                                 <FormControlLabel control={ <Radio /> } label="XML" value="xml" />
                                 <FormControlLabel control={ <Radio /> } label="FASTA" value="fasta" />
                                 <FormControlLabel control={ <Radio /> } label="ASN.1" value="asn1" />
