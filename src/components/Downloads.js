@@ -125,6 +125,12 @@ class Downloads extends Component {
         this.setState({ delimiterChoice: newValue });
     }
 
+
+    handleFileNameChange(event) {
+        let newValue = event.target.value;
+        this.setState({ fileName: newValue });
+    }
+
     render() {
         const classes = this.props.classes;
 
@@ -137,7 +143,16 @@ class Downloads extends Component {
                         <FormControl component="fieldset" required>
                             <RadioGroup className={classes.cardcardMarginLeftTop} value={this.state.fileFormat} onChange={this.handleFileFormatChange} >
                                 <FormControlLabel control={ <Radio /> } label="Delimited" value="delimited" />
-                                <div><div><TextField required id="delimiterInput" type="text" label={", for csv or \t for tsv or any" + this.state.delimiterChoice} value={this.state.delimiterChoice} className={classes.textField && classes.cardMarginLeft && classes.inlineTextField} margin="none" onChange={this.handleDelimiterChange.bind(this)} /></div></div>
+                                <div><TextField
+                                    required
+                                    id="delimiterInput"
+                                    type="text"
+                                    label="Enter delimiter (, for csv)"
+                                    value={this.state.delimiterChoice}
+                                    className={classes.textField && classes.cardMarginLeft && classes.inlineTextField}
+                                    margin="none"
+                                    disabled={this.state.fileFormat !== 'delimited' ? true : false} 
+                                    onChange={this.handleDelimiterChange.bind(this)} /></div>
                                 <FormControlLabel control={ <Radio /> } label="XML" value="xml" />
                                 <FormControlLabel control={ <Radio /> } label="FASTA" value="fasta" />
                                 <FormControlLabel control={ <Radio /> } label="ASN.1" value="asn1" />
@@ -193,7 +208,7 @@ const styleSheet = {
         marginBottom: '2%'
     },
     inlineTextField: {
-        marginLeft: 35
+        marginLeft: 34
     },
     button: {
         marginBottom: 4
