@@ -30,10 +30,6 @@ class Downloads extends Component {
             columns: props.columns,
             data: props.data,
             url: props.url,
-            checkedA: true,
-            checkedB: false,
-            checkedF: true,
-            checkedG: true,
             fileFormat: 'delimited',
             tableHeader: false,
             reRunQuery: false,
@@ -171,9 +167,9 @@ class Downloads extends Component {
                         {/* ADDITIONAL DOWNLOADS OPTIONS */}
                         <Typography type="body1" className={classes.cardcardMarginLeftTop}>Options</Typography>
                         <FormGroup className={classes.cardcardMarginLeftTop}>
-                            <FormControlLabel control={ <Checkbox onChange={this.handleGetFullResultToggle.bind(this)} value="checkedB" /> } label={"Download up-to 2.5 million rows = " + this.state.getFullResult} />
+                            <FormControlLabel control={ <Checkbox onChange={this.handleGetFullResultToggle.bind(this)} value="getFullResult" /> } label={"Download up-to 2.5 million rows = " + this.state.getFullResult} />
 
-                            <FormControlLabel control={ <Checkbox onChange={this.handleReRunQueryToggle.bind(this)} value="checkedB" /> } label={"Re-run query = " + this.state.reRunQuery} />
+                            <FormControlLabel control={ <Checkbox onChange={this.handleReRunQueryToggle.bind(this)} value="reRunQuery" /> } checked={this.state.getFullResult === true ? true: this.state.reRunQuery} label={"Re-run query = " + this.state.reRunQuery} />
 
                             <FormControlLabel control={ <Checkbox onChange={this.handleTableHeaderToggle.bind(this)} disabled={this.state.fileFormat !== 'delimited' ? true : false} value="tableHeader" /> } label={"Include table headers = " + this.state.tableHeader} />
                         </FormGroup>
