@@ -100,10 +100,10 @@ class DataTable extends Component {
                         noDataText={this.props.noDataText} />
 
                     <Downloads dbIndex={this.state.dbIndex}
-                                table={this.state.table}
-                                columns={this.state.columns}
-                                data={this.state.data}
-                                url={this.state.url} />
+                        table={this.state.table}
+                        columns={this.state.columns}
+                        data={this.state.data}
+                        url={this.state.url} />
                 </div>);
     }
 }
