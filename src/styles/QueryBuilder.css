@@ -368,11 +368,13 @@
   text-align: left;
   color: black;
   vertical-align: bottom;
+  line-height: 22px;
 }
 
 .query-builder input:focus {
   outline-width: 0;
-  border-bottom: 2px solid #E91E63;
+  border-bottom: 2px solid #5C6BC0;
+  line-height: 22px;
 }
 
 

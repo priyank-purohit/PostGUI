@@ -122,7 +122,7 @@ class Downloads extends Component {
 
     handleDelimiterChange(event) {
         let newValue = event.target.value;
-        
+
         if (newValue.length === 0) {
             this.setState({ delimiterChoice: ',' });
         } else if (newValue.length <= 5) {
