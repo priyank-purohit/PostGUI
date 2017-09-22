@@ -99,7 +99,11 @@ class DataTable extends Component {
                         nextText="Next Page"
                         noDataText={this.props.noDataText} />
 
-                    <Downloads />
+                    <Downloads dbIndex={this.state.dbIndex}
+                                table={this.state.table}
+                                columns={this.state.columns}
+                                data={this.state.data}
+                                url={this.state.url} />
                 </div>);
     }
 }

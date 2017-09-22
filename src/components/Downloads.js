@@ -28,7 +28,7 @@ class Downloads extends Component {
             dbIndex: props.dbIndex,
             table: props.table,
             columns: props.columns,
-            data: props.data,
+            data: [],
             url: props.url,
             fileFormat: 'delimited',
             tableHeader: false,
@@ -55,6 +55,7 @@ class Downloads extends Component {
     downloadTableWithDelimiter(delimiter) {
         if (JSON.stringify(this.state.data) !== "[]") {
             try {
+                delimiter = delimiter.replace(/\\t/g, '\t');
                 let result = json2csv({ data: this.state.data, fields: this.state.columns, del: delimiter, hasCSVColumnTitle: this.state.tableHeader });
 
                 // Create a good file name for the file so user knows what the data in the file is all about
@@ -132,6 +133,10 @@ class Downloads extends Component {
         this.setState({ fileName: newValue });
     }
 
+    handleDownloadClick() {
+        this.downloadTableWithDelimiter(this.state.delimiterChoice);
+    }
+
     render() {
         const classes = this.props.classes;
 
@@ -188,7 +193,7 @@ class Downloads extends Component {
 
                         <Divider />
                         
-                        <Button color="primary" className={classes.button}>Download</Button>
+                        <Button color="primary" className={classes.button} onClick={this.handleDownloadClick.bind(this)} >Download</Button>
                         <Button className={classes.button}>Copy</Button>
                         <Button className={classes.button}>Reset</Button>
                         <Button className={classes.button}>Help</Button>                        
