@@ -159,12 +159,12 @@ class Downloads extends Component {
                                     margin="none"
                                     disabled={this.state.fileFormat !== 'delimited' ? true : false} 
                                     onChange={this.handleDelimiterChange.bind(this)} /></span>
-                                <FormControlLabel control={ <Radio /> } label="XML" value="xml" />
-                                <FormControlLabel control={ <Radio /> } label="FASTA" value="fasta" />
-                                <FormControlLabel control={ <Radio /> } label="ASN.1" value="asn1" />
-                                <FormControlLabel control={ <Radio /> } label="Newick Tree" value="newick" />
-                                <FormControlLabel control={ <Radio /> } label="Nexus Tree" value="nexus" />
-                                <FormControlLabel control={ <Radio /> } label="PhyloXML" value="phyloxml" />
+                                <FormControlLabel disabled control={ <Radio /> } label="XML" value="xml" />
+                                <FormControlLabel disabled control={ <Radio /> } label="FASTA" value="fasta" />
+                                <FormControlLabel disabled control={ <Radio /> } label="ASN.1" value="asn1" />
+                                <FormControlLabel disabled control={ <Radio /> } label="Newick Tree" value="newick" />
+                                <FormControlLabel disabled control={ <Radio /> } label="Nexus Tree" value="nexus" />
+                                <FormControlLabel disabled control={ <Radio /> } label="PhyloXML" value="phyloxml" />
                             </RadioGroup>
                         </FormControl>
 
@@ -172,9 +172,9 @@ class Downloads extends Component {
                         {/* ADDITIONAL DOWNLOADS OPTIONS */}
                         <Typography type="body1" className={classes.cardcardMarginLeftTop}>Options</Typography>
                         <FormGroup className={classes.cardcardMarginLeftTop}>
-                            <FormControlLabel control={ <Checkbox onChange={this.handleGetFullResultToggle.bind(this)} value="getFullResult" /> } label={"Download up-to 2.5 million rows = " + this.state.getFullResult} />
+                            <FormControlLabel disabled control={ <Checkbox onChange={this.handleGetFullResultToggle.bind(this)} value="getFullResult" /> } label={"Download up-to 2.5 million rows = " + this.state.getFullResult} />
 
-                            <FormControlLabel control={ <Checkbox onChange={this.handleReRunQueryToggle.bind(this)} value="reRunQuery" /> } checked={this.state.getFullResult === true ? true: this.state.reRunQuery} label={"Re-run query = " + this.state.reRunQuery} />
+                            <FormControlLabel disabled control={ <Checkbox onChange={this.handleReRunQueryToggle.bind(this)} value="reRunQuery" /> } checked={this.state.getFullResult === true ? true: this.state.reRunQuery} label={"Re-run query = " + this.state.reRunQuery} />
 
                             <FormControlLabel control={ <Checkbox onChange={this.handleTableHeaderToggle.bind(this)} disabled={this.state.fileFormat !== 'delimited' ? true : false} value="tableHeader" /> } label={"Include table headers = " + this.state.tableHeader} />
                         </FormGroup>
