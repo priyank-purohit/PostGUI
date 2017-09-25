@@ -42,7 +42,10 @@ class Downloads extends Component {
             table: newProps.table,
             columns: newProps.columns,
             url: newProps.url,
-            data: newProps.data
+            data: newProps.data,
+            fileNameCustom: ''
+        }, () => {
+            this.createFileName();
         });
     }
 
@@ -54,9 +57,9 @@ class Downloads extends Component {
         }
     }
 
-    createFileName(delimiter) {
+    createFileName() {
         // Parse out the delimiter
-        delimiter = delimiter.replace(/\\t/g, '\t'); // for tabs
+        let delimiter = this.state.delimiterChoice.replace(/\\t/g, '\t'); // for tabs
 
         // Create a good file name for the file so user knows what the data in the file is all about
         let fileName = this.state.url.replace(lib.getDbConfig(this.state.dbIndex, "url") + "/", "").replace("?", "-").replace(/&/g, '-').replace(/=/g, '-');
@@ -90,7 +93,7 @@ class Downloads extends Component {
 
                 let result = json2csv({ data: this.state.data, fields: this.state.columns, del: delimiter, hasCSVColumnTitle: this.state.tableHeader });
 
-                let fileName = this.createFileName(delimiter);
+                let fileName = this.createFileName();
 
                 this.downloadFile(result, fileName, "text/plain");
             } catch (err) {
@@ -104,7 +107,7 @@ class Downloads extends Component {
             try {
                 let result = js2xmlparser.parse(this.state.table, this.state.data);
 
-                let fileName = this.createFileName("xml");
+                let fileName = this.createFileName();
 
                 this.downloadFile(result, fileName, "text/plain");
             } catch (err) {
@@ -116,7 +119,7 @@ class Downloads extends Component {
     handleFileFormatChange = (event, fileFormat) => {
         if (event.target.id !== 'delimiterInput') {
             this.setState({ fileFormat: fileFormat }, () => {
-                this.createFileName(this.state.delimiterChoice);
+                this.createFileName();
                 this.setState({fileNameCustom: ''});
             });
         }
@@ -163,12 +166,12 @@ class Downloads extends Component {
 
         if (newValue.length === 0) {
             this.setState({ delimiterChoice: ',' }, () => {
-                this.createFileName(this.state.delimiterChoice);
+                this.createFileName();
                 this.setState({fileNameCustom: ''});
             });
         } else if (newValue.length <= 5) {
             this.setState({ delimiterChoice: newValue }, () => {
-                this.createFileName(this.state.delimiterChoice);
+                this.createFileName();
                 this.setState({fileNameCustom: ''});
             });
         }
@@ -181,7 +184,7 @@ class Downloads extends Component {
     }
 
     handleDownloadClick() {
-        this.createFileName(this.state.delimiterChoice);
+        this.createFileName();
         if (this.state.fileFormat === "delimited") {
             this.downloadTableWithDelimiter();
         } else if (this.state.fileFormat === "xml") {
