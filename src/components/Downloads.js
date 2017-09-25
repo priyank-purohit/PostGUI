@@ -116,6 +116,18 @@ class Downloads extends Component {
         }
     }
 
+    downloadTableAsFASTA() {
+        if (JSON.stringify(this.state.data) !== "[]") {
+            try {
+                let result = js2xmlparser.parse(this.state.table, this.state.data);
+
+                let fileName = this.createFileName();
+
+                this.downloadFile(result, fileName, "text/plain");
+            }
+        }
+    }
+
     handleFileFormatChange = (event, fileFormat) => {
         if (event.target.id !== 'delimiterInput') {
             this.setState({ fileFormat: fileFormat }, () => {
