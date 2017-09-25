@@ -77,7 +77,7 @@ class Downloads extends Component {
         } else {
             fileName += ".txt";
         }
-        
+
         this.setState({
             fileNameAuto: fileName
         });
@@ -120,7 +120,7 @@ class Downloads extends Component {
         if (event.target.id !== 'delimiterInput') {
             this.setState({ fileFormat: fileFormat }, () => {
                 this.createFileName();
-                this.setState({fileNameCustom: ''});
+                this.setState({ fileNameCustom: '' });
             });
         }
     };
@@ -167,12 +167,12 @@ class Downloads extends Component {
         if (newValue.length === 0) {
             this.setState({ delimiterChoice: ',' }, () => {
                 this.createFileName();
-                this.setState({fileNameCustom: ''});
+                this.setState({ fileNameCustom: '' });
             });
         } else if (newValue.length <= 5) {
             this.setState({ delimiterChoice: newValue }, () => {
                 this.createFileName();
-                this.setState({fileNameCustom: ''});
+                this.setState({ fileNameCustom: '' });
             });
         }
     }
