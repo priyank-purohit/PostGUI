@@ -47,14 +47,16 @@ class Downloads extends Component {
     }
 
     downloadFile(data, fileName, mimeType) {
-        window.download(data, fileName, mimeType);
+        if (this.state.fileNameCustom === '') {
+            window.download(data, fileName, mimeType);
+        } else {
+            window.download(data, this.state.fileNameCustom, mimeType);
+        }
     }
 
     createFileName(delimiter) {
         // Parse out the delimiter
         delimiter = delimiter.replace(/\\t/g, '\t'); // for tabs
-
-        console.log(delimiter);
 
         // Create a good file name for the file so user knows what the data in the file is all about
         let fileName = this.state.url.replace(lib.getDbConfig(this.state.dbIndex, "url") + "/", "").replace("?", "-").replace(/&/g, '-').replace(/=/g, '-');
@@ -113,7 +115,10 @@ class Downloads extends Component {
 
     handleFileFormatChange = (event, fileFormat) => {
         if (event.target.id !== 'delimiterInput') {
-            this.setState({ fileFormat: fileFormat }, () => {this.createFileName(this.state.delimiterChoice)});
+            this.setState({ fileFormat: fileFormat }, () => {
+                this.createFileName(this.state.delimiterChoice);
+                this.setState({fileNameCustom: ''});
+            });
         }
     };
 
@@ -157,9 +162,15 @@ class Downloads extends Component {
         let newValue = event.target.value;
 
         if (newValue.length === 0) {
-            this.setState({ delimiterChoice: ',' }, () => {this.createFileName(this.state.delimiterChoice)});
+            this.setState({ delimiterChoice: ',' }, () => {
+                this.createFileName(this.state.delimiterChoice);
+                this.setState({fileNameCustom: ''});
+            });
         } else if (newValue.length <= 5) {
-            this.setState({ delimiterChoice: newValue }, () => {this.createFileName(this.state.delimiterChoice)});
+            this.setState({ delimiterChoice: newValue }, () => {
+                this.createFileName(this.state.delimiterChoice);
+                this.setState({fileNameCustom: ''});
+            });
         }
     }
 
@@ -227,6 +238,7 @@ class Downloads extends Component {
                                 id="delimiterInput" 
                                 type="text" 
                                 label="File name"
+                                onChange={this.handleFileNameChange.bind(this)}
                                 value={this.state.fileNameCustom === '' ? this.state.fileNameAuto : this.state.fileNameCustom}
                                 className={classes.textField && classes.cardMarginLeft} 
                                 margin="normal" />
