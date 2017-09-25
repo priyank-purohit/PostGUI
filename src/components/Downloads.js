@@ -1,25 +1,21 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
+
 import Button from 'material-ui/Button';
 import Paper from 'material-ui/Paper';
 import Typography from 'material-ui/Typography';
-
 import Radio, { RadioGroup } from 'material-ui/Radio';
-import { FormGroup, FormControlLabel } from 'material-ui/Form';
+import { FormControl, FormGroup, FormControlLabel } from 'material-ui/Form';
 import Checkbox from 'material-ui/Checkbox';
-
 import TextField from 'material-ui/TextField';
-import { FormControl } from 'material-ui/Form';
-
 import Divider from 'material-ui/Divider';
 
 import green from 'material-ui/colors/green';
 
-
 let lib = require('../utils/library.js');
 let json2csv = require('json2csv');
-
+var js2xmlparser = require("js2xmlparser");
 
 class Downloads extends Component {
     constructor(props) {
@@ -52,21 +48,48 @@ class Downloads extends Component {
         window.download(data, fileName, mimeType);
     }
 
+    createFileName(delimiter) {
+        // Parse out the delimiter
+        delimiter = delimiter.replace(/\\t/g, '\t'); // for tabs
+
+        // Create a good file name for the file so user knows what the data in the file is all about
+        let fileName = this.state.url.replace(lib.getDbConfig(this.state.dbIndex, "url") + "/", "").replace("?", "-").replace(/&/g, '-');
+
+        if (delimiter === ",") {
+            fileName += ".csv";
+        } else if (delimiter === "\t") {
+            fileName += ".tsv";
+        } else if (delimiter === "xml") {
+            fileName += ".xml";
+        } else {
+            fileName += ".txt";
+        }
+        return fileName;
+    }
+
     downloadTableWithDelimiter(delimiter) {
         if (JSON.stringify(this.state.data) !== "[]") {
             try {
-                delimiter = delimiter.replace(/\\t/g, '\t');
+                // Parse out the delimiter
+                delimiter = delimiter.replace(/\\t/g, '\t'); // for tabs
+
                 let result = json2csv({ data: this.state.data, fields: this.state.columns, del: delimiter, hasCSVColumnTitle: this.state.tableHeader });
 
-                // Create a good file name for the file so user knows what the data in the file is all about
-                let fileName = this.state.url.replace(lib.getDbConfig(this.state.dbIndex, "url") + "/", "").replace("?", "-").replace(/&/g, '-');
-                if (delimiter === ",") {
-                    fileName += ".csv";
-                } else if (delimiter === "\t") {
-                    fileName += ".tsv";
-                } else {
-                    fileName += ".txt";
-                }
+                let fileName = this.createFileName(delimiter);
+
+                this.downloadFile(result, fileName, "text/plain");
+            } catch (err) {
+                console.error(err);
+            }
+        }
+    }
+
+    downloadTableAsXML() {
+        if (JSON.stringify(this.state.data) !== "[]") {
+            try {
+                let result = js2xmlparser.parse(this.state.table, this.state.data);
+
+                let fileName = this.createFileName("xml");
 
                 this.downloadFile(result, fileName, "text/plain");
             } catch (err) {
@@ -134,7 +157,11 @@ class Downloads extends Component {
     }
 
     handleDownloadClick() {
-        this.downloadTableWithDelimiter(this.state.delimiterChoice);
+        if (this.state.fileFormat === "delimited") {
+            this.downloadTableWithDelimiter(this.state.delimiterChoice);
+        } else if (this.state.fileFormat === "xml") {
+            this.downloadTableAsXML();
+        }
     }
 
     render() {
@@ -159,11 +186,11 @@ class Downloads extends Component {
                                     margin="none"
                                     disabled={this.state.fileFormat !== 'delimited' ? true : false} 
                                     onChange={this.handleDelimiterChange.bind(this)} /></span>
-                                <FormControlLabel disabled control={ <Radio /> } label="XML" value="xml" />
+                                <FormControlLabel control={ <Radio /> } label="XML" value="xml" />
                                 <FormControlLabel disabled control={ <Radio /> } label="FASTA" value="fasta" />
-                                <FormControlLabel disabled control={ <Radio /> } label="ASN.1" value="asn1" />
-                                <FormControlLabel disabled control={ <Radio /> } label="Newick Tree" value="newick" />
-                                <FormControlLabel disabled control={ <Radio /> } label="Nexus Tree" value="nexus" />
+                                <FormControlLabel disabled control={ <Radio /> } label="ASN.1" value="asn.1" />
+                                <FormControlLabel disabled control={ <Radio /> } label="Newick Tree" value="newicktree" />
+                                <FormControlLabel disabled control={ <Radio /> } label="Nexus Tree" value="nexustree" />
                                 <FormControlLabel disabled control={ <Radio /> } label="PhyloXML" value="phyloxml" />
                             </RadioGroup>
                         </FormControl>
