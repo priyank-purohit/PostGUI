@@ -119,11 +119,14 @@ class Downloads extends Component {
     downloadTableAsFASTA() {
         if (JSON.stringify(this.state.data) !== "[]") {
             try {
-                let result = js2xmlparser.parse(this.state.table, this.state.data);
+                for (let obj in this.state.data) {
+                    console.log(JSON.stringify(obj));
+                }
+
+
 
                 let fileName = this.createFileName();
-
-                this.downloadFile(result, fileName, "text/plain");
+                //this.downloadFile(result, fileName, "text/plain");
             } catch (err) {
                 console.log(err);
             }
@@ -203,6 +206,8 @@ class Downloads extends Component {
             this.downloadTableWithDelimiter();
         } else if (this.state.fileFormat === "xml") {
             this.downloadTableAsXML();
+        } else if (this.state.fileFormat === "fasta") {
+            this.downloadTableAsFASTA();
         }
     }
 
@@ -229,7 +234,7 @@ class Downloads extends Component {
                                     disabled={this.state.fileFormat !== 'delimited' ? true : false} 
                                     onChange={this.handleDelimiterChange.bind(this)} /></span>
                                 <FormControlLabel control={ <Radio /> } label="XML" value="xml" />
-                                <FormControlLabel disabled control={ <Radio /> } label="FASTA" value="fasta" />
+                                <FormControlLabel control={ <Radio /> } label="FASTA" value="fasta" />
                                 <FormControlLabel disabled control={ <Radio /> } label="ASN.1" value="asn.1" />
                                 <FormControlLabel disabled control={ <Radio /> } label="Newick Tree" value="newicktree" />
                                 <FormControlLabel disabled control={ <Radio /> } label="Nexus Tree" value="nexustree" />
