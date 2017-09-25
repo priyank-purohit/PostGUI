@@ -31,7 +31,7 @@ class Downloads extends Component {
             data: [],
             url: props.url,
             fileFormat: 'delimited',
-            tableHeader: false,
+            tableHeader: true,
             reRunQuery: false,
             getFullResult: false,
             delimiterChoice: ','
@@ -176,7 +176,7 @@ class Downloads extends Component {
 
                             <FormControlLabel disabled control={ <Checkbox onChange={this.handleReRunQueryToggle.bind(this)} value="reRunQuery" /> } checked={this.state.getFullResult === true ? true: this.state.reRunQuery} label={"Re-run query = " + this.state.reRunQuery} />
 
-                            <FormControlLabel control={ <Checkbox onChange={this.handleTableHeaderToggle.bind(this)} disabled={this.state.fileFormat !== 'delimited' ? true : false} value="tableHeader" /> } label={"Include table headers = " + this.state.tableHeader} />
+                            <FormControlLabel control={ <Checkbox onChange={this.handleTableHeaderToggle.bind(this)} disabled={this.state.fileFormat !== 'delimited' ? true : false} value="tableHeader" /> } checked={this.state.tableHeader} label={"Include table headers = " + this.state.tableHeader} />
                         </FormGroup>
 
                         {/* FILE NAME INPUT */}
