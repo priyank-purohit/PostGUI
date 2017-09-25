@@ -124,6 +124,8 @@ class Downloads extends Component {
                 let fileName = this.createFileName();
 
                 this.downloadFile(result, fileName, "text/plain");
+            } catch (err) {
+                console.log(err);
             }
         }
     }
