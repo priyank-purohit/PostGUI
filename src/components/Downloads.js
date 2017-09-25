@@ -30,7 +30,9 @@ class Downloads extends Component {
             tableHeader: true,
             reRunQuery: false,
             getFullResult: false,
-            delimiterChoice: ','
+            delimiterChoice: ',',
+            fileNameCustom: '',
+            fileNameAuto: ''
         };
     }
 
@@ -52,26 +54,37 @@ class Downloads extends Component {
         // Parse out the delimiter
         delimiter = delimiter.replace(/\\t/g, '\t'); // for tabs
 
-        // Create a good file name for the file so user knows what the data in the file is all about
-        let fileName = this.state.url.replace(lib.getDbConfig(this.state.dbIndex, "url") + "/", "").replace("?", "-").replace(/&/g, '-');
+        console.log(delimiter);
 
-        if (delimiter === ",") {
-            fileName += ".csv";
-        } else if (delimiter === "\t") {
-            fileName += ".tsv";
-        } else if (delimiter === "xml") {
+        // Create a good file name for the file so user knows what the data in the file is all about
+        let fileName = this.state.url.replace(lib.getDbConfig(this.state.dbIndex, "url") + "/", "").replace("?", "-").replace(/&/g, '-').replace(/=/g, '-');
+
+        if (this.state.fileFormat === "delimited") {
+            if (delimiter === ",") {
+                fileName += ".csv";
+            } else if (delimiter === "\t") {
+                fileName += ".tsv";
+            } else {
+                fileName += ".txt";
+            }
+        } else if (this.state.fileFormat === "xml") {
             fileName += ".xml";
         } else {
             fileName += ".txt";
         }
+        
+        this.setState({
+            fileNameAuto: fileName
+        });
+
         return fileName;
     }
 
-    downloadTableWithDelimiter(delimiter) {
+    downloadTableWithDelimiter() {
         if (JSON.stringify(this.state.data) !== "[]") {
             try {
                 // Parse out the delimiter
-                delimiter = delimiter.replace(/\\t/g, '\t'); // for tabs
+                let delimiter = this.state.delimiterChoice.replace(/\\t/g, '\t'); // for tabs
 
                 let result = json2csv({ data: this.state.data, fields: this.state.columns, del: delimiter, hasCSVColumnTitle: this.state.tableHeader });
 
@@ -100,7 +113,7 @@ class Downloads extends Component {
 
     handleFileFormatChange = (event, fileFormat) => {
         if (event.target.id !== 'delimiterInput') {
-            this.setState({ fileFormat: fileFormat });
+            this.setState({ fileFormat: fileFormat }, () => {this.createFileName(this.state.delimiterChoice)});
         }
     };
 
@@ -144,21 +157,22 @@ class Downloads extends Component {
         let newValue = event.target.value;
 
         if (newValue.length === 0) {
-            this.setState({ delimiterChoice: ',' });
+            this.setState({ delimiterChoice: ',' }, () => {this.createFileName(this.state.delimiterChoice)});
         } else if (newValue.length <= 5) {
-            this.setState({ delimiterChoice: newValue });
+            this.setState({ delimiterChoice: newValue }, () => {this.createFileName(this.state.delimiterChoice)});
         }
     }
 
 
     handleFileNameChange(event) {
         let newValue = event.target.value;
-        this.setState({ fileName: newValue });
+        this.setState({ fileNameCustom: newValue });
     }
 
     handleDownloadClick() {
+        this.createFileName(this.state.delimiterChoice);
         if (this.state.fileFormat === "delimited") {
-            this.downloadTableWithDelimiter(this.state.delimiterChoice);
+            this.downloadTableWithDelimiter();
         } else if (this.state.fileFormat === "xml") {
             this.downloadTableAsXML();
         }
@@ -213,7 +227,7 @@ class Downloads extends Component {
                                 id="delimiterInput" 
                                 type="text" 
                                 label="File name"
-                                value="organism_info_limit_100.csv"
+                                value={this.state.fileNameCustom === '' ? this.state.fileNameAuto : this.state.fileNameCustom}
                                 className={classes.textField && classes.cardMarginLeft} 
                                 margin="normal" />
                         </FormGroup>
