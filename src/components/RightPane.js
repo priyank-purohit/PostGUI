@@ -45,7 +45,7 @@ class RightPane extends Component {
 			rows: null,
 			snackBarVisibility: false,
 			snackBarMessage: "Unknown error occured",
-			rowLimit: 2500,
+			rowLimit: 250000,
 			url: ""
 		}
 	}
