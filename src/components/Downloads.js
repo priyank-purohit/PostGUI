@@ -131,6 +131,7 @@ class Downloads extends Component {
                     if (this.state.table === "protein_seq") {
                         seq = element["aa_seq"]
                     }
+
                     // Parse header string ...
                     let header = ">";
                     for (let index in this.state.columns) {
@@ -255,10 +256,9 @@ class Downloads extends Component {
                                     onChange={this.handleDelimiterChange.bind(this)} /></span>
                                 <FormControlLabel control={ <Radio /> } label="XML" value="xml" />
                                 <FormControlLabel control={ <Radio /> } label="FASTA" value="fasta" />
-                                <FormControlLabel disabled control={ <Radio /> } label="ASN.1" value="asn.1" />
-                                <FormControlLabel disabled control={ <Radio /> } label="Newick Tree" value="newicktree" />
+                                {/*<FormControlLabel disabled control={ <Radio /> } label="Newick Tree" value="newicktree" />
                                 <FormControlLabel disabled control={ <Radio /> } label="Nexus Tree" value="nexustree" />
-                                <FormControlLabel disabled control={ <Radio /> } label="PhyloXML" value="phyloxml" />
+                                <FormControlLabel disabled control={ <Radio /> } label="PhyloXML" value="phyloxml" />*/}
                             </RadioGroup>
                         </FormControl>
 
