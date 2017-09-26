@@ -244,16 +244,18 @@ class Downloads extends Component {
                         <FormControl component="fieldset" required>
                             <RadioGroup className={classes.cardcardMarginLeftTop} value={this.state.fileFormat} onChange={this.handleFileFormatChange} >
                                 <FormControlLabel control={ <Radio /> } label="Delimited" value="delimited" />
-                                <span><TextField
-                                    required
-                                    id="delimiterInput"
-                                    type="text"
-                                    label={"Enter delimiter (, for csv)=" + this.state.delimiterChoice}
-                                    value={this.state.delimiterChoice}
-                                    className={classes.textField && classes.cardMarginLeft && classes.inlineTextField}
-                                    margin="none"
-                                    disabled={this.state.fileFormat !== 'delimited' ? true : false} 
-                                    onChange={this.handleDelimiterChange.bind(this)} /></span>
+                                <span>
+                                    <TextField
+                                        required
+                                        id="delimiterInput"
+                                        type="text"
+                                        label={"Enter delimiter (, for csv)=" + this.state.delimiterChoice}
+                                        value={this.state.delimiterChoice}
+                                        className={classes.textField && classes.cardMarginLeft && classes.inlineTextField}
+                                        margin="none"
+                                        disabled={this.state.fileFormat !== 'delimited' ? true : false} 
+                                        onChange={this.handleDelimiterChange.bind(this)} />
+                                </span>
                                 <FormControlLabel control={ <Radio /> } label="XML" value="xml" />
                                 <FormControlLabel control={ <Radio /> } label="FASTA" value="fasta" />
                                 {/*<FormControlLabel disabled control={ <Radio /> } label="Newick Tree" value="newicktree" />
