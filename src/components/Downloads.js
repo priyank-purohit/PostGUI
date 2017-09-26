@@ -74,6 +74,8 @@ class Downloads extends Component {
             }
         } else if (this.state.fileFormat === "xml") {
             fileName += ".xml";
+        } else if (this.state.fileFormat === "fasta") {
+            fileName += ".fasta";
         } else {
             fileName += ".txt";
         }
@@ -117,16 +119,34 @@ class Downloads extends Component {
     }
 
     downloadTableAsFASTA() {
-        if (JSON.stringify(this.state.data) !== "[]") {
+        if (JSON.stringify(this.state.data) !== "[]" && (this.state.table === "nucleotide_seq" || this.state.table === "protein_seq")) {
+            // TO DO: DETECT Protein or nucleotide tables automatically by name
             try {
-                for (let obj in this.state.data) {
-                    console.log(JSON.stringify(obj));
+                let result = "";
+                
+                for (let index in this.state.data) {
+                    let element = this.state.data[index];
+                    
+                    let seq = element["nuc_seq"];
+                    if (this.state.table === "protein_seq") {
+                        seq = element["aa_seq"]
+                    }
+                    // Parse header string ...
+                    let header = ">";
+                    for (let index in this.state.columns) {
+                        if (this.state.columns[index] !== "nuc_seq" && this.state.columns[index] !== "aa_seq") {
+                            header += " | " + element[this.state.columns[index]];
+                        }
+                    }
+                    
+                    result+=header.replace("> | ", ">");
+                    result+="\n";
+                    result+=seq;
+                    result+="\n";
                 }
-
-
-
+                
                 let fileName = this.createFileName();
-                //this.downloadFile(result, fileName, "text/plain");
+                this.downloadFile(result, fileName, "text/plain");
             } catch (err) {
                 console.log(err);
             }

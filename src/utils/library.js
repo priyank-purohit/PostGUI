@@ -177,3 +177,27 @@ exports.inArray = function(element, array) {
 exports.visitPage = function(url = "http://www.google.ca") {
 	window.open(url, "_blank");
 }
+
+exports.getKeysFromJSON = function(data) {
+	let keys = [];
+	for(let i in data){
+		let val = data[i];
+		for(let j in val){
+			let sub_key = j;
+			keys.push(sub_key);
+		}
+	}
+	return keys;
+}
+
+exports.arrNoDup = function(arr) {
+	var temp = {};
+	for (var i = 0; i < arr.length; i++) {
+		temp[arr[i]] = true;
+	}
+	var ret = [];
+	for (var k in temp) {
+		ret.push(k);
+	}
+	return ret;
+}
