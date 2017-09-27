@@ -223,12 +223,17 @@ class Downloads extends Component {
 
     handleDownloadClick() {
         this.createFileName();
-        if (this.state.fileFormat === "delimited") {
+        /*if (this.state.fileFormat === "delimited") {
             this.downloadTableWithDelimiter();
         } else if (this.state.fileFormat === "xml") {
             this.downloadTableAsXML();
         } else if (this.state.fileFormat === "fasta") {
             this.downloadTableAsFASTA();
+        }*/
+
+        if (this.state.getFullResult === true) {
+            console.log("URL was: " + this.state.url);
+            console.log("URL now is: " + this.state.url.replace(/limit=\d*/g, "limit=2500000"));
         }
     }
 
@@ -268,9 +273,9 @@ class Downloads extends Component {
                         {/* ADDITIONAL DOWNLOADS OPTIONS */}
                         <Typography type="body1" className={classes.cardcardMarginLeftTop}>Options</Typography>
                         <FormGroup className={classes.cardcardMarginLeftTop}>
-                            <FormControlLabel disabled control={ <Checkbox onChange={this.handleGetFullResultToggle.bind(this)} value="getFullResult" /> } label={"Download up-to 2.5 million rows = " + this.state.getFullResult} />
+                            <FormControlLabel control={ <Checkbox onChange={this.handleGetFullResultToggle.bind(this)} value="getFullResult" /> } label={"Download up-to 2.5 million rows = " + this.state.getFullResult} />
 
-                            <FormControlLabel disabled control={ <Checkbox onChange={this.handleReRunQueryToggle.bind(this)} value="reRunQuery" /> } checked={this.state.getFullResult === true ? true: this.state.reRunQuery} label={"Re-run query = " + this.state.reRunQuery} />
+                            <FormControlLabel control={ <Checkbox onChange={this.handleReRunQueryToggle.bind(this)} value="reRunQuery" /> } checked={this.state.getFullResult === true ? true: this.state.reRunQuery} label={"Re-run query = " + this.state.reRunQuery} />
 
                             <FormControlLabel control={ <Checkbox onChange={this.handleTableHeaderToggle.bind(this)} disabled={this.state.fileFormat !== 'delimited' ? true : false} value="tableHeader" /> } checked={this.state.tableHeader} label={"Include table headers = " + this.state.tableHeader} />
                         </FormGroup>

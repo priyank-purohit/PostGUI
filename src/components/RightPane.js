@@ -117,7 +117,7 @@ class RightPane extends Component {
 			const filters = lib.getQBFilters(this.state.dbIndex, this.state.table, this.state.columns);
 			const rules = newRules ? newRules : defaultRules;
 
-			window.$(element).queryBuilder({ filters, rules });
+			window.$(element).queryBuilder({ filters, rules, plugins: ['not-group'] });
 		} catch (error) {
 			console.log(error);
 		}
@@ -130,7 +130,7 @@ class RightPane extends Component {
 		const rules = newRules ? newRules : defaultRules;
 		const filters = lib.getQBFilters(dbIndex, table, columns);
 
-		window.$(element).queryBuilder({ filters, rules });
+		window.$(element).queryBuilder({ filters, rules, plugins: ['not-group'] });
 	}
 
 	// Extracts the rules recursively
