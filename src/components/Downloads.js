@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 
@@ -13,6 +14,8 @@ import Divider from 'material-ui/Divider';
 
 import green from 'material-ui/colors/green';
 
+const timeout = 2000;
+
 let lib = require('../utils/library.js');
 let json2csv = require('json2csv');
 var js2xmlparser = require("js2xmlparser");
@@ -25,6 +28,7 @@ class Downloads extends Component {
             table: props.table,
             columns: props.columns,
             data: [],
+            dataFull: [],
             url: props.url,
             fileFormat: 'delimited',
             tableHeader: true,
@@ -139,10 +143,10 @@ class Downloads extends Component {
             // TO DO: DETECT Protein or nucleotide tables automatically by name
             try {
                 let result = "";
-                
+
                 for (let index in this.state.data) {
                     let element = this.state.data[index];
-                    
+
                     let seq = element["nuc_seq"];
                     if (this.state.table === "protein_seq") {
                         seq = element["aa_seq"]
@@ -155,13 +159,13 @@ class Downloads extends Component {
                             header += " | " + element[this.state.columns[index]];
                         }
                     }
-                    
-                    result+=header.replace("> | ", ">");
-                    result+="\n";
-                    result+=seq;
-                    result+="\n";
+
+                    result += header.replace("> | ", ">");
+                    result += "\n";
+                    result += seq;
+                    result += "\n";
                 }
-                
+
                 let fileName = this.createFileName();
                 this.downloadFile(result, fileName, "text/plain");
             } catch (err) {
@@ -239,7 +243,7 @@ class Downloads extends Component {
 
     handleDownloadClick() {
         this.createFileName();
-        if (this.state.fileFormat === "delimited") {
+        /*if (this.state.fileFormat === "delimited") {
             this.downloadTableWithDelimiter();
         } else if (this.state.fileFormat === "json") {
             this.downloadTableAsJSON();
@@ -247,7 +251,7 @@ class Downloads extends Component {
             this.downloadTableAsXML();
         } else if (this.state.fileFormat === "fasta") {
             this.downloadTableAsFASTA();
-        }
+        }*/
 
         if (this.state.getFullResult === true) {
             console.log("URL was: " + this.state.url);
@@ -255,6 +259,48 @@ class Downloads extends Component {
         }
     }
 
+    fetchOutput(url) {
+        axios.get(url, { params: {}, requestId: "qbAxiosReq" })
+            .then((response) => {
+                let responseRows = null;
+                if (response.headers["content-range"] !== undefined && response.headers["content-range"] !== null) {
+                    responseRows = 1 + parseInt(response.headers["content-range"].replace("/*", "").replace("0-", ""), 10);
+                }
+                this.setState({
+                    rawData: response.data,
+                    rows: responseRows,
+                    submitLoading: false,
+                    submitError: false,
+                    submitSuccess: true
+                }, () => {
+                    this.timer = setTimeout(() => {
+                        this.setState({
+                            submitLoading: false,
+                            submitSuccess: false,
+                            submitError: false
+                        })
+                    }, timeout);
+                });
+            })
+            .catch((error) => {
+                console.log("HTTP Req:", error);
+                this.setState({
+                    rawData: [],
+                    rows: null,
+                    submitLoading: false,
+                    submitSuccess: true,
+                    submitError: true // both true implies request successfully reported an error
+                }, () => {
+                    this.timer = setTimeout(() => {
+                        this.setState({
+                            submitLoading: false,
+                            submitSuccess: false,
+                            submitError: false
+                        })
+                    }, timeout);
+                });
+            });
+    }
     render() {
         const classes = this.props.classes;
 
