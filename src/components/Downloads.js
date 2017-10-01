@@ -11,6 +11,7 @@ import { FormControl, FormGroup, FormControlLabel } from 'material-ui/Form';
 import Checkbox from 'material-ui/Checkbox';
 import TextField from 'material-ui/TextField';
 import Divider from 'material-ui/Divider';
+import { LinearProgress } from 'material-ui/Progress';
 
 import green from 'material-ui/colors/green';
 
@@ -93,7 +94,7 @@ class Downloads extends Component {
         return fileName;
     }
 
-    downloadTableWithDelimiter() {
+    downloadTableWithDelimiter(dataFullStatus = false) {
         if (JSON.stringify(this.state.data) !== "[]") {
             try {
                 // Parse out the delimiter
@@ -110,7 +111,7 @@ class Downloads extends Component {
         }
     }
 
-    downloadTableAsJSON() {
+    downloadTableAsJSON(dataFullStatus = false) {
         if (JSON.stringify(this.state.data) !== "[]") {
             try {
                 let result = JSON.stringify(this.state.data);
@@ -124,7 +125,7 @@ class Downloads extends Component {
         }
     }
 
-    downloadTableAsXML() {
+    downloadTableAsXML(dataFullStatus = false) {
         if (JSON.stringify(this.state.data) !== "[]") {
             try {
                 let result = js2xmlparser.parse(this.state.table, this.state.data);
@@ -138,7 +139,7 @@ class Downloads extends Component {
         }
     }
 
-    downloadTableAsFASTA() {
+    downloadTableAsFASTA(dataFullStatus = false) {
         if (JSON.stringify(this.state.data) !== "[]" && (this.state.table === "nucleotide_seq" || this.state.table === "protein_seq")) {
             // TO DO: DETECT Protein or nucleotide tables automatically by name
             try {
@@ -243,20 +244,35 @@ class Downloads extends Component {
 
     handleDownloadClick() {
         this.createFileName();
-        /*if (this.state.fileFormat === "delimited") {
-            this.downloadTableWithDelimiter();
-        } else if (this.state.fileFormat === "json") {
-            this.downloadTableAsJSON();
-        }  else if (this.state.fileFormat === "xml") {
-            this.downloadTableAsXML();
-        } else if (this.state.fileFormat === "fasta") {
-            this.downloadTableAsFASTA();
-        }*/
 
-        if (this.state.getFullResult === true) {
-            console.log("URL was: " + this.state.url);
-            console.log("URL now is: " + this.state.url.replace(/limit=\d*/g, "limit=2500000"));
-        }
+        this.setState({
+            submitLoading: true,
+            submitSuccess: false,
+            submitError: false,
+            dataFull: []
+        }, () => {
+            if (this.state.getFullResult === true) {
+                let dataFullURL = this.state.url.replace(/limit=\d*/g, "limit=2500000");
+                this.fetchOutput(dataFullURL);
+            } else {
+                if (this.state.fileFormat === "delimited") {
+                    this.downloadTableWithDelimiter();
+                } else if (this.state.fileFormat === "json") {
+                    this.downloadTableAsJSON();
+                }  else if (this.state.fileFormat === "xml") {
+                    this.downloadTableAsXML();
+                } else if (this.state.fileFormat === "fasta") {
+                    this.downloadTableAsFASTA();
+                }
+
+                this.setState({
+                    submitSuccess: true,
+                    submitError: false,
+                    submitLoading: false,
+                    dataFull: []
+                });
+            } 
+        });
     }
 
     fetchOutput(url) {
@@ -351,7 +367,8 @@ class Downloads extends Component {
                                 margin="normal" />
                         </FormGroup>
 
-                        <Divider />
+                        {this.state.submitLoading === true ? <LinearProgress color="primary" className={classes.linearProgressClass} /> : <Divider />}
+                        
                         
                         <Button color="primary" className={classes.button} onClick={this.handleDownloadClick.bind(this)} >Download</Button>
                         <Button disabled className={classes.button}>Copy</Button>
@@ -372,6 +389,9 @@ const styleSheet = {
         paddingBottom: 50,
         marginLeft: '30%',
         marginBottom: '2%'
+    },
+    linearProgressClass: {
+        height: 2
     },
     inlineTextField: {
         marginLeft: 34
