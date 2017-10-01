@@ -74,6 +74,8 @@ class Downloads extends Component {
             }
         } else if (this.state.fileFormat === "xml") {
             fileName += ".xml";
+        } else if (this.state.fileFormat === "json") {
+            fileName += ".json";
         } else if (this.state.fileFormat === "fasta") {
             fileName += ".fasta";
         } else {
@@ -94,6 +96,20 @@ class Downloads extends Component {
                 let delimiter = this.state.delimiterChoice.replace(/\\t/g, '\t'); // for tabs
 
                 let result = json2csv({ data: this.state.data, fields: this.state.columns, del: delimiter, hasCSVColumnTitle: this.state.tableHeader });
+
+                let fileName = this.createFileName();
+
+                this.downloadFile(result, fileName, "text/plain");
+            } catch (err) {
+                console.error(err);
+            }
+        }
+    }
+
+    downloadTableAsJSON() {
+        if (JSON.stringify(this.state.data) !== "[]") {
+            try {
+                let result = JSON.stringify(this.state.data);
 
                 let fileName = this.createFileName();
 
@@ -223,13 +239,15 @@ class Downloads extends Component {
 
     handleDownloadClick() {
         this.createFileName();
-        /*if (this.state.fileFormat === "delimited") {
+        if (this.state.fileFormat === "delimited") {
             this.downloadTableWithDelimiter();
-        } else if (this.state.fileFormat === "xml") {
+        } else if (this.state.fileFormat === "json") {
+            this.downloadTableAsJSON();
+        }  else if (this.state.fileFormat === "xml") {
             this.downloadTableAsXML();
         } else if (this.state.fileFormat === "fasta") {
             this.downloadTableAsFASTA();
-        }*/
+        }
 
         if (this.state.getFullResult === true) {
             console.log("URL was: " + this.state.url);
@@ -245,7 +263,7 @@ class Downloads extends Component {
                         <Typography type="subheading" className={classes.cardcardMarginLeftTop}>Download Query Results</Typography>
                         
                         {/* FILE FORMAT RADIO GROUP */}
-                        <Typography type="body1" className={classes.cardcardMarginLeftTop}>File Format = {this.state.fileFormat}</Typography>
+                        <Typography type="body1" className={classes.cardcardMarginLeftTop}>File Format</Typography>
                         <FormControl component="fieldset" required>
                             <RadioGroup className={classes.cardcardMarginLeftTop} value={this.state.fileFormat} onChange={this.handleFileFormatChange} >
                                 <FormControlLabel control={ <Radio /> } label="Delimited" value="delimited" />
@@ -254,13 +272,14 @@ class Downloads extends Component {
                                         required
                                         id="delimiterInput"
                                         type="text"
-                                        label={"Enter delimiter (, for csv)=" + this.state.delimiterChoice}
+                                        label={"Enter delimiter (e.g. \\t)"}
                                         value={this.state.delimiterChoice}
                                         className={classes.textField && classes.cardMarginLeft && classes.inlineTextField}
                                         margin="none"
                                         disabled={this.state.fileFormat !== 'delimited' ? true : false} 
                                         onChange={this.handleDelimiterChange.bind(this)} />
                                 </span>
+                                <FormControlLabel control={ <Radio /> } label="JSON" value="json" />
                                 <FormControlLabel control={ <Radio /> } label="XML" value="xml" />
                                 <FormControlLabel control={ <Radio /> } label="FASTA" value="fasta" />
                                 {/*<FormControlLabel disabled control={ <Radio /> } label="Newick Tree" value="newicktree" />
@@ -273,11 +292,9 @@ class Downloads extends Component {
                         {/* ADDITIONAL DOWNLOADS OPTIONS */}
                         <Typography type="body1" className={classes.cardcardMarginLeftTop}>Options</Typography>
                         <FormGroup className={classes.cardcardMarginLeftTop}>
-                            <FormControlLabel control={ <Checkbox onChange={this.handleGetFullResultToggle.bind(this)} value="getFullResult" /> } label={"Download up-to 2.5 million rows = " + this.state.getFullResult} />
+                            <FormControlLabel control={ <Checkbox onChange={this.handleGetFullResultToggle.bind(this)} value="getFullResult" /> } label={"Download up-to 2.5 million rows"} />
 
-                            {/*<FormControlLabel control={ <Checkbox onChange={this.handleReRunQueryToggle.bind(this)} value="reRunQuery" /> } checked={this.state.getFullResult === true ? true: this.state.reRunQuery} label={"Re-run query = " + this.state.reRunQuery} />*/}
-
-                            <FormControlLabel control={ <Checkbox onChange={this.handleTableHeaderToggle.bind(this)} disabled={this.state.fileFormat !== 'delimited' ? true : false} value="tableHeader" /> } checked={this.state.tableHeader} label={"Include table headers = " + this.state.tableHeader} />
+                            <FormControlLabel control={ <Checkbox onChange={this.handleTableHeaderToggle.bind(this)} disabled={this.state.fileFormat !== 'delimited' ? true : false} value="tableHeader" /> } checked={this.state.tableHeader} label={"Include table headers"} />
                         </FormGroup>
 
                         {/* FILE NAME INPUT */}
@@ -296,9 +313,9 @@ class Downloads extends Component {
                         <Divider />
                         
                         <Button color="primary" className={classes.button} onClick={this.handleDownloadClick.bind(this)} >Download</Button>
-                        <Button className={classes.button}>Copy</Button>
-                        <Button className={classes.button}>Reset</Button>
-                        <Button className={classes.button}>Help</Button>                        
+                        <Button disabled className={classes.button}>Copy</Button>
+                        <Button disabled className={classes.button}>Reset</Button>
+                        <Button disabled className={classes.button}>Help</Button>                        
                     </Paper>
                 </div>);
     }
