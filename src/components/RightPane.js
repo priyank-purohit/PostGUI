@@ -25,6 +25,7 @@ const defaultRules = lib.getQBRules();
 
 const timeout = 2000;
 const maxRowsInOutput = 250000;
+
 axiosCancel(axios, {
 	debug: false // default 
 });

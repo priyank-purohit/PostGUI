@@ -16,6 +16,7 @@ import { LinearProgress } from 'material-ui/Progress';
 import green from 'material-ui/colors/green';
 
 const timeout = 2000;
+const maxRowsInOutput = 250000;
 
 let lib = require('../utils/library.js');
 let json2csv = require('json2csv');
@@ -68,6 +69,10 @@ class Downloads extends Component {
 
         // Create a good file name for the file so user knows what the data in the file is all about
         let fileName = this.state.url.replace(lib.getDbConfig(this.state.dbIndex, "url") + "/", "").replace("?", "-").replace(/&/g, '-').replace(/=/g, '-');
+
+        if (this.state.getFullResult === true) {
+            fileName = fileName.replace(/limit-\d*/g, "limit-"+maxRowsInOutput);
+        }
 
         if (this.state.fileFormat === "delimited") {
             if (delimiter === ",") {
@@ -269,26 +274,18 @@ class Downloads extends Component {
         }
     }
 
-    handleReRunQueryToggle() {
-        if (this.state.reRunQuery === true) {
-            this.setState({
-                reRunQuery: false
-            });
-        } else {
-            this.setState({
-                reRunQuery: true
-            });
-        }
-    }
-
     handleGetFullResultToggle() {
         if (this.state.getFullResult === true) {
             this.setState({
                 getFullResult: false
+            }, () => {
+                this.createFileName();
             });
         } else {
             this.setState({
                 getFullResult: true
+            }, () => {
+                this.createFileName();
             });
         }
     }
@@ -325,7 +322,7 @@ class Downloads extends Component {
             dataFull: []
         }, () => {
             if (this.state.getFullResult === true) {
-                let dataFullURL = this.state.url.replace(/limit=\d*/g, "limit=2500000");
+                let dataFullURL = this.state.url.replace(/limit=\d*/g, "limit="+maxRowsInOutput);
                 this.fetchOutput(dataFullURL);
             } else {
                 if (this.state.fileFormat === "delimited") {
