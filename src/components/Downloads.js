@@ -63,14 +63,14 @@ class Downloads extends Component {
         }
     }
 
-    createFileName() {
+    createFileName(dataFullStatus = false) {
         // Parse out the delimiter
         let delimiter = this.state.delimiterChoice.replace(/\\t/g, '\t'); // for tabs
 
         // Create a good file name for the file so user knows what the data in the file is all about
         let fileName = this.state.url.replace(lib.getDbConfig(this.state.dbIndex, "url") + "/", "").replace("?", "-").replace(/&/g, '-').replace(/=/g, '-');
 
-        if (this.state.getFullResult === true) {
+        if (this.state.getFullResult === true || dataFullStatus === true) {
             fileName = fileName.replace(/limit-\d*/g, "limit-" + maxRowsInDownload);
         }
 
@@ -121,7 +121,7 @@ class Downloads extends Component {
 
                     let result = json2csv({ data: this.state.dataFull, fields: this.state.columns, del: delimiter, hasCSVColumnTitle: this.state.tableHeader });
 
-                    let fileName = this.createFileName();
+                    let fileName = this.createFileName(true);
 
                     this.downloadFile(result, fileName, "text/plain");
                 } catch (err) {
@@ -147,7 +147,7 @@ class Downloads extends Component {
                 try {
                     let result = JSON.stringify(this.state.dataFull);
 
-                    let fileName = this.createFileName();
+                    let fileName = this.createFileName(true);
 
                     this.downloadFile(result, fileName, "text/plain");
                 } catch (err) {
@@ -173,7 +173,7 @@ class Downloads extends Component {
                 try {
                     let result = js2xmlparser.parse(this.state.table, this.state.dataFull);
 
-                    let fileName = this.createFileName();
+                    let fileName = this.createFileName(true);
 
                     this.downloadFile(result, fileName, "text/plain");
                 } catch (err) {
@@ -244,7 +244,7 @@ class Downloads extends Component {
                         result += "\n";
                     }
 
-                    let fileName = this.createFileName();
+                    let fileName = this.createFileName(true);
                     this.downloadFile(result, fileName, "text/plain");
                 } catch (err) {
                     console.log(err);
