@@ -262,13 +262,8 @@ class Downloads extends Component {
     fetchOutput(url) {
         axios.get(url, { params: {}, requestId: "qbAxiosReq" })
             .then((response) => {
-                let responseRows = null;
-                if (response.headers["content-range"] !== undefined && response.headers["content-range"] !== null) {
-                    responseRows = 1 + parseInt(response.headers["content-range"].replace("/*", "").replace("0-", ""), 10);
-                }
                 this.setState({
-                    rawData: response.data,
-                    rows: responseRows,
+                    dataFull: response.data,
                     submitLoading: false,
                     submitError: false,
                     submitSuccess: true
@@ -285,8 +280,7 @@ class Downloads extends Component {
             .catch((error) => {
                 console.log("HTTP Req:", error);
                 this.setState({
-                    rawData: [],
-                    rows: null,
+                    dataFull: [],
                     submitLoading: false,
                     submitSuccess: true,
                     submitError: true // both true implies request successfully reported an error
@@ -301,6 +295,7 @@ class Downloads extends Component {
                 });
             });
     }
+
     render() {
         const classes = this.props.classes;
 
