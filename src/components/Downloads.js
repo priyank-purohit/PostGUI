@@ -16,7 +16,7 @@ import { LinearProgress } from 'material-ui/Progress';
 import green from 'material-ui/colors/green';
 
 const timeout = 2000;
-const maxRowsInOutput = 250000;
+const maxRowsInDownload = 2500000;
 
 let lib = require('../utils/library.js');
 let json2csv = require('json2csv');
@@ -71,7 +71,7 @@ class Downloads extends Component {
         let fileName = this.state.url.replace(lib.getDbConfig(this.state.dbIndex, "url") + "/", "").replace("?", "-").replace(/&/g, '-').replace(/=/g, '-');
 
         if (this.state.getFullResult === true) {
-            fileName = fileName.replace(/limit-\d*/g, "limit-"+maxRowsInOutput);
+            fileName = fileName.replace(/limit-\d*/g, "limit-" + maxRowsInDownload);
         }
 
         if (this.state.fileFormat === "delimited") {
@@ -322,14 +322,14 @@ class Downloads extends Component {
             dataFull: []
         }, () => {
             if (this.state.getFullResult === true) {
-                let dataFullURL = this.state.url.replace(/limit=\d*/g, "limit="+maxRowsInOutput);
+                let dataFullURL = this.state.url.replace(/limit=\d*/g, "limit=" + maxRowsInDownload);
                 this.fetchOutput(dataFullURL);
             } else {
                 if (this.state.fileFormat === "delimited") {
                     this.downloadTableWithDelimiter();
                 } else if (this.state.fileFormat === "json") {
                     this.downloadTableAsJSON();
-                }  else if (this.state.fileFormat === "xml") {
+                } else if (this.state.fileFormat === "xml") {
                     this.downloadTableAsXML();
                 } else if (this.state.fileFormat === "fasta") {
                     this.downloadTableAsFASTA();
@@ -341,7 +341,7 @@ class Downloads extends Component {
                     submitLoading: false,
                     dataFull: []
                 });
-            } 
+            }
         });
     }
 
@@ -365,7 +365,7 @@ class Downloads extends Component {
                         this.downloadTableWithDelimiter(true);
                     } else if (this.state.fileFormat === "json") {
                         this.downloadTableAsJSON(true);
-                    }  else if (this.state.fileFormat === "xml") {
+                    } else if (this.state.fileFormat === "xml") {
                         this.downloadTableAsXML(true);
                     } else if (this.state.fileFormat === "fasta") {
                         this.downloadTableAsFASTA(true);
