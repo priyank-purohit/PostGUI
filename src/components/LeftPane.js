@@ -40,7 +40,8 @@ const styleSheet = {
 	rootHide: {
 		width: '0%',
 		height: '100%',
-		float: 'left'
+		float: 'left',
+		display: 'none'
 	},
 	column: {
 		marginLeft: 27
