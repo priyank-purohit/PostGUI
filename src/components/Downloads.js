@@ -95,7 +95,7 @@ class Downloads extends Component {
     }
 
     downloadTableWithDelimiter(dataFullStatus = false) {
-        if (JSON.stringify(this.state.data) !== "[]") {
+        if (dataFullStatus === false && JSON.stringify(this.state.data) !== "[]") {
             try {
                 // Parse out the delimiter
                 let delimiter = this.state.delimiterChoice.replace(/\\t/g, '\t'); // for tabs
@@ -108,11 +108,26 @@ class Downloads extends Component {
             } catch (err) {
                 console.error(err);
             }
+        } else if (dataFullStatus === true) {
+            if (JSON.stringify(this.state.dataFull) !== "[]") {
+                try {
+                    // Parse out the delimiter
+                    let delimiter = this.state.delimiterChoice.replace(/\\t/g, '\t'); // for tabs
+
+                    let result = json2csv({ data: this.state.dataFull, fields: this.state.columns, del: delimiter, hasCSVColumnTitle: this.state.tableHeader });
+
+                    let fileName = this.createFileName();
+
+                    this.downloadFile(result, fileName, "text/plain");
+                } catch (err) {
+                    console.error(err);
+                }
+            }
         }
     }
 
     downloadTableAsJSON(dataFullStatus = false) {
-        if (JSON.stringify(this.state.data) !== "[]") {
+        if (dataFullStatus === false && JSON.stringify(this.state.data) !== "[]") {
             try {
                 let result = JSON.stringify(this.state.data);
 
@@ -122,11 +137,23 @@ class Downloads extends Component {
             } catch (err) {
                 console.error(err);
             }
+        } else if (dataFullStatus === true) {
+            if (JSON.stringify(this.state.dataFull) !== "[]") {
+                try {
+                    let result = JSON.stringify(this.state.dataFull);
+
+                    let fileName = this.createFileName();
+
+                    this.downloadFile(result, fileName, "text/plain");
+                } catch (err) {
+                    console.error(err);
+                }
+            }
         }
     }
 
     downloadTableAsXML(dataFullStatus = false) {
-        if (JSON.stringify(this.state.data) !== "[]") {
+        if (dataFullStatus === false && JSON.stringify(this.state.data) !== "[]") {
             try {
                 let result = js2xmlparser.parse(this.state.table, this.state.data);
 
@@ -136,11 +163,23 @@ class Downloads extends Component {
             } catch (err) {
                 console.error(err);
             }
+        } else if (dataFullStatus === true) {
+            if (JSON.stringify(this.state.dataFull) !== "[]") {
+                try {
+                    let result = js2xmlparser.parse(this.state.table, this.state.dataFull);
+
+                    let fileName = this.createFileName();
+
+                    this.downloadFile(result, fileName, "text/plain");
+                } catch (err) {
+                    console.error(err);
+                }
+            }
         }
     }
 
     downloadTableAsFASTA(dataFullStatus = false) {
-        if (JSON.stringify(this.state.data) !== "[]" && (this.state.table === "nucleotide_seq" || this.state.table === "protein_seq")) {
+        if (dataFullStatus === false && JSON.stringify(this.state.data) !== "[]" && (this.state.table === "nucleotide_seq" || this.state.table === "protein_seq")) {
             // TO DO: DETECT Protein or nucleotide tables automatically by name
             try {
                 let result = "";
@@ -171,6 +210,40 @@ class Downloads extends Component {
                 this.downloadFile(result, fileName, "text/plain");
             } catch (err) {
                 console.log(err);
+            }
+        } else if (dataFullStatus === true) {
+            if (JSON.stringify(this.state.dataFull) !== "[]" && (this.state.table === "nucleotide_seq" || this.state.table === "protein_seq")) {
+                // TO DO: DETECT Protein or nucleotide tables automatically by name
+                try {
+                    let result = "";
+
+                    for (let index in this.state.dataFull) {
+                        let element = this.state.dataFull[index];
+
+                        let seq = element["nuc_seq"];
+                        if (this.state.table === "protein_seq") {
+                            seq = element["aa_seq"]
+                        }
+
+                        // Parse header string ...
+                        let header = ">";
+                        for (let index in this.state.columns) {
+                            if (this.state.columns[index] !== "nuc_seq" && this.state.columns[index] !== "aa_seq") {
+                                header += " | " + element[this.state.columns[index]];
+                            }
+                        }
+
+                        result += header.replace("> | ", ">");
+                        result += "\n";
+                        result += seq;
+                        result += "\n";
+                    }
+
+                    let fileName = this.createFileName();
+                    this.downloadFile(result, fileName, "text/plain");
+                } catch (err) {
+                    console.log(err);
+                }
             }
         }
     }
@@ -291,6 +364,15 @@ class Downloads extends Component {
                             submitError: false
                         })
                     }, timeout);
+                    if (this.state.fileFormat === "delimited") {
+                        this.downloadTableWithDelimiter(true);
+                    } else if (this.state.fileFormat === "json") {
+                        this.downloadTableAsJSON(true);
+                    }  else if (this.state.fileFormat === "xml") {
+                        this.downloadTableAsXML(true);
+                    } else if (this.state.fileFormat === "fasta") {
+                        this.downloadTableAsFASTA(true);
+                    }
                 });
             })
             .catch((error) => {
