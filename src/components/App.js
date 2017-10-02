@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import 'typeface-roboto';
 
 import Navigation from './Navigation.js';
+import HistoryPane from './HistoryPane.js';
 import RightPane from './RightPane.js';
 import LeftPane from './LeftPane.js';
 
@@ -19,7 +20,8 @@ export default class Layout extends React.Component {
 			table: "",
 			columns: [],
 			visibleColumns: [],
-			leftPaneVisibility: true
+			leftPaneVisibility: true,
+			historyPaneVisibility: true
 		};
 	}
 
@@ -33,6 +35,24 @@ export default class Layout extends React.Component {
 				leftPaneVisibility: true
 			});
 		}
+	}
+
+	toggleHistoryPane() {
+		if (this.state.historyPaneVisibility) {
+			this.setState({
+				historyPaneVisibility: false
+			});
+		} else {
+			this.setState({
+				historyPaneVisibility: true
+			});
+		}
+	}
+
+	closeHistoryPane() {
+		this.setState({
+			historyPaneVisibility: false
+		});
 	}
 
 	changeDbIndex(newIndex) {
@@ -64,7 +84,8 @@ export default class Layout extends React.Component {
 			<div>
 				<Navigation
 					dbIndex={this.state.dbIndex}
-					toggleLeftPane={this.toggleLeftPane.bind(this)} />
+					toggleLeftPane={this.toggleLeftPane.bind(this)}
+					toggleHistoryPane={this.toggleHistoryPane.bind(this)} />
 
 				<div className="bodyDiv">
 					<LeftPane
@@ -75,12 +96,14 @@ export default class Layout extends React.Component {
 						changeTable={this.changeTable.bind(this)}
 						changeColumns={this.changeColumns.bind(this)}
 						changeVisibleColumns={this.changeVisibleColumns.bind(this)} />
+					<HistoryPane historyPaneVisibility={this.state.historyPaneVisibility} closeHistoryPane={this.closeHistoryPane.bind(this)} />
 					<RightPane
 						dbIndex={this.state.dbIndex}
 						table={this.state.table}
 						columns={this.state.columns}
 						visibleColumns={this.state.visibleColumns}
 						leftPaneVisibility={this.state.leftPaneVisibility} />
+
 				</div>
 			</div>
 		);

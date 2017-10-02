@@ -29,7 +29,7 @@ class Navigation extends Component {
 						<Typography type="title" color="inherit" className={classes.flex}>
 							{dbTitle}
 						</Typography>
-						<IconButton color="contrast" aria-label="Menu">
+						<IconButton color="contrast" aria-label="Menu" onClick={this.props.toggleHistoryPane.bind(this)}>
 							<HistoryIcon />
 						</IconButton>
 					</Toolbar>
