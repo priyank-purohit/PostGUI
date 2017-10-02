@@ -178,6 +178,7 @@ exports.visitPage = function(url = "http://www.google.ca") {
 	window.open(url, "_blank");
 }
 
+// Extracts the keys from a JSON string DATA
 exports.getKeysFromJSON = function(data) {
 	let keys = [];
 	for(let i in data){
@@ -190,6 +191,7 @@ exports.getKeysFromJSON = function(data) {
 	return keys;
 }
 
+// Extracts unique values from an array ARR
 exports.arrNoDup = function(arr) {
 	var temp = {};
 	for (var i = 0; i < arr.length; i++) {
