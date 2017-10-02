@@ -81,6 +81,10 @@ class Downloads extends Component {
             } else {
                 fileName += ".txt";
             }
+
+            if (this.state.tableHeader === true) {
+                fileName = fileName.replace(".csv", "-header.csv").replace(".tsv", "-header.tsv").replace(".txt", "-header.txt");
+            }
         } else if (this.state.fileFormat === "xml") {
             fileName += ".xml";
         } else if (this.state.fileFormat === "json") {
@@ -265,10 +269,14 @@ class Downloads extends Component {
         if (this.state.tableHeader === true) {
             this.setState({
                 tableHeader: false
+            }, () => {
+                this.createFileName();
             });
         } else {
             this.setState({
                 tableHeader: true
+            }, () => {
+                this.createFileName();
             });
         }
     }
