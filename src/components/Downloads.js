@@ -49,7 +49,8 @@ class Downloads extends Component {
             columns: newProps.columns,
             url: newProps.url,
             data: newProps.data,
-            fileNameCustom: ''
+            fileNameCustom: '',
+            dataFull: []
         }, () => {
             this.createFileName();
         });
