@@ -53,6 +53,11 @@
   box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.125) inset;
 }
 
+.btn-group .btn.active:before,
+.btn-group .btn:active:before {
+  content: '✓';
+}
+
 .query-builder .btn-success {
   color: #FFF;
   background-color: #5CB85C;
