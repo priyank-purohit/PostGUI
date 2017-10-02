@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import ReactTable from 'react-table';
 import PropTypes from 'prop-types';
-import { withStyles, createStyleSheet } from 'material-ui/styles';
-import Button from 'material-ui/Button';
+import { withStyles } from 'material-ui/styles';
+
+import Downloads from './Downloads.js';
 
 import "react-table/react-table.css";
 
@@ -23,13 +24,13 @@ class DataTable extends Component {
     }
 
     componentWillReceiveProps(newProps) {
-		this.setState({
-			dbIndex: newProps.dbIndex,
-			table: newProps.table,
+        this.setState({
+            dbIndex: newProps.dbIndex,
+            table: newProps.table,
             columns: newProps.columns,
-			url: newProps.url,
-			data: newProps.data
-		});
+            url: newProps.url,
+            data: newProps.data
+        });
     }
 
     downloadFile(data, fileName, mimeType) {
@@ -50,7 +51,7 @@ class DataTable extends Component {
                 } else {
                     fileName += ".txt";
                 }
-                
+
                 this.downloadFile(result, fileName, "text/plain");
             } catch (err) {
                 console.error(err);
@@ -59,20 +60,20 @@ class DataTable extends Component {
     }
 
     render() {
-        const classes = this.props.classes;
+        //const classes = this.props.classes;
         let { columns, data } = this.state;
         let parsedColumns = [];
 
         if (columns) {
             parsedColumns = columns.map((columnName) => {
-            	let columnRename = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "rename");
+                let columnRename = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "rename");
                 let columnVisibility = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "visible");
 
                 let columnWidthDefault = lib.getTableConfig(this.state.dbIndex, this.state.table, "defaultWidthPx");
                 let columnWidth = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "widthPx");
-                
+
                 let columnMinWidth = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "minWidthPx");
-            	let columnMaxWidth = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "maxWidthPx");
+                let columnMaxWidth = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "maxWidthPx");
 
 
                 return ({
@@ -83,13 +84,13 @@ class DataTable extends Component {
                     width: columnWidth !== null ? columnWidth : (columnWidthDefault ? columnWidthDefault : undefined),
                     maxWidth: columnMaxWidth !== null ? columnMaxWidth : undefined,
                     minWidth: columnMinWidth !== null ? columnMinWidth : 100,
-                    headerStyle: {fontWeight: 'bold'}
+                    headerStyle: { fontWeight: 'bold' }
                 });
             });
         }
 
         return (<div>
-        			<ReactTable
+                    <ReactTable
                         data={ data }   
                         columns={ parsedColumns }
                         defaultPageSize={ 10 } className="-striped -highlight"
@@ -98,12 +99,12 @@ class DataTable extends Component {
                         nextText="Next Page"
                         noDataText={this.props.noDataText} />
 
-                    <div className={classes.topMargin}>
-                        <Button raised disabled={(JSON.stringify(this.state.data) === "[]") ? true : false} color="primary" className={classes.button} onClick={(e) => this.downloadTableWithDelimiter(",")}>Download as .csv</Button>
-                        <Button raised disabled={(JSON.stringify(this.state.data) === "[]") ? true : false} color="primary" className={classes.button} onClick={(e) => this.downloadTableWithDelimiter("\t")}>Download as .tsv</Button>
-                    </div>
-        		</div>
-        );
+                    <Downloads dbIndex={this.state.dbIndex}
+                        table={this.state.table}
+                        columns={this.state.columns}
+                        data={this.state.data}
+                        url={this.state.url} />
+                </div>);
     }
 }
 
@@ -111,7 +112,7 @@ DataTable.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-const styleSheet = createStyleSheet(theme => ({
+const styleSheet = {
     root: {
         width: '29%',
         height: '100%',
@@ -121,12 +122,12 @@ const styleSheet = createStyleSheet(theme => ({
         fontWeight: "bold"
     },
     button: {
-        margin: theme.spacing.unit,
+        margin: 5,
         float: 'right'
     },
     topMargin: {
-        margin: theme.spacing.unit,
-        marginTop: (theme.spacing.unit)*3
+        margin: 5,
+        marginTop: (5) * 5
     }
-}));
+};
 export default withStyles(styleSheet)(DataTable);

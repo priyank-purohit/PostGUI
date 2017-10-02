@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, createStyleSheet } from 'material-ui/styles';
+import { withStyles } from 'material-ui/styles';
 import List, { ListItem, ListItemText } from 'material-ui/List';
 import Menu, { MenuItem } from 'material-ui/Menu';
 
@@ -76,9 +76,9 @@ DbPicker.propTypes = {
 	classes: PropTypes.object.isRequired,
 };
 
-const styleSheet = createStyleSheet(theme => ({
+const styleSheet = {
 	root: {
 		width: '99%'
-	},
-}));
+	}
+};
 export default withStyles(styleSheet)(DbPicker);

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import axiosCancel from 'axios-cancel';
 import PropTypes from 'prop-types';
-import { withStyles, createStyleSheet } from 'material-ui/styles';
+import { withStyles } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
 import { CardHeader } from 'material-ui/Card';
 import Snackbar from 'material-ui/Snackbar';
@@ -24,16 +24,17 @@ let lib = require('../utils/library.js');
 const defaultRules = lib.getQBRules();
 
 const timeout = 2000;
-const maxRowsInOutput = 100000;
+const maxRowsInOutput = 250000;
+
 axiosCancel(axios, {
-  debug: false // default 
+	debug: false // default 
 });
 
 class RightPane extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			dbIndex : props.dbIndex,
+			dbIndex: props.dbIndex,
 			table: props.table,
 			columns: props.columns,
 			visibleColumns: props.visibleColumns,
@@ -45,7 +46,7 @@ class RightPane extends Component {
 			rows: null,
 			snackBarVisibility: false,
 			snackBarMessage: "Unknown error occured",
-			rowLimit: 2500,
+			rowLimit: 250000,
 			url: ""
 		}
 	}
@@ -75,7 +76,7 @@ class RightPane extends Component {
 			}, () => {
 				this.rebuildQueryBuilder(this.refs.queryBuilder, newProps.dbIndex, newProps.table, newProps.columns);
 				let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
-				this.setState({url: url + "?limit=10"});
+				this.setState({ url: url + "?limit=10" });
 				this.fetchOutput(url + "?limit=10");
 			});
 		} else {
@@ -94,7 +95,7 @@ class RightPane extends Component {
 			}, () => {
 				this.rebuildQueryBuilder(this.refs.queryBuilder, newProps.dbIndex, newProps.table, newProps.columns);
 				let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
-				this.setState({url: url+"?limit=10"});
+				this.setState({ url: url + "?limit=10" });
 				this.fetchOutput(url + "?limit=10");
 			});
 		}
@@ -117,7 +118,7 @@ class RightPane extends Component {
 			const filters = lib.getQBFilters(this.state.dbIndex, this.state.table, this.state.columns);
 			const rules = newRules ? newRules : defaultRules;
 
-			window.$(element).queryBuilder({ filters, rules });
+			window.$(element).queryBuilder({ filters, rules, plugins: ['not-group'] });
 		} catch (error) {
 			console.log(error);
 		}
@@ -130,57 +131,58 @@ class RightPane extends Component {
 		const rules = newRules ? newRules : defaultRules;
 		const filters = lib.getQBFilters(dbIndex, table, columns);
 
-		window.$(element).queryBuilder({ filters, rules });
+		window.$(element).queryBuilder({ filters, rules, plugins: ['not-group'] });
 	}
 
 	// Extracts the rules recursively
-    recursiveRulesExtraction(condition, rules) {
-        let select = condition.toLowerCase() + "(";
-        for (let i = 0; i < rules.length; i++) {
-            // iterating over the first rules
-            if (rules[i]['condition'] === "OR" || rules[i]['condition'] === "AND") {
-                if (i === (rules.length - 1)) {
-                    select += this.recursiveRulesExtraction(rules[i]['condition'], rules[i]['rules']);
-                } else {
-                    select += this.recursiveRulesExtraction(rules[i]['condition'], rules[i]['rules']) + ",";
-                }
-            } else {
-                if (i === (rules.length - 1)) {
-                    select += rules[i]['id'] + "." + lib.translateOperatorToPostgrest(rules[i]['operator']) + "." + rules[i]['value'];
-                } else {
-                    select += rules[i]['id'] + "." + lib.translateOperatorToPostgrest(rules[i]['operator']) + "." + rules[i]['value'] + ",";
-                }
-            }
-        }
-        select += ")"
-        return select;
-    }
+	recursiveRulesExtraction(condition, rules) {
+		let select = condition.toLowerCase() + "(";
+		for (let i = 0; i < rules.length; i++) {
+			// iterating over the first rules
+			if (rules[i]['condition'] === "OR" || rules[i]['condition'] === "AND") {
+				if (i === (rules.length - 1)) {
+					select += this.recursiveRulesExtraction(rules[i]['condition'], rules[i]['rules']);
+				} else {
+					select += this.recursiveRulesExtraction(rules[i]['condition'], rules[i]['rules']) + ",";
+				}
+			} else {
+				if (i === (rules.length - 1)) {
+					select += rules[i]['id'] + "." + lib.translateOperatorToPostgrest(rules[i]['operator']) + "." + rules[i]['value'];
+				} else {
+					select += rules[i]['id'] + "." + lib.translateOperatorToPostgrest(rules[i]['operator']) + "." + rules[i]['value'] + ",";
+				}
+			}
+		}
+		select += ")"
+		return select;
+	}
 
-    // Based on the extracted rules, it builds a PostgREST compliant URL for API call
-    buildURLFromRules(rules) {
-        let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
+	// Based on the extracted rules, it builds a PostgREST compliant URL for API call
+	buildURLFromRules(rules) {
+		let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
 
-        // if it is valid, proceed
-        if (rules && rules['valid'] && rules['valid'] === true) {
-            url += "?";
+		// if it is valid, proceed
+		if (rules && rules['valid'] && rules['valid'] === true) {
+			url += "?";
 
-            let firstCondition = rules['condition'];
-            let firstRules = rules['rules'];
-            
-            let conds = this.recursiveRulesExtraction(firstCondition + "=", firstRules);
-            url += conds;
-            url += "&limit=" + this.state.rowLimit;
+			let firstCondition = rules['condition'];
+			let firstRules = rules['rules'];
 
-            // Add SELECT columns... i.e. which columsn to retrieve
-            //url += "&select=" + this.state.selectColumns;
-        }/* else if (this.state.selectColumns !== null && this.state.selectColumns !== [] && this.state.selectColumns !== "") {
-            // Add SELECT columns... but this time, only selected columns, NO FILTERS
-            url += "?select=" + this.state.selectColumns;
-        }*/
-        else {
-        	url += "?limit=" + this.state.rowLimit;
-        	// TODO: display a Snack bar showing an error!!!
-        	this.setState({
+			let conds = this.recursiveRulesExtraction(firstCondition + "=", firstRules);
+			url += conds;
+			url += "&limit=" + this.state.rowLimit;
+
+			// Add SELECT columns... i.e. which columsn to retrieve
+			//url += "&select=" + this.state.selectColumns;
+		}
+		/* else if (this.state.selectColumns !== null && this.state.selectColumns !== [] && this.state.selectColumns !== "") {
+		            // Add SELECT columns... but this time, only selected columns, NO FILTERS
+		            url += "?select=" + this.state.selectColumns;
+		        }*/
+		else {
+			url += "?limit=" + this.state.rowLimit;
+			// TODO: display a Snack bar showing an error!!!
+			this.setState({
 				snackBarVisibility: true,
 				snackBarMessage: "Invalid query, showing the first " + this.state.rowLimit.toString() + " rows in table.",
 			}, () => {
@@ -191,17 +193,17 @@ class RightPane extends Component {
 					});
 				}, 7500);
 			});
-        }
+		}
 
-        return url;
-    }
+		return url;
+	}
 
 	fetchOutput(url) {
 		axios.get(url, { params: {}, requestId: "qbAxiosReq" })
 			.then((response) => {
 				let responseRows = null;
 				if (response.headers["content-range"] !== undefined && response.headers["content-range"] !== null) {
-					responseRows = 1 + parseInt(response.headers["content-range"].replace("/*","").replace("0-", ""), 10);
+					responseRows = 1 + parseInt(response.headers["content-range"].replace("/*", "").replace("0-", ""), 10);
 				}
 				this.setState({
 					rawData: response.data,
@@ -210,12 +212,12 @@ class RightPane extends Component {
 					submitError: false,
 					submitSuccess: true
 				}, () => {
-					this.timer = setTimeout(() => { 
-						this.setState({ 
-							submitLoading: false, 
+					this.timer = setTimeout(() => {
+						this.setState({
+							submitLoading: false,
 							submitSuccess: false,
 							submitError: false
-						}) 
+						})
 					}, timeout);
 				});
 			})
@@ -228,12 +230,12 @@ class RightPane extends Component {
 					submitSuccess: true,
 					submitError: true // both true implies request successfully reported an error
 				}, () => {
-					this.timer = setTimeout(() => { 
-						this.setState({ 
-							submitLoading: false, 
+					this.timer = setTimeout(() => {
+						this.setState({
+							submitLoading: false,
 							submitSuccess: false,
 							submitError: false
-						}) 
+						})
 					}, timeout);
 				});
 			});
@@ -245,7 +247,7 @@ class RightPane extends Component {
 		this.setState({
 			rawData: [],
 			rows: null,
-			submitLoading: true, 
+			submitLoading: true,
 			submitError: false,
 			submitSuccess: false
 		}, () => {
@@ -253,7 +255,7 @@ class RightPane extends Component {
 			this.setState({ rules: rules }, () => {
 				let url = this.buildURLFromRules(rules);
 				this.fetchOutput(url);
-				this.setState({url: url});
+				this.setState({ url: url });
 			});
 			return rules;
 		});
@@ -267,13 +269,12 @@ class RightPane extends Component {
 	handleRowLimitChange(event) {
 		let newLimit = event.target.value;
 		if (newLimit <= 0) {
-			newLimit = 100;
-		}
-		else if (newLimit > maxRowsInOutput) {
+			newLimit = 1;
+		} else if (newLimit > maxRowsInOutput) {
 			newLimit = maxRowsInOutput;
 		}
-		
-		this.setState({rowLimit: newLimit});
+
+		this.setState({ rowLimit: parseInt(newLimit, 10) });
 	}
 
 	render() {
@@ -326,7 +327,7 @@ class RightPane extends Component {
 							onChange={this.handleRowLimitChange.bind(this)} />
 
 					<Typography type="subheading" className={classes.cardMarginLeftTop}>Query Results</Typography>
-						<RightPaneChips rows={this.state.rows} />
+						<RightPaneChips rows={this.state.rows} rowLimit={this.state.rowLimit} maxRows={maxRowsInOutput}/>
 
 						<div className={ classes.cardMarginLeftRightTop } >
 							<DataTable
@@ -347,7 +348,7 @@ RightPane.propTypes = {
 	classes: PropTypes.object.isRequired,
 };
 
-const styleSheet = createStyleSheet(theme => ({
+const styleSheet = {
 	root: {
 		paddingBottom: 50,
 		marginLeft: '30%',
@@ -372,17 +373,17 @@ const styleSheet = createStyleSheet(theme => ({
 	},
 	cardMarginLeftTop: { // For a new section
 		marginLeft: 16,
-		marginTop: 16 // want a bit more space at top to clearly indicate new section...
+		marginTop: 32 // want a bit more space at top to clearly indicate new section...
 	},
 	textField: {
-		marginLeft: theme.spacing.unit,
-		marginRight: theme.spacing.unit,
+		marginLeft: 5,
+		marginRight: 5,
 		width: 300
 	},
 	hide: {
 		opacity: 0.0,
 		marginTop: 75
 	}
-}));
+};
 
 export default withStyles(styleSheet)(RightPane);

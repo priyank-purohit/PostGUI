@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, createStyleSheet } from 'material-ui/styles';
+import { withStyles } from 'material-ui/styles';
 import axios from 'axios';
 
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
@@ -13,6 +13,7 @@ import FolderIconOpen from 'material-ui-icons/FolderOpen';
 import VisibilityIcon from 'material-ui-icons/Visibility';
 import VisibilityOffIcon from 'material-ui-icons/VisibilityOff';;
 
+import { indigo } from 'material-ui/colors';
 
 let lib = require("../utils/library.js");
 
@@ -305,7 +306,7 @@ DbSchema.propTypes = {
 	classes: PropTypes.object.isRequired,
 };
 
-const styleSheet = createStyleSheet(theme => ({
+const styleSheet = {
 	column: {
 		marginLeft: 27
 	},
@@ -313,12 +314,12 @@ const styleSheet = createStyleSheet(theme => ({
 		display: 'none'
 	},
 	close: {
-		width: theme.spacing.unit * 4,
-		height: theme.spacing.unit * 4,
+		width: 5 * 4,
+		height: 5 * 4,
 	},
 	primaryColoured: {
-		fill: theme.palette.primary[400]
+		fill: indigo[400]
 	}
-}));
+};
 
 export default withStyles(styleSheet)(DbSchema);

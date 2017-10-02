@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, createStyleSheet } from 'material-ui/styles';
+import { withStyles } from 'material-ui/styles';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
@@ -16,8 +16,8 @@ class Navigation extends Component {
 		let dbTitle = lib.getDbConfig(this.props.dbIndex, "title");
 
 		// Set a short window title
-    	document.title = dbTitle.replace("Database", "db").replace("database", "db");
-		
+		document.title = dbTitle.replace("Database", "db").replace("database", "db");
+
 		return (
 			<div className={classes.root}>
 				<AppBar position="absolute">
@@ -42,13 +42,13 @@ Navigation.propTypes = {
 	classes: PropTypes.object.isRequired,
 };
 
-const styleSheet = createStyleSheet(theme => ({
+const styleSheet = {
 	root: {
 		width: '100%'
 	},
 	flex: {
 		flex: 1
 	}
-}));
+};
 
 export default withStyles(styleSheet)(Navigation);
