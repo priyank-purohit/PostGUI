@@ -13,8 +13,6 @@ import TextField from 'material-ui/TextField';
 import Divider from 'material-ui/Divider';
 import { LinearProgress } from 'material-ui/Progress';
 
-import green from 'material-ui/colors/green';
-
 const timeout = 2000;
 const maxRowsInDownload = 2500000;
 
@@ -487,15 +485,6 @@ const styleSheet = {
         marginTop: 16,
         marginLeft: 16
     },
-    rootInvisibleLeft: {
-        paddingBottom: 50,
-        marginLeft: '1%',
-    },
-    middlePaperSection: {
-        width: '99%',
-        height: '100%',
-        marginTop: 75
-    },
     cardMarginLeft: { // For items within the same section
         marginLeft: 32
     },
@@ -518,13 +507,6 @@ const styleSheet = {
     textField: {
         marginLeft: 8,
         marginRight: 8
-    },
-    hide: {
-        opacity: 0.0,
-        marginTop: 75
-    },
-    checked: {
-        color: green[500],
     }
 };
 
