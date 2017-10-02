@@ -135,15 +135,17 @@ class RightPane extends Component {
 	}
 
 	// Extracts the rules recursively
-	recursiveRulesExtraction(condition, rules) {
-		let select = condition.toLowerCase() + "(";
+	recursiveRulesExtraction(notPrefix, condition, rules) {
+		let select = notPrefix + condition.toLowerCase() + "(";
 		for (let i = 0; i < rules.length; i++) {
 			// iterating over the first rules
+			let notPrefixLocal = rules[i]['not'] === true ? "not." : "";
+			
 			if (rules[i]['condition'] === "OR" || rules[i]['condition'] === "AND") {
 				if (i === (rules.length - 1)) {
-					select += this.recursiveRulesExtraction(rules[i]['condition'], rules[i]['rules']);
+					select += this.recursiveRulesExtraction(notPrefixLocal, rules[i]['condition'], rules[i]['rules']);
 				} else {
-					select += this.recursiveRulesExtraction(rules[i]['condition'], rules[i]['rules']) + ",";
+					select += this.recursiveRulesExtraction(notPrefixLocal, rules[i]['condition'], rules[i]['rules']) + ",";
 				}
 			} else {
 				if (i === (rules.length - 1)) {
@@ -165,10 +167,16 @@ class RightPane extends Component {
 		if (rules && rules['valid'] && rules['valid'] === true) {
 			url += "?";
 
+			let notPrefix = "";
+			if (rules['not'] === true) {
+				console.log("NOT!");
+				notPrefix = "not.";
+			}
+
 			let firstCondition = rules['condition'];
 			let firstRules = rules['rules'];
 
-			let conds = this.recursiveRulesExtraction(firstCondition + "=", firstRules);
+			let conds = this.recursiveRulesExtraction(notPrefix, firstCondition + "=", firstRules);
 			url += conds;
 			url += "&limit=" + this.state.rowLimit;
 
@@ -252,6 +260,7 @@ class RightPane extends Component {
 			submitSuccess: false
 		}, () => {
 			const rules = window.$(this.refs.queryBuilder).queryBuilder('getRules');
+			console.log(JSON.stringify(rules));
 			this.setState({ rules: rules }, () => {
 				let url = this.buildURLFromRules(rules);
 				this.fetchOutput(url);
