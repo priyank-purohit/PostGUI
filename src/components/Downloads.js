@@ -186,9 +186,9 @@ class Downloads extends Component {
         }
     }
 
-    downloadTableAsFASTA(dataFullStatus = false) {
-        let seqColumnNames = lib.getValueFromConfig('seq_column_names');
+    identifySeqColumnInStateColumns() {
         let seqColumn = null;
+        let seqColumnNames = lib.getValueFromConfig('seq_column_names');
         for (let i in this.state.columns) {
             let columnName = this.state.columns[i];
 
@@ -197,6 +197,11 @@ class Downloads extends Component {
                 break;
             }
         }
+        return seqColumn;
+    }
+
+    downloadTableAsFASTA(dataFullStatus = false) {
+        let seqColumn = this.identifySeqColumnInStateColumns();
 
         // proceed if a sequence column was found, proceed w/ the first found column....
         if (seqColumn !== null) {
