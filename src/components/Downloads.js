@@ -204,11 +204,11 @@ class Downloads extends Component {
                     let header = ">";
                     for (let index in this.state.columns) {
                         if (this.state.columns[index] !== "nuc_seq" && this.state.columns[index] !== "aa_seq") {
-                            header += " | " + element[this.state.columns[index]];
+                            header += "|" + element[this.state.columns[index]];
                         }
                     }
 
-                    result += header.replace("> | ", ">");
+                    result += header.replace(">|", ">");
                     result += "\n";
                     result += seq;
                     result += "\n";
@@ -237,11 +237,11 @@ class Downloads extends Component {
                         let header = ">";
                         for (let index in this.state.columns) {
                             if (this.state.columns[index] !== "nuc_seq" && this.state.columns[index] !== "aa_seq") {
-                                header += " | " + element[this.state.columns[index]];
+                                header += "|" + element[this.state.columns[index]];
                             }
                         }
 
-                        result += header.replace("> | ", ">");
+                        result += header.replace(">|", ">");
                         result += "\n";
                         result += seq;
                         result += "\n";
