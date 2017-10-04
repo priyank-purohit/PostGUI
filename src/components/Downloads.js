@@ -437,7 +437,7 @@ class Downloads extends Component {
                                 </span>
                                 <FormControlLabel control={ <Radio /> } label="JSON" value="json" />
                                 <FormControlLabel control={ <Radio /> } label="XML" value="xml" />
-                                <FormControlLabel control={ <Radio /> } label="FASTA" value="fasta" />
+                                <FormControlLabel control={ <Radio /> } label="FASTA" value="fasta" disabled={this.identifySeqColumnInStateColumns() === null ? true : false}/>
                                 {/*<FormControlLabel disabled control={ <Radio /> } label="Newick Tree" value="newicktree" />
                                 <FormControlLabel disabled control={ <Radio /> } label="Nexus Tree" value="nexustree" />
                                 <FormControlLabel disabled control={ <Radio /> } label="PhyloXML" value="phyloxml" />*/}
