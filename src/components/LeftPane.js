@@ -4,6 +4,7 @@ import { withStyles } from 'material-ui/styles';
 import Divider from 'material-ui/Divider';
 import DbPicker from './DbPicker.js'
 import DbSchema from './DbSchema.js'
+import { CardHeader } from 'material-ui/Card';
 
 
 class LeftPane extends Component {
@@ -16,6 +17,7 @@ class LeftPane extends Component {
 					dbIndex={this.props.dbIndex} 
 					changeDbIndex={this.props.changeDbIndex} />
 				<Divider />
+				<CardHeader subheader="Tables and Columns" className={classes.lowBottomPadding}/>
 				<DbSchema 
 					dbIndex={this.props.dbIndex} 
 					table={this.props.table} 
@@ -45,6 +47,9 @@ const styleSheet = {
 	},
 	column: {
 		marginLeft: 27
+	},
+	lowBottomPadding: {
+		paddingBottom: 0
 	}
 };
 
