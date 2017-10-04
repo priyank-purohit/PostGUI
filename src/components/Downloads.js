@@ -213,7 +213,7 @@ class Downloads extends Component {
                         // Parse header string ...
                         let header = ">";
                         for (let index in this.state.columns) {
-                            if (this.state.columns[index] !== "nuc_seq" && this.state.columns[index] !== "aa_seq") {
+                            if (this.state.columns[index] !== seqColumn) {
                                 header += "|" + element[this.state.columns[index]];
                             }
                         }
@@ -243,7 +243,7 @@ class Downloads extends Component {
                             // Parse header string ...
                             let header = ">";
                             for (let index in this.state.columns) {
-                                if (this.state.columns[index] !== "nuc_seq" && this.state.columns[index] !== "aa_seq") {
+                                if (this.state.columns[index] !== seqColumn) {
                                     header += "|" + element[this.state.columns[index]];
                                 }
                             }
