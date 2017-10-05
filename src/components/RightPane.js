@@ -10,6 +10,8 @@ import Snackbar from 'material-ui/Snackbar';
 import TextField from 'material-ui/TextField';
 import SubmitButton from './SubmitButton.js';
 import Typography from 'material-ui/Typography';
+import { FormControl, FormGroup, FormControlLabel } from 'material-ui/Form';
+import Checkbox from 'material-ui/Checkbox';
 
 import IconButton from 'material-ui/IconButton';
 import CloseIcon from 'material-ui-icons/Close';
@@ -336,6 +338,9 @@ class RightPane extends Component {
 							margin="normal" 
 							onChange={this.handleRowLimitChange.bind(this)} />
 
+						<FormControlLabel control={ <Checkbox value="getExactRowCount" /> } label={"Get exact rows count"} className={classes.marginLeft} />
+
+
 					<Typography type="subheading" className={classes.cardMarginLeftTop}>Query Results</Typography>
 						<RightPaneChips rows={this.state.rows} rowLimit={this.state.rowLimit} maxRows={maxRowsInOutput}/>
 
@@ -393,6 +398,9 @@ const styleSheet = {
 	hide: {
 		opacity: 0.0,
 		marginTop: 75
+	},
+	marginLeft: {
+		marginLeft: 200
 	}
 };
 
