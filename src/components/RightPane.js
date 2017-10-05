@@ -47,6 +47,7 @@ class RightPane extends Component {
 			submitSuccess: false,
 			rows: null,
 			snackBarVisibility: false,
+			exactRowCount: false,
 			snackBarMessage: "Unknown error occured",
 			rowLimit: 250000,
 			url: ""
@@ -289,6 +290,22 @@ class RightPane extends Component {
 		this.setState({ rowLimit: parseInt(newLimit, 10) });
 	}
 
+	handleGetExactRowCountToggle() {
+        if (this.state.exactRowCount === true) {
+            this.setState({
+                exactRowCount: false
+            }/*, () => {
+                this.createFileName();
+            }*/);
+        } else {
+            this.setState({
+                exactRowCount: true
+            }/*, () => {
+                this.createFileName();
+            }*/);
+        }
+    }
+
 	render() {
 		const classes = this.props.classes;
 
@@ -338,7 +355,7 @@ class RightPane extends Component {
 							margin="normal" 
 							onChange={this.handleRowLimitChange.bind(this)} />
 
-						<FormControlLabel control={ <Checkbox value="getExactRowCount" /> } label={"Get exact rows count"} className={classes.marginLeft} />
+						<FormControlLabel control={ <Checkbox onChange={this.handleGetExactRowCountToggle.bind(this)} value="getExactRowCount" /> } checked={this.state.exactRowCount} label={"Get exact rows count"} className={classes.marginLeft} />
 
 
 					<Typography type="subheading" className={classes.cardMarginLeftTop}>Query Results</Typography>
