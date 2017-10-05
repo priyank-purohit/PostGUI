@@ -9,6 +9,7 @@ class RightPaneChips extends Component {
 
 		this.state = {
 			rows: props.rows ? props.rows : 0,
+			totalRows: props.totalRows ? props.totalRows : 0,
 			rowLimit: props.rowLimit ? props.rowLimit : 2500,
 			maxRows: props.maxRows ? props.maxRows : 100000,
 			tip: "Tip: Hold shift and click to multi-sort!",
@@ -22,6 +23,7 @@ class RightPaneChips extends Component {
 	componentWillReceiveProps(newProps) {
 		this.setState({
 			rows: newProps.rows ? newProps.rows : 0,
+			totalRows: newProps.totalRows ? newProps.totalRows : 0,
 			rowLimit: newProps.rowLimit ? newProps.rowLimit : 2500,
 			maxRows: newProps.maxRows ? newProps.maxRows : 100000,
 		});
@@ -30,10 +32,10 @@ class RightPaneChips extends Component {
 		const classes = this.props.classes;
 		return (
 			<div className={classes.row}>
-				<Chip label={"Displaying " + this.state.rows + " rows"} key={1} className={classes.chip} />
+				<Chip label={"Displaying " + this.state.rows + " of " + this.props.totalRows + " rows"} key={1} className={classes.chip} />
 				{this.state.rows === this.state.rowLimit ? <Chip label={this.state.tip2} title={this.state.title2} key={3} className={classes.chip} /> : <div></div>}
 				{this.state.rows === this.state.maxRows ? <Chip label={this.state.tip3} title={this.state.title3} key={2} className={classes.chip} /> : <div></div>}
-				<Chip label={this.state.tip} key={2} className={classes.chip} />
+				<Chip label={this.state.tip} key={4} className={classes.chip} />
 			</div>
 		);
 	}

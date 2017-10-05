@@ -211,15 +211,22 @@ class RightPane extends Component {
 	}
 
 	fetchOutput(url) {
-		axios.get(url, { params: {}, requestId: "qbAxiosReq" })
+		let exactCountHeader = { Prefer: 'count=exact' };
+		let inexactCountHeader = { Prefer: 'count=estimated' };
+		axios.get(url, { headers: this.state.exactRowCount === true ? exactCountHeader : inexactCountHeader, requestId: "qbAxiosReq" })
 			.then((response) => {
 				let responseRows = null;
+				let totalRows = null;
 				if (response.headers["content-range"] !== undefined && response.headers["content-range"] !== null) {
+					console.log(response.headers["content-range"]);
 					responseRows = 1 + parseInt(response.headers["content-range"].replace("/*", "").replace("0-", ""), 10);
+					totalRows = response.headers["content-range"].replace(/0-\d*\//, "");
+					console.log("totalRows = " + totalRows);
 				}
 				this.setState({
 					rawData: response.data,
 					rows: responseRows,
+					totalRows: totalRows,
 					submitLoading: false,
 					submitError: false,
 					submitSuccess: true
@@ -357,9 +364,8 @@ class RightPane extends Component {
 
 						<FormControlLabel control={ <Checkbox onChange={this.handleGetExactRowCountToggle.bind(this)} value="getExactRowCount" /> } checked={this.state.exactRowCount} label={"Get exact rows count"} className={classes.marginLeft} />
 
-
 					<Typography type="subheading" className={classes.cardMarginLeftTop}>Query Results</Typography>
-						<RightPaneChips rows={this.state.rows} rowLimit={this.state.rowLimit} maxRows={maxRowsInOutput}/>
+						<RightPaneChips rows={this.state.rows} totalRows={this.state.totalRows} rowLimit={this.state.rowLimit} maxRows={maxRowsInOutput}/>
 
 						<div className={ classes.cardMarginLeftRightTop } >
 							<DataTable
