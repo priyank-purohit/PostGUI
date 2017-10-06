@@ -10,7 +10,7 @@ import Snackbar from 'material-ui/Snackbar';
 import TextField from 'material-ui/TextField';
 import SubmitButton from './SubmitButton.js';
 import Typography from 'material-ui/Typography';
-import { FormControl, FormGroup, FormControlLabel } from 'material-ui/Form';
+import { FormControlLabel } from 'material-ui/Form';
 import Checkbox from 'material-ui/Checkbox';
 
 import IconButton from 'material-ui/IconButton';
@@ -173,7 +173,6 @@ class RightPane extends Component {
 
 			let notPrefix = "";
 			if (rules['not'] === true) {
-				console.log("NOT!");
 				notPrefix = "not.";
 			}
 
@@ -218,10 +217,8 @@ class RightPane extends Component {
 				let responseRows = null;
 				let totalRows = null;
 				if (response.headers["content-range"] !== undefined && response.headers["content-range"] !== null) {
-					console.log(response.headers["content-range"]);
 					responseRows = 1 + parseInt(response.headers["content-range"].replace("/*", "").replace("0-", ""), 10);
 					totalRows = response.headers["content-range"].replace(/0-\d*\//, "");
-					console.log("totalRows = " + totalRows);
 				}
 				this.setState({
 					rawData: response.data,
@@ -271,7 +268,6 @@ class RightPane extends Component {
 			submitSuccess: false
 		}, () => {
 			const rules = window.$(this.refs.queryBuilder).queryBuilder('getRules');
-			console.log(JSON.stringify(rules));
 			this.setState({ rules: rules }, () => {
 				let url = this.buildURLFromRules(rules);
 				this.fetchOutput(url);
@@ -362,7 +358,7 @@ class RightPane extends Component {
 							margin="normal" 
 							onChange={this.handleRowLimitChange.bind(this)} />
 
-						<FormControlLabel control={ <Checkbox onChange={this.handleGetExactRowCountToggle.bind(this)} value="getExactRowCount" /> } checked={this.state.exactRowCount} label={"Get exact rows count"} className={classes.marginLeft} />
+						<FormControlLabel control={ <Checkbox onChange={this.handleGetExactRowCountToggle.bind(this)} value="getExactRowCount" /> } checked={this.state.exactRowCount} label={"Get exact count of rows in result"} className={classes.marginLeft} />
 
 					<Typography type="subheading" className={classes.cardMarginLeftTop}>Query Results</Typography>
 						<RightPaneChips rows={this.state.rows} totalRows={this.state.totalRows} rowLimit={this.state.rowLimit} maxRows={maxRowsInOutput}/>
