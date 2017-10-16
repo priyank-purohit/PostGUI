@@ -218,7 +218,7 @@ class RightPane extends Component {
 				let totalRows = null;
 				if (response.headers["content-range"] !== undefined && response.headers["content-range"] !== null) {
 					responseRows = 1 + parseInt(response.headers["content-range"].replace("/*", "").replace("0-", ""), 10);
-					totalRows = response.headers["content-range"].replace(/0-\d*\//, "");
+					totalRows = parseInt(response.headers["content-range"].replace(/0-\d*\//, ""), 10);
 				}
 				this.setState({
 					rawData: response.data,
