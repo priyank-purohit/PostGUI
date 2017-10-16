@@ -262,7 +262,7 @@ class RightPane extends Component {
 		// first show loading
 		this.setState({
 			rawData: [],
-			rows: null,
+			rows: 0,
 			submitLoading: true,
 			submitError: false,
 			submitSuccess: false
