@@ -10,6 +10,8 @@ import Snackbar from 'material-ui/Snackbar';
 import TextField from 'material-ui/TextField';
 import SubmitButton from './SubmitButton.js';
 import Typography from 'material-ui/Typography';
+import { FormControlLabel } from 'material-ui/Form';
+import Checkbox from 'material-ui/Checkbox';
 
 import IconButton from 'material-ui/IconButton';
 import CloseIcon from 'material-ui-icons/Close';
@@ -45,6 +47,7 @@ class RightPane extends Component {
 			submitSuccess: false,
 			rows: null,
 			snackBarVisibility: false,
+			exactRowCount: false,
 			snackBarMessage: "Unknown error occured",
 			rowLimit: 250000,
 			url: ""
@@ -148,10 +151,11 @@ class RightPane extends Component {
 					select += this.recursiveRulesExtraction(notPrefixLocal, rules[i]['condition'], rules[i]['rules']) + ",";
 				}
 			} else {
+				let containsWildCards = rules[i]['operator'] === "contains" ? (rules[i]['value'].indexOf("*") === -1 ? "*" : "") : ""; // equals * only when user forgets to have at least 1 * in the value input box
 				if (i === (rules.length - 1)) {
-					select += rules[i]['id'] + "." + lib.translateOperatorToPostgrest(rules[i]['operator']) + "." + rules[i]['value'];
+					select += rules[i]['id'] + "." + lib.translateOperatorToPostgrest(rules[i]['operator']) + "." + containsWildCards + rules[i]['value'] + containsWildCards;
 				} else {
-					select += rules[i]['id'] + "." + lib.translateOperatorToPostgrest(rules[i]['operator']) + "." + rules[i]['value'] + ",";
+					select += rules[i]['id'] + "." + lib.translateOperatorToPostgrest(rules[i]['operator']) + "." + containsWildCards + rules[i]['value'] + containsWildCards + ",";
 				}
 			}
 		}
@@ -169,7 +173,6 @@ class RightPane extends Component {
 
 			let notPrefix = "";
 			if (rules['not'] === true) {
-				console.log("NOT!");
 				notPrefix = "not.";
 			}
 
@@ -192,14 +195,14 @@ class RightPane extends Component {
 			// TODO: display a Snack bar showing an error!!!
 			this.setState({
 				snackBarVisibility: true,
-				snackBarMessage: "Invalid query, showing the first " + this.state.rowLimit.toString() + " rows in table.",
+				snackBarMessage: "Incomplete query",
 			}, () => {
 				this.timer = setTimeout(() => {
 					this.setState({
 						snackBarVisibility: false,
 						snackBarMessage: "Unknown error"
 					});
-				}, 7500);
+				}, 2500);
 			});
 		}
 
@@ -207,15 +210,20 @@ class RightPane extends Component {
 	}
 
 	fetchOutput(url) {
-		axios.get(url, { params: {}, requestId: "qbAxiosReq" })
+		let exactCountHeader = { Prefer: 'count=exact' };
+		let inexactCountHeader = { Prefer: 'count=estimated' };
+		axios.get(url, { headers: this.state.exactRowCount === true ? exactCountHeader : inexactCountHeader, requestId: "qbAxiosReq" })
 			.then((response) => {
 				let responseRows = null;
+				let totalRows = null;
 				if (response.headers["content-range"] !== undefined && response.headers["content-range"] !== null) {
 					responseRows = 1 + parseInt(response.headers["content-range"].replace("/*", "").replace("0-", ""), 10);
+					totalRows = parseInt(response.headers["content-range"].replace(/0-\d*\//, ""), 10);
 				}
 				this.setState({
 					rawData: response.data,
 					rows: responseRows,
+					totalRows: totalRows,
 					submitLoading: false,
 					submitError: false,
 					submitSuccess: true
@@ -254,13 +262,12 @@ class RightPane extends Component {
 		// first show loading
 		this.setState({
 			rawData: [],
-			rows: null,
+			rows: 0,
 			submitLoading: true,
 			submitError: false,
 			submitSuccess: false
 		}, () => {
 			const rules = window.$(this.refs.queryBuilder).queryBuilder('getRules');
-			console.log(JSON.stringify(rules));
 			this.setState({ rules: rules }, () => {
 				let url = this.buildURLFromRules(rules);
 				this.fetchOutput(url);
@@ -285,6 +292,22 @@ class RightPane extends Component {
 
 		this.setState({ rowLimit: parseInt(newLimit, 10) });
 	}
+
+	handleGetExactRowCountToggle() {
+        if (this.state.exactRowCount === true) {
+            this.setState({
+                exactRowCount: false
+            }/*, () => {
+                this.createFileName();
+            }*/);
+        } else {
+            this.setState({
+                exactRowCount: true
+            }/*, () => {
+                this.createFileName();
+            }*/);
+        }
+    }
 
 	render() {
 		const classes = this.props.classes;
@@ -335,8 +358,10 @@ class RightPane extends Component {
 							margin="normal" 
 							onChange={this.handleRowLimitChange.bind(this)} />
 
+						<FormControlLabel control={ <Checkbox onChange={this.handleGetExactRowCountToggle.bind(this)} value="getExactRowCount" /> } checked={this.state.exactRowCount} label={"Get exact count of rows in result (slow)"} className={classes.marginLeft} />
+
 					<Typography type="subheading" className={classes.cardMarginLeftTop}>Query Results</Typography>
-						<RightPaneChips rows={this.state.rows} rowLimit={this.state.rowLimit} maxRows={maxRowsInOutput}/>
+						<RightPaneChips rows={this.state.rows} totalRows={this.state.totalRows} rowLimit={this.state.rowLimit} maxRows={maxRowsInOutput}/>
 
 						<div className={ classes.cardMarginLeftRightTop } >
 							<DataTable
@@ -392,6 +417,9 @@ const styleSheet = {
 	hide: {
 		opacity: 0.0,
 		marginTop: 75
+	},
+	marginLeft: {
+		marginLeft: 200
 	}
 };
 

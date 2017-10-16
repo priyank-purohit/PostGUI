@@ -186,71 +186,84 @@ class Downloads extends Component {
         }
     }
 
-    downloadTableAsFASTA(dataFullStatus = false) {
-        if (dataFullStatus === false && JSON.stringify(this.state.data) !== "[]" && (this.state.table === "nucleotide_seq" || this.state.table === "protein_seq")) {
-            // TO DO: DETECT Protein or nucleotide tables automatically by name
-            try {
-                let result = "";
+    identifySeqColumnInStateColumns() {
+        let seqColumn = null;
+        let seqColumnNames = lib.getValueFromConfig('seq_column_names');
+        for (let i in this.state.columns) {
+            let columnName = this.state.columns[i];
 
-                for (let index in this.state.data) {
-                    let element = this.state.data[index];
-
-                    let seq = element["nuc_seq"];
-                    if (this.state.table === "protein_seq") {
-                        seq = element["aa_seq"]
-                    }
-
-                    // Parse header string ...
-                    let header = ">";
-                    for (let index in this.state.columns) {
-                        if (this.state.columns[index] !== "nuc_seq" && this.state.columns[index] !== "aa_seq") {
-                            header += " | " + element[this.state.columns[index]];
-                        }
-                    }
-
-                    result += header.replace("> | ", ">");
-                    result += "\n";
-                    result += seq;
-                    result += "\n";
-                }
-
-                let fileName = this.createFileName();
-                this.downloadFile(result, fileName, "text/plain");
-            } catch (err) {
-                console.log(err);
+            if (lib.inArray(columnName, seqColumnNames)) {
+                seqColumn = columnName;
+                break;
             }
-        } else if (dataFullStatus === true) {
-            if (JSON.stringify(this.state.dataFull) !== "[]" && (this.state.table === "nucleotide_seq" || this.state.table === "protein_seq")) {
+        }
+        return seqColumn;
+    }
+
+    downloadTableAsFASTA(dataFullStatus = false) {
+        let seqColumn = this.identifySeqColumnInStateColumns();
+
+        // proceed if a sequence column was found, proceed w/ the first found column....
+        if (seqColumn !== null) {
+            if (dataFullStatus === false && JSON.stringify(this.state.data) !== "[]") {
                 // TO DO: DETECT Protein or nucleotide tables automatically by name
                 try {
                     let result = "";
 
-                    for (let index in this.state.dataFull) {
-                        let element = this.state.dataFull[index];
+                    for (let index in this.state.data) {
+                        let element = this.state.data[index];
 
-                        let seq = element["nuc_seq"];
-                        if (this.state.table === "protein_seq") {
-                            seq = element["aa_seq"]
-                        }
+                        let seq = element[seqColumn];
 
                         // Parse header string ...
                         let header = ">";
                         for (let index in this.state.columns) {
-                            if (this.state.columns[index] !== "nuc_seq" && this.state.columns[index] !== "aa_seq") {
-                                header += " | " + element[this.state.columns[index]];
+                            if (this.state.columns[index] !== seqColumn) {
+                                header += "|" + element[this.state.columns[index]];
                             }
                         }
 
-                        result += header.replace("> | ", ">");
+                        result += header.replace(">|", ">");
                         result += "\n";
                         result += seq;
                         result += "\n";
                     }
 
-                    let fileName = this.createFileName(true);
+                    let fileName = this.createFileName();
                     this.downloadFile(result, fileName, "text/plain");
                 } catch (err) {
                     console.log(err);
+                }
+            } else if (dataFullStatus === true) {
+                if (JSON.stringify(this.state.dataFull) !== "[]") {
+                    // TO DO: DETECT Protein or nucleotide tables automatically by name
+                    try {
+                        let result = "";
+
+                        for (let index in this.state.dataFull) {
+                            let element = this.state.dataFull[index];
+
+                            let seq = element[seqColumn];
+
+                            // Parse header string ...
+                            let header = ">";
+                            for (let index in this.state.columns) {
+                                if (this.state.columns[index] !== seqColumn) {
+                                    header += "|" + element[this.state.columns[index]];
+                                }
+                            }
+
+                            result += header.replace(">|", ">");
+                            result += "\n";
+                            result += seq;
+                            result += "\n";
+                        }
+
+                        let fileName = this.createFileName(true);
+                        this.downloadFile(result, fileName, "text/plain");
+                    } catch (err) {
+                        console.log(err);
+                    }
                 }
             }
         }
@@ -424,7 +437,7 @@ class Downloads extends Component {
                                 </span>
                                 <FormControlLabel control={ <Radio /> } label="JSON" value="json" />
                                 <FormControlLabel control={ <Radio /> } label="XML" value="xml" />
-                                <FormControlLabel control={ <Radio /> } label="FASTA" value="fasta" />
+                                <FormControlLabel control={ <Radio /> } label="FASTA" value="fasta" disabled={this.identifySeqColumnInStateColumns() === null ? true : false}/>
                                 {/*<FormControlLabel disabled control={ <Radio /> } label="Newick Tree" value="newicktree" />
                                 <FormControlLabel disabled control={ <Radio /> } label="Nexus Tree" value="nexustree" />
                                 <FormControlLabel disabled control={ <Radio /> } label="PhyloXML" value="phyloxml" />*/}
@@ -435,7 +448,7 @@ class Downloads extends Component {
                         {/* ADDITIONAL DOWNLOADS OPTIONS */}
                         <Typography type="body1" className={classes.cardcardMarginLeftTop}>Options</Typography>
                         <FormGroup className={classes.cardcardMarginLeftTop}>
-                            <FormControlLabel control={ <Checkbox onChange={this.handleGetFullResultToggle.bind(this)} value="getFullResult" /> } label={"Download up to 2.5 million rows"} />
+                            <FormControlLabel disabled={true} control={ <Checkbox onChange={this.handleGetFullResultToggle.bind(this)} value="getFullResult" /> } label={"Download up to 2.5 million rows"} />
 
                             <FormControlLabel control={ <Checkbox onChange={this.handleTableHeaderToggle.bind(this)} disabled={this.state.fileFormat !== 'delimited' ? true : false} value="tableHeader" /> } checked={this.state.tableHeader} label={"Include table headers"} />
                         </FormGroup>

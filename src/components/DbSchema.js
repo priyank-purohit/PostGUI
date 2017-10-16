@@ -153,6 +153,24 @@ class DbSchema extends Component {
 	// Handle click methods
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	// Show/hide table based on last visibility
+	handleTableHover(clickedTable, skipCheck = false) {
+		// skipCheck prevents table schema collapse when leftPane toggles
+		if (this.state.hoverTable !== clickedTable || skipCheck) {
+			this.setState({
+				hoverTable: clickedTable
+			}, () => {
+				this.updateVisibleColumnsOnHover();
+			});
+		} else {
+			this.setState({
+				hoverTable: ""
+			}, () => {
+				this.updateVisibleColumnsOnHover();
+			});
+		}
+	}
+
 	// Set CLICKEDTABLE in state as TABLE
 	handleTableClick(clickedTable, skipCheck = false) {
 		// skipCheck prevents table schema collapse when leftPane toggles
@@ -212,7 +230,7 @@ class DbSchema extends Component {
 		// First push the table itself
 		tableColumnElements.push(
 			<ListItem button key={this.state.dbIndex+tableName} id={tableName}
-				 title={displayName} onClick={(event) => this.handleTableClick(tableName)}>
+				 title={displayName} onClick={(event) => this.handleTableClick(tableName)} onMouseEnter={(event) => this.handleTableHover(tableName)}  >
 				<ListItemIcon>
 					{this.state.table === tableName ? <FolderIconOpen className={this.props.classes.primaryColoured} /> : <FolderIcon /> }
 				</ListItemIcon>
@@ -237,7 +255,7 @@ class DbSchema extends Component {
 
 		// If TABLE is equal to STATE.TABLE (displayed table), show the column element
 		let classNames = this.props.classes.column;
-		if (this.state.table !== table) {
+		if (this.state.table !== table && this.state.hoverTable !== table) {
 			classNames = this.props.classes.column + " " + this.props.classes.hide;
 		}
 
@@ -276,6 +294,22 @@ class DbSchema extends Component {
 		}, () => {
 			this.props.changeVisibleColumns(this.state[this.state.table + "visibleColumns"]);
 		});*/
+	}
+
+	updateVisibleColumnsOnHover() {
+		let columns = this.state[this.state.hoverTable];
+		let columnVisibility = {};
+		let visibleColumns = [];
+
+		if (columns !== undefined) {
+			for (let i = 0; i < columns.length; i++) {
+				let visibility = this.state[this.state.hoverTable + columns[i] + "Visibility"] === "hide" ? false : true;
+				columnVisibility[columns[i]] = visibility;
+				if (visibility) {
+					visibleColumns.push(columns[i]);
+				}
+			}
+		}
 	}
 
 	render() {
