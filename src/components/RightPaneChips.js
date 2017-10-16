@@ -36,7 +36,7 @@ class RightPaneChips extends Component {
 		const classes = this.props.classes;
 		let rowCountChipLabel = "Displaying " + this.state.rows + " rows";
 		if (this.props.totalRows >= 0) {
-			rowCountChipLabel = "Displaying " + this.state.rows + " of " + this.props.totalRows + " rows";
+			rowCountChipLabel = "Displaying " + this.state.rows + " of " + String(this.props.totalRows).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " rows";
 		}
 		return (
 			<div className={classes.row}>
