@@ -195,14 +195,14 @@ class RightPane extends Component {
 			// TODO: display a Snack bar showing an error!!!
 			this.setState({
 				snackBarVisibility: true,
-				snackBarMessage: "Invalid query, showing the first " + this.state.rowLimit.toString() + " rows in table.",
+				snackBarMessage: "Incomplete query",
 			}, () => {
 				this.timer = setTimeout(() => {
 					this.setState({
 						snackBarVisibility: false,
 						snackBarMessage: "Unknown error"
 					});
-				}, 7500);
+				}, 2500);
 			});
 		}
 
@@ -262,7 +262,7 @@ class RightPane extends Component {
 		// first show loading
 		this.setState({
 			rawData: [],
-			rows: null,
+			rows: 0,
 			submitLoading: true,
 			submitError: false,
 			submitSuccess: false
@@ -358,7 +358,7 @@ class RightPane extends Component {
 							margin="normal" 
 							onChange={this.handleRowLimitChange.bind(this)} />
 
-						<FormControlLabel control={ <Checkbox onChange={this.handleGetExactRowCountToggle.bind(this)} value="getExactRowCount" /> } checked={this.state.exactRowCount} label={"Get exact count of rows in result"} className={classes.marginLeft} />
+						<FormControlLabel control={ <Checkbox onChange={this.handleGetExactRowCountToggle.bind(this)} value="getExactRowCount" /> } checked={this.state.exactRowCount} label={"Get exact count of rows in result (slow)"} className={classes.marginLeft} />
 
 					<Typography type="subheading" className={classes.cardMarginLeftTop}>Query Results</Typography>
 						<RightPaneChips rows={this.state.rows} totalRows={this.state.totalRows} rowLimit={this.state.rowLimit} maxRows={maxRowsInOutput}/>
