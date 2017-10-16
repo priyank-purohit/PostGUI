@@ -165,6 +165,7 @@ class RightPane extends Component {
 
 	// Based on the extracted rules, it builds a PostgREST compliant URL for API call
 	buildURLFromRules(rules) {
+		console.log(JSON.stringify(rules));
 		let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
 
 		// if it is valid, proceed
@@ -195,14 +196,14 @@ class RightPane extends Component {
 			// TODO: display a Snack bar showing an error!!!
 			this.setState({
 				snackBarVisibility: true,
-				snackBarMessage: "Invalid query, showing the first " + this.state.rowLimit.toString() + " rows in table.",
+				snackBarMessage: "Incomplete query",
 			}, () => {
 				this.timer = setTimeout(() => {
 					this.setState({
 						snackBarVisibility: false,
 						snackBarMessage: "Unknown error"
 					});
-				}, 7500);
+				}, 2500);
 			});
 		}
 
