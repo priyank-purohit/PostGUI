@@ -165,7 +165,6 @@ class RightPane extends Component {
 
 	// Based on the extracted rules, it builds a PostgREST compliant URL for API call
 	buildURLFromRules(rules) {
-		console.log(JSON.stringify(rules));
 		let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
 
 		// if it is valid, proceed
@@ -359,7 +358,7 @@ class RightPane extends Component {
 							margin="normal" 
 							onChange={this.handleRowLimitChange.bind(this)} />
 
-						<FormControlLabel control={ <Checkbox onChange={this.handleGetExactRowCountToggle.bind(this)} value="getExactRowCount" /> } checked={this.state.exactRowCount} label={"Get exact count of rows in result"} className={classes.marginLeft} />
+						<FormControlLabel control={ <Checkbox onChange={this.handleGetExactRowCountToggle.bind(this)} value="getExactRowCount" /> } checked={this.state.exactRowCount} label={"Get exact count of rows in result (slow)"} className={classes.marginLeft} />
 
 					<Typography type="subheading" className={classes.cardMarginLeftTop}>Query Results</Typography>
 						<RightPaneChips rows={this.state.rows} totalRows={this.state.totalRows} rowLimit={this.state.rowLimit} maxRows={maxRowsInOutput}/>
