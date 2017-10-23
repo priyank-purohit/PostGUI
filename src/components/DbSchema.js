@@ -244,9 +244,11 @@ class DbSchema extends Component {
 		);
 
 		// Now push each column as hidden until state.table equals table tableName...
-		for (let i in this.state[tableName]) {
-			let columnName = this.state[tableName][i];
-			tableColumnElements.push(this.createColumnElement(columnName, tableName));
+		if (tableName !== "phylogenetic_tree") {
+			for (let i in this.state[tableName]) {
+				let columnName = this.state[tableName][i];
+				tableColumnElements.push(this.createColumnElement(columnName, tableName));
+			}	
 		}
 
 		return tableColumnElements;
