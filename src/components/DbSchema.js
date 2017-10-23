@@ -10,6 +10,8 @@ import IconButton from 'material-ui/IconButton';
 import CloseIcon from 'material-ui-icons/Close';
 import FolderIcon from 'material-ui-icons/Folder';
 import FolderIconOpen from 'material-ui-icons/FolderOpen';
+import AddIcon from 'material-ui-icons/Add';
+import ClearIcon from 'material-ui-icons/Clear';
 import VisibilityIcon from 'material-ui-icons/Visibility';
 import VisibilityOffIcon from 'material-ui-icons/VisibilityOff';;
 
@@ -230,11 +232,14 @@ class DbSchema extends Component {
 		// First push the table itself
 		tableColumnElements.push(
 			<ListItem button key={this.state.dbIndex+tableName} id={tableName}
-				 title={displayName} onClick={(event) => this.handleTableClick(tableName)} onMouseEnter={(event) => this.handleTableHover(tableName)}  >
-				<ListItemIcon>
+				 title={displayName} >
+				<ListItemIcon onClick={(event) => this.handleTableClick(tableName)}>
 					{this.state.table === tableName ? <FolderIconOpen className={this.props.classes.primaryColoured} /> : <FolderIcon /> }
 				</ListItemIcon>
-				<ListItemText primary={displayName} style={truncTextStyle} />
+				<ListItemText primary={displayName} style={truncTextStyle} onClick={(event) => this.handleTableClick(tableName)} />
+				<ListItemIcon onClick={(event) => this.handleTableHover(tableName)}>
+					{this.state.hoverTable === tableName ? (this.state.table === tableName ? <div></div> : <ClearIcon className={this.props.classes.primaryColoured} />) : (this.state.table === tableName ? <div></div> : <AddIcon />) }
+				</ListItemIcon>
 			</ListItem>
 		);
 
