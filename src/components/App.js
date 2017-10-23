@@ -19,6 +19,7 @@ export default class Layout extends React.Component {
 			dbIndex: 0,
 			table: "",
 			columns: [],
+			url: "",
 			visibleColumns: [],
 			leftPaneVisibility: true,
 			historyPaneVisibility: true
@@ -73,6 +74,12 @@ export default class Layout extends React.Component {
 		});
 	}
 
+	changeUrl(newUrl) {
+		this.setState({
+			url: newUrl
+		});
+	}
+
 	changeVisibleColumns(newVisibleColumns) {
 		this.setState({
 			visibleColumns: newVisibleColumns
@@ -96,13 +103,14 @@ export default class Layout extends React.Component {
 						changeTable={this.changeTable.bind(this)}
 						changeColumns={this.changeColumns.bind(this)}
 						changeVisibleColumns={this.changeVisibleColumns.bind(this)} />
-					<HistoryPane historyPaneVisibility={this.state.historyPaneVisibility} closeHistoryPane={this.closeHistoryPane.bind(this)} />
+					<HistoryPane historyPaneVisibility={this.state.historyPaneVisibility} closeHistoryPane={this.closeHistoryPane.bind(this)} url={this.state.url} />
 					<RightPane
 						dbIndex={this.state.dbIndex}
 						table={this.state.table}
 						columns={this.state.columns}
 						visibleColumns={this.state.visibleColumns}
-						leftPaneVisibility={this.state.leftPaneVisibility} />
+						leftPaneVisibility={this.state.leftPaneVisibility}
+						changeUrl={this.changeUrl.bind(this)} />
 
 				</div>
 			</div>

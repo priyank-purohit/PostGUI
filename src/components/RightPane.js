@@ -210,6 +210,9 @@ class RightPane extends Component {
 	}
 
 	fetchOutput(url) {
+		// Send updated URL to the HistoryPane
+		this.props.changeUrl(this.state.url);
+
 		let exactCountHeader = { Prefer: 'count=exact' };
 		let inexactCountHeader = { Prefer: 'count=estimated' };
 		axios.get(url, { headers: this.state.exactRowCount === true ? exactCountHeader : inexactCountHeader, requestId: "qbAxiosReq" })

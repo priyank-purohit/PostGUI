@@ -12,13 +12,19 @@ class HistoryPane extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			historyPaneVisibility: this.props.historyPaneVisibility || true
+			historyPaneVisibility: this.props.historyPaneVisibility || true,
+			url: this.props.url,
+			urlArray: []
 		};
 	}
 
 	componentWillReceiveProps(newProps) {
+		var arrayvar = this.state.urlArray.slice();
+		arrayvar.push(newProps.url);
 		this.setState({
-			historyPaneVisibility: newProps.historyPaneVisibility
+			historyPaneVisibility: newProps.historyPaneVisibility,
+			url: newProps.url,
+			urlArray: arrayvar
 		});
 	}
 
@@ -33,6 +39,7 @@ class HistoryPane extends Component {
 		const classes = this.props.classes;
 		const sideList = (
 			<div className={classes.list}>
+				<p>{this.state.urlArray.join(', ')}</p>
 				<List>
 					<ListItem button>
 						<ListItemIcon>
