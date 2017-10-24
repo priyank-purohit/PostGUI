@@ -59,8 +59,8 @@ exports.getTableConfig = function(dbIndex, table, option) {
 	}
 }
 
-// Returns value of OPTION for specific TABLE and COLUMN and DBINDEX
-// NOTE: check for null value when this function is used
+// Returns value of OPTION for specific COLUMN and DBINDEX .. from the defined global configs
+// NOTE: do not use this function, it is called automatically from the getColumnConfig() function
 exports.getColumnConfigGlobal = function(dbIndex, table, column, option) {
 	try {
 		if (this.getDbConfig(dbIndex, "columnRulesGlobal")) {
