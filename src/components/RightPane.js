@@ -205,13 +205,14 @@ class RightPane extends Component {
 				}, 2500);
 			});
 		}
+		
+		// Send updated URL to the HistoryPane
+		this.props.changeUrl(this.state.url);
 
 		return url;
 	}
 
 	fetchOutput(url) {
-		// Send updated URL to the HistoryPane
-		this.props.changeUrl(this.state.url);
 
 		let exactCountHeader = { Prefer: 'count=exact' };
 		let inexactCountHeader = { Prefer: 'count=estimated' };
