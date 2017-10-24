@@ -257,8 +257,14 @@ class RightPane extends Component {
 			});
 	}
 
+	handleSubmitButtonClickCancelQuery() {
+		axios.cancel("qbAxiosReq");
+		axios.cancelAll();
+	}
+
 
 	handleSubmitButtonClick() {
+		event.stopPropagation();
 		// first show loading
 		this.setState({
 			rawData: [],
@@ -339,14 +345,16 @@ class RightPane extends Component {
 
 						<Typography type="body1" className={classes.cardMarginLeftTop}>Options</Typography>
 
-						<SubmitButton 
-							dbIndex={this.state.dbIndex} 
-							table={this.state.table} 
-							leftPaneVisibility={this.state.leftPaneVisibility} 
-							getRules={this.handleSubmitButtonClick.bind(this)} 
-							loading={this.state.submitLoading} 
-							success={this.state.submitSuccess} 
-							error={this.state.submitError} />
+						<div onClick={this.handleSubmitButtonClickCancelQuery.bind(this)}>
+							<SubmitButton 
+								dbIndex={this.state.dbIndex} 
+								table={this.state.table} 
+								leftPaneVisibility={this.state.leftPaneVisibility} 
+								getRules={this.handleSubmitButtonClick.bind(this)} 
+								loading={this.state.submitLoading} 
+								success={this.state.submitSuccess} 
+								error={this.state.submitError} />
+						</div>
 
 						<TextField 
 							required 

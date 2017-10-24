@@ -237,7 +237,7 @@ class DbSchema extends Component {
 					{this.state.table === tableName ? <FolderIconOpen className={this.props.classes.primaryColoured} /> : <FolderIcon /> }
 				</ListItemIcon>
 				<ListItemText primary={displayName} style={truncTextStyle} />
-				<ListItemIcon zIndex={1} onClick={(event) => {event.stopPropagation(); this.handleTableOpenClick(tableName);}}>
+				<ListItemIcon onClick={(event) => {event.stopPropagation(); this.handleTableOpenClick(tableName);}}>
 					{this.state.hoverTable === tableName ? (this.state.table === tableName ? <div></div> : <ClearIcon className={this.props.classes.primaryColoured} />) : (this.state.table === tableName ? <div></div> : <AddIcon />) }
 				</ListItemIcon>
 			</ListItem>
