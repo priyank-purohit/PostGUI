@@ -61,7 +61,7 @@ exports.getTableConfig = function(dbIndex, table, option) {
 
 // Returns value of OPTION for specific COLUMN and DBINDEX .. from the defined global configs
 // NOTE: do not use this function, it is called automatically from the getColumnConfig() function
-exports.getColumnConfigGlobal = function(dbIndex, table, column, option) {
+exports.getColumnConfigGlobal = function(dbIndex, column, option) {
 	try {
 		if (this.getDbConfig(dbIndex, "columnRulesGlobal")) {
 			let allGlobalColumnConfigs = (this.getDbConfig(dbIndex, "columnRulesGlobal"))[column];
@@ -87,10 +87,10 @@ exports.getColumnConfig = function(dbIndex, table, column, option) {
 			if (columnRules[column][option] !== undefined) {
 				return columnRules[column][option];
 			} else {
-				return this.getColumnConfigGlobal(dbIndex, table, column, option);
+				return this.getColumnConfigGlobal(dbIndex, column, option);
 			}
 		} catch (error) {
-			return this.getColumnConfigGlobal(dbIndex, table, column, option);
+			return this.getColumnConfigGlobal(dbIndex, column, option);
 		}
 	} else {
 		return null;
