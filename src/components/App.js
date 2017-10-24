@@ -22,7 +22,7 @@ export default class Layout extends React.Component {
 			url: "",
 			visibleColumns: [],
 			leftPaneVisibility: true,
-			historyPaneVisibility: true
+			historyPaneVisibility: false
 		};
 	}
 

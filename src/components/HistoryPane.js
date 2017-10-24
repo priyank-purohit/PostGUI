@@ -8,18 +8,20 @@ import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import InboxIcon from 'material-ui-icons/Inbox';
 import DraftsIcon from 'material-ui-icons/Drafts';
 
+let lib = require("../utils/library.js");
+
 class HistoryPane extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			historyPaneVisibility: this.props.historyPaneVisibility || true,
+			historyPaneVisibility: this.props.historyPaneVisibility || false,
 			url: this.props.url,
 			urlArray: []
 		};
 	}
 
 	componentWillReceiveProps(newProps) {
-		if (this.state.url !== newProps.url && newProps.url !== "" && newProps.url !== undefined && newProps.url !== null && newProps.url) {
+		if (this.state.url !== newProps.url && lib.inArray(newProps.url, this.state.urlArray) === false && newProps.url !== "" && newProps.url !== undefined && newProps.url !== null && newProps.url) {
 			var arrayvar = this.state.urlArray.slice();
 			arrayvar.push(newProps.url);
 
