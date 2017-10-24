@@ -205,9 +205,9 @@ class RightPane extends Component {
 				}, 2500);
 			});
 		}
-		
+
 		// Send updated URL to the HistoryPane
-		this.props.changeUrl(this.state.url);
+		this.props.changeUrl(url);
 
 		return url;
 	}
