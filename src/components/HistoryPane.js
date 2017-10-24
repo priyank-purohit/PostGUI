@@ -19,13 +19,20 @@ class HistoryPane extends Component {
 	}
 
 	componentWillReceiveProps(newProps) {
-		var arrayvar = this.state.urlArray.slice();
-		arrayvar.push(newProps.url);
-		this.setState({
-			historyPaneVisibility: newProps.historyPaneVisibility,
-			url: newProps.url,
-			urlArray: arrayvar
-		});
+		if (this.state.url !== newProps.url && newProps.url !== "" && newProps.url !== undefined && newProps.url !== null && newProps.url) {
+			var arrayvar = this.state.urlArray.slice();
+			arrayvar.push(newProps.url);
+
+			this.setState({
+				historyPaneVisibility: newProps.historyPaneVisibility,
+				url: newProps.url,
+				urlArray: arrayvar
+			});
+		} else {
+			this.setState({
+				historyPaneVisibility: newProps.historyPaneVisibility
+			});
+		}
 	}
 
 	closeDrawer() {
