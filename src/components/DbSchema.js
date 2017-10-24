@@ -156,7 +156,7 @@ class DbSchema extends Component {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Show/hide table based on last visibility
-	handleTableHover(clickedTable, skipCheck = false) {
+	handleTableOpenClick(clickedTable, skipCheck = false) {
 		// skipCheck prevents table schema collapse when leftPane toggles
 		if (this.state.hoverTable !== clickedTable || skipCheck) {
 			this.setState({
@@ -232,12 +232,12 @@ class DbSchema extends Component {
 		// First push the table itself
 		tableColumnElements.push(
 			<ListItem button key={this.state.dbIndex+tableName} id={tableName}
-				 title={displayName} >
-				<ListItemIcon onClick={(event) => this.handleTableClick(tableName)}>
+				 title={displayName} onClick={(event) => this.handleTableClick(tableName)} >
+				<ListItemIcon >
 					{this.state.table === tableName ? <FolderIconOpen className={this.props.classes.primaryColoured} /> : <FolderIcon /> }
 				</ListItemIcon>
-				<ListItemText primary={displayName} style={truncTextStyle} onClick={(event) => this.handleTableClick(tableName)} />
-				<ListItemIcon onClick={(event) => this.handleTableHover(tableName)}>
+				<ListItemText primary={displayName} style={truncTextStyle} />
+				<ListItemIcon zIndex={1} onClick={(event) => {event.stopPropagation(); this.handleTableOpenClick(tableName);}}>
 					{this.state.hoverTable === tableName ? (this.state.table === tableName ? <div></div> : <ClearIcon className={this.props.classes.primaryColoured} />) : (this.state.table === tableName ? <div></div> : <AddIcon />) }
 				</ListItemIcon>
 			</ListItem>
