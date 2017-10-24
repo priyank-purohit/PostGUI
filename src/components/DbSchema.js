@@ -256,14 +256,7 @@ class DbSchema extends Component {
 
 	createColumnElement(columnName, table) {
 		let columnRename = lib.getColumnConfig(this.state.dbIndex, table, columnName, "rename");
-		let columnRenameGlobal = null;
-		if (!columnRename && lib.getDbConfig(this.props.dbIndex, "columnRulesGlobal")) {
-			columnRenameGlobal = (lib.getDbConfig(this.props.dbIndex, "columnRulesGlobal"))[columnName];
-			if (columnRenameGlobal !== undefined) {
-				columnRenameGlobal = columnRenameGlobal["rename"];
-			}
-		}
-		let displayName = columnRename ? columnRename : (columnRenameGlobal ? columnRenameGlobal : columnName);
+		let displayName = columnRename ? columnRename : columnName;
 
 		let visibility = this.state[table + columnName + "Visibility"] === "hide" ? false : true;
 

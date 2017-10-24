@@ -61,6 +61,22 @@ exports.getTableConfig = function(dbIndex, table, option) {
 
 // Returns value of OPTION for specific TABLE and COLUMN and DBINDEX
 // NOTE: check for null value when this function is used
+exports.getColumnConfigGlobal = function(dbIndex, table, column, option) {
+	try {
+		if (this.getDbConfig(dbIndex, "columnRulesGlobal")) {
+			let columnRenameGlobal = (this.getDbConfig(dbIndex, "columnRulesGlobal"))[column];
+			if (columnRenameGlobal !== undefined) {
+				return columnRenameGlobal["rename"];
+			}
+		}
+	} catch (error) {
+		return null;
+	}
+	return null;
+}
+
+// Returns value of OPTION for specific TABLE and COLUMN and DBINDEX
+// NOTE: check for null value when this function is used
 exports.getColumnConfig = function(dbIndex, table, column, option) {
 	if (dbIndex !== null && table !== null && option !== null && option !== null) {
 		try {
@@ -69,7 +85,7 @@ exports.getColumnConfig = function(dbIndex, table, column, option) {
 			if (columnRules[column][option] !== undefined) {
 				return columnRules[column][option];
 			} else {
-				return null;
+				return this.getColumnConfigGlobal(dbIndex, table, column, option);
 			}
 		} catch (error) {
 			return null;
