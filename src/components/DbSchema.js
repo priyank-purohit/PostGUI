@@ -10,6 +10,8 @@ import IconButton from 'material-ui/IconButton';
 import CloseIcon from 'material-ui-icons/Close';
 import FolderIcon from 'material-ui-icons/Folder';
 import FolderIconOpen from 'material-ui-icons/FolderOpen';
+import AddIcon from 'material-ui-icons/Add';
+import ClearIcon from 'material-ui-icons/Clear';
 import VisibilityIcon from 'material-ui-icons/Visibility';
 import VisibilityOffIcon from 'material-ui-icons/VisibilityOff';;
 
@@ -154,7 +156,7 @@ class DbSchema extends Component {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Show/hide table based on last visibility
-	handleTableHover(clickedTable, skipCheck = false) {
+	handleTableOpenClick(clickedTable, skipCheck = false) {
 		// skipCheck prevents table schema collapse when leftPane toggles
 		if (this.state.hoverTable !== clickedTable || skipCheck) {
 			this.setState({
@@ -230,18 +232,23 @@ class DbSchema extends Component {
 		// First push the table itself
 		tableColumnElements.push(
 			<ListItem button key={this.state.dbIndex+tableName} id={tableName}
-				 title={displayName} onClick={(event) => this.handleTableClick(tableName)} onMouseEnter={(event) => this.handleTableHover(tableName)}  >
-				<ListItemIcon>
+				 title={displayName} onClick={(event) => this.handleTableClick(tableName)} >
+				<ListItemIcon >
 					{this.state.table === tableName ? <FolderIconOpen className={this.props.classes.primaryColoured} /> : <FolderIcon /> }
 				</ListItemIcon>
 				<ListItemText primary={displayName} style={truncTextStyle} />
+				<ListItemIcon onClick={(event) => {event.stopPropagation(); this.handleTableOpenClick(tableName);}}>
+					{this.state.hoverTable === tableName ? (this.state.table === tableName ? <div></div> : <ClearIcon className={this.props.classes.primaryColoured} />) : (this.state.table === tableName ? <div></div> : <AddIcon />) }
+				</ListItemIcon>
 			</ListItem>
 		);
 
 		// Now push each column as hidden until state.table equals table tableName...
-		for (let i in this.state[tableName]) {
-			let columnName = this.state[tableName][i];
-			tableColumnElements.push(this.createColumnElement(columnName, tableName));
+		if (tableName !== "phylogenetic_tree") {
+			for (let i in this.state[tableName]) {
+				let columnName = this.state[tableName][i];
+				tableColumnElements.push(this.createColumnElement(columnName, tableName));
+			}	
 		}
 
 		return tableColumnElements;
