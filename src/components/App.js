@@ -103,7 +103,7 @@ export default class Layout extends React.Component {
 						changeTable={this.changeTable.bind(this)}
 						changeColumns={this.changeColumns.bind(this)}
 						changeVisibleColumns={this.changeVisibleColumns.bind(this)} />
-					<HistoryPane historyPaneVisibility={this.state.historyPaneVisibility} closeHistoryPane={this.closeHistoryPane.bind(this)} url={this.state.url} />
+					<HistoryPane url={this.state.url} historyPaneVisibility={this.state.historyPaneVisibility} closeHistoryPane={this.closeHistoryPane.bind(this)} />
 					<RightPane
 						dbIndex={this.state.dbIndex}
 						table={this.state.table}
