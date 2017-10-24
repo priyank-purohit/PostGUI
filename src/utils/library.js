@@ -65,7 +65,7 @@ exports.getColumnConfigGlobal = function(dbIndex, column, option) {
 	try {
 		if (this.getDbConfig(dbIndex, "columnRulesGlobal")) {
 			let allGlobalColumnConfigs = (this.getDbConfig(dbIndex, "columnRulesGlobal"))[column];
-			if (allGlobalColumnConfigs && allGlobalColumnConfigs[option]) {
+			if (allGlobalColumnConfigs && allGlobalColumnConfigs[option] !== undefined) {
 				return allGlobalColumnConfigs[option];
 			} else {
 				return null;
@@ -84,7 +84,7 @@ exports.getColumnConfig = function(dbIndex, table, column, option) {
 		try {
 			let columnRules = this.getTableConfig(dbIndex, table, "columnRules");
 
-			if (columnRules[column][option] !== undefined) {
+			if (columnRules[column][option]) {
 				return columnRules[column][option];
 			} else {
 				return this.getColumnConfigGlobal(dbIndex, column, option);
@@ -93,7 +93,7 @@ exports.getColumnConfig = function(dbIndex, table, column, option) {
 			return this.getColumnConfigGlobal(dbIndex, column, option);
 		}
 	} else {
-		return null;
+		return this.getColumnConfigGlobal(dbIndex, column, option);
 	}
 }
 
