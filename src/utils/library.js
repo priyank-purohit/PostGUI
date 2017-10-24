@@ -62,12 +62,13 @@ exports.getTableConfig = function(dbIndex, table, option) {
 // Returns value of OPTION for specific TABLE and COLUMN and DBINDEX
 // NOTE: check for null value when this function is used
 exports.getColumnConfigGlobal = function(dbIndex, table, column, option) {
-	console.log("Getting global config for ", table, column, option);
 	try {
 		if (this.getDbConfig(dbIndex, "columnRulesGlobal")) {
-			let columnRenameGlobal = (this.getDbConfig(dbIndex, "columnRulesGlobal"))[column];
-			if (columnRenameGlobal !== undefined) {
-				return columnRenameGlobal[option];
+			let allGlobalColumnConfigs = (this.getDbConfig(dbIndex, "columnRulesGlobal"))[column];
+			if (allGlobalColumnConfigs && allGlobalColumnConfigs[option]) {
+				return allGlobalColumnConfigs[option];
+			} else {
+				return null;
 			}
 		}
 	} catch (error) {
@@ -84,16 +85,12 @@ exports.getColumnConfig = function(dbIndex, table, column, option) {
 			let columnRules = this.getTableConfig(dbIndex, table, "columnRules");
 
 			if (columnRules[column][option] !== undefined) {
-				if (columnRules[column][option] === null) {
-					return this.getColumnConfigGlobal(dbIndex, table, column, option);
-				} else {
-					return columnRules[column][option];
-				}
+				return columnRules[column][option];
 			} else {
 				return this.getColumnConfigGlobal(dbIndex, table, column, option);
 			}
 		} catch (error) {
-			return null;
+			return this.getColumnConfigGlobal(dbIndex, table, column, option);
 		}
 	} else {
 		return null;
