@@ -17,7 +17,7 @@ class HistoryPane extends Component {
 		this.state = {
 			historyPaneVisibility: this.props.historyPaneVisibility || true,
 			url: this.props.url,
-			urlArray: ["http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(genome_designation.eq.PphAlberta37,description.ilike.*family*,and(significance_value.gte.0.00001,significance_value.lte.1))&limit=250000", "http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(genome_designation.eq.PphAlberta37,description.ilike.*family*)&limit=250000", "http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(genome_designation.eq.PphAlberta37)&limit=250000", "http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=250", "http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=2500", "http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=25000", "http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=2", "http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=25", "http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=259"]
+			urlArray: ["http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(genome_designation.eq.PphAlberta37,description.ilike.*family*)&limit=250000", "http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(genome_designation.eq.PphAlberta37)&limit=250000", "http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=250", "http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=2500", "http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=25000", "http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=2", "http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=25", "http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=259", "http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(genome_designation.eq.PphAlberta37,description.ilike.*family*,and(significance_value.gte.0.00001,significance_value.lte.1))&limit=250000"]
 		};
 	}
 
@@ -32,6 +32,7 @@ class HistoryPane extends Component {
 					historyPaneVisibility: newProps.historyPaneVisibility,
 					url: newProps.url,
 					urlArray: arrayvar
+
 				});
 			} else {
 				// move it to "top" (which in this case is the highest index...)
@@ -62,7 +63,7 @@ class HistoryPane extends Component {
 				<CardHeader subheader="Query History" />
 				<List dense>
 					{
-						this.state.urlArray.map((url) => {
+						this.state.urlArray.slice(0).reverse().map((url) => {
 							let index = lib.elementPositionInArray(url, this.state.urlArray);
 							return (
 									<ListItem button key={index}>
@@ -99,7 +100,7 @@ const styleSheet = {
 		float: 'right'
 	},
 	list: {
-		width: 350,
+		width: 400,
 	},
 	listFull: {
 		width: 'auto',
