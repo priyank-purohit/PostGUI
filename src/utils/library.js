@@ -191,6 +191,26 @@ exports.inArray = function(element, array) {
 		return false;
 }
 
+// returns index of ELEMENT is in ARRAY
+exports.elementPositionInArray = function(element, array) {
+	if (array && element)
+		return array.indexOf(element);
+	else
+		return -1;
+}
+
+exports.moveArrayElementFromTo = function(targetArray, indexFrom, indexTo) {
+	let targetElement = targetArray[indexFrom];
+	let magicIncrement = (indexTo - indexFrom) / Math.abs (indexTo - indexFrom);
+
+	for (let e = indexFrom; e !== indexTo; e += magicIncrement){
+		targetArray[e] = targetArray[e + magicIncrement];
+	}
+
+	targetArray[indexTo] = targetElement;
+	return targetArray;
+}
+
 // Opens the specified URL in a different tab
 exports.visitPage = function(url = "http://www.google.ca") {
 	window.open(url, "_blank");

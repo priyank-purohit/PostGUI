@@ -13,6 +13,7 @@ let lib = require("../utils/library.js");
 class HistoryPane extends Component {
 	constructor(props) {
 		super(props);
+		// urlArray will have the latest URL at the end ... i.e. 0 position is the earliest query, and the highest position index is the latest query...
 		this.state = {
 			historyPaneVisibility: this.props.historyPaneVisibility || false,
 			url: this.props.url,
@@ -21,15 +22,25 @@ class HistoryPane extends Component {
 	}
 
 	componentWillReceiveProps(newProps) {
-		if (this.state.url !== newProps.url && lib.inArray(newProps.url, this.state.urlArray) === false && newProps.url !== "" && newProps.url !== undefined && newProps.url !== null && newProps.url) {
-			var arrayvar = this.state.urlArray.slice();
-			arrayvar.push(newProps.url);
+		if (this.state.url !== newProps.url && newProps.url !== "" && newProps.url !== undefined && newProps.url !== null && newProps.url) {
+			if (lib.inArray(newProps.url, this.state.urlArray) === false) {
+				// insert it
+				var arrayvar = this.state.urlArray.slice();
+				arrayvar.push(newProps.url);
 
-			this.setState({
-				historyPaneVisibility: newProps.historyPaneVisibility,
-				url: newProps.url,
-				urlArray: arrayvar
-			});
+				this.setState({
+					historyPaneVisibility: newProps.historyPaneVisibility,
+					url: newProps.url,
+					urlArray: arrayvar
+				});
+			} else {
+				// move it to "top" (which in this case is the highest index...)
+				this.setState({
+					historyPaneVisibility: newProps.historyPaneVisibility,
+					url: newProps.url,
+					urlArray: lib.moveArrayElementFromTo(this.state.urlArray, lib.elementPositionInArray(newProps.url, this.state.urlArray), this.state.urlArray.length - 1)
+				});
+			}
 		} else {
 			this.setState({
 				historyPaneVisibility: newProps.historyPaneVisibility
