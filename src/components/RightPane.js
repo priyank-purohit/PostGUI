@@ -206,10 +206,14 @@ class RightPane extends Component {
 			});
 		}
 
+		// Send updated URL to the HistoryPane
+		this.props.changeUrl(url);
+
 		return url;
 	}
 
 	fetchOutput(url) {
+
 		let exactCountHeader = { Prefer: 'count=exact' };
 		let inexactCountHeader = { Prefer: 'count=estimated' };
 		axios.get(url, { headers: this.state.exactRowCount === true ? exactCountHeader : inexactCountHeader, requestId: "qbAxiosReq" })

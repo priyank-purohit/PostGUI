@@ -6,6 +6,7 @@ import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
+import HistoryIcon from 'material-ui-icons/History';
 
 let lib = require('../utils/library.js');
 
@@ -28,9 +29,9 @@ class Navigation extends Component {
 						<Typography type="title" color="inherit" className={classes.flex}>
 							{dbTitle}
 						</Typography>
-						{/*<IconButton color="contrast" aria-label="Menu">
-							<HomeIcon />
-						</IconButton>*/}
+						<IconButton color="contrast" aria-label="Menu" onClick={this.props.toggleHistoryPane.bind(this)}>
+							<HistoryIcon />
+						</IconButton>
 					</Toolbar>
 				</AppBar>
 			</div>
