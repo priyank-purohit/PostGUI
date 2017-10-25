@@ -16,7 +16,7 @@ class HistoryPane extends Component {
 		this.state = {
 			historyPaneVisibility: this.props.historyPaneVisibility || false,
 			url: this.props.url,
-			urlArray: ["http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(genome_designation.eq.PphAlberta37,description.ilike.*family*)&limit=250000", "http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(genome_designation.eq.PphAlberta37)&limit=250000", "http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=250", "http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=2500", "http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=25000", "http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=2", "http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=25", "http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=259", "http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(genome_designation.eq.PphAlberta37,description.ilike.*family*,and(significance_value.gte.0.00001,significance_value.lte.1))&limit=250000"]
+			urlArray: ["http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(genome_designation.eq.PphAlberta37,description.ilike.*family*)&limit=250000", "http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(genome_designation.eq.PphAlberta37)&limit=250000",  "http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=25000", "http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(genome_designation.eq.PphAlberta37,description.ilike.*family*,and(significance_value.gte.0.00001,significance_value.lte.1))&limit=250000"]
 		};
 	}
 
