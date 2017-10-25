@@ -216,7 +216,7 @@ class RightPane extends Component {
 
 		let exactCountHeader = { Prefer: 'count=exact' };
 		let inexactCountHeader = { Prefer: 'count=estimated' };
-		axios.get(url, { headers: this.state.exactRowCount === true ? exactCountHeader : inexactCountHeader, requestId: "qbAxiosReq" })
+		axios.get(url, { headers: this.state.exactRowCount === true && url.indexOf(/limit=10$/) === false ? exactCountHeader : inexactCountHeader, requestId: "qbAxiosReq" })
 			.then((response) => {
 				let responseRows = null;
 				let totalRows = null;
