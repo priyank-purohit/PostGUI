@@ -80,7 +80,7 @@ class RightPane extends Component {
 				this.rebuildQueryBuilder(this.refs.queryBuilder, newProps.dbIndex, newProps.table, newProps.columns);
 				let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
 				this.setState({ url: url + "?limit=10" });
-				this.fetchOutput(url + "?limit=10");
+				this.fetchOutput(url + "?limit=10", true);
 			});
 		} else {
 			this.setState({
@@ -99,7 +99,7 @@ class RightPane extends Component {
 				this.rebuildQueryBuilder(this.refs.queryBuilder, newProps.dbIndex, newProps.table, newProps.columns);
 				let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
 				this.setState({ url: url + "?limit=10" });
-				this.fetchOutput(url + "?limit=10");
+				this.fetchOutput(url + "?limit=10", true);
 			});
 		}
 	}
@@ -212,11 +212,11 @@ class RightPane extends Component {
 		return url;
 	}
 
-	fetchOutput(url) {
+	fetchOutput(url, skipFullCount = false) {
 
 		let exactCountHeader = { Prefer: 'count=exact' };
 		let inexactCountHeader = { Prefer: 'count=estimated' };
-		axios.get(url, { headers: this.state.exactRowCount === true && url.indexOf(/limit=10$/) === false ? exactCountHeader : inexactCountHeader, requestId: "qbAxiosReq" })
+		axios.get(url, { headers: this.state.exactRowCount === true && skipFullCount === false ? exactCountHeader : inexactCountHeader, requestId: "qbAxiosReq" })
 			.then((response) => {
 				let responseRows = null;
 				let totalRows = null;
