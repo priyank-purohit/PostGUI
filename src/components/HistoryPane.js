@@ -15,9 +15,9 @@ class HistoryPane extends Component {
 		super(props);
 		// urlArray will have the latest URL at the end ... i.e. 0 position is the earliest query, and the highest position index is the latest query...
 		this.state = {
-			historyPaneVisibility: this.props.historyPaneVisibility || false,
+			historyPaneVisibility: this.props.historyPaneVisibility || true,
 			url: this.props.url,
-			urlArray: []
+			urlArray: ["http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=250", "http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=2500", "http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=25000", "http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=2", "http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=25", "http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=259"]
 		};
 	}
 
