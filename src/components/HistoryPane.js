@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
+
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Drawer from 'material-ui/Drawer';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
-import CreateIcon from 'material-ui-icons/Create';
-
+import CopyIcon from 'material-ui-icons/ContentCopy';
 import { CardHeader } from 'material-ui/Card';
 
 let lib = require("../utils/library.js");
@@ -13,6 +14,7 @@ class HistoryPane extends Component {
 	constructor(props) {
 		super(props);
 		// urlArray will have the latest URL at the end ... i.e. 0 position is the earliest query, and the highest position index is the latest query...
+		// TODO: Need to make urlArray db specific!!!
 		this.state = {
 			historyPaneVisibility: this.props.historyPaneVisibility || false,
 			url: this.props.url,
@@ -66,10 +68,14 @@ class HistoryPane extends Component {
 							let index = lib.elementPositionInArray(url, this.state.urlArray);
 							return (
 									<ListItem button key={index}>
-										<ListItemIcon>
-											<CreateIcon />
+										<ListItemIcon className={classes.noStyleButton}>
+											<CopyToClipboard text={url} >
+												<button>
+													<CopyIcon/>
+												</button>
+											</CopyToClipboard>
 										</ListItemIcon>
-										<ListItemText primary={url.replace(lib.getDbConfig(0, "url"), "").replace(/\?.*/, "").replace("/", "")} secondary={url.replace(lib.getDbConfig(0, "url"), "").replace(/.*\?/, "").replace(/&/g, "\n").replace(/,/g, ",\n")} />
+										<ListItemText primary={url.replace(lib.getDbConfig(this.props.dbIndex, "url"), "").replace(/\?.*/, "").replace("/", "")} secondary={url.replace(lib.getDbConfig(this.props.dbIndex, "url"), "").replace(/.*\?/, "").replace(/&/g, "\n").replace(/,/g, ",\n")} />
 									</ListItem>
 								);
 						})
@@ -103,6 +109,10 @@ const styleSheet = {
 	},
 	listFull: {
 		width: 'auto',
+	},
+	noStyleButton: {
+		border: "none",
+		backgroundColor: "transparent"
 	}
 };
 
