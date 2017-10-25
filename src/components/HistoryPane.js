@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
-import Divider from 'material-ui/Divider';
 import Drawer from 'material-ui/Drawer';
 //import Button from 'material-ui/Button';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
-import InboxIcon from 'material-ui-icons/Inbox';
-import DraftsIcon from 'material-ui-icons/Drafts';
+import CreateIcon from 'material-ui-icons/Create';
+
+import { CardHeader } from 'material-ui/Card';
 
 let lib = require("../utils/library.js");
 
@@ -17,7 +17,7 @@ class HistoryPane extends Component {
 		this.state = {
 			historyPaneVisibility: this.props.historyPaneVisibility || true,
 			url: this.props.url,
-			urlArray: ["http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=250", "http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=2500", "http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=25000", "http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=2", "http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=25", "http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=259"]
+			urlArray: ["http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(genome_designation.eq.PphAlberta37,description.ilike.*family*,and(significance_value.gte.0.00001,significance_value.lte.1))&limit=250000", "http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(genome_designation.eq.PphAlberta37,description.ilike.*family*)&limit=250000", "http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(genome_designation.eq.PphAlberta37)&limit=250000", "http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=250", "http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=2500", "http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=25000", "http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=2", "http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=25", "http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=259"]
 		};
 	}
 
@@ -59,29 +59,21 @@ class HistoryPane extends Component {
 		const classes = this.props.classes;
 		const sideList = (
 			<div className={classes.list}>
-				<p>{this.state.urlArray.join(', ')}</p>
-				<List>
-					<ListItem button>
-						<ListItemIcon>
-							<InboxIcon />
-						</ListItemIcon>
-						<ListItemText primary="Inbox" />
-					</ListItem>
-					<ListItem button>
-						<ListItemIcon>
-							<DraftsIcon />
-						</ListItemIcon>
-						<ListItemText primary="Drafts" />
-					</ListItem>
-				</List>
-				<Divider />
-				<List>
-					<ListItem button>
-						<ListItemText primary="Trash" />
-					</ListItem>
-					<ListItem button component="a" href="#simple-list">
-						<ListItemText primary="Spam" />
-					</ListItem>
+				<CardHeader subheader="Query History" />
+				<List dense>
+					{
+						this.state.urlArray.map((url) => {
+							let index = lib.elementPositionInArray(url, this.state.urlArray);
+							return (
+									<ListItem button key={index}>
+										<ListItemIcon>
+											<CreateIcon />
+										</ListItemIcon>
+										<ListItemText primary={url.replace(lib.getDbConfig(0, "url"), "").replace(/\?.*/, "").replace("/", "")} secondary={url.replace(lib.getDbConfig(0, "url"), "").replace(/.*\?/, "").replace(/&/g, "\n").replace(/,/g, ",\n")} />
+									</ListItem>
+								);
+						})
+					}
 				</List>
 			</div>
 		);
@@ -102,12 +94,12 @@ HistoryPane.propTypes = {
 
 const styleSheet = {
 	root: {
-		width: '20%',
+		width: '30%',
 		height: '100%',
 		float: 'right'
 	},
 	list: {
-		width: 250,
+		width: 350,
 	},
 	listFull: {
 		width: 'auto',
