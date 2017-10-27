@@ -13,41 +13,47 @@ let lib = require("../utils/library.js");
 class HistoryPane extends Component {
 	constructor(props) {
 		super(props);
-		// urlArray will have the latest URL at the end ... i.e. 0 position is the earliest query, and the highest position index is the latest query...
-		// TODO: Need to make urlArray db specific!!!
+		// historyArray will have the latest URL at the end ... i.e. 0 position is the earliest query, and the highest position index is the latest query...
+		// TODO: Need to make historyArray db specific!!!
 		this.state = {
 			historyPaneVisibility: this.props.historyPaneVisibility || false,
-			url: this.props.url,
-			urlArray: ["http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(genome_designation.eq.PphAlberta37,description.ilike.*family*)&limit=250000", "http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(genome_designation.eq.PphAlberta37)&limit=250000",  "http://hopper.csb.utoronto.ca:3001/annotation_domain?limit=25000", "http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(genome_designation.eq.PphAlberta37,description.ilike.*family*,and(significance_value.gte.0.00001,significance_value.lte.1))&limit=250000"]
+			newHistoryItem: this.props.newHistoryItem,
+			historyArray: []
 		};
 	}
 
 	componentWillReceiveProps(newProps) {
-		if (this.state.url !== newProps.url && newProps.url !== "" && newProps.url !== undefined && newProps.url !== null && newProps.url) {
-			if (lib.inArray(newProps.url, this.state.urlArray) === false) {
-				// insert it
-				var arrayvar = this.state.urlArray.slice();
-				arrayvar.push(newProps.url);
+		this.setState({
+			historyPaneVisibility: newProps.historyPaneVisibility
+		});
 
-				this.setState({
-					historyPaneVisibility: newProps.historyPaneVisibility,
-					url: newProps.url,
-					urlArray: arrayvar
+		console.log("Got URL as : " + newProps.newHistoryItem[0]);
+		console.log("Got rules as : " + JSON.stringify(newProps.newHistoryItem[1]));
+		// if (this.state.newHistoryItem !== newProps.urlAndRules && newProps.urlAndRules !== "" && newProps.urlAndRules !== undefined && newProps.urlAndRules !== null && newProps.urlAndRules) {
+		// 	if (lib.inArray(newProps.urlAndRules, this.state.historyArray) === false) {
+		// 		// insert it
+		// 		var arrayvar = this.state.historyArray.slice();
+		// 		arrayvar.push(newProps.urlAndRules);
 
-				});
-			} else {
-				// move it to "top" (which in this case is the highest index...)
-				this.setState({
-					historyPaneVisibility: newProps.historyPaneVisibility,
-					url: newProps.url,
-					urlArray: lib.moveArrayElementFromTo(this.state.urlArray, lib.elementPositionInArray(newProps.url, this.state.urlArray), this.state.urlArray.length - 1)
-				});
-			}
-		} else {
-			this.setState({
-				historyPaneVisibility: newProps.historyPaneVisibility
-			});
-		}
+		// 		this.setState({
+		// 			historyPaneVisibility: newProps.historyPaneVisibility,
+		// 			newHistoryItem: newProps.urlAndRules,
+		// 			historyArray: arrayvar
+
+		// 		});
+		// 	} else {
+		// 		// move it to "top" (which in this case is the highest index...)
+		// 		this.setState({
+		// 			historyPaneVisibility: newProps.historyPaneVisibility,
+		// 			newHistoryItem: newProps.urlAndRules,
+		// 			historyArray: lib.moveArrayElementFromTo(this.state.historyArray, lib.elementPositionInArray(newProps.urlAndRules, this.state.historyArray), this.state.historyArray.length - 1)
+		// 		});
+		// 	}
+		// } else {
+		// 	this.setState({
+		// 		historyPaneVisibility: newProps.historyPaneVisibility
+		// 	});
+		// }
 	}
 
 	closeDrawer() {
@@ -64,8 +70,8 @@ class HistoryPane extends Component {
 				<CardHeader subheader="Query History" />
 				<List dense>
 					{
-						this.state.urlArray.slice(0).reverse().map((url) => {
-							let index = lib.elementPositionInArray(url, this.state.urlArray);
+						this.state.historyArray.slice(0).reverse().map((url) => {
+							let index = lib.elementPositionInArray(url, this.state.historyArray);
 							return (
 									<ListItem button key={index}>
 										<ListItemIcon className={classes.noStyleButton}>
