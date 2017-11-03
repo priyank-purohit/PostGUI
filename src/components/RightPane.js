@@ -55,6 +55,10 @@ class RightPane extends Component {
 	}
 
 	componentWillReceiveProps(newProps) {
+		// Get rid of the timer
+		clearTimeout(this.timer);
+		this.timer = null;
+
 		if (newProps.visibleColumns !== undefined && this.state.dbIndex === newProps.dbIndex && this.state.table === newProps.table && this.state.columns === newProps.columns && this.state.leftPaneVisibility === newProps.leftPaneVisibility) {
 			this.setState({
 				visibleColumns: newProps.visibleColumns
@@ -152,10 +156,15 @@ class RightPane extends Component {
 				}
 			} else {
 				let containsWildCards = rules[i]['operator'] === "contains" ? (rules[i]['value'].indexOf("*") === -1 ? "*" : "") : ""; // equals * only when user forgets to have at least 1 * in the value input box
+
+				// For when left and right brakcets are needed
+				let leftBracket = rules[i]['operator'] === "in" ? "(" : "";
+				let rightBracket = rules[i]['operator'] === "in" ? ")" : "";
+
 				if (i === (rules.length - 1)) {
-					select += rules[i]['id'] + "." + lib.translateOperatorToPostgrest(rules[i]['operator']) + "." + containsWildCards + rules[i]['value'] + containsWildCards;
+					select += rules[i]['id'] + "." + lib.translateOperatorToPostgrest(rules[i]['operator']) + "." + containsWildCards + leftBracket + rules[i]['value'] + rightBracket + containsWildCards;
 				} else {
-					select += rules[i]['id'] + "." + lib.translateOperatorToPostgrest(rules[i]['operator']) + "." + containsWildCards + rules[i]['value'] + containsWildCards + ",";
+					select += rules[i]['id'] + "." + lib.translateOperatorToPostgrest(rules[i]['operator']) + "." + containsWildCards + leftBracket + rules[i]['value'] + rightBracket + containsWildCards + ",";
 				}
 			}
 		}
@@ -213,6 +222,9 @@ class RightPane extends Component {
 	}
 
 	fetchOutput(url, skipFullCount = false) {
+		// Get rid of the timer
+		clearTimeout(this.timer);
+		this.timer = null;
 
 		let exactCountHeader = { Prefer: 'count=exact' };
 		let inexactCountHeader = { Prefer: 'count=estimated' };
@@ -224,6 +236,7 @@ class RightPane extends Component {
 					responseRows = 1 + parseInt(response.headers["content-range"].replace("/*", "").replace("0-", ""), 10);
 					totalRows = parseInt(response.headers["content-range"].replace(/0-\d*\//, ""), 10);
 				}
+				
 				this.setState({
 					rawData: response.data,
 					rows: responseRows,
@@ -268,6 +281,10 @@ class RightPane extends Component {
 
 
 	handleSubmitButtonClick() {
+		// Get rid of the timer
+		clearTimeout(this.timer);
+		this.timer = null;
+
 		event.stopPropagation();
 		// first show loading
 		this.setState({
