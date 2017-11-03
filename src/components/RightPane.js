@@ -152,10 +152,15 @@ class RightPane extends Component {
 				}
 			} else {
 				let containsWildCards = rules[i]['operator'] === "contains" ? (rules[i]['value'].indexOf("*") === -1 ? "*" : "") : ""; // equals * only when user forgets to have at least 1 * in the value input box
+
+				// For when left and right brakcets are needed
+				let leftBracket = rules[i]['operator'] === "in" ? "(" : "";
+				let rightBracket = rules[i]['operator'] === "in" ? ")" : "";
+
 				if (i === (rules.length - 1)) {
-					select += rules[i]['id'] + "." + lib.translateOperatorToPostgrest(rules[i]['operator']) + "." + containsWildCards + rules[i]['value'] + containsWildCards;
+					select += rules[i]['id'] + "." + lib.translateOperatorToPostgrest(rules[i]['operator']) + "." + containsWildCards + leftBracket + rules[i]['value'] + rightBracket + containsWildCards;
 				} else {
-					select += rules[i]['id'] + "." + lib.translateOperatorToPostgrest(rules[i]['operator']) + "." + containsWildCards + rules[i]['value'] + containsWildCards + ",";
+					select += rules[i]['id'] + "." + lib.translateOperatorToPostgrest(rules[i]['operator']) + "." + containsWildCards + leftBracket + rules[i]['value'] + rightBracket + containsWildCards + ",";
 				}
 			}
 		}
