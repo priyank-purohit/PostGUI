@@ -55,6 +55,10 @@ class RightPane extends Component {
 	}
 
 	componentWillReceiveProps(newProps) {
+		// Get rid of the timer
+		clearTimeout(this.timeout);
+		this.timeout = null;
+
 		if (newProps.visibleColumns !== undefined && this.state.dbIndex === newProps.dbIndex && this.state.table === newProps.table && this.state.columns === newProps.columns && this.state.leftPaneVisibility === newProps.leftPaneVisibility) {
 			this.setState({
 				visibleColumns: newProps.visibleColumns
@@ -218,6 +222,9 @@ class RightPane extends Component {
 	}
 
 	fetchOutput(url, skipFullCount = false) {
+		// Get rid of the timer
+		clearTimeout(this.timeout);
+		this.timeout = null;
 
 		let exactCountHeader = { Prefer: 'count=exact' };
 		let inexactCountHeader = { Prefer: 'count=estimated' };
@@ -229,6 +236,7 @@ class RightPane extends Component {
 					responseRows = 1 + parseInt(response.headers["content-range"].replace("/*", "").replace("0-", ""), 10);
 					totalRows = parseInt(response.headers["content-range"].replace(/0-\d*\//, ""), 10);
 				}
+				
 				this.setState({
 					rawData: response.data,
 					rows: responseRows,
@@ -273,6 +281,10 @@ class RightPane extends Component {
 
 
 	handleSubmitButtonClick() {
+		// Get rid of the timer
+		clearTimeout(this.timeout);
+		this.timeout = null;
+
 		event.stopPropagation();
 		// first show loading
 		this.setState({
