@@ -27,33 +27,37 @@ class HistoryPane extends Component {
 			historyPaneVisibility: newProps.historyPaneVisibility
 		});
 
-		console.log("Got URL as : " + newProps.newHistoryItem[0]);
-		console.log("Got rules as : " + JSON.stringify(newProps.newHistoryItem[1]));
-		// if (this.state.newHistoryItem !== newProps.urlAndRules && newProps.urlAndRules !== "" && newProps.urlAndRules !== undefined && newProps.urlAndRules !== null && newProps.urlAndRules) {
-		// 	if (lib.inArray(newProps.urlAndRules, this.state.historyArray) === false) {
-		// 		// insert it
-		// 		var arrayvar = this.state.historyArray.slice();
-		// 		arrayvar.push(newProps.urlAndRules);
+		console.log("Got URL as : " + newProps.newHistoryItem[0], " and rules as : " + JSON.stringify(newProps.newHistoryItem[1]));
+		// If the incoming newHistoryItem isn't already the current state.newHistoryItem AND it actually exists THEN
+		if (this.state.newHistoryItem !== newProps.newHistoryItem && 
+			newProps.newHistoryItem !== [] && 
+			newProps.newHistoryItem !== undefined && 
+			newProps.newHistoryItem !== null && 
+			newProps.newHistoryItem) {
+			// Check if the new item already exists in the historyArray
+			if (lib.inArray(newProps.newHistoryItem, this.state.historyArray) === false) { // doesn't exist, so insert it at highestIndex+1 position (i.e. 0th index is oldest)
+				var arrayvar = this.state.historyArray.slice();
+				arrayvar.push(newProps.newHistoryItem);
 
-		// 		this.setState({
-		// 			historyPaneVisibility: newProps.historyPaneVisibility,
-		// 			newHistoryItem: newProps.urlAndRules,
-		// 			historyArray: arrayvar
-
-		// 		});
-		// 	} else {
-		// 		// move it to "top" (which in this case is the highest index...)
-		// 		this.setState({
-		// 			historyPaneVisibility: newProps.historyPaneVisibility,
-		// 			newHistoryItem: newProps.urlAndRules,
-		// 			historyArray: lib.moveArrayElementFromTo(this.state.historyArray, lib.elementPositionInArray(newProps.urlAndRules, this.state.historyArray), this.state.historyArray.length - 1)
-		// 		});
-		// 	}
-		// } else {
-		// 	this.setState({
-		// 		historyPaneVisibility: newProps.historyPaneVisibility
-		// 	});
-		// }
+				this.setState({
+					historyPaneVisibility: newProps.historyPaneVisibility,
+					newHistoryItem: newProps.newHistoryItem,
+					historyArray: arrayvar
+				});
+			} else { // already exists, move it to "top" (which in this case is the highest index...)
+				this.setState({
+					historyPaneVisibility: newProps.historyPaneVisibility,
+					newHistoryItem: newProps.newHistoryItem,
+					historyArray: lib.moveArrayElementFromTo(this.state.historyArray, lib.elementPositionInArray(newProps.newHistoryItem, this.state.historyArray), this.state.historyArray.length - 1)
+				});
+			}
+		} else {
+			// just make sure the (potentially) new visibility setting is saved...
+			this.setState({
+				historyPaneVisibility: newProps.historyPaneVisibility
+			});
+		}
+		console.log("Current historyArray = " + JSON.stringify(this.state.historyArray));
 	}
 
 	closeDrawer() {
@@ -70,18 +74,14 @@ class HistoryPane extends Component {
 				<CardHeader subheader="Query History" />
 				<List dense>
 					{
-						this.state.historyArray.slice(0).reverse().map((url) => {
-							let index = lib.elementPositionInArray(url, this.state.historyArray);
+						this.state.historyArray.slice(0).reverse().map((item) => {
+							let index = lib.elementPositionInArray(item, this.state.historyArray);
 							return (
 									<ListItem button key={index}>
 										<ListItemIcon className={classes.noStyleButton}>
-											<CopyToClipboard text={url} >
-												<button>
-													<CopyIcon/>
-												</button>
-											</CopyToClipboard>
+											<CopyIcon/>
 										</ListItemIcon>
-										<ListItemText primary={url.replace(lib.getDbConfig(this.props.dbIndex, "url"), "").replace(/\?.*/, "").replace("/", "")} secondary={url.replace(lib.getDbConfig(this.props.dbIndex, "url"), "").replace(/.*\?/, "").replace(/&/g, "\n").replace(/,/g, ",\n")} />
+										<ListItemText primary={item[0].replace(lib.getDbConfig(this.props.dbIndex, "url"), "").replace(/\?.*/, "").replace("/", "")} secondary={item[0].replace(lib.getDbConfig(this.props.dbIndex, "url"), "").replace(/.*\?/, "").replace(/&/g, "\n").replace(/,/g, ",\n")} />
 									</ListItem>
 								);
 						})
