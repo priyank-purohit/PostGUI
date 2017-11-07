@@ -18,10 +18,11 @@ class HistoryPane extends Component {
 		this.state = {
 			historyPaneVisibility: this.props.historyPaneVisibility || false,
 			newHistoryItem: this.props.newHistoryItem,
-			historyArray: []
+			historyArray: [["http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(protein_id.eq.ALP80_00672)&limit=25000", {"condition":"AND","rules":[{"id":"protein_id","field":"protein_id","type":"string","input":"text","operator":"equal","value":"ALP80_00672"}],"not":false,"valid":true}], ["http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(genome_designation.eq.PfrICMP7712)&limit=25000", {"condition":"AND","rules":[{"id":"genome_designation","field":"genome_designation","type":"string","input":"text","operator":"equal","value":"PfrICMP7712"}],"not":false,"valid":true}], ["http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(domain_start.gte.164)&limit=25000", {"condition":"AND","rules":[{"id":"domain_start","field":"domain_start","type":"integer","input":"number","operator":"greater_or_equal","value":"164"}],"not":false,"valid":true}]]
 		};
 	}
 
+	// Keeps track of the incoming queries in an array
 	componentWillReceiveProps(newProps) {
 		this.setState({
 			historyPaneVisibility: newProps.historyPaneVisibility
@@ -58,6 +59,11 @@ class HistoryPane extends Component {
 		}
 	}
 
+	// Loads the History Item in the Query Builder
+	handleHistoryItemClick(index) {
+		console.log(JSON.stringify(this.state.historyArray[index][0]), JSON.stringify(this.state.historyArray[index][1]));
+	}
+
 	closeDrawer() {
 		this.props.closeHistoryPane();
 		this.setState({
@@ -75,7 +81,7 @@ class HistoryPane extends Component {
 						this.state.historyArray.slice(0).reverse().map((item) => {
 							let index = lib.elementPositionInArray(item, this.state.historyArray);
 							return (
-									<ListItem button key={index}>
+									<ListItem button key={index} onClick={this.handleHistoryItemClick.bind(this, index)}>
 										<ListItemIcon className={classes.noStyleButton}>
 											<CopyIcon/>
 										</ListItemIcon>
