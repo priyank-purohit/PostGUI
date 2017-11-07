@@ -182,11 +182,43 @@ exports.translateOperatorToPostgrest = function(operator) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Other Methods
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+// 
+exports.isJsonString = function(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
+
+// searches for an array element in an array of arrays (2D only)
+exports.searchForArrayInArray = function (element, array) {
+	for (let i = 0; i < array.length; i++) {
+		// Only search if lengths match
+		if (element.length === array[i].length) {
+			for (let j = 0; j < element.length; j++) {
+				if (JSON.stringify(element[j]) !== JSON.stringify(array[i][j])) {
+					break;
+				}
+				// Match FOUND, return the position of element in array .. which is index i
+				if (j === (element.length - 1)) {
+					return i;
+				}
+			}
+		}
+	}
+	return -1;
+}
 
 // returns true if ELEMENT is in ARRAY
 exports.inArray = function(element, array) {
 	if (array && element)
-		return array.indexOf(element) > -1;
+		if (element.constructor === Array) {
+			return this.searchForArrayInArray(element, array) > -1;
+		} else {
+			return array.indexOf(element) > -1;
+		}
 	else
 		return false;
 }
@@ -194,7 +226,11 @@ exports.inArray = function(element, array) {
 // returns index of ELEMENT is in ARRAY
 exports.elementPositionInArray = function(element, array) {
 	if (array && element)
-		return array.indexOf(element);
+		if (element.constructor === Array) {
+			return this.searchForArrayInArray(element, array);
+		} else {
+			return array.indexOf(element);
+		}
 	else
 		return -1;
 }

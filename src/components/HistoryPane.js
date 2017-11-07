@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {CopyToClipboard} from 'react-copy-to-clipboard';
+//import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
@@ -27,7 +27,6 @@ class HistoryPane extends Component {
 			historyPaneVisibility: newProps.historyPaneVisibility
 		});
 
-		console.log("Got URL as : " + newProps.newHistoryItem[0], " and rules as : " + JSON.stringify(newProps.newHistoryItem[1]));
 		// If the incoming newHistoryItem isn't already the current state.newHistoryItem AND it actually exists THEN
 		if (this.state.newHistoryItem !== newProps.newHistoryItem && 
 			newProps.newHistoryItem !== [] && 
@@ -57,7 +56,6 @@ class HistoryPane extends Component {
 				historyPaneVisibility: newProps.historyPaneVisibility
 			});
 		}
-		console.log("Current historyArray = " + JSON.stringify(this.state.historyArray));
 	}
 
 	closeDrawer() {
