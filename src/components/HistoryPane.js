@@ -5,7 +5,8 @@ import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Drawer from 'material-ui/Drawer';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
-import CopyIcon from 'material-ui-icons/ContentCopy';
+import EditIcon from 'material-ui-icons/Edit';
+import LinkIcon from 'material-ui-icons/Link';
 import { CardHeader } from 'material-ui/Card';
 
 let lib = require("../utils/library.js");
@@ -81,11 +82,17 @@ class HistoryPane extends Component {
 						this.state.historyArray.slice(0).reverse().map((item) => {
 							let index = lib.elementPositionInArray(item, this.state.historyArray);
 							return (
-									<ListItem button key={index} onClick={this.handleHistoryItemClick.bind(this, index)}>
-										<ListItemIcon className={classes.noStyleButton}>
-											<CopyIcon/>
+									<ListItem button key={index}>
+										
+										<ListItemIcon className={classes.noStyleButton}  onClick={this.handleHistoryItemClick.bind(this, index)}>
+											<EditIcon/>
 										</ListItemIcon>
-										<ListItemText primary={item[0].replace(lib.getDbConfig(this.props.dbIndex, "url"), "").replace(/\?.*/, "").replace("/", "")} secondary={item[0].replace(lib.getDbConfig(this.props.dbIndex, "url"), "").replace(/.*\?/, "").replace(/&/g, "\n").replace(/,/g, ",\n")} />
+
+										<ListItemIcon disabled className={classes.noStyleButton}>
+											<LinkIcon/>
+										</ListItemIcon>
+										
+										<ListItemText primary={item[0].replace(lib.getDbConfig(this.props.dbIndex, "url"), "").replace(/\?.*/, "").replace("/", "")} secondary={item[0].replace(lib.getDbConfig(this.props.dbIndex, "url"), "").replace(/.*\?/, "").replace(/&/g, "\n").replace(/,/g, ",\n")}  onClick={this.handleHistoryItemClick.bind(this, index)}/>
 									</ListItem>
 								);
 						})
