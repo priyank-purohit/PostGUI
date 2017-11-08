@@ -64,14 +64,12 @@ export default class Layout extends React.Component {
 	}
 
 	changeTable(newTable) {
-		console.log("App.js got new table = " + newTable);
 		this.setState({
 			table: newTable
 		});
 	}
 
 	changeRules(newRules) {
-		console.log("App.js got new rules = " + JSON.stringify(newRules));
 		this.setState({
 			rules: newRules
 		});
