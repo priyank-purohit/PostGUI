@@ -59,7 +59,12 @@ class RightPane extends Component {
 		clearTimeout(this.timer);
 		this.timer = null;
 
-		if (newProps.visibleColumns !== undefined && this.state.dbIndex === newProps.dbIndex && this.state.table === newProps.table && this.state.columns === newProps.columns && this.state.leftPaneVisibility === newProps.leftPaneVisibility) {
+		if (newProps.visibleColumns !== undefined && 
+			this.state.dbIndex === newProps.dbIndex && 
+			this.state.table === newProps.table && 
+			this.state.columns === newProps.columns && 
+			this.state.leftPaneVisibility === newProps.leftPaneVisibility &&
+			this.state.rules === newProps.rules) {
 			this.setState({
 				visibleColumns: newProps.visibleColumns
 			});
@@ -81,7 +86,7 @@ class RightPane extends Component {
 				rawData: [],
 				rows: null
 			}, () => {
-				this.rebuildQueryBuilder(this.refs.queryBuilder, newProps.dbIndex, newProps.table, newProps.columns);
+				this.rebuildQueryBuilder(this.refs.queryBuilder, newProps.dbIndex, newProps.table, newProps.columns, newProps.rules);
 				let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
 				this.setState({ url: url + "?limit=10" });
 				this.fetchOutput(url + "?limit=10", true);
@@ -93,14 +98,14 @@ class RightPane extends Component {
 				columns: newProps.columns,
 				visibleColumns: newProps.visibleColumns,
 				leftPaneVisibility: newProps.leftPaneVisibility,
-				rules: null,
+				rules: newProps.rules,
 				submitLoading: false,
 				submitError: false,
 				submitSuccess: false,
 				rawData: [],
 				rows: null
 			}, () => {
-				this.rebuildQueryBuilder(this.refs.queryBuilder, newProps.dbIndex, newProps.table, newProps.columns);
+				this.rebuildQueryBuilder(this.refs.queryBuilder, newProps.dbIndex, newProps.table, newProps.columns, newProps.rules);
 				let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
 				this.setState({ url: url + "?limit=10" });
 				this.fetchOutput(url + "?limit=10", true);
@@ -133,12 +138,31 @@ class RightPane extends Component {
 
 	// Destroys the old one, and creates a new QB based on the selected view's attributes
 	rebuildQueryBuilder(element, dbIndex, table, columns, newRules) {
-		window.$(this.refs.queryBuilder).queryBuilder('destroy');
-
 		const rules = newRules ? newRules : defaultRules;
 		const filters = lib.getQBFilters(dbIndex, table, columns);
 
-		window.$(element).queryBuilder({ filters, rules, plugins: ['not-group'] });
+		// Create a list of columns found in the new rules
+		let columnsInNewQBRules = [];
+		for (let i = 0; i < rules['rules'].length; i++) {
+			columnsInNewQBRules.push(rules['rules'][i]['field']);
+		}
+		
+		// Check if all columns found in the new rules are found in the QB columns list
+		let allRulesColumnsInColumnsArray = true;
+		for (let i = 0; i < columnsInNewQBRules.length; i++) {
+			if (lib.inArray(columnsInNewQBRules[i], columns) === false) {
+				allRulesColumnsInColumnsArray = false;
+			}
+		}
+
+		// if all rules columns are present in list of columns, rebuild with the rules!
+		if (allRulesColumnsInColumnsArray) {
+			window.$(element).queryBuilder('destroy');
+			window.$(element).queryBuilder({ filters, rules, plugins: ['not-group'] });
+		} else {
+			window.$(element).queryBuilder('destroy');
+			window.$(element).queryBuilder({ filters, defaultRules, plugins: ['not-group'] });
+		}
 	}
 
 	// Extracts the rules recursively
