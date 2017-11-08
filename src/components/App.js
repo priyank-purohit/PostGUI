@@ -18,7 +18,7 @@ export default class Layout extends React.Component {
 		this.state = {
 			dbIndex: 0,
 			table: "",
-			rules: null,
+			rulesFromHistoryPane: null,
 			columns: [],
 			newHistoryItem: [],
 			visibleColumns: [],
@@ -71,7 +71,7 @@ export default class Layout extends React.Component {
 
 	changeRules(newRules) {
 		this.setState({
-			rules: newRules
+			rulesFromHistoryPane: newRules
 		});
 	}
 
@@ -120,6 +120,7 @@ export default class Layout extends React.Component {
 					<RightPane
 						dbIndex={this.state.dbIndex}
 						table={this.state.table}
+						rulesFromHistoryPane={this.state.rulesFromHistoryPane}
 						columns={this.state.columns}
 						visibleColumns={this.state.visibleColumns}
 						leftPaneVisibility={this.state.leftPaneVisibility}
