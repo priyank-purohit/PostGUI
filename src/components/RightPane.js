@@ -63,6 +63,7 @@ class RightPane extends Component {
 				this.state.dbIndex === newProps.dbIndex && 
 				this.state.table === newProps.table && 
 				this.state.columns === newProps.columns && 
+				this.state.rulesFromHistoryPane === newProps.rulesFromHistoryPane && 
 				this.state.leftPaneVisibility === newProps.leftPaneVisibility) {
 			this.setState({
 				visibleColumns: newProps.visibleColumns
