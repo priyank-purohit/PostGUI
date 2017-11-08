@@ -59,7 +59,11 @@ class RightPane extends Component {
 		clearTimeout(this.timer);
 		this.timer = null;
 
-		if (newProps.visibleColumns !== undefined && this.state.dbIndex === newProps.dbIndex && this.state.table === newProps.table && this.state.columns === newProps.columns && this.state.leftPaneVisibility === newProps.leftPaneVisibility) {
+		if (newProps.visibleColumns !== undefined && 
+				this.state.dbIndex === newProps.dbIndex && 
+				this.state.table === newProps.table && 
+				this.state.columns === newProps.columns && 
+				this.state.leftPaneVisibility === newProps.leftPaneVisibility) {
 			this.setState({
 				visibleColumns: newProps.visibleColumns
 			});
