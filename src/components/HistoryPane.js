@@ -62,7 +62,10 @@ class HistoryPane extends Component {
 
 	// Loads the History Item in the Query Builder
 	handleHistoryItemClick(index) {
-		console.log(JSON.stringify(this.state.historyArray[index][0]), JSON.stringify(this.state.historyArray[index][1]));
+		let url = this.state.historyArray[index][0];
+		let rules = this.state.historyArray[index][1];
+		this.props.changeTable(this.extractTableNameFromURL(url));
+		this.props.changeRules(rules);
 	}
 
 	closeDrawer() {
@@ -71,6 +74,14 @@ class HistoryPane extends Component {
 			historyPaneVisibility: false,
 		});
 	};
+
+	extractTableNameFromURL(url) {
+		return url.replace(lib.getDbConfig(this.props.dbIndex, "url"), "").replace(/\?.*/, "").replace("/", "");
+	}
+
+	cleanUpRules(url) {
+		return url.replace(lib.getDbConfig(this.props.dbIndex, "url"), "").replace(/.*\?/, "").replace(/&/g, "\n").replace(/,/g, ",\n");
+	}
 
 	render() {
 		const classes = this.props.classes;
@@ -92,7 +103,7 @@ class HistoryPane extends Component {
 											<LinkIcon/>
 										</ListItemIcon>
 										
-										<ListItemText primary={item[0].replace(lib.getDbConfig(this.props.dbIndex, "url"), "").replace(/\?.*/, "").replace("/", "")} secondary={item[0].replace(lib.getDbConfig(this.props.dbIndex, "url"), "").replace(/.*\?/, "").replace(/&/g, "\n").replace(/,/g, ",\n")}  onClick={this.handleHistoryItemClick.bind(this, index)}/>
+										<ListItemText primary={this.extractTableNameFromURL(item[0])} secondary={this.cleanUpRules(item[0])}  onClick={this.handleHistoryItemClick.bind(this, index)}/>
 									</ListItem>
 								);
 						})
