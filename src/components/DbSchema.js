@@ -55,6 +55,7 @@ class DbSchema extends Component {
 				this.updateVisibleColumns();
 			});
 		} else if (this.state.table !== newProps.table) {
+			console.log("DbSchema.js got a new table to display!! " + newProps.table + " instead of " + this.state.table);
 			this.setState({
 				table: newProps.table
 			});

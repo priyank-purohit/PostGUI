@@ -120,7 +120,6 @@ export default class Layout extends React.Component {
 					<RightPane
 						dbIndex={this.state.dbIndex}
 						table={this.state.table}
-						rules={this.state.rules}
 						columns={this.state.columns}
 						visibleColumns={this.state.visibleColumns}
 						leftPaneVisibility={this.state.leftPaneVisibility}
