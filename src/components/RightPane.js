@@ -76,7 +76,7 @@ class RightPane extends Component {
 
 				//commenting this out ensures the item loads everytime
 				// the problem is if current table has the column names, then it will set it to null. When the actual table is laoded, it sets to blank rules ... so if you switch from GO to Domain annotation table, the rule won't load if the column is protein_id .. which exists in both tables.. 
-				//this.props.changeRules(null);
+				this.props.changeRules(null);
 			} else {
 				window.$(this.refs.queryBuilder).queryBuilder('destroy');
 				window.$(this.refs.queryBuilder).queryBuilder({ filters, defaultRules, plugins: ['not-group'] });
@@ -175,7 +175,7 @@ class RightPane extends Component {
 
 			//commenting this out ensures the item loads everytime
 			// the problem is if current table has the column names, then it will set it to null. When the actual table is laoded, it sets to blank rules ... so if you switch from GO to Domain annotation table, the rule won't load if the column is protein_id .. which exists in both tables.. 
-			//this.props.changeRules(null);
+			this.props.changeRules(null);
 		} else {
 			window.$(element).queryBuilder({ filters, defaultRules, plugins: ['not-group'] });
 		}
