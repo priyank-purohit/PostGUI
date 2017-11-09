@@ -59,6 +59,27 @@ class RightPane extends Component {
 		clearTimeout(this.timer);
 		this.timer = null;
 
+		if (newProps.rulesFromHistoryPane !== null && newProps.rulesFromHistoryPane !== undefined) {
+			// There is something the user wants to load...
+			const filters = lib.getQBFilters(this.state.dbIndex, this.state.table, this.state.columns);
+			let rules = newProps.rulesFromHistoryPane;
+
+			this.setState({
+				rulesFromHistoryPane: rules
+			});
+
+			// Rebuild if all columns exist in the current table list of column
+			if (this.checkIfRulesColumnsAreInStateTableColumns(rules)) {
+				window.$(this.refs.queryBuilder).queryBuilder('destroy');
+				window.$(this.refs.queryBuilder).queryBuilder({ filters, rules, plugins: ['not-group'] });
+
+				this.props.changeRules(null);
+			} else {
+				window.$(this.refs.queryBuilder).queryBuilder('destroy');
+				window.$(this.refs.queryBuilder).queryBuilder({ filters, defaultRules, plugins: ['not-group'] });
+			}
+		}
+
 		if (newProps.visibleColumns !== undefined && 
 				this.state.dbIndex === newProps.dbIndex && 
 				this.state.table === newProps.table && 
@@ -136,13 +157,38 @@ class RightPane extends Component {
 	}
 
 	// Destroys the old one, and creates a new QB based on the selected view's attributes
-	rebuildQueryBuilder(element, dbIndex, table, columns, newRules) {
+	rebuildQueryBuilder(element, dbIndex, table, columns, newRules = this.state.rulesFromHistoryPane) {
 		window.$(this.refs.queryBuilder).queryBuilder('destroy');
 
 		const rules = newRules ? newRules : defaultRules;
 		const filters = lib.getQBFilters(dbIndex, table, columns);
 
-		window.$(element).queryBuilder({ filters, rules, plugins: ['not-group'] });
+		if (newRules !== null && newRules !== undefined && this.checkIfRulesColumnsAreInStateTableColumns(rules)) {
+			window.$(element).queryBuilder({ filters, rules, plugins: ['not-group'] });
+
+			this.props.changeRules(null);
+		} else {
+			window.$(element).queryBuilder({ filters, defaultRules, plugins: ['not-group'] });
+		}
+	}
+
+	// Returns true if the QB rules are safe to use
+	checkIfRulesColumnsAreInStateTableColumns(rules) {
+		// Create a list of columns found in the rules user wants to load
+		let columnsInNewQBRules = [];
+		for (let i = 0; i < rules['rules'].length; i++) {
+			columnsInNewQBRules.push(rules['rules'][i]['field']);
+		}
+
+		// Check if ALL the columns are existing in the current table's columns
+		let allRulesColumnsInColumnsArray = true;
+		for (let i = 0; i < columnsInNewQBRules.length; i++) {
+			if (lib.inArray(columnsInNewQBRules[i], this.state.columns) === false) {
+				allRulesColumnsInColumnsArray = false;
+			}
+		}
+
+		return allRulesColumnsInColumnsArray;
 	}
 
 	// Extracts the rules recursively
@@ -364,7 +410,7 @@ class RightPane extends Component {
 
 				<Paper className={paperClasses} elevation={5}>
 					<CardHeader title={tableDisplayName} subheader={tableDescription} />
-
+					
 					<Typography type="subheading" className={classes.cardMarginLeftTop} >Query Builder</Typography>
 						<div id='query-builder' ref='queryBuilder'/>
 
