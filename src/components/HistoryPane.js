@@ -80,7 +80,7 @@ class HistoryPane extends Component {
 	}
 
 	cleanUpRules(url) {
-		return url.replace(lib.getDbConfig(this.props.dbIndex, "url"), "").replace(/.*\?/, "").replace(/&/g, "\n").replace(/,/g, ",\n");
+		return url.replace(lib.getDbConfig(this.props.dbIndex, "url"), "").replace(/.*\?/, "").replace(/&/g, "\n").replace(/,/g, ",\n").replace(/limit=\d*/g, "");
 	}
 
 	render() {
@@ -103,7 +103,10 @@ class HistoryPane extends Component {
 											<LinkIcon/>
 										</ListItemIcon>
 										
-										<ListItemText primary={this.extractTableNameFromURL(item[0])} secondary={this.cleanUpRules(item[0])}  onClick={this.handleHistoryItemClick.bind(this, index)}/>
+										<div onClick={this.handleHistoryItemClick.bind(this, index)}>
+											<ListItemText primary={this.extractTableNameFromURL(item[0])}/>
+											<ListItemText secondary={this.cleanUpRules(item[0])} />
+										</div>
 									</ListItem>
 								);
 						})
