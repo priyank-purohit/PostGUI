@@ -42,6 +42,7 @@ class RightPane extends Component {
 			visibleColumns: props.visibleColumns,
 			leftPaneVisibility: props.leftPaneVisibility,
 			rules: null,
+			rulesFromHistoryPane: null,
 			submitLoading: false,
 			submitError: false,
 			submitSuccess: false,
@@ -78,6 +79,10 @@ class RightPane extends Component {
 				window.$(this.refs.queryBuilder).queryBuilder('destroy');
 				window.$(this.refs.queryBuilder).queryBuilder({ filters, defaultRules, plugins: ['not-group'] });
 			}
+		} else {
+			this.setState({
+				rulesFromHistoryPane: null
+			});
 		}
 
 		if (newProps.visibleColumns !== undefined && 
