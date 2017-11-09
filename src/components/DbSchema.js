@@ -58,6 +58,7 @@ class DbSchema extends Component {
 			this.setState({
 				table: newProps.table
 			});
+			this.handleTableClick(newProps.table);
 		}
 	}
 
