@@ -23,7 +23,7 @@ export default class Layout extends React.Component {
 			newHistoryItem: [],
 			visibleColumns: [],
 			leftPaneVisibility: true,
-			historyPaneVisibility: true
+			historyPaneVisibility: false
 		};
 	}
 
