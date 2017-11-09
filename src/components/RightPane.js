@@ -182,18 +182,14 @@ class RightPane extends Component {
 	}
 
 	recursiveColumnNameExtraction(rules) {
-		console.log("\t\tExtracting from rules = " + JSON.stringify(rules));
-
 		let columnNames = [];
 		for (let i = 0; i < rules.length; i++) {
 			let potentialName = rules[i]['field'];
 			if (potentialName !== null && potentialName !== undefined) {
 				columnNames.push(potentialName);
-				console.log("\t\t\tFound col = " + potentialName);
 			} else {
 				// Check if it's a GROUP by looking for "condition" key
 				if (rules[i]['condition'] === "AND" || rules[i]['condition'] === "OR") {
-					console.log("\t\t\t FOUND SUB GROUP!");
 					let subGroupColumns = this.recursiveColumnNameExtraction(rules[i]['rules']);
 					for (let ii = 0; ii < subGroupColumns.length; ii++) {
 						if (subGroupColumns[ii] !== null && subGroupColumns[ii] !== undefined) {
@@ -211,8 +207,6 @@ class RightPane extends Component {
 		// Create a list of columns found in the rules user wants to load
 		let columnsInNewQBRules = lib.arrNoDup(this.recursiveColumnNameExtraction(rawRules['rules']));
 
-		console.log(">>>>> Recurse= " + JSON.stringify(columnsInNewQBRules));
-
 		// Check if ALL the columns are existing in the current table's columns
 		let allRulesColumnsInColumnsArray = true;
 		for (let i = 0; i < columnsInNewQBRules.length; i++) {
@@ -220,9 +214,6 @@ class RightPane extends Component {
 				allRulesColumnsInColumnsArray = false;
 			}
 		}
-
-		console.log("Returning " + (allRulesColumnsInColumnsArray));
-
 		return allRulesColumnsInColumnsArray;
 	}
 
