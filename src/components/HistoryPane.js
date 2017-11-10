@@ -118,30 +118,47 @@ class HistoryPane extends Component {
 				<List dense>
 					{
 						this.state.historyArray.slice(0).reverse().map((item) => {
-							let rules = this.recursiveRulesExtraction(item[1]['rules'], item[1]['condition'], 0);
-							let index = lib.elementPositionInArray(item, this.state.historyArray);
-							return (
-									<ListItem button key={index} onClick={this.handleHistoryItemClick.bind(this, index)}>
-										
-										<ListItemIcon className={classes.noStyleButton}  onClick={this.handleHistoryItemClick.bind(this, index)}>
-											<EditIcon/>
-										</ListItemIcon>
-										
-										<div>
-											<ListItemText primary={this.extractTableNameFromURL(item[0])}/>
-											{
-												rules.map((rule) => {
-													let displayStr = "";
-													for (let i = 0; i < rule.length; i++) {
-														displayStr += " " + rule[i] + " ";
-													}
-													displayStr = displayStr.replace(/\t/g, " . . ").replace("greater_or_equal", ">=").replace("less_or_equal", "<=").replace("greater", ">").replace("less", "<").replace("equal", "=");
-													return <ListItemText secondary={displayStr} key={index+rule} />;
-												})
-											}
-										</div>
-									</ListItem>
-								);
+							if (item[0] && item[1]) {
+								let rules = this.recursiveRulesExtraction(item[1]['rules'], item[1]['condition'], 0);
+								let index = lib.elementPositionInArray(item, this.state.historyArray);
+								return (
+										<ListItem button key={index} onClick={this.handleHistoryItemClick.bind(this, index)}>
+											
+											<ListItemIcon className={classes.noStyleButton}  onClick={this.handleHistoryItemClick.bind(this, index)}>
+												<EditIcon/>
+											</ListItemIcon>
+											
+											<div>
+												<ListItemText primary={this.extractTableNameFromURL(item[0])}/>
+												{
+													rules.map((rule) => {
+														let displayStr = "";
+														for (let i = 0; i < rule.length; i++) {
+															displayStr += " " + rule[i] + " ";
+														}
+														displayStr = displayStr.replace(/\t/g, " . . ").replace("greater_or_equal", ">=").replace("less_or_equal", "<=").replace("greater", ">").replace("less", "<").replace("equal", "=");
+														return <ListItemText secondary={displayStr} key={index+rule} />;
+													})
+												}
+											</div>
+										</ListItem>
+									);
+							} else if (item[0] && !item[1]) {
+								let index = lib.elementPositionInArray(item, this.state.historyArray);
+
+								return (
+										<ListItem button key={index} onClick={this.handleHistoryItemClick.bind(this, index)}>
+											
+											<ListItemIcon className={classes.noStyleButton}  onClick={this.handleHistoryItemClick.bind(this, index)}>
+												<EditIcon/>
+											</ListItemIcon>
+											
+											<div>
+												<ListItemText primary={this.extractTableNameFromURL(item[0])}/>
+											</div>
+										</ListItem>
+									);
+							}
 						})
 					}
 				</List>
