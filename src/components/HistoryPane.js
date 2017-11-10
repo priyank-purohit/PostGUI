@@ -103,7 +103,6 @@ class HistoryPane extends Component {
 							rulesArray.push(subGroupRules[ii]);
 						}
 					}
-					//rulesArray.push(subGroupRules);
 				}
 			}
 		}
