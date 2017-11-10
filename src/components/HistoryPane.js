@@ -84,6 +84,33 @@ class HistoryPane extends Component {
 		return url.replace(lib.getDbConfig(this.props.dbIndex, "url"), "").replace(/.*\?/, "").replace(/&/g, "\n").replace(/,/g, ",\n").replace(/limit=\d*/g, "");
 	}
 
+
+	recursiveRulesExtraction(rules, condition, depth = 0) {
+		let rulesArray = [];
+		if (rules.length > 1) {
+			rulesArray = [[Array(depth).join("\t") + condition]];
+		}
+		for (let i = 0; i < rules.length; i++) {
+			let potentialName = rules[i]['field'];
+			if (potentialName !== null && potentialName !== undefined) {
+				rulesArray.push([Array(depth+1).join("\t") + potentialName, rules[i]['operator'], rules[i]['value']]);
+			} else {
+				// Check if it's a GROUP by looking for "condition" key
+				if (rules[i]['condition'] === "AND" || rules[i]['condition'] === "OR") {
+					let subGroupRules = this.recursiveRulesExtraction(rules[i]['rules'], rules[i]['condition'], depth+1);
+					for (let ii = 0; ii < subGroupRules.length; ii++) {
+						if (subGroupRules[ii] !== null && subGroupRules[ii] !== undefined) {
+							rulesArray.push(subGroupRules[ii]);
+						}
+					}
+					//rulesArray.push(subGroupRules);
+				}
+			}
+		}
+		return rulesArray;
+	}
+
+
 	render() {
 		const classes = this.props.classes;
 		const sideList = (
@@ -92,17 +119,27 @@ class HistoryPane extends Component {
 				<List dense>
 					{
 						this.state.historyArray.slice(0).reverse().map((item) => {
+							let rules = this.recursiveRulesExtraction(item[1]['rules'], item[1]['condition'], 0);
 							let index = lib.elementPositionInArray(item, this.state.historyArray);
 							return (
-									<ListItem button key={index}>
+									<ListItem button key={index} onClick={this.handleHistoryItemClick.bind(this, index)}>
 										
 										<ListItemIcon className={classes.noStyleButton}  onClick={this.handleHistoryItemClick.bind(this, index)}>
 											<EditIcon/>
 										</ListItemIcon>
 										
-										<div onClick={this.handleHistoryItemClick.bind(this, index)}>
+										<div>
 											<ListItemText primary={this.extractTableNameFromURL(item[0])}/>
-											<ListItemText secondary={this.cleanUpRules(item[0])} />
+											{
+												rules.map((rule) => {
+													let displayStr = "";
+													for (let i = 0; i < rule.length; i++) {
+														displayStr += " " + rule[i] + " ";
+													}
+													displayStr = displayStr.replace(/\t/g, " . . ").replace("greater_or_equal", ">=").replace("less_or_equal", "<=").replace("greater", ">").replace("less", "<").replace("equal", "=");
+													return <ListItemText secondary={displayStr} key={index+rule} />;
+												})
+											}
 										</div>
 									</ListItem>
 								);
