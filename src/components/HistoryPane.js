@@ -158,7 +158,7 @@ class HistoryPane extends Component {
 											</div>
 										</ListItem>
 									);
-							} else if (item[0] && !item[1]) {
+							} else {
 								let index = lib.elementPositionInArray(item, this.state.historyArray);
 
 								return (
