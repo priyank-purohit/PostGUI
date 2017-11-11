@@ -4,8 +4,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Drawer from 'material-ui/Drawer';
+//import Typography from 'material-ui/Typography';
 import List, { ListItem, ListItemIcon, ListItemText, ListSubheader } from 'material-ui/List';
 import IconButton from 'material-ui/IconButton';
+import Button from 'material-ui/Button';
 import EditIcon from 'material-ui-icons/Edit';
 import DeleteIcon from 'material-ui-icons/Delete';
 //import LinkIcon from 'material-ui-icons/Link';
@@ -23,10 +25,11 @@ class HistoryPane extends Component {
 		// historyArray will have the latest URL at the end ... i.e. 0 position is the earliest query, and the highest position index is the latest query...
 		// TODO: Need to make historyArray db specific!!!
 		this.state = {
-			historyPaneVisibility: this.props.historyPaneVisibility || false,
+			historyPaneVisibility: this.props.historyPaneVisibility || true,
 			newHistoryItem: this.props.newHistoryItem,
 			displayIndex: -1,
-			historyArray: localHistoryArray ? localHistoryArray : [["http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(protein_id.eq.ALP80_00672,genome_designation.eq.PfrICMP7712)&limit=25000", {"condition":"AND","rules":[{"id":"protein_id","field":"protein_id","type":"string","input":"text","operator":"equal","value":"ALP80_00672"},{"id":"genome_designation","field":"genome_designation","type":"string","input":"text","operator":"equal","value":"PfrICMP7712"}],"not":false,"valid":true}],["http://hopper.csb.utoronto.ca:3001/annotation_go?and=(go_id.eq.GO:0005215)&limit=25000", {"condition":"AND","rules":[{"id":"go_id","field":"go_id","type":"string","input":"text","operator":"equal","value":"GO:0005215"}],"not":false,"valid":true}],["http://hopper.csb.utoronto.ca:3001/annotation_pathway?and=(pathway_name.ilike.*Lipid metabolism*)&limit=25000", {"condition":"AND","rules":[{"id":"pathway_name","field":"pathway_name","type":"string","input":"text","operator":"contains","value":"Lipid metabolism"}],"not":false,"valid":true}],["http://hopper.csb.utoronto.ca:3001/gene_feature?and=(nuc_length.gte.2500)&limit=25000", {"condition":"AND","rules":[{"id":"nuc_length","field":"nuc_length","type":"string","input":"text","operator":"greater_or_equal","value":"2500"}],"not":false,"valid":true}],["http://hopper.csb.utoronto.ca:3001/genome_characteristics?and=(host_common.eq.wheat)&limit=25000", {"condition":"AND","rules":[{"id":"host_common","field":"host_common","type":"string","input":"text","operator":"equal","value":"wheat"}],"not":false,"valid":true}],["http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(protein_id.ilike.*ALP80*,genome_designation.eq.PfrICMP7712,description.ilike.*kinase*,or(significance_value.eq.2.6e-200,significance_value.lte.2e-28))&limit=25000",{"condition":"AND","rules":[{"id":"protein_id","field":"protein_id","type":"string","input":"text","operator":"contains","value":"ALP80"},{"id":"genome_designation","field":"genome_designation","type":"string","input":"text","operator":"equal","value":"PfrICMP7712"},{"id":"description","field":"description","type":"string","input":"text","operator":"contains","value":"kinase"},{"condition":"OR","rules":[{"id":"significance_value","field":"significance_value","type":"double","input":"number","operator":"equal","value":"2.6e-200"},{"id":"significance_value","field":"significance_value","type":"double","input":"number","operator":"less_or_equal","value":"2e-28"}],"not":false}],"not":false,"valid":true}],["http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(protein_id.ilike.*ALP80*,genome_designation.eq.PfrICMP7712,description.ilike.*kinase*,or(significance_value.eq.2.6e-200,significance_value.lte.2e-28,and(significance_value.gte.5.4e-27,significance_value.lte.1.9e-22)))&limit=25000",{"condition":"AND","rules":[{"id":"protein_id","field":"protein_id","type":"string","input":"text","operator":"contains","value":"ALP80"},{"id":"genome_designation","field":"genome_designation","type":"string","input":"text","operator":"equal","value":"PfrICMP7712"},{"id":"description","field":"description","type":"string","input":"text","operator":"contains","value":"kinase"},{"condition":"OR","rules":[{"id":"significance_value","field":"significance_value","type":"double","input":"number","operator":"equal","value":"2.6e-200"},{"id":"significance_value","field":"significance_value","type":"double","input":"number","operator":"less_or_equal","value":"2e-28"},{"condition":"AND","rules":[{"id":"significance_value","field":"significance_value","type":"double","input":"number","operator":"greater_or_equal","value":"5.4e-27"},{"id":"significance_value","field":"significance_value","type":"double","input":"number","operator":"less_or_equal","value":"1.9e-22"}],"not":false}],"not":false}],"not":false,"valid":true}],["http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(protein_id.ilike.*ALP80*,genome_designation.eq.PfrICMP7712,description.ilike.*kinase*,or(significance_value.eq.2.6e-200,significance_value.lte.2e-28,and(significance_value.gte.5.4e-27,significance_value.lte.1.9e-22)),not.and(description.ilike.*Shikimate*))&limit=25000",{"condition":"AND","rules":[{"id":"protein_id","field":"protein_id","type":"string","input":"text","operator":"contains","value":"ALP80"},{"id":"genome_designation","field":"genome_designation","type":"string","input":"text","operator":"equal","value":"PfrICMP7712"},{"id":"description","field":"description","type":"string","input":"text","operator":"contains","value":"kinase"},{"condition":"OR","rules":[{"id":"significance_value","field":"significance_value","type":"double","input":"number","operator":"equal","value":"2.6e-200"},{"id":"significance_value","field":"significance_value","type":"double","input":"number","operator":"less_or_equal","value":"2e-28"},{"condition":"AND","rules":[{"id":"significance_value","field":"significance_value","type":"double","input":"number","operator":"greater_or_equal","value":"5.4e-27"},{"id":"significance_value","field":"significance_value","type":"double","input":"number","operator":"less_or_equal","value":"1.9e-22"}],"not":false}],"not":false},{"condition":"AND","rules":[{"id":"description","field":"description","type":"string","input":"text","operator":"contains","value":"Shikimate"}],"not":true}],"not":false,"valid":true}]]
+			historyArray: localHistoryArray ? localHistoryArray : [["http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(protein_id.eq.ALP80_00672,genome_designation.eq.PfrICMP7712)&limit=25000", {"condition":"AND","rules":[{"id":"protein_id","field":"protein_id","type":"string","input":"text","operator":"equal","value":"ALP80_00672"},{"id":"genome_designation","field":"genome_designation","type":"string","input":"text","operator":"equal","value":"PfrICMP7712"}],"not":false,"valid":true}],["http://hopper.csb.utoronto.ca:3001/annotation_go?and=(go_id.eq.GO:0005215)&limit=25000", {"condition":"AND","rules":[{"id":"go_id","field":"go_id","type":"string","input":"text","operator":"equal","value":"GO:0005215"}],"not":false,"valid":true}],["http://hopper.csb.utoronto.ca:3001/annotation_pathway?and=(pathway_name.ilike.*Lipid metabolism*)&limit=25000", {"condition":"AND","rules":[{"id":"pathway_name","field":"pathway_name","type":"string","input":"text","operator":"contains","value":"Lipid metabolism"}],"not":false,"valid":true}],["http://hopper.csb.utoronto.ca:3001/gene_feature?and=(nuc_length.gte.2500)&limit=25000", {"condition":"AND","rules":[{"id":"nuc_length","field":"nuc_length","type":"string","input":"text","operator":"greater_or_equal","value":"2500"}],"not":false,"valid":true}],["http://hopper.csb.utoronto.ca:3001/genome_characteristics?and=(host_common.eq.wheat)&limit=25000", {"condition":"AND","rules":[{"id":"host_common","field":"host_common","type":"string","input":"text","operator":"equal","value":"wheat"}],"not":false,"valid":true}],["http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(protein_id.ilike.*ALP80*,genome_designation.eq.PfrICMP7712,description.ilike.*kinase*,or(significance_value.eq.2.6e-200,significance_value.lte.2e-28))&limit=25000",{"condition":"AND","rules":[{"id":"protein_id","field":"protein_id","type":"string","input":"text","operator":"contains","value":"ALP80"},{"id":"genome_designation","field":"genome_designation","type":"string","input":"text","operator":"equal","value":"PfrICMP7712"},{"id":"description","field":"description","type":"string","input":"text","operator":"contains","value":"kinase"},{"condition":"OR","rules":[{"id":"significance_value","field":"significance_value","type":"double","input":"number","operator":"equal","value":"2.6e-200"},{"id":"significance_value","field":"significance_value","type":"double","input":"number","operator":"less_or_equal","value":"2e-28"}],"not":false}],"not":false,"valid":true}],["http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(protein_id.ilike.*ALP80*,genome_designation.eq.PfrICMP7712,description.ilike.*kinase*,or(significance_value.eq.2.6e-200,significance_value.lte.2e-28,and(significance_value.gte.5.4e-27,significance_value.lte.1.9e-22)))&limit=25000",{"condition":"AND","rules":[{"id":"protein_id","field":"protein_id","type":"string","input":"text","operator":"contains","value":"ALP80"},{"id":"genome_designation","field":"genome_designation","type":"string","input":"text","operator":"equal","value":"PfrICMP7712"},{"id":"description","field":"description","type":"string","input":"text","operator":"contains","value":"kinase"},{"condition":"OR","rules":[{"id":"significance_value","field":"significance_value","type":"double","input":"number","operator":"equal","value":"2.6e-200"},{"id":"significance_value","field":"significance_value","type":"double","input":"number","operator":"less_or_equal","value":"2e-28"},{"condition":"AND","rules":[{"id":"significance_value","field":"significance_value","type":"double","input":"number","operator":"greater_or_equal","value":"5.4e-27"},{"id":"significance_value","field":"significance_value","type":"double","input":"number","operator":"less_or_equal","value":"1.9e-22"}],"not":false}],"not":false}],"not":false,"valid":true}],["http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(protein_id.ilike.*ALP80*,genome_designation.eq.PfrICMP7712,description.ilike.*kinase*,or(significance_value.eq.2.6e-200,significance_value.lte.2e-28,and(significance_value.gte.5.4e-27,significance_value.lte.1.9e-22)),not.and(description.ilike.*Shikimate*))&limit=25000",{"condition":"AND","rules":[{"id":"protein_id","field":"protein_id","type":"string","input":"text","operator":"contains","value":"ALP80"},{"id":"genome_designation","field":"genome_designation","type":"string","input":"text","operator":"equal","value":"PfrICMP7712"},{"id":"description","field":"description","type":"string","input":"text","operator":"contains","value":"kinase"},{"condition":"OR","rules":[{"id":"significance_value","field":"significance_value","type":"double","input":"number","operator":"equal","value":"2.6e-200"},{"id":"significance_value","field":"significance_value","type":"double","input":"number","operator":"less_or_equal","value":"2e-28"},{"condition":"AND","rules":[{"id":"significance_value","field":"significance_value","type":"double","input":"number","operator":"greater_or_equal","value":"5.4e-27"},{"id":"significance_value","field":"significance_value","type":"double","input":"number","operator":"less_or_equal","value":"1.9e-22"}],"not":false}],"not":false},{"condition":"AND","rules":[{"id":"description","field":"description","type":"string","input":"text","operator":"contains","value":"Shikimate"}],"not":true}],"not":false,"valid":true}]],
+			dialogVisibility: this.props.classes.hide
 		};
 	}
 
@@ -126,12 +129,26 @@ class HistoryPane extends Component {
 		});
 	}
 
+	showDeleteHistoryDialog() {
+		const classes = this.props.classes;
+		if (this.state.dialogVisibility === null) {
+			this.setState({
+				dialogVisibility: classes.hide
+			});
+		} else {
+			this.setState({
+				dialogVisibility: null
+			});
+		}
+	}
+
 	deleteHistory() {
 		this.setState({
 			historyArray: []
 		}, () => {
 			localStorage.setItem("localHistory", []);
 		});
+		this.showDeleteHistoryDialog();
 	}
 
 
@@ -139,7 +156,20 @@ class HistoryPane extends Component {
 		const classes = this.props.classes;
 		const sideList = (
 			<div className={classes.list}>
-				<List dense subheader={<ListSubheader>Query History<IconButton style={{float: "right"}} aria-label="Delete" onClick={this.deleteHistory.bind(this)}><DeleteIcon/></IconButton></ListSubheader>}>
+				<List
+					dense
+					subheader={<ListSubheader>Query History
+								<IconButton style={{float: "right"}}
+									aria-label="Delete"
+									onClick={this.showDeleteHistoryDialog.bind(this)}>
+									<DeleteIcon/>
+								</IconButton>
+								</ListSubheader>}>
+					<div style={{marginLeft: "250px", height: "100px", width: "100%"}} className={this.state.dialogVisibility}>
+						<ListSubheader style={{marginLeft: "-25px"}}>Delete all history items?</ListSubheader>
+						<Button onClick={this.deleteHistory.bind(this)} dense raised style={{margin: "5px"}}>Yes</Button>
+						<Button onClick={this.showDeleteHistoryDialog.bind(this)} dense raised color="primary" style={{margin: "5px"}}>No</Button>
+					</div>
 					{
 						this.state.historyArray.slice(0).reverse().map((item) => {
 							if (item[0] && item[1]) {
