@@ -179,6 +179,29 @@ exports.translateOperatorToPostgrest = function(operator) {
 	return "eq";
 }
 
+// Accepts jQB operator, and returns HUMAN equivalent of it
+exports.translateOperatorToHuman = function(operator) {
+	let dict = [
+		['equal', '='],
+		['not_equal', '!='],
+		['greater', '>'],
+		['less', '<'],
+		['greater_or_equal', '>='],
+		['less_or_equal', '<='],
+		['is_not_null', 'is not NULL'],
+		['in', 'in'],
+		['contains', 'CONTAINS'],
+		['is_null', 'is NULL']
+	];
+
+	for (let i = 0; i < dict.length; i++) {
+		if (dict[i][0] === operator) {
+			return dict[i][1];
+		}
+	}
+	return operator;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Other Methods
 ////////////////////////////////////////////////////////////////////////////////////////////////////

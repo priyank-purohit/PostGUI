@@ -203,11 +203,15 @@ class HistoryPane extends Component {
 														let displayStr = "";
 														let columnName = "";
 														let displayName = "";
+														let rawOperator = "";
+														let niceOperator = "";
 														for (let i = 0; i < rule.length; i++) {
 															displayStr += " " + rule[i] + " ";
 															// if there are more than 1 rules (i.e. it's not AND/OR only) then extract column name
 															if (i === 1) {
 																columnName = rule[0].replace(/\s/g, "");
+																rawOperator = rule[1].replace(/\s/g, "");
+																niceOperator = lib.translateOperatorToHuman(rawOperator);
 															}
 														}
 
@@ -217,8 +221,7 @@ class HistoryPane extends Component {
 															displayName = columnRename ? columnRename : columnName;
 														}
 
-
-														displayStr = displayStr.replace(columnName, displayName).replace(/\t/g, " . . ").replace("greater_or_equal", ">=").replace("less_or_equal", "<=").replace("greater", ">").replace("less", "<").replace("equal", "=");
+														displayStr = displayStr.replace(columnName, displayName).replace(rawOperator, niceOperator).replace(/\t/g, " . . ");
 														let currRuleIndexInRules = lib.elementPositionInArray(rule, rules);
 
 														return <ListItemText secondary={displayStr} key={index+rule} className={currRuleIndexInRules > 3 ? classNames : null}/>;
