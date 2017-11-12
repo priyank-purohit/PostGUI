@@ -79,7 +79,7 @@ class HistoryPane extends Component {
 		let url = this.state.historyArray[index][0];
 		let rules = this.state.historyArray[index][1];
 		//console.log("[",JSON.stringify(url),"," ,JSON.stringify(rules),"]");
-		this.props.changeTable(this.extractTableNameFromURL(url));
+		this.props.changeTable(this.extractTableNameFromURL(url, true));
 		this.props.changeRules(rules);
 	}
 
@@ -90,8 +90,10 @@ class HistoryPane extends Component {
 		});
 	};
 
-	extractTableNameFromURL(url) {
+	extractTableNameFromURL(url, getRaw = false) {
 		let rawTableName = url.replace(lib.getDbConfig(this.props.dbIndex, "url"), "").replace(/\?.*/, "").replace("/", "");
+
+		if (getRaw) { return rawTableName; }
 
 		let tableRename = lib.getTableConfig(this.props.dbIndex, rawTableName, "rename");
 		let displayName = tableRename ? tableRename : rawTableName;
@@ -204,6 +206,9 @@ class HistoryPane extends Component {
 														}
 														displayStr = displayStr.replace(/\t/g, " . . ").replace("greater_or_equal", ">=").replace("less_or_equal", "<=").replace("greater", ">").replace("less", "<").replace("equal", "=");
 														let currRuleIndexInRules = lib.elementPositionInArray(rule, rules);
+
+														let columnName = displayStr.substr(0, displayStr.indexOf(" "));;
+														console.log(columnName);
 														return <ListItemText secondary={displayStr} key={index+rule} className={currRuleIndexInRules > 3 ? classNames : null}/>;
 													})
 												}
