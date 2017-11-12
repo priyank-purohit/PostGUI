@@ -91,7 +91,7 @@ class HistoryPane extends Component {
 	};
 
 	extractTableNameFromURL(url, getRaw = false) {
-		let rawTableName = url.replace(lib.getDbConfig(this.props.dbIndex, "url"), "").replace(/\?.*/, "").replace("/", "");
+		let rawTableName = url.replace(lib.getDbConfig(this.props.dbIndex, "url"), "").replace(/\?.*/, "").replace(/\s/g, "").replace("/", "");
 
 		if (getRaw) { return rawTableName; }
 
@@ -201,14 +201,26 @@ class HistoryPane extends Component {
 												{
 													rules.map((rule) => {
 														let displayStr = "";
+														let columnName = "";
+														let displayName = "";
 														for (let i = 0; i < rule.length; i++) {
 															displayStr += " " + rule[i] + " ";
+															// if there are more than 1 rules (i.e. it's not AND/OR only) then extract column name
+															if (i === 1) {
+																columnName = rule[0].replace(/\s/g, "");
+															}
 														}
-														displayStr = displayStr.replace(/\t/g, " . . ").replace("greater_or_equal", ">=").replace("less_or_equal", "<=").replace("greater", ">").replace("less", "<").replace("equal", "=");
+
+														// find column's rename rules from config
+														if (columnName) {
+															let columnRename = lib.getColumnConfig(this.props.dbIndex, this.extractTableNameFromURL(item[0], true), columnName, "rename");
+															displayName = columnRename ? columnRename : columnName;
+														}
+
+
+														displayStr = displayStr.replace(columnName, displayName).replace(/\t/g, " . . ").replace("greater_or_equal", ">=").replace("less_or_equal", "<=").replace("greater", ">").replace("less", "<").replace("equal", "=");
 														let currRuleIndexInRules = lib.elementPositionInArray(rule, rules);
 
-														let columnName = displayStr.substr(0, displayStr.indexOf(" "));;
-														console.log(columnName);
 														return <ListItemText secondary={displayStr} key={index+rule} className={currRuleIndexInRules > 3 ? classNames : null}/>;
 													})
 												}
