@@ -91,7 +91,12 @@ class HistoryPane extends Component {
 	};
 
 	extractTableNameFromURL(url) {
-		return url.replace(lib.getDbConfig(this.props.dbIndex, "url"), "").replace(/\?.*/, "").replace("/", "");
+		let rawTableName = url.replace(lib.getDbConfig(this.props.dbIndex, "url"), "").replace(/\?.*/, "").replace("/", "");
+
+		let tableRename = lib.getTableConfig(this.props.dbIndex, rawTableName, "rename");
+		let displayName = tableRename ? tableRename : rawTableName;
+
+		return displayName;
 	}
 
 	cleanUpRules(url) {
