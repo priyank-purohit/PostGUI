@@ -29,7 +29,8 @@ class DbSchema extends Component {
 			dbSchema: null,
 			tables: [],
 			snackBarVisibility: false,
-			snackBarMessage: "Unknown error occured"
+			snackBarMessage: "Unknown error occured",
+			searchTerm: ""
 		};
 	}
 
@@ -59,6 +60,10 @@ class DbSchema extends Component {
 				table: newProps.table
 			});
 			this.handleTableClick(newProps.table);
+		} else if (this.state.searchTerm !== newProps.searchTerm) {
+			this.setState({
+				searchTerm: newProps.searchTerm
+			});
 		}
 	}
 
@@ -324,6 +329,7 @@ class DbSchema extends Component {
 		const classes = this.props.classes;
 		return (
 			<div>
+			<p>{"searchTerm = " + this.state.searchTerm}</p>
 				<Snackbar 	anchorOrigin={{vertical: "bottom", horizontal: "center"}}
 							open={this.state.snackBarVisibility}
 							onRequestClose={this.handleRequestClose}

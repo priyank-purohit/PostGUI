@@ -21,6 +21,7 @@ class LeftPane extends Component {
 				<DbSchema 
 					dbIndex={this.props.dbIndex} 
 					table={this.props.table} 
+					searchTerm={this.props.searchTerm}
 					changeTable={this.props.changeTable} 
 					changeColumns={this.props.changeColumns} 
 					changeVisibleColumns={this.props.changeVisibleColumns} /> 

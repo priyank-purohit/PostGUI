@@ -13,6 +13,12 @@ let lib = require('../utils/library.js');
 
 //join: predicted genes, protein seqs
 class Navigation extends Component {
+	changeSearchTerm(e) {
+		if (e && ((e.key && e.key === 'Enter') || !e.target.value)) {
+			this.props.changeSearchTerm(e.target.value);
+		}
+	}
+
 	render() {
 		const classes = this.props.classes;
 		let dbTitle = lib.getDbConfig(this.props.dbIndex, "title");
@@ -31,7 +37,7 @@ class Navigation extends Component {
 							{dbTitle}
 						</Typography>
 						<div className={classes.searchBarFlex}>
-							<TextField id="search" placeholder="Search tables and columns" type="search" className={classes.searchBar} margin="normal" />
+							<TextField id="search" placeholder="Search tables and columns" onKeyPress={this.changeSearchTerm.bind(this)} onChange={this.changeSearchTerm.bind(this)} type="search" className={classes.searchBar}/>
 						</div>
 						<IconButton className={classes.rightIconsFlex} color="contrast" aria-label="Menu" onClick={this.props.toggleHistoryPane.bind(this)}>
 							<HistoryIcon className={classes.floatRight} />
@@ -59,7 +65,7 @@ const styleSheet = {
 		display: 'block',
 		marginLeft: 5,
     	marginRight: 5,
-    	marginTop: -10,
+    	marginTop: 0,
 	},
 	searchBar: {
 		width: 300,

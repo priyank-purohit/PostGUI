@@ -23,7 +23,8 @@ export default class Layout extends React.Component {
 			newHistoryItem: [],
 			visibleColumns: [],
 			leftPaneVisibility: true,
-			historyPaneVisibility: false
+			historyPaneVisibility: false,
+			searchTerm: ""
 		};
 	}
 
@@ -63,6 +64,10 @@ export default class Layout extends React.Component {
 		});
 	}
 
+	changeSearchTerm(newTerm) {
+		this.setState({searchTerm: newTerm});
+	}
+
 	changeTable(newTable) {
 		this.setState({
 			table: newTable
@@ -98,6 +103,7 @@ export default class Layout extends React.Component {
 			<div>
 				<Navigation
 					dbIndex={this.state.dbIndex}
+					changeSearchTerm={this.changeSearchTerm.bind(this)}
 					toggleLeftPane={this.toggleLeftPane.bind(this)}
 					toggleHistoryPane={this.toggleHistoryPane.bind(this)} />
 
@@ -105,6 +111,7 @@ export default class Layout extends React.Component {
 					<LeftPane
 						dbIndex={this.state.dbIndex}
 						table={this.state.table}
+						searchTerm={this.state.searchTerm}
 						leftPaneVisibility={this.state.leftPaneVisibility}
 						changeDbIndex={this.changeDbIndex.bind(this)}
 						changeTable={this.changeTable.bind(this)}
