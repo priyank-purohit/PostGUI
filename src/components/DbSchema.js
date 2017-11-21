@@ -18,8 +18,8 @@ import VisibilityOffIcon from 'material-ui-icons/VisibilityOff';;
 
 import { indigo } from 'material-ui/colors';
 
+let _ = require('lodash');
 let lib = require("../utils/library.js");
-
 
 class DbSchema extends Component {
 	constructor(props) {
@@ -64,8 +64,33 @@ class DbSchema extends Component {
 		} else if (this.state.searchTerm !== newProps.searchTerm) {
 			this.setState({
 				searchTerm: newProps.searchTerm
+			}, () => {
+				console.log("FINAL RESULT", JSON.stringify(this.searchTables()));
 			});
 		}
+	}
+
+	// Returns a list of tables matching state.saerchTerm from the current tables' raw and rename names
+	searchTables() {
+		let tableSearchResults = [];
+		let searchTerm = (this.state.searchTerm).toLowerCase().split(" ");
+		
+		for (let i = 0; i < searchTerm.length; i++) {
+			let splitTerm = searchTerm[i];
+			if (splitTerm !== "") {
+				let splitTermResults = (this.state.tables).filter(table => table.toLowerCase().indexOf(splitTerm) > -1);
+
+				let splitTermResultsWithRename = (this.state.tables).filter(table => {
+					let tableRename = lib.getTableConfig(this.state.dbIndex, table, "rename");
+					let displayName = tableRename ? tableRename : table;
+					return displayName.toLowerCase().indexOf(splitTerm) > -1;
+				});
+
+				tableSearchResults.push(splitTermResults);
+				tableSearchResults.push(splitTermResultsWithRename);
+			}
+		}
+		return _.uniq(_.flattenDeep(tableSearchResults));
 	}
 
 
