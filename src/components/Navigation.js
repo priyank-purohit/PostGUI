@@ -9,14 +9,20 @@ import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
 import HistoryIcon from 'material-ui-icons/History';
 
+let _ = require('lodash');
 let lib = require('../utils/library.js');
 
 //join: predicted genes, protein seqs
 class Navigation extends Component {
+	constructor(props) {
+		super(props);
+		this.changeSearchTermDebounce = _.debounce(value => this.props.changeSearchTerm(value), 300);
+	}
 	changeSearchTerm(e) {
-		if (e && ((e.key && e.key === 'Enter') || !e.target.value)) {
+		/*if (e && ((e.key && e.key === 'Enter') || !e.target.value)) {
 			this.props.changeSearchTerm(e.target.value);
-		}
+		}*/
+		this.changeSearchTermDebounce(e.target.value);
 	}
 
 	render() {
