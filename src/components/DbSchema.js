@@ -93,6 +93,42 @@ class DbSchema extends Component {
 		return _.uniq(_.flattenDeep(tableSearchResults));
 	}
 
+	// Returns a list of tables that have columns matching state.saerchTerm from the tables' raw and rename column names
+	searchColumns() {
+		let tableSearchResults = [];
+		let searchTerm = (this.state.searchTerm).toLowerCase().split(" ");
+		
+		for (let i = 0; i < searchTerm.length; i++) {
+			let splitTerm = searchTerm[i];
+			if (splitTerm !== "") {
+				
+				tableSearchResults.push(this.state.tables.map(table => {
+					let columnsFound = [];
+					let columns = this.state[table];
+
+					let splitTermResults = _.compact(columns.filter(column => column.toLowerCase().indexOf(splitTerm) > -1));
+
+					let splitTermResultsWithRename = _.compact(columns.filter(column => {
+						let columnRename = lib.getColumnConfig(this.state.dbIndex, table, column, "rename");
+						let displayName = columnRename ? columnRename : column;
+						return displayName.toLowerCase().indexOf(splitTerm) > -1;
+					}));
+
+					columnsFound.push(splitTermResults);
+					columnsFound.push(splitTermResultsWithRename);
+
+					if (splitTermResults.length > 0 || splitTermResultsWithRename.length > 0) {
+						return [table, _.uniq(_.flattenDeep(columnsFound))];
+					}
+					else {
+						return null;
+					}
+				}));
+			}
+		}
+		return _.compact(_.flatten(_.uniq(tableSearchResults)));
+	}
+
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// HTTP Methods
