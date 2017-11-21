@@ -5,6 +5,7 @@ import axios from 'axios';
 
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Snackbar from 'material-ui/Snackbar';
+import Chip from 'material-ui/Chip';
 
 import IconButton from 'material-ui/IconButton';
 import CloseIcon from 'material-ui-icons/Close';
@@ -327,9 +328,14 @@ class DbSchema extends Component {
 
 	render() {
 		const classes = this.props.classes;
+		let searchTermTrucated = this.state.searchTerm;
+		if (searchTermTrucated.length > 34) {
+			searchTermTrucated = searchTermTrucated.substring(0,34);
+			searchTermTrucated = searchTermTrucated + " ...";
+		}
 		return (
 			<div>
-			<p>{"searchTerm = " + this.state.searchTerm}</p>
+				{this.state.searchTerm !== "" ? <Chip label={"Searching: " + searchTermTrucated} className={classes.chipClasses} /> : null}
 				<Snackbar 	anchorOrigin={{vertical: "bottom", horizontal: "center"}}
 							open={this.state.snackBarVisibility}
 							onRequestClose={this.handleRequestClose}
@@ -367,6 +373,9 @@ const styleSheet = {
 	},
 	primaryColoured: {
 		fill: indigo[400]
+	},
+	chipClasses: {
+		margin: 5
 	}
 };
 
