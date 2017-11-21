@@ -331,7 +331,7 @@ class DbSchema extends Component {
 		let searchTermTrucated = this.state.searchTerm;
 		if (searchTermTrucated.length > 34) {
 			searchTermTrucated = searchTermTrucated.substring(0,34);
-			searchTermTrucated = searchTermTrucated + " ...";
+			searchTermTrucated += " ...";
 		}
 		return (
 			<div>
@@ -375,7 +375,9 @@ const styleSheet = {
 		fill: indigo[400]
 	},
 	chipClasses: {
-		margin: 5
+		margin: 5,
+		marginTop: 10,
+		marginBottom: 0
 	}
 };
 
