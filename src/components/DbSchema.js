@@ -389,6 +389,10 @@ class DbSchema extends Component {
 		this.setState({ snackBarVisibility: false });
 	};
 
+	handleSearchClose = () => {
+		this.setState({ searchTerm: "", searchResults: {} });
+	};
+
 	updateVisibleColumns() {
 		let columns = this.state[this.state.table];
 		let columnVisibility = {};
@@ -436,7 +440,7 @@ class DbSchema extends Component {
 		}
 		return (
 			<div>
-				{this.state.searchTerm !== "" ? <Chip label={"Searching: " + searchTermTrucated} className={classes.chipClasses} /> : null}
+				{this.state.searchTerm !== "" ? <Chip label={"Searching: " + searchTermTrucated} className={classes.chipClasses} onRequestDelete={this.handleSearchClose} /> : null}
 				<Snackbar 	anchorOrigin={{vertical: "bottom", horizontal: "center"}}
 							open={this.state.snackBarVisibility}
 							onRequestClose={this.handleRequestClose}
