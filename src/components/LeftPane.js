@@ -22,6 +22,7 @@ class LeftPane extends Component {
 					dbIndex={this.props.dbIndex} 
 					table={this.props.table} 
 					searchTerm={this.props.searchTerm}
+					changeSearchTerm={this.props.changeSearchTerm}
 					changeTable={this.props.changeTable} 
 					changeColumns={this.props.changeColumns} 
 					changeVisibleColumns={this.props.changeVisibleColumns} /> 

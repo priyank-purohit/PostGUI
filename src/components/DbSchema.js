@@ -391,6 +391,7 @@ class DbSchema extends Component {
 
 	handleSearchClose = () => {
 		this.setState({ searchTerm: "", searchResults: {} });
+		this.props.changeSearchTerm("");
 	};
 
 	updateVisibleColumns() {

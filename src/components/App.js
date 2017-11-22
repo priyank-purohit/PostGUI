@@ -112,6 +112,7 @@ export default class Layout extends React.Component {
 						dbIndex={this.state.dbIndex}
 						table={this.state.table}
 						searchTerm={this.state.searchTerm}
+						changeSearchTerm={this.changeSearchTerm.bind(this)}
 						leftPaneVisibility={this.state.leftPaneVisibility}
 						changeDbIndex={this.changeDbIndex.bind(this)}
 						changeTable={this.changeTable.bind(this)}
