@@ -14,10 +14,12 @@ let lib = require('../utils/library.js');
 
 //join: predicted genes, protein seqs
 class Navigation extends Component {
+	
 	constructor(props) {
 		super(props);
-		this.changeSearchTermDebounce = _.debounce(value => this.props.changeSearchTerm(value), 300);
+		this.changeSearchTermDebounce = _.debounce(value => this.props.changeSearchTerm(value), 350);
 	}
+
 	changeSearchTerm(e) {
 		/*if (e && ((e.key && e.key === 'Enter') || !e.target.value)) {
 			this.props.changeSearchTerm(e.target.value);
@@ -43,7 +45,7 @@ class Navigation extends Component {
 							{dbTitle}
 						</Typography>
 						<div className={classes.searchBarFlex}>
-							<TextField id="search" placeholder="Search tables and columns" onKeyPress={this.changeSearchTerm.bind(this)} onChange={this.changeSearchTerm.bind(this)} type="search" className={classes.searchBar}/>
+							<TextField id="search" placeholder="Search tables and columns" onKeyPress={this.changeSearchTerm.bind(this)} onChange={this.changeSearchTerm.bind(this)} onFocus={this.changeSearchTerm.bind(this)} type="search" className={classes.searchBar}/>
 						</div>
 						<IconButton className={classes.rightIconsFlex} color="contrast" aria-label="Menu" onClick={this.props.toggleHistoryPane.bind(this)}>
 							<HistoryIcon className={classes.floatRight} />
