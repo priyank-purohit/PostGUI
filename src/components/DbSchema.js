@@ -65,7 +65,10 @@ class DbSchema extends Component {
 			this.setState({
 				searchTerm: newProps.searchTerm
 			}, () => {
-				console.log("TABLE SEARCH RESULT", JSON.stringify(this.searchTablesColumns()));
+				console.log("TABLE COLUMN SEARCH RESULT SAVED", JSON.stringify(this.searchTablesColumns()));
+				this.setState({
+					searchResults: this.searchTablesColumns()
+				});
 			});
 		}
 	}
@@ -80,7 +83,7 @@ class DbSchema extends Component {
 		let dict = {};
 
 		_.forEach(this.searchTables(), table => {
-			dict[table] = null;
+			dict[table] = [];
 		});
 		_.forEach(this.searchColumns(), result => {
 			dict[result[0]] = result[1];
@@ -145,7 +148,7 @@ class DbSchema extends Component {
 						return [table, _.uniq(_.flattenDeep(matchingColumns))];
 					}
 					else {
-						return null;
+						return [];
 					}
 				}));
 			}
@@ -321,9 +324,17 @@ class DbSchema extends Component {
 
 		let tableColumnElements = [];
 
+		// Update visibility of tables according to the search results, if a search term is entered
+		let classNames = this.props.classes.hide;
+		if (this.state.searchTerm === "") {
+			classNames = null;
+		} else if (this.state.searchResults && this.state.searchResults[tableName] !== undefined && this.state.searchResults[tableName] !== null) {
+			classNames = null;
+		}
+
 		// First push the table itself
 		tableColumnElements.push(
-			<ListItem button key={this.state.dbIndex+tableName} id={tableName}
+			<ListItem button key={this.state.dbIndex+tableName} id={tableName} className={classNames} 
 				 title={displayName} onClick={(event) => this.handleTableClick(tableName)} >
 				<ListItemIcon >
 					{this.state.table === tableName ? <FolderIconOpen className={this.props.classes.primaryColoured} /> : <FolderIcon /> }
@@ -355,6 +366,11 @@ class DbSchema extends Component {
 		// If TABLE is equal to STATE.TABLE (displayed table), show the column element
 		let classNames = this.props.classes.column;
 		if (this.state.table !== table && this.state.hoverTable !== table) {
+			classNames = this.props.classes.column + " " + this.props.classes.hide;
+		}
+
+		// Specifically hide columns if they do not belong to current search results
+		if (this.state.searchTerm !== "" && this.state.searchResults && (this.state.searchResults[table] === undefined || this.state.searchResults[table] === null)) {
 			classNames = this.props.classes.column + " " + this.props.classes.hide;
 		}
 
