@@ -65,9 +65,20 @@ class DbSchema extends Component {
 			this.setState({
 				searchTerm: newProps.searchTerm
 			}, () => {
-				console.log("COLUMN SEARCH RESULT", JSON.stringify(this.searchColumns()));
+				console.log("TABLE SEARCH RESULT", JSON.stringify(this.searchTablesColumns()));
 			});
 		}
+	}
+
+	searchTablesColumns() {
+		let searchTables = this.searchTables();
+		let searchColumns = this.searchColumns();
+
+		let temp = _.union(searchColumns, searchTables.map(table => [table]));
+
+		return _.uniqWith(temp, function(arrVal, othVal) {
+			return arrVal[0] === othVal[0];
+		});
 	}
 
 	// Returns a list of tables matching state.saerchTerm from the current tables' raw and rename names
