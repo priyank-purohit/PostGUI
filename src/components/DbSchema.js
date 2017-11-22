@@ -65,7 +65,7 @@ class DbSchema extends Component {
 			this.setState({
 				searchTerm: newProps.searchTerm
 			}, () => {
-				console.log("FINAL RESULT", JSON.stringify(this.searchTables()));
+				console.log("COLUMN SEARCH RESULT", JSON.stringify(this.searchColumns()));
 			});
 		}
 	}
@@ -78,14 +78,17 @@ class DbSchema extends Component {
 		for (let i = 0; i < searchTerm.length; i++) {
 			let splitTerm = searchTerm[i];
 			if (splitTerm !== "") {
+				// First search the raw table names as returned by API
 				let splitTermResults = (this.state.tables).filter(table => table.toLowerCase().indexOf(splitTerm) > -1);
 
+				// Next search the config file renames
 				let splitTermResultsWithRename = (this.state.tables).filter(table => {
 					let tableRename = lib.getTableConfig(this.state.dbIndex, table, "rename");
 					let displayName = tableRename ? tableRename : table;
 					return displayName.toLowerCase().indexOf(splitTerm) > -1;
 				});
 
+				// Keep track of the matching tables
 				tableSearchResults.push(splitTermResults);
 				tableSearchResults.push(splitTermResultsWithRename);
 			}
@@ -101,24 +104,26 @@ class DbSchema extends Component {
 		for (let i = 0; i < searchTerm.length; i++) {
 			let splitTerm = searchTerm[i];
 			if (splitTerm !== "") {
-				
 				tableSearchResults.push(this.state.tables.map(table => {
-					let columnsFound = [];
-					let columns = this.state[table];
+					let matchingColumns = [];
+					let currentTableColumns = this.state[table];
 
-					let splitTermResults = _.compact(columns.filter(column => column.toLowerCase().indexOf(splitTerm) > -1));
+					// First search raw table column names
+					let splitTermResults = _.compact(currentTableColumns.filter(column => column.toLowerCase().indexOf(splitTerm) > -1));
 
-					let splitTermResultsWithRename = _.compact(columns.filter(column => {
+					// Next search the column renames from config.json
+					let splitTermResultsWithRename = _.compact(currentTableColumns.filter(column => {
 						let columnRename = lib.getColumnConfig(this.state.dbIndex, table, column, "rename");
 						let displayName = columnRename ? columnRename : column;
 						return displayName.toLowerCase().indexOf(splitTerm) > -1;
 					}));
 
-					columnsFound.push(splitTermResults);
-					columnsFound.push(splitTermResultsWithRename);
+					// Keep track of matching column names
+					matchingColumns.push(splitTermResults);
+					matchingColumns.push(splitTermResultsWithRename);
 
 					if (splitTermResults.length > 0 || splitTermResultsWithRename.length > 0) {
-						return [table, _.uniq(_.flattenDeep(columnsFound))];
+						return [table, _.uniq(_.flattenDeep(matchingColumns))];
 					}
 					else {
 						return null;
@@ -126,7 +131,7 @@ class DbSchema extends Component {
 				}));
 			}
 		}
-		return _.compact(_.flatten(_.uniq(tableSearchResults)));
+		return _.uniq(_.compact(_.flatten(tableSearchResults)));
 	}
 
 
