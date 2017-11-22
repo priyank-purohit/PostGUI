@@ -65,7 +65,7 @@ class DbSchema extends Component {
 			this.setState({
 				searchTerm: newProps.searchTerm
 			}, () => {
-				console.log("TABLE COLUMN SEARCH RESULT SAVED", JSON.stringify(this.searchTablesColumns()));
+				//console.log("TABLE COLUMN SEARCH RESULT SAVED", JSON.stringify(this.searchTablesColumns()));
 				this.setState({
 					searchResults: this.searchTablesColumns()
 				});
