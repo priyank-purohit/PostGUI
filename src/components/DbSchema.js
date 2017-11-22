@@ -70,15 +70,18 @@ class DbSchema extends Component {
 		}
 	}
 
+	// Combines results of this.searchColumns() and this.searchTables() into a dict/JSON object
 	searchTablesColumns() {
-		let searchTables = this.searchTables();
-		let searchColumns = this.searchColumns();
+		let dict = {};
 
-		let temp = _.union(searchColumns, searchTables.map(table => [table]));
-
-		return _.uniqWith(temp, function(arrVal, othVal) {
-			return arrVal[0] === othVal[0];
+		_.forEach(this.searchTables(), table => {
+			dict[table] = null;
 		});
+		_.forEach(this.searchColumns(), result => {
+			dict[result[0]] = result[1];
+		});
+
+		return dict;
 	}
 
 	// Returns a list of tables matching state.saerchTerm from the current tables' raw and rename names
