@@ -241,7 +241,7 @@ class DbSchema extends Component {
 			});
 		// Get FK info IFF enabled in config explicitly
 		if (lib.getDbConfig(this.state.dbIndex, "foreignKeySearch") === true) {
-			axios.post(url + "/rpc/foreign_keys_v2", {})
+			axios.post(url + "/rpc/foreign_keys", {})
 				.then((response) => {
 					// Save the raw resp + parse tables and columns...
 					this.setState({
