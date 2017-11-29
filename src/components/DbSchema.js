@@ -93,8 +93,12 @@ class DbSchema extends Component {
 			dict[result[0]] = result[1];
 		});
 
-		// Search foreign keys
-		return this.addForeignKeyResults(dict);
+		// Search foreign keys IFF enabled in config explicitly
+		if (lib.getDbConfig(this.state.dbIndex, "foreignKeySearch") === true) {	
+			return this.addForeignKeyResults(dict);
+		} else {
+			return dict;
+		}
 	}
 
 	addForeignKeyResults(searchResults) {
@@ -233,28 +237,30 @@ class DbSchema extends Component {
 					}, 5000);
 				});
 			});
-		
-		axios.post(url + "/rpc/foreign_keys_v2", {})
-			.then((response) => {
-				// Save the raw resp + parse tables and columns...
-				this.setState({
-					dbFkSchema: response.data
+		// Get FK info IFF enabled in config explicitly
+		if (lib.getDbConfig(this.state.dbIndex, "foreignKeySearch") === true) {
+			axios.post(url + "/rpc/foreign_keys_v2", {})
+				.then((response) => {
+					// Save the raw resp + parse tables and columns...
+					this.setState({
+						dbFkSchema: response.data
+					});
+				})
+				.catch((error) => {
+					// Show error in top-right Snack-Bar
+					this.setState({
+						snackBarVisibility: true,
+						snackBarMessage: "Foreign keys function does not exist in database."
+					}, () => {
+						this.timer = setTimeout(() => {
+							this.setState({
+								snackBarVisibility: false,
+								snackBarMessage: "Unknown error"
+							});
+						}, 5000);
+					});
 				});
-			})
-			.catch((error) => {
-				// Show error in top-right Snack-Bar
-				this.setState({
-					snackBarVisibility: true,
-					snackBarMessage: "Foreign keys function does not exist in database."
-				}, () => {
-					this.timer = setTimeout(() => {
-						this.setState({
-							snackBarVisibility: false,
-							snackBarMessage: "Unknown error"
-						});
-					}, 5000);
-				});
-			});
+		}
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
