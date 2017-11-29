@@ -28,6 +28,7 @@ class DbSchema extends Component {
 			dbIndex: props.dbIndex,
 			table: props.table,
 			dbSchema: null,
+			dbFkSchema: null,
 			tables: [],
 			snackBarVisibility: false,
 			snackBarMessage: "Unknown error occured",
@@ -89,7 +90,16 @@ class DbSchema extends Component {
 			dict[result[0]] = result[1];
 		});
 
+		console.log("Results = " + JSON.stringify(dict));
+
 		return dict;
+	}
+
+	searchForeignKeys(searchResults) {
+		let updatedSearchResults = [];
+		// Retrieve a list of foreign keys given a table using the /rpc/foreign_keys endpoint
+		// If the search result column has a foreign key, add that table+FK_column to the saerch result
+		return updatedSearchResults;
 	}
 
 	// Returns a list of tables matching state.saerchTerm from the current tables' raw and rename names
@@ -177,6 +187,29 @@ class DbSchema extends Component {
 				this.setState({
 					snackBarVisibility: true,
 					snackBarMessage: "Database does not exist."
+				}, () => {
+					this.timer = setTimeout(() => {
+						this.setState({
+							snackBarVisibility: false,
+							snackBarMessage: "Unknown error"
+						});
+					}, 5000);
+				});
+			});
+		
+		axios.post(url + "/rpc/foreign_keys_v2", {})
+			.then((response) => {
+				console.log("Got back FK Response as", JSON.stringify(response.data));
+				// Save the raw resp + parse tables and columns...
+				this.setState({
+					dbFkSchema: response.data
+				});
+			})
+			.catch((error) => {
+				// Show error in top-right Snack-Bar
+				this.setState({
+					snackBarVisibility: true,
+					snackBarMessage: "Foreign keys function does not exist in database."
 				}, () => {
 					this.timer = setTimeout(() => {
 						this.setState({
