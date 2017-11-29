@@ -90,13 +90,33 @@ class DbSchema extends Component {
 			dict[result[0]] = result[1];
 		});
 
+		this.searchForeignKeys(dict);
+
 		return dict;
 	}
 
 	searchForeignKeys(searchResults) {
-		let updatedSearchResults = [];
+		let updatedSearchResults = searchResults;
 		// Retrieve a list of foreign keys given a table using the /rpc/foreign_keys endpoint
 		// If the search result column has a foreign key, add that table+FK_column to the saerch result
+
+		_.keys(searchResults).forEach(table => {
+			if (table !== undefined && searchResults[table] !== undefined && searchResults[table]['columns'] !== undefined) {
+				_.forEach(searchResults[table]['columns'], column => {
+					let fk_result = _.find(this.state.dbFkSchema, function(fk) {
+						return fk.table_name === table && fk.column_name === column;
+					});
+					if (fk_result !== undefined) {
+						updatedSearchResults[table]["foreign_keys"] = {};
+							updatedSearchResults[table]["foreign_keys"][column] = {
+							"foreign_table": fk_result.foreign_table,
+							"foreign_column": fk_result.foreign_column
+						};
+					}
+				});
+			}
+		});
+
 		return updatedSearchResults;
 	}
 
@@ -153,7 +173,7 @@ class DbSchema extends Component {
 					matchingColumns.push(splitTermResultsWithRename);
 
 					if (splitTermResults.length > 0 || splitTermResultsWithRename.length > 0) {
-						return [table, _.uniq(_.flattenDeep(matchingColumns))];
+						return [table, {columns: _.uniq(_.flattenDeep(matchingColumns))}];
 					}
 					else {
 						return [];
