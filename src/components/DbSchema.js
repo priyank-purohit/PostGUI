@@ -66,9 +66,9 @@ class DbSchema extends Component {
 			this.setState({
 				searchTerm: newProps.searchTerm
 			}, () => {
-				//console.log("TABLE COLUMN SEARCH RESULT SAVED", JSON.stringify(this.searchTablesColumns()));
+				//console.log("TABLE COLUMN SEARCH RESULT SAVED", JSON.stringify(this.searchTablesColumnsFK()));
 				this.setState({
-					searchResults: this.searchTablesColumns()
+					searchResults: this.searchTablesColumnsFK()
 				});
 			});
 		}
@@ -80,22 +80,24 @@ class DbSchema extends Component {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Combines results of this.searchColumns() and this.searchTables() into a dict/JSON object
-	searchTablesColumns() {
+	searchTablesColumnsFK() {
 		let dict = {};
 
+		// Search tables
 		_.forEach(this.searchTables(), table => {
 			dict[table] = [];
 		});
+
+		// Seach columns
 		_.forEach(this.searchColumns(), result => {
 			dict[result[0]] = result[1];
 		});
 
-		this.searchForeignKeys(dict);
-
-		return dict;
+		// Search foreign keys
+		return this.addForeignKeyResults(dict);
 	}
 
-	searchForeignKeys(searchResults) {
+	addForeignKeyResults(searchResults) {
 		let updatedSearchResults = searchResults;
 		// Retrieve a list of foreign keys given a table using the /rpc/foreign_keys endpoint
 		// If the search result column has a foreign key, add that table+FK_column to the saerch result
@@ -116,6 +118,8 @@ class DbSchema extends Component {
 				});
 			}
 		});
+
+		console.log(JSON.stringify(updatedSearchResults));
 
 		return updatedSearchResults;
 	}
