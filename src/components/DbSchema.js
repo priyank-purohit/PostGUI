@@ -114,12 +114,27 @@ class DbSchema extends Component {
 							"foreign_table": fk_result.foreign_table,
 							"foreign_column": fk_result.foreign_column
 						};
+
+						// add the FK as a normal search result too (until a good way to indicate FK is figured out)
+						// TODO: Indicate FK result clearly ... so user knows why the fk_result.foreign_table shows up even though there isn't any obvious match (potential)
+						if (updatedSearchResults[fk_result.foreign_table] && updatedSearchResults[fk_result.foreign_table]["columns"]) {
+							// fk_result.foreign_table and columns elements exist for the FK ... just ensure the column is part of columns element
+							if (_.find(updatedSearchResults[fk_result.foreign_table]["columns"], fk_result.foreign_column) === -1) {
+								// column not found, insert it
+								updatedSearchResults[fk_result.foreign_table]["columns"] = updatedSearchResults[fk_result.foreign_table]["columns"].push(fk_result.foreign_column);
+							}
+						} else if (updatedSearchResults[fk_result.foreign_table] && (updatedSearchResults[fk_result.foreign_table]["columns"] === null || updatedSearchResults[fk_result.foreign_table]["columns"] === undefined)) {
+							// fk_result.foreign_table exists but no columns defined for it
+							updatedSearchResults[fk_result.foreign_table]["columns"] = updatedSearchResults[fk_result.foreign_table]["columns"].push(fk_result.foreign_column);
+						} else {
+							// fk_result.foreign_table does not exist, and columns also doesn't.... obv
+							updatedSearchResults[fk_result.foreign_table] = {};
+							updatedSearchResults[fk_result.foreign_table]["columns"] = [fk_result.foreign_column];
+						}
 					}
 				});
 			}
 		});
-
-		console.log(JSON.stringify(updatedSearchResults));
 
 		return updatedSearchResults;
 	}
