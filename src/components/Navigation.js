@@ -29,7 +29,7 @@ class Navigation extends Component {
 
 	render() {
 		const classes = this.props.classes;
-		let dbTitle = lib.getDbConfig(this.props.dbIndex, "title");
+		let dbTitle = lib.getDbConfig(this.props.dbIndex, "title") || "Untitled database";
 
 		// Set a short window title
 		document.title = dbTitle.replace("Database", "db").replace("database", "db");
