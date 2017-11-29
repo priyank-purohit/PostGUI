@@ -90,8 +90,6 @@ class DbSchema extends Component {
 			dict[result[0]] = result[1];
 		});
 
-		console.log("Results = " + JSON.stringify(dict));
-
 		return dict;
 	}
 
@@ -199,7 +197,6 @@ class DbSchema extends Component {
 		
 		axios.post(url + "/rpc/foreign_keys_v2", {})
 			.then((response) => {
-				console.log("Got back FK Response as", JSON.stringify(response.data));
 				// Save the raw resp + parse tables and columns...
 				this.setState({
 					dbFkSchema: response.data
