@@ -50,6 +50,8 @@ class DbSchema extends Component {
 			this.setState({
 				dbIndex: newProps.dbIndex,
 				table: "",
+				dbSchema: null,
+				dbFkSchema: null,
 				tables: []
 			}, function() {
 				this.props.changeTable("");
@@ -94,7 +96,7 @@ class DbSchema extends Component {
 		});
 
 		// Search foreign keys IFF enabled in config explicitly
-		if (lib.getDbConfig(this.state.dbIndex, "foreignKeySearch") === true) {	
+		if (lib.getDbConfig(this.state.dbIndex, "foreignKeySearch") === true && this.state.dbFkSchema !== undefined && this.state.dbFkSchema !== null) {	
 			return this.addForeignKeyResults(dict);
 		} else {
 			return dict;
