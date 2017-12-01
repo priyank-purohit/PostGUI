@@ -76,6 +76,23 @@ class DbSchema extends Component {
 		}
 	}
 
+	// Returns the list of foreign keys given a table, column
+	hasForeignKey(table, column) {
+		let fkSearchResults = {};
+		// Retrieve a list of foreign keys given a table using the /rpc/foreign_keys endpoint
+		// If the search result column has a foreign key, add that table+FK_column to the saerch result
+
+		// Finds a foreign key
+		fkSearchResults = _.find(this.state.dbFkSchema, function(fk) {
+			return fk.table_name === table && fk.column_name === column;
+		});
+
+		if (fkSearchResults === {} || fkSearchResults === null || fkSearchResults === undefined) {
+			return false;
+		}
+
+		return fkSearchResults;
+	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Search Methods
@@ -451,6 +468,13 @@ class DbSchema extends Component {
 			classNames = this.props.classes.column + " " + this.props.classes.hide;
 		}
 
+		let fkResults = this.hasForeignKey(table, columnName);
+		let fkText = "FK to " + fkResults.foreign_table + "." + fkResults.foreign_column;
+
+		if (fkText.length > 20) {
+			fkText = fkText.substring(0, 20) + "...";
+		}
+
 		return (
 			<ListItem button key={columnName+table+this.state.dbIndex} id={columnName}
 				 title={displayName} className={classNames} onClick={(event) => this.handleColumnClick(columnName, table)}>
@@ -458,6 +482,7 @@ class DbSchema extends Component {
 					{visibility ? <VisibilityIcon className={this.props.classes.primaryColoured} /> : <VisibilityOffIcon /> }
 				</ListItemIcon>
 				<ListItemText secondary={displayName} />
+				{fkResults === false ? null : <Chip style={{maxWidth: 175}} label={fkText} title={"Foreign Key to " + fkResults.foreign_table + "." + fkResults.foreign_column} />}
 			</ListItem>
 		);
 	}
