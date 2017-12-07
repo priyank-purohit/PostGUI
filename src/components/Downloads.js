@@ -338,6 +338,36 @@ class Downloads extends Component {
         this.setState({ fileNameCustom: newValue });
     }
 
+    //https://stackoverflow.com/a/33946647/5279040
+    insertToClipboard(val) {
+        // Create a dummy input to copy the string array inside it
+        var dummy = document.createElement("input");
+        // Add it to the document
+        document.body.appendChild(dummy);
+        // Set its ID
+        dummy.setAttribute("id", "dummy_id");
+        // Output the array into it  
+        document.getElementById("dummy_id").value = val;  
+        // Select it
+        dummy.select();
+        // Copy its contents
+        document.execCommand("copy");
+        // Remove it as its not needed anymore
+        document.body.removeChild(dummy);
+    }
+    
+    handleCopyClick() {
+        console.log("Copy clicked with selected col = " + this.state.columnChosen);
+        console.log(JSON.stringify(this.state.data));
+        let output = "";
+        for (let i = 0; i < this.state.data.length; i++) {
+            //console.log(this.state.data[i][this.state.columns[this.state.columnChosen]]);
+            output += this.state.data[i][this.state.columns[this.state.columnChosen]] + ",";
+        }
+        console.log(output);
+        this.insertToClipboard(output);
+    }
+
     handleDownloadClick() {
         this.createFileName();
 
@@ -505,7 +535,7 @@ class Downloads extends Component {
                         
                         
                         <Button color="primary" className={classes.button} onClick={this.handleDownloadClick.bind(this)} >Download</Button>
-                        <Button disabled={this.state.fileFormat !== 'delimitedColumn'} className={classes.button}>Copy</Button>
+                        <Button disabled={this.state.fileFormat !== 'delimitedColumn'} className={classes.button} onClick={this.handleCopyClick.bind(this)} >Copy</Button>
                         <Button disabled className={classes.button}>Reset</Button>
                         <Button disabled className={classes.button}>Help</Button>                        
                     </Paper>
