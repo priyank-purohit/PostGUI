@@ -5,6 +5,7 @@ import axios from 'axios';
 
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Snackbar from 'material-ui/Snackbar';
+import Chip from 'material-ui/Chip';
 
 import IconButton from 'material-ui/IconButton';
 import CloseIcon from 'material-ui-icons/Close';
@@ -17,8 +18,8 @@ import VisibilityOffIcon from 'material-ui-icons/VisibilityOff';;
 
 import { indigo } from 'material-ui/colors';
 
+let _ = require('lodash');
 let lib = require("../utils/library.js");
-
 
 class DbSchema extends Component {
 	constructor(props) {
@@ -27,9 +28,11 @@ class DbSchema extends Component {
 			dbIndex: props.dbIndex,
 			table: props.table,
 			dbSchema: null,
+			dbFkSchema: null,
 			tables: [],
 			snackBarVisibility: false,
-			snackBarMessage: "Unknown error occured"
+			snackBarMessage: "Unknown error occured",
+			searchTerm: ""
 		};
 	}
 
@@ -47,19 +50,211 @@ class DbSchema extends Component {
 			this.setState({
 				dbIndex: newProps.dbIndex,
 				table: "",
+				dbSchema: null,
+				dbFkSchema: null,
 				tables: []
 			}, function() {
 				this.props.changeTable("");
 				this.props.changeColumns(this.state[""]);
 				this.getDbSchema();
 				this.updateVisibleColumns();
+				this.handleSearchClose();
 			});
 		} else if (this.state.table !== newProps.table) {
 			this.setState({
 				table: newProps.table
 			});
 			this.handleTableClick(newProps.table);
+		} else if (this.state.searchTerm !== newProps.searchTerm) {
+			this.setState({
+				searchTerm: newProps.searchTerm
+			}, () => {
+				//console.log("TABLE COLUMN SEARCH RESULT SAVED", JSON.stringify(this.searchTablesColumnsFK()));
+				this.setState({
+					searchResults: this.searchTablesColumnsFK()
+				});
+			});
 		}
+	}
+	
+		// Returns the list of foreign keys given a table, column
+		hasForeignKey(table, column) {
+			let fkSearchResults = {};
+			// Retrieve a list of foreign keys given a table using the /rpc/foreign_keys endpoint
+			// If the search result column has a foreign key, add that table+FK_column to the saerch result
+	
+			// Finds a foreign key
+			fkSearchResults = _.find(this.state.dbFkSchema, function(fk) {
+				return fk.table_name === table && fk.column_name === column;
+			});
+	
+			if (fkSearchResults === {} || fkSearchResults === null || fkSearchResults === undefined) {
+				return false;
+			}
+	
+			return fkSearchResults;
+		}
+		
+		// Returns the list of foreign keys referencing to the table, column
+		isForeignKey(table, column) {
+			let fkSearchResults = {};
+			// Retrieve a list of foreign keys given a table using the /rpc/foreign_keys endpoint
+			// If the search result column has a foreign key, add that table+FK_column to the saerch result
+	
+			// Finds a foreign key
+			fkSearchResults = _.filter(this.state.dbFkSchema, function(fk) {
+				return fk.foreign_table === table && fk.foreign_column === column;
+			});
+	
+			if (fkSearchResults === {} || fkSearchResults === null || fkSearchResults === undefined) {
+				return false;
+			}
+
+			//console.log("isForeignKey() .. fkSearchResults = " + JSON.stringify(fkSearchResults));
+
+			let prettifiedStr = "";
+			_.forEach(fkSearchResults, function(result) {
+				prettifiedStr += result["table_name"] + "." + result["column_name"] + ", ";
+			});
+
+			if (prettifiedStr !== "") {
+				prettifiedStr = prettifiedStr.replace(/,\s$/g, "");
+				//console.log("isForeignKey(" + table + ", " + column + ") = " + prettifiedStr);
+			}
+	
+			return prettifiedStr;
+		}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Search Methods
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// Combines results of this.searchColumns() and this.searchTables() into a dict/JSON object
+	searchTablesColumnsFK() {
+		let dict = {};
+
+		// Search tables
+		_.forEach(this.searchTables(), table => {
+			dict[table] = [];
+		});
+
+		// Seach columns
+		_.forEach(this.searchColumns(), result => {
+			dict[result[0]] = result[1];
+		});
+
+		// Search foreign keys IFF enabled in config explicitly
+		if (lib.getDbConfig(this.state.dbIndex, "foreignKeySearch") === true && this.state.dbFkSchema !== undefined && this.state.dbFkSchema !== null) {	
+			return this.addForeignKeyResults(dict);
+		} else {
+			return dict;
+		}
+	}
+
+	addForeignKeyResults(searchResults) {
+		let updatedSearchResults = searchResults;
+		// Retrieve a list of foreign keys given a table using the /rpc/foreign_keys endpoint
+		// If the search result column has a foreign key, add that table+FK_column to the saerch result
+
+		_.keys(searchResults).forEach(table => {
+			if (table !== undefined && searchResults[table] !== undefined && searchResults[table]['columns'] !== undefined) {
+				_.forEach(searchResults[table]['columns'], column => {
+					let fk_result = _.find(this.state.dbFkSchema, function(fk) {
+						return fk.table_name === table && fk.column_name === column;
+					});
+					if (fk_result !== undefined) {
+						updatedSearchResults[table]["foreign_keys"] = {};
+							updatedSearchResults[table]["foreign_keys"][column] = {
+							"foreign_table": fk_result.foreign_table,
+							"foreign_column": fk_result.foreign_column
+						};
+
+						// add the FK as a normal search result too (until a good way to indicate FK is figured out)
+						// TODO: Indicate FK result clearly ... so user knows why the fk_result.foreign_table shows up even though there isn't any obvious match (potential)
+						if (updatedSearchResults[fk_result.foreign_table] && updatedSearchResults[fk_result.foreign_table]["columns"]) {
+							// fk_result.foreign_table and columns elements exist for the FK ... just ensure the column is part of columns element
+							if (_.find(updatedSearchResults[fk_result.foreign_table]["columns"], fk_result.foreign_column) === -1) {
+								// column not found, insert it
+								updatedSearchResults[fk_result.foreign_table]["columns"] = updatedSearchResults[fk_result.foreign_table]["columns"].push(fk_result.foreign_column);
+							}
+						} else if (updatedSearchResults[fk_result.foreign_table] && (updatedSearchResults[fk_result.foreign_table]["columns"] === null || updatedSearchResults[fk_result.foreign_table]["columns"] === undefined)) {
+							// fk_result.foreign_table exists but no columns defined for it
+							updatedSearchResults[fk_result.foreign_table]["columns"] = updatedSearchResults[fk_result.foreign_table]["columns"].push(fk_result.foreign_column);
+						} else {
+							// fk_result.foreign_table does not exist, and columns also doesn't.... obv
+							updatedSearchResults[fk_result.foreign_table] = {};
+							updatedSearchResults[fk_result.foreign_table]["columns"] = [fk_result.foreign_column];
+						}
+					}
+				});
+			}
+		});
+
+		return updatedSearchResults;
+	}
+
+	// Returns a list of tables matching state.saerchTerm from the current tables' raw and rename names
+	searchTables() {
+		let tableSearchResults = [];
+		let searchTerm = (this.state.searchTerm).toLowerCase().split(" ");
+		
+		for (let i = 0; i < searchTerm.length; i++) {
+			let splitTerm = searchTerm[i];
+			if (splitTerm !== "") {
+				// First search the raw table names as returned by API
+				let splitTermResults = (this.state.tables).filter(table => table.toLowerCase().indexOf(splitTerm) > -1);
+
+				// Next search the config file renames
+				let splitTermResultsWithRename = (this.state.tables).filter(table => {
+					let tableRename = lib.getTableConfig(this.state.dbIndex, table, "rename");
+					let displayName = tableRename ? tableRename : table;
+					return displayName.toLowerCase().indexOf(splitTerm) > -1;
+				});
+
+				// Keep track of the matching tables
+				tableSearchResults.push(splitTermResults);
+				tableSearchResults.push(splitTermResultsWithRename);
+			}
+		}
+		return _.uniq(_.flattenDeep(tableSearchResults));
+	}
+
+	// Returns a list of tables that have columns matching state.saerchTerm from the tables' raw and rename column names
+	searchColumns() {
+		let tableSearchResults = [];
+		let searchTerm = (this.state.searchTerm).toLowerCase().split(" ");
+		
+		for (let i = 0; i < searchTerm.length; i++) {
+			let splitTerm = searchTerm[i];
+			if (splitTerm !== "") {
+				tableSearchResults.push(this.state.tables.map(table => {
+					let matchingColumns = [];
+					let currentTableColumns = this.state[table];
+
+					// First search raw table column names
+					let splitTermResults = _.compact(currentTableColumns.filter(column => column.toLowerCase().indexOf(splitTerm) > -1));
+
+					// Next search the column renames from config.json
+					let splitTermResultsWithRename = _.compact(currentTableColumns.filter(column => {
+						let columnRename = lib.getColumnConfig(this.state.dbIndex, table, column, "rename");
+						let displayName = columnRename ? columnRename : column;
+						return displayName.toLowerCase().indexOf(splitTerm) > -1;
+					}));
+
+					// Keep track of matching column names
+					matchingColumns.push(splitTermResults);
+					matchingColumns.push(splitTermResultsWithRename);
+
+					if (splitTermResults.length > 0 || splitTermResultsWithRename.length > 0) {
+						return [table, {columns: _.uniq(_.flattenDeep(matchingColumns))}];
+					}
+					else {
+						return [];
+					}
+				}));
+			}
+		}
+		return _.uniq(_.compact(_.flatten(tableSearchResults)));
 	}
 
 
@@ -92,6 +287,30 @@ class DbSchema extends Component {
 					}, 5000);
 				});
 			});
+		// Get FK info IFF enabled in config explicitly
+		if (lib.getDbConfig(this.state.dbIndex, "foreignKeySearch") === true) {
+			axios.post(url + "/rpc/foreign_keys", {})
+				.then((response) => {
+					// Save the raw resp + parse tables and columns...
+					this.setState({
+						dbFkSchema: response.data
+					});
+				})
+				.catch((error) => {
+					// Show error in top-right Snack-Bar
+					this.setState({
+						snackBarVisibility: true,
+						snackBarMessage: "Foreign keys function does not exist in database."
+					}, () => {
+						this.timer = setTimeout(() => {
+							this.setState({
+								snackBarVisibility: false,
+								snackBarMessage: "Unknown error"
+							});
+						}, 5000);
+					});
+				});
+		}
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -230,9 +449,17 @@ class DbSchema extends Component {
 
 		let tableColumnElements = [];
 
+		// Update visibility of tables according to the search results, if a search term is entered
+		let classNames = this.props.classes.hide;
+		if (this.state.searchTerm === "") {
+			classNames = null;
+		} else if (this.state.searchResults && this.state.searchResults[tableName] !== undefined && this.state.searchResults[tableName] !== null) {
+			classNames = null;
+		}
+
 		// First push the table itself
 		tableColumnElements.push(
-			<ListItem button key={this.state.dbIndex+tableName} id={tableName}
+			<ListItem button key={this.state.dbIndex+tableName} id={tableName} className={classNames} 
 				 title={displayName} onClick={(event) => this.handleTableClick(tableName)} >
 				<ListItemIcon >
 					{this.state.table === tableName ? <FolderIconOpen className={this.props.classes.primaryColoured} /> : <FolderIcon /> }
@@ -267,6 +494,23 @@ class DbSchema extends Component {
 			classNames = this.props.classes.column + " " + this.props.classes.hide;
 		}
 
+		// Specifically hide columns if they do not belong to current search results
+		if (this.state.searchTerm !== "" && this.state.searchResults && (this.state.searchResults[table] === undefined || this.state.searchResults[table] === null)) {
+			classNames = this.props.classes.column + " " + this.props.classes.hide;
+		}
+
+		let referencedResults = this.isForeignKey(table, columnName);
+		let referencedResultsText = "Ref. by " + referencedResults;
+		let fkResults = this.hasForeignKey(table, columnName);
+		let fkText = "FK to " + fkResults.foreign_table + "." + fkResults.foreign_column;
+
+		if (fkText.length > 15) {
+			fkText = fkText.substring(0, 15) + "...";
+		}
+		if (referencedResultsText.length > 15) {
+			referencedResultsText = referencedResultsText.substring(0, 15) + "...";
+		}
+
 		return (
 			<ListItem button key={columnName+table+this.state.dbIndex} id={columnName}
 				 title={displayName} className={classNames} onClick={(event) => this.handleColumnClick(columnName, table)}>
@@ -274,12 +518,19 @@ class DbSchema extends Component {
 					{visibility ? <VisibilityIcon className={this.props.classes.primaryColoured} /> : <VisibilityOffIcon /> }
 				</ListItemIcon>
 				<ListItemText secondary={displayName} />
+				{fkResults === false ? null : <Chip style={{maxWidth: 175}} label={fkText} title={"Foreign Key to " + fkResults.foreign_table + "." + fkResults.foreign_column} />}
+				{referencedResults === "" ? null : <Chip style={{maxWidth: 175}} label={referencedResultsText} title={"Referenced by " + referencedResults} />}
 			</ListItem>
 		);
 	}
 
 	handleRequestClose = () => {
 		this.setState({ snackBarVisibility: false });
+	};
+
+	handleSearchClose = () => {
+		this.setState({ searchTerm: "", searchResults: {} });
+		this.props.changeSearchTerm("");
 	};
 
 	updateVisibleColumns() {
@@ -322,8 +573,14 @@ class DbSchema extends Component {
 
 	render() {
 		const classes = this.props.classes;
+		let searchTermTrucated = this.state.searchTerm;
+		if (searchTermTrucated.length > 34) {
+			searchTermTrucated = searchTermTrucated.substring(0,34);
+			searchTermTrucated += " ...";
+		}
 		return (
 			<div>
+				{this.state.searchTerm !== "" ? <Chip label={"Searching: " + searchTermTrucated} className={classes.chipClasses} onRequestDelete={this.handleSearchClose} /> : null}
 				<Snackbar 	anchorOrigin={{vertical: "bottom", horizontal: "center"}}
 							open={this.state.snackBarVisibility}
 							onRequestClose={this.handleRequestClose}
@@ -361,6 +618,11 @@ const styleSheet = {
 	},
 	primaryColoured: {
 		fill: indigo[400]
+	},
+	chipClasses: {
+		margin: 5,
+		marginTop: 10,
+		marginBottom: 0
 	}
 };
 

@@ -9,6 +9,7 @@
     "jQuery-QueryBuilder": "^2.4.3",
     "js2xmlparser": "^3.0.0",
     "json2csv": "^3.11.5",
+    "lodash": "^4.17.4",
     "material-ui": "^1.0.0-beta.18",
     "material-ui-icons": "^1.0.0-beta.17",
     "react": "^15.6.1",
