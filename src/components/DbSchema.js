@@ -75,24 +75,54 @@ class DbSchema extends Component {
 			});
 		}
 	}
-
-	// Returns the list of foreign keys given a table, column
-	hasForeignKey(table, column) {
-		let fkSearchResults = {};
-		// Retrieve a list of foreign keys given a table using the /rpc/foreign_keys endpoint
-		// If the search result column has a foreign key, add that table+FK_column to the saerch result
-
-		// Finds a foreign key
-		fkSearchResults = _.find(this.state.dbFkSchema, function(fk) {
-			return fk.table_name === table && fk.column_name === column;
-		});
-
-		if (fkSearchResults === {} || fkSearchResults === null || fkSearchResults === undefined) {
-			return false;
+	
+		// Returns the list of foreign keys given a table, column
+		hasForeignKey(table, column) {
+			let fkSearchResults = {};
+			// Retrieve a list of foreign keys given a table using the /rpc/foreign_keys endpoint
+			// If the search result column has a foreign key, add that table+FK_column to the saerch result
+	
+			// Finds a foreign key
+			fkSearchResults = _.find(this.state.dbFkSchema, function(fk) {
+				return fk.table_name === table && fk.column_name === column;
+			});
+	
+			if (fkSearchResults === {} || fkSearchResults === null || fkSearchResults === undefined) {
+				return false;
+			}
+	
+			return fkSearchResults;
 		}
+		
+		// Returns the list of foreign keys referencing to the table, column
+		isForeignKey(table, column) {
+			let fkSearchResults = {};
+			// Retrieve a list of foreign keys given a table using the /rpc/foreign_keys endpoint
+			// If the search result column has a foreign key, add that table+FK_column to the saerch result
+	
+			// Finds a foreign key
+			fkSearchResults = _.filter(this.state.dbFkSchema, function(fk) {
+				return fk.foreign_table === table && fk.foreign_column === column;
+			});
+	
+			if (fkSearchResults === {} || fkSearchResults === null || fkSearchResults === undefined) {
+				return false;
+			}
 
-		return fkSearchResults;
-	}
+			//console.log("isForeignKey() .. fkSearchResults = " + JSON.stringify(fkSearchResults));
+
+			let prettifiedStr = "";
+			_.forEach(fkSearchResults, function(result) {
+				prettifiedStr += result["table_name"] + "." + result["column_name"] + ", ";
+			});
+
+			if (prettifiedStr !== "") {
+				prettifiedStr = prettifiedStr.replace(/,\s$/g, "");
+				//console.log("isForeignKey(" + table + ", " + column + ") = " + prettifiedStr);
+			}
+	
+			return prettifiedStr;
+		}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Search Methods
@@ -468,11 +498,16 @@ class DbSchema extends Component {
 			classNames = this.props.classes.column + " " + this.props.classes.hide;
 		}
 
+		let referencedResults = this.isForeignKey(table, columnName);
+		let referencedResultsText = "Ref. by " + referencedResults;
 		let fkResults = this.hasForeignKey(table, columnName);
 		let fkText = "FK to " + fkResults.foreign_table + "." + fkResults.foreign_column;
 
-		if (fkText.length > 20) {
-			fkText = fkText.substring(0, 20) + "...";
+		if (fkText.length > 15) {
+			fkText = fkText.substring(0, 15) + "...";
+		}
+		if (referencedResultsText.length > 15) {
+			referencedResultsText = referencedResultsText.substring(0, 15) + "...";
 		}
 
 		return (
@@ -483,6 +518,7 @@ class DbSchema extends Component {
 				</ListItemIcon>
 				<ListItemText secondary={displayName} />
 				{fkResults === false ? null : <Chip style={{maxWidth: 175}} label={fkText} title={"Foreign Key to " + fkResults.foreign_table + "." + fkResults.foreign_column} />}
+				{referencedResults === "" ? null : <Chip style={{maxWidth: 175}} label={referencedResultsText} title={"Referenced by " + referencedResults} />}
 			</ListItem>
 		);
 	}
