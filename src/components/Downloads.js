@@ -12,6 +12,8 @@ import Checkbox from 'material-ui/Checkbox';
 import TextField from 'material-ui/TextField';
 import Divider from 'material-ui/Divider';
 import { LinearProgress } from 'material-ui/Progress';
+import Menu, { MenuItem } from 'material-ui/Menu';
+import List, { ListItem, ListItemText } from 'material-ui/List';
 
 const timeout = 2000;
 const maxRowsInDownload = 2500000;
@@ -36,7 +38,10 @@ class Downloads extends Component {
             getFullResult: false,
             delimiterChoice: ',',
             fileNameCustom: '',
-            fileNameAuto: ''
+            fileNameAuto: '',
+			anchorEl: undefined,
+            open: false,
+            columnChosen: 0
         };
     }
 
@@ -48,7 +53,8 @@ class Downloads extends Component {
             url: newProps.url,
             data: newProps.data,
             fileNameCustom: '',
-            dataFull: []
+            dataFull: [],
+            columnChosen: 0
         }, () => {
             this.createFileName();
         });
@@ -365,6 +371,18 @@ class Downloads extends Component {
         });
     }
 
+    handleClickListItem = (event) => {
+		this.setState({ open: true, anchorEl: event.currentTarget });
+	};
+    
+    handleMenuItemClick = (event, index) => {
+        this.setState({ columnChosen: index, open: false });
+    };
+
+	handleRequestClose = () => {
+		this.setState({ open: false });
+    };
+
     fetchOutput(url) {
         axios.get(url, { params: {}, requestId: "qbAxiosReq" })
             .then((response) => {
@@ -423,7 +441,7 @@ class Downloads extends Component {
                         <FormControl component="fieldset" required>
                             <RadioGroup className={classes.cardcardMarginLeftTop} value={this.state.fileFormat} onChange={this.handleFileFormatChange} >
                                 <FormControlLabel control={ <Radio /> } label="Delimited" value="delimited" />
-                                <span>
+                                <span className={this.state.fileFormat !== 'delimited' ? classes.hidden : null}>
                                     <TextField
                                         required
                                         id="delimiterInput"
@@ -438,6 +456,23 @@ class Downloads extends Component {
                                 <FormControlLabel control={ <Radio /> } label="JSON" value="json" />
                                 <FormControlLabel control={ <Radio /> } label="XML" value="xml" />
                                 <FormControlLabel control={ <Radio /> } label="FASTA" value="fasta" disabled={this.identifySeqColumnInStateColumns() === null ? true : false}/>
+                                <FormControlLabel control={ <Radio /> } label="Get delimited column values" value="delimitedColumn" />
+                                <span className={this.state.fileFormat !== 'delimitedColumn' ? classes.hidden : classes.inlineTextField}>
+                                    <List>
+                                        <ListItem button aria-haspopup="true" aria-controls="columnMenu" aria-label="Choose column" onClick={this.handleClickListItem} >
+                                            <ListItemText primary="Choose a column" secondary={this.state.columns[this.state.columnChosen]} />
+                                        </ListItem>
+                                    </List>
+                                    <Menu id="columnMenu" anchorEl={this.state.anchorEl} open={this.state.open} onRequestClose={this.handleRequestClose} >
+                                        {
+                                            this.state.columns.map((option, index) =>
+                                                <MenuItem key={option} selected={index === this.state.columnChosen} onClick={event => this.handleMenuItemClick(event, index)} >
+                                                    {option}
+                                                </MenuItem>
+                                            )
+                                        }
+                                    </Menu>
+                                </span>
                                 {/*<FormControlLabel disabled control={ <Radio /> } label="Newick Tree" value="newicktree" />
                                 <FormControlLabel disabled control={ <Radio /> } label="Nexus Tree" value="nexustree" />
                                 <FormControlLabel disabled control={ <Radio /> } label="PhyloXML" value="phyloxml" />*/}
@@ -528,6 +563,9 @@ const styleSheet = {
     textField: {
         marginLeft: 8,
         marginRight: 8
+    },
+    hidden: {
+        display: 'none'
     }
 };
 
