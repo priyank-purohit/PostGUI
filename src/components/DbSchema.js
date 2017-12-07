@@ -58,6 +58,7 @@ class DbSchema extends Component {
 				this.props.changeColumns(this.state[""]);
 				this.getDbSchema();
 				this.updateVisibleColumns();
+				this.handleSearchClose();
 			});
 		} else if (this.state.table !== newProps.table) {
 			this.setState({
