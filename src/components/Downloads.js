@@ -456,7 +456,7 @@ class Downloads extends Component {
                                 <FormControlLabel control={ <Radio /> } label="JSON" value="json" />
                                 <FormControlLabel control={ <Radio /> } label="XML" value="xml" />
                                 <FormControlLabel control={ <Radio /> } label="FASTA" value="fasta" disabled={this.identifySeqColumnInStateColumns() === null ? true : false}/>
-                                <FormControlLabel control={ <Radio /> } label="Get delimited column values" value="delimitedColumn" />
+                                <FormControlLabel control={ <Radio /> } label="Delimited column values" value="delimitedColumn" />
                                 <span className={this.state.fileFormat !== 'delimitedColumn' ? classes.hidden : classes.inlineTextField}>
                                     <List>
                                         <ListItem button aria-haspopup="true" aria-controls="columnMenu" aria-label="Choose column" onClick={this.handleClickListItem} >
@@ -505,7 +505,7 @@ class Downloads extends Component {
                         
                         
                         <Button color="primary" className={classes.button} onClick={this.handleDownloadClick.bind(this)} >Download</Button>
-                        <Button disabled className={classes.button}>Copy</Button>
+                        <Button disabled={this.state.fileFormat !== 'delimitedColumn'} className={classes.button}>Copy</Button>
                         <Button disabled className={classes.button}>Reset</Button>
                         <Button disabled className={classes.button}>Help</Button>                        
                     </Paper>
