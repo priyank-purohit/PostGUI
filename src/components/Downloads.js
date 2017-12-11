@@ -73,7 +73,16 @@ class Downloads extends Component {
         let delimiter = this.state.delimiterChoice.replace(/\\t/g, '\t'); // for tabs
 
         // Create a good file name for the file so user knows what the data in the file is all about
-        let fileName = this.state.url.replace(lib.getDbConfig(this.state.dbIndex, "url") + "/", "").replace("?", "-").replace(/&/g, '-').replace(/=/g, '-');
+        /* EXPLANATIONS FOR THE REGEXES
+        let fileName = this.state.url.replace(lib.getDbConfig(this.state.dbIndex, "url") + "/", "") // Get rid of the URL
+            .replace("?", "-") /////// The params q-mark can be replaced with dash
+            .replace(/&/g, '-') /////// All URL key-value separating ampersands can be replaced with dashes
+            .replace(/=/g, '-') /////// Get rid of the = in favour of the -
+            .replace(/\([^()]{15,}\)/g, "(vals)") /////// Replaces any single non-nested AND/OR conditions with (vals) if they're longer than 15 chars
+            .replace(/\(([^()]|\(vals\)){50,}\)/g,"(nested-vals)") /////// Replaces any AND/OR conds with a single (vals) if it's longer than 50 chars
+            .replace(/[.]([\w,"\s]{30,})[,]/g, "(in-vals)"); /////// Specifically targets the IN operator's comma separated vals .. replace if longer than 30 chars
+        */
+        let fileName = this.state.url.replace(lib.getDbConfig(this.state.dbIndex, "url") + "/", "").replace("?", "-").replace(/&/g, '-').replace(/=/g, '-').replace(/\([^()]{15,}\)/g, "(vals)").replace(/\(([^()]|\(vals\)){50,}\)/g,"(nested-vals)").replace(/[.]([\w,"\s]{30,})[,]/g, "(in-vals)");
 
         if (this.state.getFullResult === true || dataFullStatus === true) {
             fileName = fileName.replace(/limit-\d*/g, "limit-" + maxRowsInDownload);
