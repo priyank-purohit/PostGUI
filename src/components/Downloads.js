@@ -41,7 +41,8 @@ class Downloads extends Component {
             fileNameAuto: '',
 			anchorEl: undefined,
             open: false,
-            columnChosen: 0
+            columnChosen: 0,
+            copyLoading: false
         };
     }
 
@@ -347,30 +348,33 @@ class Downloads extends Component {
         this.setState({ fileNameCustom: newValue });
     }
 
-    //https://stackoverflow.com/a/33946647/5279040
-    insertToClipboard(val) {
-        // Create a dummy input to copy the string array inside it
-        var dummy = document.createElement("input");
-        // Add it to the document
-        document.body.appendChild(dummy);
-        // Set its ID
-        dummy.setAttribute("id", "dummy_id");
-        // Output the array into it  
-        document.getElementById("dummy_id").value = val;  
-        // Select it
-        dummy.select();
-        // Copy its contents
-        document.execCommand("copy");
-        // Remove it as its not needed anymore
-        document.body.removeChild(dummy);
+    insertToClipboard(str) {
+        console.log("Insert to clip board started .... ");
+
+        //based on https://stackoverflow.com/a/12693636
+        document.oncopy = function (event) {
+            event.clipboardData.setData("Text", str);
+            event.preventDefault();
+        };
+        document.execCommand("Copy");
+        document.oncopy = undefined;
+
+        setTimeout(function() {
+            this.setState({ copyLoading: false })
+        }.bind(this), 1000);
+        console.log("Insert to clip board finished !!!!");
     }
     
     handleCopyClick() {
-        let output = "";
-        for (let i = 0; i < this.state.data.length; i++) {
-            output += this.state.data[i][this.state.columns[this.state.columnChosen]] + ",";
-        }
-        this.insertToClipboard(output);
+        console.log("Copy started....");
+        this.setState({copyLoading: true}, function() {
+            let output = "";
+            for (let i = 0; i < this.state.data.length; i++) {
+                output += this.state.data[i][this.state.columns[this.state.columnChosen]] + ",";
+            }
+            this.insertToClipboard(output);
+        });
+        console.log("Copy finished!!!");
     }
 
     handleDownloadClick() {
@@ -536,7 +540,7 @@ class Downloads extends Component {
                                 margin="normal" />
                         </FormGroup>
 
-                        {this.state.submitLoading === true ? <LinearProgress color="primary" className={classes.linearProgressClass} /> : <Divider />}
+                        {this.state.copyLoading === true ? <LinearProgress color="primary" className={classes.linearProgressClass} /> : <Divider />}
                         
                         
                         <Button color="primary" className={classes.button} onClick={this.handleDownloadClick.bind(this)} >Download</Button>
