@@ -366,14 +366,10 @@ class Downloads extends Component {
     }
     
     handleCopyClick() {
-        console.log("Copy clicked with selected col = " + this.state.columnChosen);
-        console.log(JSON.stringify(this.state.data));
         let output = "";
         for (let i = 0; i < this.state.data.length; i++) {
-            //console.log(this.state.data[i][this.state.columns[this.state.columnChosen]]);
             output += this.state.data[i][this.state.columns[this.state.columnChosen]] + ",";
         }
-        console.log(output);
         this.insertToClipboard(output);
     }
 
