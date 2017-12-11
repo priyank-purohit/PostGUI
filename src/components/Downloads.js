@@ -349,8 +349,6 @@ class Downloads extends Component {
     }
 
     insertToClipboard(str) {
-        console.log("Insert to clip board started .... ");
-
         //based on https://stackoverflow.com/a/12693636
         document.oncopy = function (event) {
             event.clipboardData.setData("Text", str);
@@ -362,11 +360,9 @@ class Downloads extends Component {
         setTimeout(function() {
             this.setState({ copyLoading: false })
         }.bind(this), 1000);
-        console.log("Insert to clip board finished !!!!");
     }
     
     handleCopyClick() {
-        console.log("Copy started....");
         this.setState({copyLoading: true}, function() {
             let output = "";
             for (let i = 0; i < this.state.data.length; i++) {
@@ -374,7 +370,6 @@ class Downloads extends Component {
             }
             this.insertToClipboard(output);
         });
-        console.log("Copy finished!!!");
     }
 
     handleDownloadClick() {
