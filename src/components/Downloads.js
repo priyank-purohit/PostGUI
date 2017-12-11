@@ -368,7 +368,7 @@ class Downloads extends Component {
             for (let i = 0; i < this.state.data.length; i++) {
                 output += this.state.data[i][this.state.columns[this.state.columnChosen]] + ",";
             }
-            this.insertToClipboard(output);
+            this.insertToClipboard(output.replace(/,$/g, ""));
         });
     }
 
