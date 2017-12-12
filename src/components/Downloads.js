@@ -12,6 +12,8 @@ import Checkbox from 'material-ui/Checkbox';
 import TextField from 'material-ui/TextField';
 import Divider from 'material-ui/Divider';
 import { LinearProgress } from 'material-ui/Progress';
+import Menu, { MenuItem } from 'material-ui/Menu';
+import List, { ListItem, ListItemText } from 'material-ui/List';
 
 const timeout = 2000;
 const maxRowsInDownload = 2500000;
@@ -31,12 +33,16 @@ class Downloads extends Component {
             dataFull: [],
             url: props.url,
             fileFormat: 'delimited',
-            tableHeader: true,
-            reRunQuery: false,
-            getFullResult: false,
             delimiterChoice: ',',
+            columnChosen: 0,
+            tableHeader: true,
+            getFullResult: false,
             fileNameCustom: '',
-            fileNameAuto: ''
+            reRunQuery: false,
+            fileNameAuto: '',
+			anchorEl: undefined,
+            open: false,
+            copyLoading: false
         };
     }
 
@@ -48,7 +54,8 @@ class Downloads extends Component {
             url: newProps.url,
             data: newProps.data,
             fileNameCustom: '',
-            dataFull: []
+            dataFull: [],
+            columnChosen: 0
         }, () => {
             this.createFileName();
         });
@@ -67,7 +74,16 @@ class Downloads extends Component {
         let delimiter = this.state.delimiterChoice.replace(/\\t/g, '\t'); // for tabs
 
         // Create a good file name for the file so user knows what the data in the file is all about
-        let fileName = this.state.url.replace(lib.getDbConfig(this.state.dbIndex, "url") + "/", "").replace("?", "-").replace(/&/g, '-').replace(/=/g, '-');
+        /* EXPLANATIONS FOR THE REGEXES
+        let fileName = this.state.url.replace(lib.getDbConfig(this.state.dbIndex, "url") + "/", "") // Get rid of the URL
+            .replace("?", "-") /////// The params q-mark can be replaced with dash
+            .replace(/&/g, '-') /////// All URL key-value separating ampersands can be replaced with dashes
+            .replace(/=/g, '-') /////// Get rid of the = in favour of the -
+            .replace(/\([^()]{15,}\)/g, "(vals)") /////// Replaces any single non-nested AND/OR conditions with (vals) if they're longer than 15 chars
+            .replace(/\(([^()]|\(vals\)){50,}\)/g,"(nested-vals)") /////// Replaces any AND/OR conds with a single (vals) if it's longer than 50 chars
+            .replace(/[.]([\w,"\s]{30,})[,]/g, "(in-vals)"); /////// Specifically targets the IN operator's comma separated vals .. replace if longer than 30 chars
+        */
+        let fileName = this.state.url.replace(lib.getDbConfig(this.state.dbIndex, "url") + "/", "").replace("?", "-").replace(/&/g, '-').replace(/=/g, '-').replace(/\([^()]{15,}\)/g, "(vals)").replace(/\(([^()]|\(vals\)){50,}\)/g,"(nested-vals)").replace(/[.]([\w,"\s]{30,})[,]/g, "(in-vals)");
 
         if (this.state.getFullResult === true || dataFullStatus === true) {
             fileName = fileName.replace(/limit-\d*/g, "limit-" + maxRowsInDownload);
@@ -332,6 +348,42 @@ class Downloads extends Component {
         this.setState({ fileNameCustom: newValue });
     }
 
+    insertToClipboard(str) {
+        //based on https://stackoverflow.com/a/12693636
+        document.oncopy = function (event) {
+            event.clipboardData.setData("Text", str);
+            event.preventDefault();
+        };
+        document.execCommand("Copy");
+        document.oncopy = undefined;
+
+        setTimeout(function() {
+            this.setState({ copyLoading: false })
+        }.bind(this), 1000);
+    }
+
+    handleResetClick() {
+        console.log("Changing state...");
+        this.setState({
+            fileFormat: 'delimited',
+            delimiterChoice: ',',
+            columnChosen: 0,
+            tableHeader: true,
+            getFullResult: false,
+            fileNameCustom: ''
+        });
+    }
+    
+    handleCopyClick() {
+        this.setState({copyLoading: true}, function() {
+            let output = "";
+            for (let i = 0; i < this.state.data.length; i++) {
+                output += this.state.data[i][this.state.columns[this.state.columnChosen]] + ",";
+            }
+            this.insertToClipboard(output.replace(/,$/g, ""));
+        });
+    }
+
     handleDownloadClick() {
         this.createFileName();
 
@@ -364,6 +416,18 @@ class Downloads extends Component {
             }
         });
     }
+
+    handleClickListItem = (event) => {
+		this.setState({ open: true, anchorEl: event.currentTarget });
+	};
+    
+    handleMenuItemClick = (event, index) => {
+        this.setState({ columnChosen: index, open: false });
+    };
+
+	handleRequestClose = () => {
+		this.setState({ open: false });
+    };
 
     fetchOutput(url) {
         axios.get(url, { params: {}, requestId: "qbAxiosReq" })
@@ -423,7 +487,7 @@ class Downloads extends Component {
                         <FormControl component="fieldset" required>
                             <RadioGroup className={classes.cardcardMarginLeftTop} value={this.state.fileFormat} onChange={this.handleFileFormatChange} >
                                 <FormControlLabel control={ <Radio /> } label="Delimited" value="delimited" />
-                                <span>
+                                <span className={this.state.fileFormat !== 'delimited' ? classes.hidden : null}>
                                     <TextField
                                         required
                                         id="delimiterInput"
@@ -438,6 +502,23 @@ class Downloads extends Component {
                                 <FormControlLabel control={ <Radio /> } label="JSON" value="json" />
                                 <FormControlLabel control={ <Radio /> } label="XML" value="xml" />
                                 <FormControlLabel control={ <Radio /> } label="FASTA" value="fasta" disabled={this.identifySeqColumnInStateColumns() === null ? true : false}/>
+                                <FormControlLabel control={ <Radio /> } label="Delimited column values" value="delimitedColumn" />
+                                <span className={this.state.fileFormat !== 'delimitedColumn' ? classes.hidden : classes.inlineTextField}>
+                                    <List>
+                                        <ListItem button aria-haspopup="true" aria-controls="columnMenu" aria-label="Choose column" onClick={this.handleClickListItem} >
+                                            <ListItemText primary="Choose a column" secondary={this.state.columns[this.state.columnChosen]} />
+                                        </ListItem>
+                                    </List>
+                                    <Menu id="columnMenu" anchorEl={this.state.anchorEl} open={this.state.open} onRequestClose={this.handleRequestClose} >
+                                        {
+                                            this.state.columns.map((option, index) =>
+                                                <MenuItem key={option} selected={index === this.state.columnChosen} onClick={event => this.handleMenuItemClick(event, index)} >
+                                                    {option}
+                                                </MenuItem>
+                                            )
+                                        }
+                                    </Menu>
+                                </span>
                                 {/*<FormControlLabel disabled control={ <Radio /> } label="Newick Tree" value="newicktree" />
                                 <FormControlLabel disabled control={ <Radio /> } label="Nexus Tree" value="nexustree" />
                                 <FormControlLabel disabled control={ <Radio /> } label="PhyloXML" value="phyloxml" />*/}
@@ -466,13 +547,13 @@ class Downloads extends Component {
                                 margin="normal" />
                         </FormGroup>
 
-                        {this.state.submitLoading === true ? <LinearProgress color="primary" className={classes.linearProgressClass} /> : <Divider />}
+                        {this.state.copyLoading === true ? <LinearProgress color="primary" className={classes.linearProgressClass} /> : <Divider />}
                         
                         
                         <Button color="primary" className={classes.button} onClick={this.handleDownloadClick.bind(this)} >Download</Button>
-                        <Button disabled className={classes.button}>Copy</Button>
-                        <Button disabled className={classes.button}>Reset</Button>
-                        <Button disabled className={classes.button}>Help</Button>                        
+                        <Button disabled={this.state.fileFormat !== 'delimitedColumn'} className={classes.button} onClick={this.handleCopyClick.bind(this)} >Copy</Button>
+                        <Button className={classes.button && classes.floatRight} onClick={this.handleResetClick.bind(this)} >Reset</Button>
+                        {/* <Button className={classes.button}>Help</Button> */}
                     </Paper>
                 </div>);
     }
@@ -528,6 +609,12 @@ const styleSheet = {
     textField: {
         marginLeft: 8,
         marginRight: 8
+    },
+    hidden: {
+        display: 'none'
+    },
+    floatRight: {
+        float: 'right'
     }
 };
 
