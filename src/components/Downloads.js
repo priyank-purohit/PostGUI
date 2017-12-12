@@ -170,6 +170,26 @@ class Downloads extends Component {
         }
     }
 
+    copyTableAsJSON(dataFullStatus = false) {
+        if (dataFullStatus === false && JSON.stringify(this.state.data) !== "[]") {
+            try {
+                let result = JSON.stringify(this.state.data);
+                this.insertToClipboard(result);
+            } catch (err) {
+                console.error(err);
+            }
+        } else if (dataFullStatus === true) {
+            if (JSON.stringify(this.state.dataFull) !== "[]") {
+                try {
+                    let result = JSON.stringify(this.state.dataFull);
+                    this.insertToClipboard(result);
+                } catch (err) {
+                    console.error(err);
+                }
+            }
+        }
+    }
+
     downloadTableAsXML(dataFullStatus = false) {
         if (dataFullStatus === false && JSON.stringify(this.state.data) !== "[]") {
             try {
@@ -187,6 +207,26 @@ class Downloads extends Component {
                     let fileName = this.createFileName(true);
 
                     this.downloadFile(result, fileName, "text/plain");
+                } catch (err) {
+                    console.error(err);
+                }
+            }
+        }
+    }
+
+    copyTableAsXML(dataFullStatus = false) {
+        if (dataFullStatus === false && JSON.stringify(this.state.data) !== "[]") {
+            try {
+                let result = js2xmlparser.parse(this.state.table, this.state.data);
+                this.insertToClipboard(result);
+            } catch (err) {
+                console.error(err);
+            }
+        } else if (dataFullStatus === true) {
+            if (JSON.stringify(this.state.dataFull) !== "[]") {
+                try {
+                    let result = js2xmlparser.parse(this.state.table, this.state.dataFull);
+                    this.insertToClipboard(result);
                 } catch (err) {
                     console.error(err);
                 }
@@ -375,8 +415,30 @@ class Downloads extends Component {
     }
     
     handleCopyClick() {
-        this.setState({copyLoading: true}, function() {
-            this.insertToClipboard(this.convertColumnValuesToCSVString().replace(/,$/g, ""));
+        this.setState({copyLoading: true}, () => {
+            if (this.state.getFullResult === true) {
+                let dataFullURL = this.state.url.replace(/limit=\d*/g, "limit=" + maxRowsInDownload);
+                this.fetchOutput(dataFullURL);
+            } else {
+                if (this.state.fileFormat === "delimited") {
+                    //this.downloadTableWithDelimiter();
+                } else if (this.state.fileFormat === "delimitedColumn") {
+                    this.insertToClipboard(this.convertColumnValuesToCSVString().replace(/,$/g, ""));
+                } else if (this.state.fileFormat === "json") {
+                    this.copyTableAsJSON();
+                } else if (this.state.fileFormat === "xml") {
+                    this.copyTableAsXML();
+                } else if (this.state.fileFormat === "fasta") {
+                    //this.downloadTableAsFASTA();
+                }
+
+                this.setState({
+                    submitSuccess: true,
+                    submitError: false,
+                    submitLoading: false,
+                    dataFull: []
+                });
+            }
         });
     }
 
@@ -546,7 +608,7 @@ class Downloads extends Component {
                         {this.state.copyLoading === true ? <LinearProgress color="primary" className={classes.linearProgressClass} /> : <Divider />}
                         
                         <Button color="primary" className={classes.button} onClick={this.handleDownloadClick.bind(this)} disabled={this.state.fileFormat === 'delimitedColumn'} >Download</Button>
-                        <Button disabled={this.state.fileFormat !== 'delimitedColumn'} className={classes.button} onClick={this.handleCopyClick.bind(this)} >Copy</Button>
+                        <Button disabled={this.state.fileFormat !== 'delimitedColumn' && this.state.fileFormat !== 'json' && this.state.fileFormat !== 'xml'} className={classes.button} onClick={this.handleCopyClick.bind(this)} >Copy</Button>
                         <Button className={classes.button && classes.floatRight} onClick={this.handleResetClick.bind(this)} >Reset</Button>
                         {/* <Button className={classes.button}>Help</Button> */}
                     </Paper>
