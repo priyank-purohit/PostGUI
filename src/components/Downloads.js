@@ -371,6 +371,8 @@ class Downloads extends Component {
             tableHeader: true,
             getFullResult: false,
             fileNameCustom: ''
+        }, () => {
+            this.createFileName();
         });
     }
     
