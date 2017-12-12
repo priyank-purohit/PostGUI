@@ -33,15 +33,15 @@ class Downloads extends Component {
             dataFull: [],
             url: props.url,
             fileFormat: 'delimited',
-            tableHeader: true,
-            reRunQuery: false,
-            getFullResult: false,
             delimiterChoice: ',',
+            columnChosen: 0,
+            tableHeader: true,
+            getFullResult: false,
             fileNameCustom: '',
+            reRunQuery: false,
             fileNameAuto: '',
 			anchorEl: undefined,
             open: false,
-            columnChosen: 0,
             copyLoading: false
         };
     }
@@ -361,6 +361,18 @@ class Downloads extends Component {
             this.setState({ copyLoading: false })
         }.bind(this), 1000);
     }
+
+    handleResetClick() {
+        console.log("Changing state...");
+        this.setState({
+            fileFormat: 'delimited',
+            delimiterChoice: ',',
+            columnChosen: 0,
+            tableHeader: true,
+            getFullResult: false,
+            fileNameCustom: ''
+        });
+    }
     
     handleCopyClick() {
         this.setState({copyLoading: true}, function() {
@@ -540,8 +552,8 @@ class Downloads extends Component {
                         
                         <Button color="primary" className={classes.button} onClick={this.handleDownloadClick.bind(this)} >Download</Button>
                         <Button disabled={this.state.fileFormat !== 'delimitedColumn'} className={classes.button} onClick={this.handleCopyClick.bind(this)} >Copy</Button>
-                        <Button disabled className={classes.button}>Reset</Button>
-                        <Button disabled className={classes.button}>Help</Button>                        
+                        <Button className={classes.button && classes.floatRight} onClick={this.handleResetClick.bind(this)} >Reset</Button>
+                        {/* <Button className={classes.button}>Help</Button> */}
                     </Paper>
                 </div>);
     }
@@ -600,6 +612,9 @@ const styleSheet = {
     },
     hidden: {
         display: 'none'
+    },
+    floatRight: {
+        float: 'right'
     }
 };
 
