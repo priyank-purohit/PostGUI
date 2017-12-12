@@ -559,7 +559,7 @@ class Downloads extends Component {
                                 </span>
                                 <FormControlLabel control={ <Radio /> } label="JSON" value="json" />
                                 <FormControlLabel control={ <Radio /> } label="XML" value="xml" />
-                                <FormControlLabel control={ <Radio /> } label="FASTA" value="fasta" disabled={this.identifySeqColumnInStateColumns() === null ? true : false}/>
+                                <FormControlLabel control={ <Radio /> } label="FASTA" value="fasta" className={this.identifySeqColumnInStateColumns() === null ? classes.hidden : null}/>
                                 <FormControlLabel control={ <Radio /> } label="Delimited column values" value="delimitedColumn" />
                                 <span className={this.state.fileFormat !== 'delimitedColumn' ? classes.hidden : classes.inlineTextField}>
                                     <List>
