@@ -544,6 +544,7 @@ class Downloads extends Component {
                         <FormGroup className={classes.cardcardMarginLeftTop && classes.cardcardMarginBottomRight}>
                             <TextField 
                                 required 
+                                disabled={this.state.fileFormat === 'delimitedColumn'}
                                 id="delimiterInput" 
                                 type="text" 
                                 label="File name"
@@ -556,7 +557,7 @@ class Downloads extends Component {
                         {this.state.copyLoading === true ? <LinearProgress color="primary" className={classes.linearProgressClass} /> : <Divider />}
                         
                         
-                        <Button color="primary" className={classes.button} onClick={this.handleDownloadClick.bind(this)} >Download</Button>
+                        <Button color="primary" className={classes.button} onClick={this.handleDownloadClick.bind(this)} disabled={this.state.fileFormat === 'delimitedColumn'} >Download</Button>
                         <Button disabled={this.state.fileFormat !== 'delimitedColumn'} className={classes.button} onClick={this.handleCopyClick.bind(this)} >Copy</Button>
                         <Button className={classes.button && classes.floatRight} onClick={this.handleResetClick.bind(this)} >Reset</Button>
                         {/* <Button className={classes.button}>Help</Button> */}
