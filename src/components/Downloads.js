@@ -123,9 +123,7 @@ class Downloads extends Component {
             try {
                 // Parse out the delimiter
                 let delimiter = this.state.delimiterChoice.replace(/\\t/g, '\t'); // for tabs
-
                 let result = json2csv({ data: this.state.data, fields: this.state.columns, del: delimiter, hasCSVColumnTitle: this.state.tableHeader });
-
                 let fileName = this.createFileName();
 
                 this.downloadFile(result, fileName, "text/plain");
@@ -137,9 +135,7 @@ class Downloads extends Component {
                 try {
                     // Parse out the delimiter
                     let delimiter = this.state.delimiterChoice.replace(/\\t/g, '\t'); // for tabs
-
                     let result = json2csv({ data: this.state.dataFull, fields: this.state.columns, del: delimiter, hasCSVColumnTitle: this.state.tableHeader });
-
                     let fileName = this.createFileName(true);
 
                     this.downloadFile(result, fileName, "text/plain");
@@ -154,7 +150,6 @@ class Downloads extends Component {
         if (dataFullStatus === false && JSON.stringify(this.state.data) !== "[]") {
             try {
                 let result = JSON.stringify(this.state.data);
-
                 let fileName = this.createFileName();
 
                 this.downloadFile(result, fileName, "text/plain");
@@ -165,7 +160,6 @@ class Downloads extends Component {
             if (JSON.stringify(this.state.dataFull) !== "[]") {
                 try {
                     let result = JSON.stringify(this.state.dataFull);
-
                     let fileName = this.createFileName(true);
 
                     this.downloadFile(result, fileName, "text/plain");
@@ -180,7 +174,6 @@ class Downloads extends Component {
         if (dataFullStatus === false && JSON.stringify(this.state.data) !== "[]") {
             try {
                 let result = js2xmlparser.parse(this.state.table, this.state.data);
-
                 let fileName = this.createFileName();
 
                 this.downloadFile(result, fileName, "text/plain");
@@ -191,7 +184,6 @@ class Downloads extends Component {
             if (JSON.stringify(this.state.dataFull) !== "[]") {
                 try {
                     let result = js2xmlparser.parse(this.state.table, this.state.dataFull);
-
                     let fileName = this.createFileName(true);
 
                     this.downloadFile(result, fileName, "text/plain");
@@ -228,7 +220,6 @@ class Downloads extends Component {
 
                     for (let index in this.state.data) {
                         let element = this.state.data[index];
-
                         let seq = element[seqColumn];
 
                         // Parse header string ...
@@ -258,7 +249,6 @@ class Downloads extends Component {
 
                         for (let index in this.state.dataFull) {
                             let element = this.state.dataFull[index];
-
                             let seq = element[seqColumn];
 
                             // Parse header string ...
@@ -531,7 +521,6 @@ class Downloads extends Component {
                             </RadioGroup>
                         </FormControl>
 
-
                         {/* ADDITIONAL DOWNLOADS OPTIONS */}
                         <Typography type="body1" className={classes.cardcardMarginLeftTop}>Options</Typography>
                         <FormGroup className={classes.cardcardMarginLeftTop}>
@@ -555,7 +544,6 @@ class Downloads extends Component {
                         </FormGroup>
 
                         {this.state.copyLoading === true ? <LinearProgress color="primary" className={classes.linearProgressClass} /> : <Divider />}
-                        
                         
                         <Button color="primary" className={classes.button} onClick={this.handleDownloadClick.bind(this)} disabled={this.state.fileFormat === 'delimitedColumn'} >Download</Button>
                         <Button disabled={this.state.fileFormat !== 'delimitedColumn'} className={classes.button} onClick={this.handleCopyClick.bind(this)} >Copy</Button>
