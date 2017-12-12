@@ -285,6 +285,29 @@ class Downloads extends Component {
         }
     }
 
+    // COLUMN should be the index of the target column in this.state.columns
+    convertColumnValuesToCSVString(column = this.state.columnChosen) {
+        let output = "";
+        for (let i = 0; i < this.state.data.length; i++) {
+            output += this.state.data[i][this.state.columns[column]] + ",";
+        }
+        return output;
+    }
+
+    insertToClipboard(str) {
+        //based on https://stackoverflow.com/a/12693636
+        document.oncopy = function (event) {
+            event.clipboardData.setData("Text", str);
+            event.preventDefault();
+        };
+        document.execCommand("Copy");
+        document.oncopy = undefined;
+
+        setTimeout(function() {
+            this.setState({ copyLoading: false })
+        }.bind(this), 1000);
+    }
+
     handleFileFormatChange = (event, fileFormat) => {
         if (event.target.id !== 'delimiterInput') {
             this.setState({ fileFormat: fileFormat }, () => {
@@ -342,24 +365,9 @@ class Downloads extends Component {
         }
     }
 
-
     handleFileNameChange(event) {
         let newValue = event.target.value;
         this.setState({ fileNameCustom: newValue });
-    }
-
-    insertToClipboard(str) {
-        //based on https://stackoverflow.com/a/12693636
-        document.oncopy = function (event) {
-            event.clipboardData.setData("Text", str);
-            event.preventDefault();
-        };
-        document.execCommand("Copy");
-        document.oncopy = undefined;
-
-        setTimeout(function() {
-            this.setState({ copyLoading: false })
-        }.bind(this), 1000);
     }
 
     handleResetClick() {
@@ -378,11 +386,7 @@ class Downloads extends Component {
     
     handleCopyClick() {
         this.setState({copyLoading: true}, function() {
-            let output = "";
-            for (let i = 0; i < this.state.data.length; i++) {
-                output += this.state.data[i][this.state.columns[this.state.columnChosen]] + ",";
-            }
-            this.insertToClipboard(output.replace(/,$/g, ""));
+            this.insertToClipboard(this.convertColumnValuesToCSVString().replace(/,$/g, ""));
         });
     }
 
