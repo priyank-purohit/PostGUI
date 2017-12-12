@@ -312,6 +312,9 @@ class Downloads extends Component {
                     }
                 }
             }
+        } else {
+            // User got here by mistake, reset Download.js options
+            this.handleResetClick();
         }
     }
 
@@ -401,7 +404,6 @@ class Downloads extends Component {
     }
 
     handleResetClick() {
-        console.log("Changing state...");
         this.setState({
             fileFormat: 'delimited',
             delimiterChoice: ',',
