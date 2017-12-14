@@ -15,6 +15,12 @@ const workercode = () => {
             }
 
             self.postMessage(output.replace(/,$/g, ""));
+        } else if (e.data.method === "json") {
+            // Convert the posted data to JSON string...
+            let data = e.data.data;
+
+            let output = JSON.stringify(data);
+            self.postMessage(output);
         }
     }
 };

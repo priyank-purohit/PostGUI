@@ -181,6 +181,7 @@ class Downloads extends Component {
         if (dataFullStatus === false && JSON.stringify(this.state.data) !== "[]") {
             try {
                 let result = JSON.stringify(this.state.data);
+                this.setState({copyResult: result});
                 let copySuccess = this.insertToClipboard(result)
                 if (copySuccess) {
                     this.setState({copyLoading: false});
@@ -439,7 +440,11 @@ class Downloads extends Component {
                         this.setState({copyLoading: false, copyResult: m.data});
                     };
                 } else if (this.state.fileFormat === "json") {
-                    this.copyTableAsJSON();
+                    //this.copyTableAsJSON();
+                    myWorker.postMessage({method: 'json', data: this.state.data});
+                    myWorker.onmessage = (m) => {
+                        this.setState({copyLoading: false, copyResult: m.data});
+                    };
                 } else if (this.state.fileFormat === "xml") {
                     this.copyTableAsXML();
                 } else if (this.state.fileFormat === "fasta") {
