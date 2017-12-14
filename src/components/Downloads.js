@@ -181,15 +181,21 @@ class Downloads extends Component {
         if (dataFullStatus === false && JSON.stringify(this.state.data) !== "[]") {
             try {
                 let result = JSON.stringify(this.state.data);
-                this.insertToClipboard(result);
+                let copySuccess = this.insertToClipboard(result)
+                if (copySuccess) {
+                    this.setState({copyLoading: false});
+                }
             } catch (err) {
                 console.error(err);
             }
         } else if (dataFullStatus === true) {
             if (JSON.stringify(this.state.dataFull) !== "[]") {
                 try {
-                    let result = JSON.stringify(this.state.dataFull);
-                    this.insertToClipboard(result);
+                    let result = JSON.stringify(this.state.dataFull);    
+                    let copySuccess = this.insertToClipboard(result)
+                    if (copySuccess) {
+                        this.setState({copyLoading: false});
+                    }
                 } catch (err) {
                     console.error(err);
                 }
@@ -225,15 +231,21 @@ class Downloads extends Component {
         if (dataFullStatus === false && JSON.stringify(this.state.data) !== "[]") {
             try {
                 let result = js2xmlparser.parse(this.state.table, this.state.data);
-                this.insertToClipboard(result);
+                let copySuccess = this.insertToClipboard(result)
+                if (copySuccess) {
+                    this.setState({copyLoading: false});
+                }
             } catch (err) {
                 console.error(err);
             }
         } else if (dataFullStatus === true) {
             if (JSON.stringify(this.state.dataFull) !== "[]") {
                 try {
-                    let result = js2xmlparser.parse(this.state.table, this.state.dataFull);
-                    this.insertToClipboard(result);
+                    let result = js2xmlparser.parse(this.state.table, this.state.dataFull);   
+                let copySuccess = this.insertToClipboard(result)
+                if (copySuccess) {
+                    this.setState({copyLoading: false});
+                }
                 } catch (err) {
                     console.error(err);
                 }
@@ -331,8 +343,9 @@ class Downloads extends Component {
             event.clipboardData.setData("Text", str);
             event.preventDefault();
         };
-        document.execCommand("Copy");
+        let copySuccess = document.execCommand("Copy");
         document.oncopy = undefined;
+        return copySuccess;
     }
 
     handleFileFormatChange = (event, fileFormat) => {
