@@ -21,6 +21,14 @@ const workercode = () => {
 
             let output = JSON.stringify(data);
             self.postMessage(output);
+        } else if (e.data.method === "xml") {
+            var js2xmlparser = self.importScripts("js2xmlparser");
+
+            let table = e.data.table;
+            let data = e.data.data;
+
+            let result = js2xmlparser.parse(table, data);
+            self.postMessage(result);
         }
     }
 };
