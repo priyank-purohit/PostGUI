@@ -11,10 +11,12 @@ import { FormControl, FormGroup, FormControlLabel } from 'material-ui/Form';
 import Checkbox from 'material-ui/Checkbox';
 import TextField from 'material-ui/TextField';
 import Divider from 'material-ui/Divider';
+import IconButton from 'material-ui/IconButton';
 import { LinearProgress } from 'material-ui/Progress';
 import Menu, { MenuItem } from 'material-ui/Menu';
 import List, { ListItem, ListItemText } from 'material-ui/List';
 
+import CopyIcon from 'material-ui-icons/ContentCopy';
 
 import worker_script from './WebWorker';
 var myWorker = new Worker(worker_script);
@@ -331,10 +333,6 @@ class Downloads extends Component {
         };
         document.execCommand("Copy");
         document.oncopy = undefined;
-
-        setTimeout(function() {
-            this.setState({ copyLoading: false })
-        }.bind(this), 1000);
     }
 
     handleFileFormatChange = (event, fileFormat) => {
@@ -423,10 +421,8 @@ class Downloads extends Component {
                 if (this.state.fileFormat === "delimited") {
                     //this.downloadTableWithDelimiter();
                 } else if (this.state.fileFormat === "delimitedColumn") {
-                    //this.insertToClipboard(this.convertColumnValuesToCSVString().replace(/,$/g, ""));
-                    myWorker.postMessage({column: this.state.columnChosen, data: this.state.data, columns: this.state.columns});
+                    myWorker.postMessage({method: 'delimitedColumn', column: this.state.columnChosen, data: this.state.data, columns: this.state.columns});
                     myWorker.onmessage = (m) => {
-                        console.log("Got a response from worker!");
                         this.setState({copyLoading: false, copyResult: m.data});
                     };
                 } else if (this.state.fileFormat === "json") {
@@ -614,17 +610,19 @@ class Downloads extends Component {
                                 margin="normal" />
                         </FormGroup>
 
-                        <FormGroup className={classes.cardcardMarginLeftTop && classes.cardcardMarginBottomRight}>
+                        <div className={classes.cardcardMarginLeftTop && classes.cardcardMarginBottomRight}>
                             <TextField
                                 id="copyOutput" 
-                                type="text" 
-                                disabled
+                                type="text"
                                 label="Ctrl A and Ctrl C to copy"
                                 value={this.state.copyResult}
                                 onChange={this.handleCopyOutputClick.bind(this)}
-                                className={this.state.copyResult === "" ? classes.hidden : classes.textField && classes.cardMarginLeft} 
+                                className={this.state.copyResult === "" ? classes.hidden : classes.textFieldCopyOutput} 
                                 margin="normal" />
-                        </FormGroup>
+                            <IconButton onClick={this.insertToClipboard.bind(this, this.state.copyResult)} className={this.state.copyResult === "" ? classes.hidden : classes.button} aria-label="Copy">
+                                <CopyIcon />
+                            </IconButton>
+                        </div>
 
                         {this.state.copyLoading === true ? <LinearProgress color="primary" className={classes.linearProgressClass} /> : <Divider />}
                         
@@ -687,6 +685,11 @@ const styleSheet = {
     textField: {
         marginLeft: 8,
         marginRight: 8
+    },
+    textFieldCopyOutput: {
+        marginLeft: 32,
+        marginRight: 8,
+        width: '80%'
     },
     hidden: {
         display: 'none'
