@@ -14,7 +14,7 @@ const workercode = () => {
             output += data[i][columns[column]] + ",";
         }
 
-        self.postMessage(output.replace(/,$/g, ""));        
+        self.postMessage(output.replace(/,$/g, ""));
     }
 };
 

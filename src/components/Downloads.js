@@ -46,7 +46,8 @@ class Downloads extends Component {
             fileNameAuto: '',
 			anchorEl: undefined,
             open: false,
-            copyLoading: false
+            copyLoading: false,
+            copyResult: ""
         };
     }
 
@@ -405,7 +406,9 @@ class Downloads extends Component {
             columnChosen: 0,
             tableHeader: true,
             getFullResult: false,
-            fileNameCustom: ''
+            fileNameCustom: '',
+            copyLoading: false,
+            copyResult: ""
         }, () => {
             this.createFileName();
         });
@@ -423,7 +426,8 @@ class Downloads extends Component {
                     //this.insertToClipboard(this.convertColumnValuesToCSVString().replace(/,$/g, ""));
                     myWorker.postMessage({column: this.state.columnChosen, data: this.state.data, columns: this.state.columns});
                     myWorker.onmessage = (m) => {
-                        console.log("msg from worker: ", m.data);
+                        console.log("Got a response from worker!");
+                        this.setState({copyLoading: false, copyResult: m.data});
                     };
                 } else if (this.state.fileFormat === "json") {
                     this.copyTableAsJSON();
@@ -441,6 +445,10 @@ class Downloads extends Component {
                 });
             }
         });
+    }
+
+    handleCopyOutputClick() {
+        //
     }
 
     handleDownloadClick() {
@@ -603,6 +611,18 @@ class Downloads extends Component {
                                 onChange={this.handleFileNameChange.bind(this)}
                                 value={this.state.fileNameCustom === '' ? this.state.fileNameAuto : this.state.fileNameCustom}
                                 className={classes.textField && classes.cardMarginLeft} 
+                                margin="normal" />
+                        </FormGroup>
+
+                        <FormGroup className={classes.cardcardMarginLeftTop && classes.cardcardMarginBottomRight}>
+                            <TextField
+                                id="copyOutput" 
+                                type="text" 
+                                disabled
+                                label="Ctrl A and Ctrl C to copy"
+                                value={this.state.copyResult}
+                                onChange={this.handleCopyOutputClick.bind(this)}
+                                className={this.state.copyResult === "" ? classes.hidden : classes.textField && classes.cardMarginLeft} 
                                 margin="normal" />
                         </FormGroup>
 
