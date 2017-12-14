@@ -15,6 +15,10 @@ import { LinearProgress } from 'material-ui/Progress';
 import Menu, { MenuItem } from 'material-ui/Menu';
 import List, { ListItem, ListItemText } from 'material-ui/List';
 
+
+import worker_script from './WebWorker';
+var myWorker = new Worker(worker_script);
+
 const timeout = 2000;
 const maxRowsInDownload = 2500000;
 
@@ -318,15 +322,6 @@ class Downloads extends Component {
         }
     }
 
-    // COLUMN should be the index of the target column in this.state.columns
-    convertColumnValuesToCSVString(column = this.state.columnChosen) {
-        let output = "";
-        for (let i = 0; i < this.state.data.length; i++) {
-            output += this.state.data[i][this.state.columns[column]] + ",";
-        }
-        return output;
-    }
-
     insertToClipboard(str) {
         //based on https://stackoverflow.com/a/12693636
         document.oncopy = function (event) {
@@ -425,7 +420,11 @@ class Downloads extends Component {
                 if (this.state.fileFormat === "delimited") {
                     //this.downloadTableWithDelimiter();
                 } else if (this.state.fileFormat === "delimitedColumn") {
-                    this.insertToClipboard(this.convertColumnValuesToCSVString().replace(/,$/g, ""));
+                    //this.insertToClipboard(this.convertColumnValuesToCSVString().replace(/,$/g, ""));
+                    myWorker.postMessage({column: this.state.columnChosen, data: this.state.data, columns: this.state.columns});
+                    myWorker.onmessage = (m) => {
+                        console.log("msg from worker: ", m.data);
+                    };
                 } else if (this.state.fileFormat === "json") {
                     this.copyTableAsJSON();
                 } else if (this.state.fileFormat === "xml") {
