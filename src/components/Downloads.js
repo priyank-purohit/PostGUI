@@ -688,8 +688,8 @@ const styleSheet = {
     },
     textFieldCopyOutput: {
         marginLeft: 32,
-        marginRight: 8,
-        width: '80%'
+        marginRight: 0,
+        width: '70%'
     },
     hidden: {
         display: 'none'
