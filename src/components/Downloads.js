@@ -446,11 +446,11 @@ class Downloads extends Component {
                     //     this.setState({copyLoading: false, copyResult: m.data});
                     // };
                 } else if (this.state.fileFormat === "xml") {
-                    //this.copyTableAsXML();
-                    myWorker.postMessage({method: 'xml', data: this.state.data});
-                    myWorker.onmessage = (m) => {
-                        this.setState({copyLoading: false, copyResult: m.data});
-                    };
+                    this.copyTableAsXML();
+                    // myWorker.postMessage({method: 'xml', data: this.state.data});
+                    // myWorker.onmessage = (m) => {
+                    //     this.setState({copyLoading: false, copyResult: m.data});
+                    // };
                 } else if (this.state.fileFormat === "fasta") {
                     //this.downloadTableAsFASTA();
                 }
