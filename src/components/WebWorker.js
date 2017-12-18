@@ -15,15 +15,7 @@ const workercode = () => {
             }
 
             output = output.replace(/,$/g, "");
-
-            var buf = new ArrayBuffer(output.length * 2); // 2 bytes for each char
-            var bufView = new Uint16Array(buf);
-            for (var i = 0, outputLen = output.length; i < outputLen; i++) {
-                bufView[i] = output.charCodeAt(i);
-            }
-            //return buf;
-            self.postMessage(bufView.buffer, [bufView.buffer]);
-            //self.postMessage(output);
+            self.postMessage(output);
         } else if (e.data.method === "json") {
             // Convert the posted data to JSON string...
             let data = e.data.data;

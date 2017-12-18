@@ -426,12 +426,7 @@ class Downloads extends Component {
         });
     }
     
-    ab2str(buf) {
-        return String.fromCharCode.apply(null, new Uint16Array(buf));
-    }
-    
     handleCopyClick() {
-        let enc = new TextDecoder();
         this.setState({copyLoading: true}, () => {
             if (this.state.getFullResult === true) {
                 let dataFullURL = this.state.url.replace(/limit=\d*/g, "limit=" + maxRowsInDownload);
@@ -442,19 +437,19 @@ class Downloads extends Component {
                 } else if (this.state.fileFormat === "delimitedColumn") {
                     myWorker.postMessage({method: 'delimitedColumn', column: this.state.columnChosen, data: this.state.data, columns: this.state.columns});
                     myWorker.onmessage = (m) => {
-                        this.setState({copyLoading: false, copyResult: enc.decode(m.data)});
+                        this.setState({copyLoading: false, copyResult: m.data});
                     };
                 } else if (this.state.fileFormat === "json") {
                     this.copyTableAsJSON();
                     // myWorker.postMessage({method: 'json', data: this.state.data});
                     // myWorker.onmessage = (m) => {
-                    //     this.setState({copyLoading: false, copyResult: enc.decode(m.data)});
+                    //     this.setState({copyLoading: false, copyResult: m.data});
                     // };
                 } else if (this.state.fileFormat === "xml") {
                     //this.copyTableAsXML();
                     myWorker.postMessage({method: 'xml', data: this.state.data});
                     myWorker.onmessage = (m) => {
-                        this.setState({copyLoading: false, copyResult: enc.decode(m.data)});
+                        this.setState({copyLoading: false, copyResult: m.data});
                     };
                 } else if (this.state.fileFormat === "fasta") {
                     //this.downloadTableAsFASTA();
