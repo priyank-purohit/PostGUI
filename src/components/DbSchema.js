@@ -583,7 +583,7 @@ class DbSchema extends Component {
 				{this.state.searchTerm !== "" ? <Chip label={"Searching: " + searchTermTrucated} className={classes.chipClasses} onRequestDelete={this.handleSearchClose} /> : null}
 				<Snackbar 	anchorOrigin={{vertical: "bottom", horizontal: "center"}}
 							open={this.state.snackBarVisibility}
-							onRequestClose={this.handleRequestClose}
+							onClose={this.handleRequestClose}
 							SnackbarContentProps={{ 'aria-describedby': 'message-id', }}
 							message={<span id="message-id">{this.state.snackBarMessage}</span>}
 							action={[ <IconButton key="close" aria-label="Close" color="accent" className={classes.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton> ]} />
