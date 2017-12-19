@@ -10,16 +10,17 @@ import IconButton from 'material-ui/IconButton';
 import Button from 'material-ui/Button';
 import EditIcon from 'material-ui-icons/Edit';
 import DeleteIcon from 'material-ui-icons/Delete';
+import CloseIcon from 'material-ui-icons/Close';
 //import LinkIcon from 'material-ui-icons/Link';
 
 let _ = require('lodash');
 let lib = require("../utils/library.js");
+let displayLengthCutoff = 50;
 
 class HistoryPane extends Component {
 	constructor(props) {
 		super(props);
 
-		//localStorage.setItem("localHistory", JSON.stringify([["http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(protein_id.eq.ALP80_00672,genome_designation.eq.PfrICMP7712)&limit=25000", {"condition":"AND","rules":[{"id":"protein_id","field":"protein_id","type":"string","input":"text","operator":"equal","value":"ALP80_00672"},{"id":"genome_designation","field":"genome_designation","type":"string","input":"text","operator":"equal","value":"PfrICMP7712"}],"not":false,"valid":true}],["http://hopper.csb.utoronto.ca:3001/annotation_go?and=(go_id.eq.GO:0005215)&limit=25000", {"condition":"AND","rules":[{"id":"go_id","field":"go_id","type":"string","input":"text","operator":"equal","value":"GO:0005215"}],"not":false,"valid":true}],["http://hopper.csb.utoronto.ca:3001/annotation_pathway?and=(pathway_name.ilike.*Lipid metabolism*)&limit=25000", {"condition":"AND","rules":[{"id":"pathway_name","field":"pathway_name","type":"string","input":"text","operator":"contains","value":"Lipid metabolism"}],"not":false,"valid":true}],["http://hopper.csb.utoronto.ca:3001/gene_feature?and=(nuc_length.gte.2500)&limit=25000", {"condition":"AND","rules":[{"id":"nuc_length","field":"nuc_length","type":"string","input":"text","operator":"greater_or_equal","value":"2500"}],"not":false,"valid":true}],["http://hopper.csb.utoronto.ca:3001/genome_characteristics?and=(host_common.eq.wheat)&limit=25000", {"condition":"AND","rules":[{"id":"host_common","field":"host_common","type":"string","input":"text","operator":"equal","value":"wheat"}],"not":false,"valid":true}],["http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(protein_id.ilike.*ALP80*,genome_designation.eq.PfrICMP7712,description.ilike.*kinase*,or(significance_value.eq.2.6e-200,significance_value.lte.2e-28))&limit=25000",{"condition":"AND","rules":[{"id":"protein_id","field":"protein_id","type":"string","input":"text","operator":"contains","value":"ALP80"},{"id":"genome_designation","field":"genome_designation","type":"string","input":"text","operator":"equal","value":"PfrICMP7712"},{"id":"description","field":"description","type":"string","input":"text","operator":"contains","value":"kinase"},{"condition":"OR","rules":[{"id":"significance_value","field":"significance_value","type":"double","input":"number","operator":"equal","value":"2.6e-200"},{"id":"significance_value","field":"significance_value","type":"double","input":"number","operator":"less_or_equal","value":"2e-28"}],"not":false}],"not":false,"valid":true}],["http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(protein_id.ilike.*ALP80*,genome_designation.eq.PfrICMP7712,description.ilike.*kinase*,or(significance_value.eq.2.6e-200,significance_value.lte.2e-28,and(significance_value.gte.5.4e-27,significance_value.lte.1.9e-22)))&limit=25000",{"condition":"AND","rules":[{"id":"protein_id","field":"protein_id","type":"string","input":"text","operator":"contains","value":"ALP80"},{"id":"genome_designation","field":"genome_designation","type":"string","input":"text","operator":"equal","value":"PfrICMP7712"},{"id":"description","field":"description","type":"string","input":"text","operator":"contains","value":"kinase"},{"condition":"OR","rules":[{"id":"significance_value","field":"significance_value","type":"double","input":"number","operator":"equal","value":"2.6e-200"},{"id":"significance_value","field":"significance_value","type":"double","input":"number","operator":"less_or_equal","value":"2e-28"},{"condition":"AND","rules":[{"id":"significance_value","field":"significance_value","type":"double","input":"number","operator":"greater_or_equal","value":"5.4e-27"},{"id":"significance_value","field":"significance_value","type":"double","input":"number","operator":"less_or_equal","value":"1.9e-22"}],"not":false}],"not":false}],"not":false,"valid":true}],["http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(protein_id.ilike.*ALP80*,genome_designation.eq.PfrICMP7712,description.ilike.*kinase*,or(significance_value.eq.2.6e-200,significance_value.lte.2e-28,and(significance_value.gte.5.4e-27,significance_value.lte.1.9e-22)),not.and(description.ilike.*Shikimate*))&limit=25000",{"condition":"AND","rules":[{"id":"protein_id","field":"protein_id","type":"string","input":"text","operator":"contains","value":"ALP80"},{"id":"genome_designation","field":"genome_designation","type":"string","input":"text","operator":"equal","value":"PfrICMP7712"},{"id":"description","field":"description","type":"string","input":"text","operator":"contains","value":"kinase"},{"condition":"OR","rules":[{"id":"significance_value","field":"significance_value","type":"double","input":"number","operator":"equal","value":"2.6e-200"},{"id":"significance_value","field":"significance_value","type":"double","input":"number","operator":"less_or_equal","value":"2e-28"},{"condition":"AND","rules":[{"id":"significance_value","field":"significance_value","type":"double","input":"number","operator":"greater_or_equal","value":"5.4e-27"},{"id":"significance_value","field":"significance_value","type":"double","input":"number","operator":"less_or_equal","value":"1.9e-22"}],"not":false}],"not":false},{"condition":"AND","rules":[{"id":"description","field":"description","type":"string","input":"text","operator":"contains","value":"Shikimate"}],"not":true}],"not":false,"valid":true}]]));
 		let localHistoryArray = JSON.parse(localStorage.getItem("localHistory") ? localStorage.getItem("localHistory") : "[]");
 		localHistoryArray = JSON.stringify(localHistoryArray) === "[]" ? null : localHistoryArray;
 
@@ -30,7 +31,7 @@ class HistoryPane extends Component {
 			newHistoryItem: this.props.newHistoryItem,
 			displayIndex: -1,
 			historyArray: localHistoryArray ? localHistoryArray : [["http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(protein_id.eq.ALP80_00672,genome_designation.eq.PfrICMP7712)&limit=25000", { "condition": "AND", "rules": [{ "id": "protein_id", "field": "protein_id", "type": "string", "input": "text", "operator": "equal", "value": "ALP80_00672" }, { "id": "genome_designation", "field": "genome_designation", "type": "string", "input": "text", "operator": "equal", "value": "PfrICMP7712" }], "not": false, "valid": true }], ["http://hopper.csb.utoronto.ca:3001/annotation_go?and=(go_id.eq.GO:0005215)&limit=25000", { "condition": "AND", "rules": [{ "id": "go_id", "field": "go_id", "type": "string", "input": "text", "operator": "equal", "value": "GO:0005215" }], "not": false, "valid": true }], ["http://hopper.csb.utoronto.ca:3001/annotation_pathway?and=(pathway_name.ilike.*Lipid metabolism*)&limit=25000", { "condition": "AND", "rules": [{ "id": "pathway_name", "field": "pathway_name", "type": "string", "input": "text", "operator": "contains", "value": "Lipid metabolism" }], "not": false, "valid": true }], ["http://hopper.csb.utoronto.ca:3001/gene_feature?and=(nuc_length.gte.2500)&limit=25000", { "condition": "AND", "rules": [{ "id": "nuc_length", "field": "nuc_length", "type": "string", "input": "text", "operator": "greater_or_equal", "value": "2500" }], "not": false, "valid": true }], ["http://hopper.csb.utoronto.ca:3001/genome_characteristics?and=(host_common.eq.wheat)&limit=25000", { "condition": "AND", "rules": [{ "id": "host_common", "field": "host_common", "type": "string", "input": "text", "operator": "equal", "value": "wheat" }], "not": false, "valid": true }], ["http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(protein_id.ilike.*ALP80*,genome_designation.eq.PfrICMP7712,description.ilike.*kinase*,or(significance_value.eq.2.6e-200,significance_value.lte.2e-28))&limit=25000", { "condition": "AND", "rules": [{ "id": "protein_id", "field": "protein_id", "type": "string", "input": "text", "operator": "contains", "value": "ALP80" }, { "id": "genome_designation", "field": "genome_designation", "type": "string", "input": "text", "operator": "equal", "value": "PfrICMP7712" }, { "id": "description", "field": "description", "type": "string", "input": "text", "operator": "contains", "value": "kinase" }, { "condition": "OR", "rules": [{ "id": "significance_value", "field": "significance_value", "type": "double", "input": "number", "operator": "equal", "value": "2.6e-200" }, { "id": "significance_value", "field": "significance_value", "type": "double", "input": "number", "operator": "less_or_equal", "value": "2e-28" }], "not": false }], "not": false, "valid": true }], ["http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(protein_id.ilike.*ALP80*,genome_designation.eq.PfrICMP7712,description.ilike.*kinase*,or(significance_value.eq.2.6e-200,significance_value.lte.2e-28,and(significance_value.gte.5.4e-27,significance_value.lte.1.9e-22)))&limit=25000", { "condition": "AND", "rules": [{ "id": "protein_id", "field": "protein_id", "type": "string", "input": "text", "operator": "contains", "value": "ALP80" }, { "id": "genome_designation", "field": "genome_designation", "type": "string", "input": "text", "operator": "equal", "value": "PfrICMP7712" }, { "id": "description", "field": "description", "type": "string", "input": "text", "operator": "contains", "value": "kinase" }, { "condition": "OR", "rules": [{ "id": "significance_value", "field": "significance_value", "type": "double", "input": "number", "operator": "equal", "value": "2.6e-200" }, { "id": "significance_value", "field": "significance_value", "type": "double", "input": "number", "operator": "less_or_equal", "value": "2e-28" }, { "condition": "AND", "rules": [{ "id": "significance_value", "field": "significance_value", "type": "double", "input": "number", "operator": "greater_or_equal", "value": "5.4e-27" }, { "id": "significance_value", "field": "significance_value", "type": "double", "input": "number", "operator": "less_or_equal", "value": "1.9e-22" }], "not": false }], "not": false }], "not": false, "valid": true }], ["http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(protein_id.ilike.*ALP80*,genome_designation.eq.PfrICMP7712,description.ilike.*kinase*,or(significance_value.eq.2.6e-200,significance_value.lte.2e-28,and(significance_value.gte.5.4e-27,significance_value.lte.1.9e-22)),not.and(description.ilike.*Shikimate*))&limit=25000", { "condition": "AND", "rules": [{ "id": "protein_id", "field": "protein_id", "type": "string", "input": "text", "operator": "contains", "value": "ALP80" }, { "id": "genome_designation", "field": "genome_designation", "type": "string", "input": "text", "operator": "equal", "value": "PfrICMP7712" }, { "id": "description", "field": "description", "type": "string", "input": "text", "operator": "contains", "value": "kinase" }, { "condition": "OR", "rules": [{ "id": "significance_value", "field": "significance_value", "type": "double", "input": "number", "operator": "equal", "value": "2.6e-200" }, { "id": "significance_value", "field": "significance_value", "type": "double", "input": "number", "operator": "less_or_equal", "value": "2e-28" }, { "condition": "AND", "rules": [{ "id": "significance_value", "field": "significance_value", "type": "double", "input": "number", "operator": "greater_or_equal", "value": "5.4e-27" }, { "id": "significance_value", "field": "significance_value", "type": "double", "input": "number", "operator": "less_or_equal", "value": "1.9e-22" }], "not": false }], "not": false }, { "condition": "AND", "rules": [{ "id": "description", "field": "description", "type": "string", "input": "text", "operator": "contains", "value": "Shikimate" }], "not": true }], "not": false, "valid": true }]],
-			dialogVisibility: this.props.classes.hide
+			deleteHistoryDialogVisibility: this.props.classes.hide
 		};
 		this.changeDisplayIndexDebounce = _.debounce(value => this.setState({ displayIndex: value }), 300);
 	}
@@ -107,7 +108,6 @@ class HistoryPane extends Component {
 		return url.replace(lib.getDbConfig(this.props.dbIndex, "url"), "").replace(/.*\?/, "").replace(/&/g, "\n").replace(/,/g, ",\n").replace(/limit=\d*/g, "");
 	}
 
-
 	recursiveRulesExtraction(rules, condition, depth = 0) {
 		let rulesArray = [];
 		if (rules.length > 1) {
@@ -138,13 +138,13 @@ class HistoryPane extends Component {
 
 	showDeleteHistoryDialog() {
 		const classes = this.props.classes;
-		if (this.state.dialogVisibility === null) {
+		if (this.state.deleteHistoryDialogVisibility === null) {
 			this.setState({
-				dialogVisibility: classes.hide
+				deleteHistoryDialogVisibility: classes.hide
 			});
 		} else {
 			this.setState({
-				dialogVisibility: null
+				deleteHistoryDialogVisibility: null
 			});
 		}
 	}
@@ -161,43 +161,60 @@ class HistoryPane extends Component {
 
 	render() {
 		const classes = this.props.classes;
-		const sideList = (
+		const historyPanelItemsList = (
 			<div className={classes.list}>
 				<List
 					dense
 					subheader={<ListSubheader>Query History
 								<IconButton style={{ float: "right" }}
-							aria-label="Delete"
-							onClick={this.showDeleteHistoryDialog.bind(this)}>
-							<DeleteIcon />
-						</IconButton>
-					</ListSubheader>}>
-					<div style={{ marginLeft: "250px", height: "100px", width: "100%" }} className={this.state.dialogVisibility}>
+									aria-label="Close"
+									onClick={this.closeDrawer.bind(this)}>
+									<CloseIcon />
+								</IconButton>
+								<IconButton style={{ float: "right" }}
+									aria-label="Delete"
+									onClick={this.showDeleteHistoryDialog.bind(this)}>
+									<DeleteIcon />
+								</IconButton>
+							</ListSubheader>}>
+
+					{/* Delete History Button and Dialog */}
+					<div style={{ height: "100px", width: "100%", marginLeft: "130px" }} className={this.state.deleteHistoryDialogVisibility}>
 						<ListSubheader style={{ marginLeft: "10px" }}>Delete history?</ListSubheader>
 						<Button onClick={this.deleteHistory.bind(this)} dense raised style={{ margin: "5px" }}>Yes</Button>
 						<Button onClick={this.showDeleteHistoryDialog.bind(this)} dense raised color="primary" style={{ margin: "5px" }}>No</Button>
 					</div>
+
+					{/* History Items List */}
 					{
 						this.state.historyArray.slice(0).reverse().map((item) => {
+							let tableName = this.extractTableNameFromURL(item[0]);
+							if (tableName.length > displayLengthCutoff) {
+								tableName = tableName.substring(0, displayLengthCutoff) + "...";
+							}
+
+							// If both a table name and rules are present, then display it with limited number of rows for rules
 							if (item[0] && item[1]) {
 								let rules = this.recursiveRulesExtraction(item[1]['rules'], item[1]['condition'], 0);
 								let index = lib.elementPositionInArray(item, this.state.historyArray);
 
-								// When user hovers over an item, show rest of the lines
+								// When user hovers over a history item, show rest of the lines
 								let classNames = this.props.classes.hide;
 								if (this.state.displayIndex === index) {
 									classNames = null;
 								}
 
+
 								return (
 									<ListItem button key={index} onMouseEnter={this.changeDisplayIndex.bind(this, index)} onClick={this.handleHistoryItemClick.bind(this, index)}>
-
+										{/* Clicking on this edit button should load the history item in the Query Builder */}
 										<ListItemIcon className={classes.noStyleButton} onClick={this.handleHistoryItemClick.bind(this, index)}>
 											<EditIcon />
 										</ListItemIcon>
 
+										{/* Nicely formatted history item */}
 										<div>
-											<ListItemText primary={this.extractTableNameFromURL(item[0])} />
+											<ListItemText primary={tableName} />
 											{
 												rules.map((rule) => {
 													let displayStr = "";
@@ -224,13 +241,17 @@ class HistoryPane extends Component {
 													displayStr = displayStr.replace(columnName, displayName).replace(rawOperator, niceOperator).replace(/\t/g, " . . ");
 													let currRuleIndexInRules = lib.elementPositionInArray(rule, rules);
 
+													if (displayStr.length > displayLengthCutoff) {
+														displayStr = displayStr.substring(0, displayLengthCutoff) + "...";
+													}
+
 													return <ListItemText secondary={displayStr} key={index + rule} className={currRuleIndexInRules > 3 ? classNames : null} />;
 												})
 											}
 										</div>
 									</ListItem>
 								);
-							} else {
+							} else { // If only table name is present, then display just a table name
 								let index = lib.elementPositionInArray(item, this.state.historyArray);
 
 								return (
@@ -241,7 +262,7 @@ class HistoryPane extends Component {
 										</ListItemIcon>
 
 										<div>
-											<ListItemText primary={this.extractTableNameFromURL(item[0])} />
+											<ListItemText primary={tableName} />
 										</div>
 									</ListItem>
 								);
@@ -255,7 +276,7 @@ class HistoryPane extends Component {
 		return (
 			<Drawer anchor="right" open={this.state.historyPaneVisibility} onClose={this.closeDrawer.bind(this)}>
 				<div tabIndex={0} role="button">
-					{sideList}
+					{historyPanelItemsList}
 				</div>
 			</Drawer>
 		);
