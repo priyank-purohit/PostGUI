@@ -91,7 +91,7 @@ class HistoryPane extends Component {
 		this.setState({
 			historyPaneVisibility: false,
 		});
-	};
+	}
 
 	extractTableNameFromURL(url, getRaw = false) {
 		let rawTableName = url.replace(lib.getDbConfig(this.props.dbIndex, "url"), "").replace(/\?.*/, "").replace(/\s/g, "").replace("/", "");
@@ -188,84 +188,93 @@ class HistoryPane extends Component {
 					{/* History Items List */}
 					{
 						this.state.historyArray.slice(0).reverse().map((item) => {
-							let tableName = this.extractTableNameFromURL(item[0]);
-							if (tableName.length > displayLengthCutoff) {
-								tableName = tableName.substring(0, displayLengthCutoff) + "...";
-							}
+							// Item[0] is the URL
+							// Item[1] are the rules?
 
-							// If both a table name and rules are present, then display it with limited number of rows for rules
-							if (item[0] && item[1]) {
-								let rules = this.recursiveRulesExtraction(item[1]['rules'], item[1]['condition'], 0);
-								let index = lib.elementPositionInArray(item, this.state.historyArray);
+							// Display the current item iff it belongs to currently active db
+							if (item[0].indexOf(lib.getDbConfig(this.props.dbIndex, "url")) >= 0) {
 
-								// When user hovers over a history item, show rest of the lines
-								let classNames = this.props.classes.hide;
-								if (this.state.displayIndex === index) {
-									classNames = null;
+								let tableName = this.extractTableNameFromURL(item[0]);
+								if (tableName.length > displayLengthCutoff) {
+									tableName = tableName.substring(0, displayLengthCutoff) + "...";
 								}
 
+								// If there are rules are present, then display it with limited number of rows for rules
+								if (item[0] && item[1]) {
+									let rules = this.recursiveRulesExtraction(item[1]['rules'], item[1]['condition'], 0);
+									let index = lib.elementPositionInArray(item, this.state.historyArray);
 
-								return (
-									<ListItem button key={index} onMouseEnter={this.changeDisplayIndex.bind(this, index)} onClick={this.handleHistoryItemClick.bind(this, index)}>
-										{/* Clicking on this edit button should load the history item in the Query Builder */}
-										<ListItemIcon className={classes.noStyleButton} onClick={this.handleHistoryItemClick.bind(this, index)}>
-											<EditIcon />
-										</ListItemIcon>
+									// When user hovers over a history item, show rest of the lines
+									let classNames = this.props.classes.hide;
+									if (this.state.displayIndex === index) {
+										classNames = null;
+									}
 
-										{/* Nicely formatted history item */}
-										<div>
-											<ListItemText primary={tableName} />
-											{
-												rules.map((rule) => {
-													let displayStr = "";
-													let columnName = "";
-													let displayName = "";
-													let rawOperator = "";
-													let niceOperator = "";
-													for (let i = 0; i < rule.length; i++) {
-														displayStr += " " + rule[i] + " ";
-														// if there are more than 1 rules (i.e. it's not AND/OR only) then extract column name
-														if (i === 1) {
-															columnName = rule[0].replace(/\s/g, "");
-															rawOperator = rule[1].replace(/\s/g, "");
-															niceOperator = lib.translateOperatorToHuman(rawOperator);
+
+									return (
+										<ListItem button key={index} onMouseEnter={this.changeDisplayIndex.bind(this, index)} onClick={this.handleHistoryItemClick.bind(this, index)}>
+											{/* Clicking on this edit button should load the history item in the Query Builder */}
+											<ListItemIcon className={classes.noStyleButton} onClick={this.handleHistoryItemClick.bind(this, index)}>
+												<EditIcon />
+											</ListItemIcon>
+
+											{/* Nicely formatted history item */}
+											<div>
+												<ListItemText primary={tableName} />
+												{
+													rules.map((rule) => {
+														let displayStr = "";
+														let columnName = "";
+														let displayName = "";
+														let rawOperator = "";
+														let niceOperator = "";
+														for (let i = 0; i < rule.length; i++) {
+															displayStr += " " + rule[i] + " ";
+															// if there are more than 1 rules (i.e. it's not AND/OR only) then extract column name
+															if (i === 1) {
+																columnName = rule[0].replace(/\s/g, "");
+																rawOperator = rule[1].replace(/\s/g, "");
+																niceOperator = lib.translateOperatorToHuman(rawOperator);
+															}
 														}
-													}
 
-													// find column's rename rules from config
-													if (columnName) {
-														let columnRename = lib.getColumnConfig(this.props.dbIndex, this.extractTableNameFromURL(item[0], true), columnName, "rename");
-														displayName = columnRename ? columnRename : columnName;
-													}
+														// find column's rename rules from config
+														if (columnName) {
+															let columnRename = lib.getColumnConfig(this.props.dbIndex, this.extractTableNameFromURL(item[0], true), columnName, "rename");
+															displayName = columnRename ? columnRename : columnName;
+														}
 
-													displayStr = displayStr.replace(columnName, displayName).replace(rawOperator, niceOperator).replace(/\t/g, " . . ");
-													let currRuleIndexInRules = lib.elementPositionInArray(rule, rules);
+														displayStr = displayStr.replace(columnName, displayName).replace(rawOperator, niceOperator).replace(/\t/g, " . . ");
+														let currRuleIndexInRules = lib.elementPositionInArray(rule, rules);
 
-													if (displayStr.length > displayLengthCutoff) {
-														displayStr = displayStr.substring(0, displayLengthCutoff) + "...";
-													}
+														if (displayStr.length > displayLengthCutoff) {
+															displayStr = displayStr.substring(0, displayLengthCutoff) + "...";
+														}
 
-													return <ListItemText secondary={displayStr} key={index + rule} className={currRuleIndexInRules > 3 ? classNames : null} />;
-												})
-											}
-										</div>
-									</ListItem>
-								);
-							} else { // If only table name is present, then display just a table name
-								let index = lib.elementPositionInArray(item, this.state.historyArray);
+														return <ListItemText secondary={displayStr} key={index + rule} className={currRuleIndexInRules > 3 ? classNames : null} />;
+													})
+												}
+											</div>
+										</ListItem>
+									);
+								} else { // If only table name is present, then display just a table name
+									let index = lib.elementPositionInArray(item, this.state.historyArray);
 
-								return (
-									<ListItem button key={index} onMouseEnter={this.changeDisplayIndex.bind(this, index)} onClick={this.handleHistoryItemClick.bind(this, index)}>
+									return (
+										<ListItem button key={index} onMouseEnter={this.changeDisplayIndex.bind(this, index)} onClick={this.handleHistoryItemClick.bind(this, index)}>
 
-										<ListItemIcon className={classes.noStyleButton} onClick={this.handleHistoryItemClick.bind(this, index)}>
-											<EditIcon />
-										</ListItemIcon>
+											<ListItemIcon className={classes.noStyleButton} onClick={this.handleHistoryItemClick.bind(this, index)}>
+												<EditIcon />
+											</ListItemIcon>
 
-										<div>
-											<ListItemText primary={tableName} />
-										</div>
-									</ListItem>
-								);
+											<div>
+												<ListItemText primary={tableName} />
+											</div>
+										</ListItem>
+									);
+								}
+							} else {
+								return null;
 							}
 						})
 					}
