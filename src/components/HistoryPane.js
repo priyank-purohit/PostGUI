@@ -253,7 +253,7 @@ class HistoryPane extends Component {
 		);
 
 		return (
-			<Drawer anchor="right" open={this.state.historyPaneVisibility} onRequestClose={this.closeDrawer.bind(this)}>
+			<Drawer anchor="right" open={this.state.historyPaneVisibility} onClose={this.closeDrawer.bind(this)}>
 				<div tabIndex={0} role="button">
 					{sideList}
 				</div>

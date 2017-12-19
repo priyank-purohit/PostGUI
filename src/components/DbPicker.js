@@ -58,7 +58,7 @@ class DbPicker extends Component {
 						<ListItemText primary="Database" secondary={this.state.databases[this.state.dbIndex]} />
 					</ListItem>
 				</List>
-				<Menu id="lock-menu" anchorEl={this.state.anchorEl} open={this.state.open} onRequestClose={this.handleRequestClose} >
+				<Menu id="lock-menu" anchorEl={this.state.anchorEl} open={this.state.open} onClose={this.handleRequestClose} >
 					{
 						this.state.databases.map((option, index) =>
 							<MenuItem key={option} selected={index === this.state.dbIndex} onClick={event => this.handleMenuItemClick(event, index)} >
