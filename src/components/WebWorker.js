@@ -11,7 +11,12 @@ const workercode = () => {
 
             let output = "";
             for (let i = 0; i < data.length; i++) {
-                output += data[i][columns[column]] + ",";
+                let valueToCopy = data[i][columns[column]];
+                if (valueToCopy.match(/\s/g)) {
+                    output += "\"" + valueToCopy + "\",";
+                } else {
+                    output += valueToCopy + ",";
+                }
             }
 
             output = output.replace(/,$/g, "");
