@@ -11,9 +11,15 @@ import { FormControl, FormGroup, FormControlLabel } from 'material-ui/Form';
 import Checkbox from 'material-ui/Checkbox';
 import TextField from 'material-ui/TextField';
 import Divider from 'material-ui/Divider';
+import IconButton from 'material-ui/IconButton';
 import { LinearProgress } from 'material-ui/Progress';
 import Menu, { MenuItem } from 'material-ui/Menu';
 import List, { ListItem, ListItemText } from 'material-ui/List';
+
+import CopyIcon from 'material-ui-icons/ContentCopy';
+
+import worker_script from './WebWorker';
+var myWorker = new Worker(worker_script);
 
 const timeout = 2000;
 const maxRowsInDownload = 2500000;
@@ -42,7 +48,8 @@ class Downloads extends Component {
             fileNameAuto: '',
 			anchorEl: undefined,
             open: false,
-            copyLoading: false
+            copyLoading: false,
+            copyResult: ""
         };
     }
 
@@ -174,15 +181,22 @@ class Downloads extends Component {
         if (dataFullStatus === false && JSON.stringify(this.state.data) !== "[]") {
             try {
                 let result = JSON.stringify(this.state.data);
-                this.insertToClipboard(result);
+                this.setState({copyResult: result});
+                let copySuccess = this.insertToClipboard(result)
+                if (copySuccess) {
+                    this.setState({copyLoading: false});
+                }
             } catch (err) {
                 console.error(err);
             }
         } else if (dataFullStatus === true) {
             if (JSON.stringify(this.state.dataFull) !== "[]") {
                 try {
-                    let result = JSON.stringify(this.state.dataFull);
-                    this.insertToClipboard(result);
+                    let result = JSON.stringify(this.state.dataFull);    
+                    let copySuccess = this.insertToClipboard(result)
+                    if (copySuccess) {
+                        this.setState({copyLoading: false});
+                    }
                 } catch (err) {
                     console.error(err);
                 }
@@ -218,15 +232,21 @@ class Downloads extends Component {
         if (dataFullStatus === false && JSON.stringify(this.state.data) !== "[]") {
             try {
                 let result = js2xmlparser.parse(this.state.table, this.state.data);
-                this.insertToClipboard(result);
+                let copySuccess = this.insertToClipboard(result)
+                if (copySuccess) {
+                    this.setState({copyLoading: false});
+                }
             } catch (err) {
                 console.error(err);
             }
         } else if (dataFullStatus === true) {
             if (JSON.stringify(this.state.dataFull) !== "[]") {
                 try {
-                    let result = js2xmlparser.parse(this.state.table, this.state.dataFull);
-                    this.insertToClipboard(result);
+                    let result = js2xmlparser.parse(this.state.table, this.state.dataFull);   
+                let copySuccess = this.insertToClipboard(result)
+                if (copySuccess) {
+                    this.setState({copyLoading: false});
+                }
                 } catch (err) {
                     console.error(err);
                 }
@@ -318,27 +338,15 @@ class Downloads extends Component {
         }
     }
 
-    // COLUMN should be the index of the target column in this.state.columns
-    convertColumnValuesToCSVString(column = this.state.columnChosen) {
-        let output = "";
-        for (let i = 0; i < this.state.data.length; i++) {
-            output += this.state.data[i][this.state.columns[column]] + ",";
-        }
-        return output;
-    }
-
     insertToClipboard(str) {
         //based on https://stackoverflow.com/a/12693636
         document.oncopy = function (event) {
             event.clipboardData.setData("Text", str);
             event.preventDefault();
         };
-        document.execCommand("Copy");
+        let copySuccess = document.execCommand("Copy");
         document.oncopy = undefined;
-
-        setTimeout(function() {
-            this.setState({ copyLoading: false })
-        }.bind(this), 1000);
+        return copySuccess;
     }
 
     handleFileFormatChange = (event, fileFormat) => {
@@ -410,7 +418,9 @@ class Downloads extends Component {
             columnChosen: 0,
             tableHeader: true,
             getFullResult: false,
-            fileNameCustom: ''
+            fileNameCustom: '',
+            copyLoading: false,
+            copyResult: ""
         }, () => {
             this.createFileName();
         });
@@ -425,11 +435,22 @@ class Downloads extends Component {
                 if (this.state.fileFormat === "delimited") {
                     //this.downloadTableWithDelimiter();
                 } else if (this.state.fileFormat === "delimitedColumn") {
-                    this.insertToClipboard(this.convertColumnValuesToCSVString().replace(/,$/g, ""));
+                    myWorker.postMessage({method: 'delimitedColumn', column: this.state.columnChosen, data: this.state.data, columns: this.state.columns});
+                    myWorker.onmessage = (m) => {
+                        this.setState({copyLoading: false, copyResult: m.data});
+                    };
                 } else if (this.state.fileFormat === "json") {
                     this.copyTableAsJSON();
+                    // myWorker.postMessage({method: 'json', data: this.state.data});
+                    // myWorker.onmessage = (m) => {
+                    //     this.setState({copyLoading: false, copyResult: m.data});
+                    // };
                 } else if (this.state.fileFormat === "xml") {
                     this.copyTableAsXML();
+                    // myWorker.postMessage({method: 'xml', data: this.state.data});
+                    // myWorker.onmessage = (m) => {
+                    //     this.setState({copyLoading: false, copyResult: m.data});
+                    // };
                 } else if (this.state.fileFormat === "fasta") {
                     //this.downloadTableAsFASTA();
                 }
@@ -442,6 +463,10 @@ class Downloads extends Component {
                 });
             }
         });
+    }
+
+    handleCopyOutputClick() {
+        //
     }
 
     handleDownloadClick() {
@@ -607,6 +632,20 @@ class Downloads extends Component {
                                 margin="normal" />
                         </FormGroup>
 
+                        <div className={classes.cardcardMarginLeftTop && classes.cardcardMarginBottomRight}>
+                            <TextField
+                                id="copyOutput" 
+                                type="text"
+                                label="Ctrl A and Ctrl C to copy"
+                                value={this.state.copyResult}
+                                onChange={this.handleCopyOutputClick.bind(this)}
+                                className={this.state.copyResult === "" ? classes.hidden : classes.textFieldCopyOutput} 
+                                margin="normal" />
+                            <IconButton onClick={this.insertToClipboard.bind(this, this.state.copyResult)} className={this.state.copyResult === "" ? classes.hidden : classes.button} aria-label="Copy">
+                                <CopyIcon />
+                            </IconButton>
+                        </div>
+
                         {this.state.copyLoading === true ? <LinearProgress color="primary" className={classes.linearProgressClass} /> : <Divider />}
                         
                         <Button color="primary" className={classes.button} onClick={this.handleDownloadClick.bind(this)} disabled={this.state.fileFormat === 'delimitedColumn'} >Download</Button>
@@ -668,6 +707,11 @@ const styleSheet = {
     textField: {
         marginLeft: 8,
         marginRight: 8
+    },
+    textFieldCopyOutput: {
+        marginLeft: 32,
+        marginRight: 0,
+        width: '70%'
     },
     hidden: {
         display: 'none'
