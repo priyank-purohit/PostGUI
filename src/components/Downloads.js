@@ -587,6 +587,11 @@ class Downloads extends Component {
                                 <FormControlLabel control={ <Radio /> } label="JSON" value="json" />
                                 <FormControlLabel control={ <Radio /> } label="XML" value="xml" />
                                 <FormControlLabel control={ <Radio /> } label="FASTA" value="fasta" className={this.identifySeqColumnInStateColumns() === null ? classes.hidden : null}/>
+
+                                <span className={this.state.fileFormat !== 'fasta' ? classes.hidden : classes.inlineTextField}>
+                                    <Typography>Note: FASTA header is composed from visible columns</Typography>
+                                </span>
+
                                 <FormControlLabel control={ <Radio /> } label="Delimited column values" value="delimitedColumn" />
                                 <span className={this.state.fileFormat !== 'delimitedColumn' ? classes.hidden : classes.inlineTextField}>
                                     <List>
@@ -594,7 +599,7 @@ class Downloads extends Component {
                                             <ListItemText primary="Choose a column" secondary={this.state.columns[this.state.columnChosen]} />
                                         </ListItem>
                                     </List>
-                                    <Menu id="columnMenu" anchorEl={this.state.anchorEl} open={this.state.open} onRequestClose={this.handleRequestClose} >
+                                    <Menu id="columnMenu" anchorEl={this.state.anchorEl} open={this.state.open} onClose={this.handleRequestClose} >
                                         {
                                             this.state.columns.map((option, index) =>
                                                 <MenuItem key={option} selected={index === this.state.columnChosen} onClick={event => this.handleMenuItemClick(event, index)} >
