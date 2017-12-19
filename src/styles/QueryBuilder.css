@@ -60,7 +60,7 @@
 
 .query-builder .btn-success {
   color: #FFF;
-  background-color: #5CB85C;
+  background-color: #66BB6A;
   border-color: #4CAE4C;
 }
 
@@ -79,7 +79,7 @@
 
 .query-builder .btn-danger {
   color: #FFF;
-  background-color: #D9534F;
+  background-color: #EF5350;
   border-color: #D43F3A;
 }
 
@@ -99,7 +99,7 @@
 .query-builder .btn-primary:focus,
 .query-builder .btn-primary:hover {
   color: #FFF;
-  background-color: #286090;
+  background-color: #5C6BC0;
   border-color: #204D74;
 }
 
