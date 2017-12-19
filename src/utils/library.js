@@ -148,11 +148,11 @@ exports.getQBFilters = function(dbIndex, table, columns, definitions = null) {
 		let type = this.getColumnConfig(dbIndex, table, columns[i], "type");
 		if (type === null && definitions !== null) {
 			let pgRestType = definitions[table]['properties'][columns[i]]['type'];
-			if (pgRestType === 'numeric') {
+			if (pgRestType === 'number' || pgRestType === 'numeric') {
 				pgRestType = 'double';
 			}
 			type = pgRestType;
-			//console.log("Assigning type of column =", columns[i], "from the PostgREST resp as", type);
+			console.log("Assigning type of column =", columns[i], "from the PostgREST resp as", type);
 		}
 		
 		let operators = this.getColumnConfig(dbIndex, table, columns[i], "operators");
