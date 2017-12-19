@@ -167,16 +167,16 @@ class HistoryPane extends Component {
 					dense
 					subheader={<ListSubheader>Query History
 								<IconButton style={{ float: "right" }}
-									aria-label="Close"
-									onClick={this.closeDrawer.bind(this)}>
-									<CloseIcon />
-								</IconButton>
-								<IconButton style={{ float: "right" }}
-									aria-label="Delete"
-									onClick={this.showDeleteHistoryDialog.bind(this)}>
-									<DeleteIcon />
-								</IconButton>
-							</ListSubheader>}>
+							aria-label="Close"
+							onClick={this.closeDrawer.bind(this)}>
+							<CloseIcon />
+						</IconButton>
+						<IconButton style={{ float: "right" }}
+							aria-label="Delete"
+							onClick={this.showDeleteHistoryDialog.bind(this)}>
+							<DeleteIcon />
+						</IconButton>
+					</ListSubheader>}>
 
 					{/* Delete History Button and Dialog */}
 					<div style={{ height: "100px", width: "100%", marginLeft: "130px" }} className={this.state.deleteHistoryDialogVisibility}>
