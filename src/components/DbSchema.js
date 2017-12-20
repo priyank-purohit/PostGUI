@@ -158,27 +158,27 @@ class DbSchema extends Component {
 
 		let rawSearchTerm = this.state.searchTerm.toLowerCase().match(/(?:[^\s"]+|"[^"]*")+/g); // Splits on all sapces that are not contained within double quotes
 
-		console.log("Raw search term is", rawSearchTerm, "that was split as:");
+		//console.log("Raw search term is", rawSearchTerm, "that was split as:");
 		_.forEach(rawSearchTerm, term => {
 			if (term) {
-				console.log("\tUnderstanding term", term);
+				//console.log("\tUnderstanding term", term);
 
 				if (term.indexOf("[table]") > -1 || term.indexOf("[tables]") > -1) {
-					console.log("\t\tSeparating to the tables search term");
+					//console.log("\t\tSeparating to the tables search term");
 					tablesSearchTerm += " " + term.replace("[table]", "").replace("[tables]", "");
 				} else if (term.indexOf("[column]") > -1 || term.indexOf("[columns]") > -1) {
-					console.log("\t\tSeparating to the columns search term");
+					//console.log("\t\tSeparating to the columns search term");
 					columnsSearchTerm += " " + term.replace("[column]", "").replace("[columns]", "");
 				} else {
-					console.log("\t\tSeparating to the global search term");
+					//console.log("\t\tSeparating to the global search term");
 					tablesColumnsSearchTerm += " " + term;
 				}
 			}
 		});
 
-		console.log("Global search is", tablesColumnsSearchTerm);
-		console.log("Table search is", tablesColumnsSearchTerm + tablesSearchTerm);
-		console.log("Column search is", tablesColumnsSearchTerm + columnsSearchTerm);
+		//console.log("Global search is", tablesColumnsSearchTerm);
+		//console.log("Table search is", tablesColumnsSearchTerm + tablesSearchTerm);
+		//console.log("Column search is", tablesColumnsSearchTerm + columnsSearchTerm);
 
 		// Search tables
 		_.forEach(this.searchTables(tablesColumnsSearchTerm + tablesSearchTerm), table => {
