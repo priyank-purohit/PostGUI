@@ -142,7 +142,7 @@ class DbSchema extends Component {
 		annotations[table] domain[column]
 		annotations[column] domain[column]
 		annotations[table] id[column]
-		annotations domain[table]
+		annotations domain[table] description[column]
 
 		These get split and separated based on the table or column value supplied in square brackets.
 		Ultimately, the ones without a table/column specific tag are combined with table or column search terms and passed to the correct method...
@@ -152,13 +152,37 @@ class DbSchema extends Component {
 		let tablesSearchTerm = "";
 		let columnsSearchTerm = "";
 
+		let rawSearchTerm = this.state.searchTerm.toLowerCase().split(" ");
+
+		console.log("Raw search term is", rawSearchTerm, "that was split as:");
+		_.forEach(rawSearchTerm, term => {
+			console.log("\tUnderstanding term", term);
+			if (term.indexOf("[table]") > -1) {
+				console.log("\t\tSeparating to the tables search term");
+				tablesSearchTerm += " " + term.replace("[table]", "");
+			} else if (term.indexOf("[column]") > -1) {
+				console.log("\t\tSeparating to the columns search term");
+				columnsSearchTerm += " " + term.replace("[column]", "");
+			} else {
+				console.log("\t\tSeparating to the global search term");
+				tablesColumnsSearchTerm += " " + term;
+			}
+		});
+		
+
+
+
+		console.log("Global search is", tablesColumnsSearchTerm);
+		console.log("Table search is", tablesColumnsSearchTerm + tablesSearchTerm);
+		console.log("Column search is", tablesColumnsSearchTerm + columnsSearchTerm);
+
 		// Search tables
-		_.forEach(this.searchTables(this.state.searchTerm), table => {
+		_.forEach(this.searchTables(tablesColumnsSearchTerm + tablesSearchTerm), table => {
 			dict[table] = [];
 		});
 
 		// Seach columns
-		_.forEach(this.searchColumns(this.state.searchTerm), result => {
+		_.forEach(this.searchColumns(tablesColumnsSearchTerm + columnsSearchTerm), result => {
 			dict[result[0]] = result[1];
 		});
 
@@ -602,7 +626,7 @@ class DbSchema extends Component {
 		}
 		return (
 			<div>
-				{this.state.searchTerm !== "" ? <Chip label={"Searching: " + searchTermTrucated} className={classes.chipClasses} onRequestDelete={this.handleSearchClose} /> : null}
+				{this.state.searchTerm !== "" ? <Chip label={"Searching: " + searchTermTrucated} className={classes.chipClasses} onDelete={this.handleSearchClose} /> : null}
 				<Snackbar 	anchorOrigin={{vertical: "bottom", horizontal: "center"}}
 							open={this.state.snackBarVisibility}
 							onClose={this.handleRequestClose}
