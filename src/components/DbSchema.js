@@ -143,6 +143,7 @@ class DbSchema extends Component {
 		annotations[column] domain[column]
 		annotations[table] id[column]
 		annotations domain[table] description[column]
+		annotations domain[tables] description[column]
 
 		These get split and separated based on the table or column value supplied in square brackets.
 		Ultimately, the ones without a table/column specific tag are combined with table or column search terms and passed to the correct method...
@@ -157,20 +158,18 @@ class DbSchema extends Component {
 		console.log("Raw search term is", rawSearchTerm, "that was split as:");
 		_.forEach(rawSearchTerm, term => {
 			console.log("\tUnderstanding term", term);
-			if (term.indexOf("[table]") > -1) {
+
+			if (term.indexOf("[table]") > -1 || term.indexOf("[tables]") > -1) {
 				console.log("\t\tSeparating to the tables search term");
-				tablesSearchTerm += " " + term.replace("[table]", "");
-			} else if (term.indexOf("[column]") > -1) {
+				tablesSearchTerm += " " + term.replace("[table]", "").replace("[tables]", "");
+			} else if (term.indexOf("[column]") > -1 || term.indexOf("[columns]") > -1) {
 				console.log("\t\tSeparating to the columns search term");
-				columnsSearchTerm += " " + term.replace("[column]", "");
+				columnsSearchTerm += " " + term.replace("[column]", "").replace("[columns]", "");
 			} else {
 				console.log("\t\tSeparating to the global search term");
 				tablesColumnsSearchTerm += " " + term;
 			}
 		});
-		
-
-
 
 		console.log("Global search is", tablesColumnsSearchTerm);
 		console.log("Table search is", tablesColumnsSearchTerm + tablesSearchTerm);
