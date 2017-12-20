@@ -134,12 +134,12 @@ class DbSchema extends Component {
 		let dict = {};
 
 		// Search tables
-		_.forEach(this.searchTables(), table => {
+		_.forEach(this.searchTables(this.state.searchTerm), table => {
 			dict[table] = [];
 		});
 
 		// Seach columns
-		_.forEach(this.searchColumns(), result => {
+		_.forEach(this.searchColumns(this.state.searchTerm), result => {
 			dict[result[0]] = result[1];
 		});
 
@@ -152,9 +152,9 @@ class DbSchema extends Component {
 	}
 
 	// Returns a list of tables matching state.saerchTerm from the current tables' raw and rename names
-	searchTables() {
+	searchTables(searchTerm) {
 		let tableSearchResults = [];
-		let searchTerm = (this.state.searchTerm).toLowerCase().split(" ");
+		searchTerm = (searchTerm).toLowerCase().split(" ");
 		
 		for (let i = 0; i < searchTerm.length; i++) {
 			let splitTerm = searchTerm[i];
@@ -178,9 +178,9 @@ class DbSchema extends Component {
 	}
 
 	// Returns a list of tables that have columns matching state.saerchTerm from the tables' raw and rename column names
-	searchColumns() {
+	searchColumns(searchTerm) {
 		let tableSearchResults = [];
-		let searchTerm = (this.state.searchTerm).toLowerCase().split(" ");
+		searchTerm = (searchTerm).toLowerCase().split(" ");
 		
 		for (let i = 0; i < searchTerm.length; i++) {
 			let splitTerm = searchTerm[i];
