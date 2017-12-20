@@ -144,6 +144,9 @@ class DbSchema extends Component {
 		annotations[table] id[column]
 		annotations domain[table] description[column]
 		annotations domain[tables] description[column]
+		"domain annotations"[table]
+		"domain annotations"[table] description[column]
+		"domain annotations"[table] description[column] "go id"[column]
 
 		These get split and separated based on the table or column value supplied in square brackets.
 		Ultimately, the ones without a table/column specific tag are combined with table or column search terms and passed to the correct method...
@@ -153,21 +156,23 @@ class DbSchema extends Component {
 		let tablesSearchTerm = "";
 		let columnsSearchTerm = "";
 
-		let rawSearchTerm = this.state.searchTerm.toLowerCase().split(" ");
+		let rawSearchTerm = this.state.searchTerm.toLowerCase().match(/(?:[^\s"]+|"[^"]*")+/g);
 
 		console.log("Raw search term is", rawSearchTerm, "that was split as:");
 		_.forEach(rawSearchTerm, term => {
-			console.log("\tUnderstanding term", term);
+			if (term) {
+				console.log("\tUnderstanding term", term);
 
-			if (term.indexOf("[table]") > -1 || term.indexOf("[tables]") > -1) {
-				console.log("\t\tSeparating to the tables search term");
-				tablesSearchTerm += " " + term.replace("[table]", "").replace("[tables]", "");
-			} else if (term.indexOf("[column]") > -1 || term.indexOf("[columns]") > -1) {
-				console.log("\t\tSeparating to the columns search term");
-				columnsSearchTerm += " " + term.replace("[column]", "").replace("[columns]", "");
-			} else {
-				console.log("\t\tSeparating to the global search term");
-				tablesColumnsSearchTerm += " " + term;
+				if (term.indexOf("[table]") > -1 || term.indexOf("[tables]") > -1) {
+					console.log("\t\tSeparating to the tables search term");
+					tablesSearchTerm += " " + term.replace("[table]", "").replace("[tables]", "");
+				} else if (term.indexOf("[column]") > -1 || term.indexOf("[columns]") > -1) {
+					console.log("\t\tSeparating to the columns search term");
+					columnsSearchTerm += " " + term.replace("[column]", "").replace("[columns]", "");
+				} else {
+					console.log("\t\tSeparating to the global search term");
+					tablesColumnsSearchTerm += " " + term;
+				}
 			}
 		});
 
@@ -196,10 +201,10 @@ class DbSchema extends Component {
 	// Returns a list of tables matching state.saerchTerm from the current tables' raw and rename names
 	searchTables(searchTerm) {
 		let tableSearchResults = [];
-		searchTerm = (searchTerm).toLowerCase().split(" ");
+		searchTerm = (searchTerm).toLowerCase().match(/(?:[^\s"]+|"[^"]*")+/g);
 		
 		for (let i = 0; i < searchTerm.length; i++) {
-			let splitTerm = searchTerm[i];
+			let splitTerm = searchTerm[i].replace(/\"/g, "");
 			if (splitTerm !== "") {
 				// First search the raw table names as returned by API
 				let splitTermResults = (this.state.tables).filter(table => table.toLowerCase().indexOf(splitTerm) > -1);
@@ -222,10 +227,10 @@ class DbSchema extends Component {
 	// Returns a list of tables that have columns matching state.saerchTerm from the tables' raw and rename column names
 	searchColumns(searchTerm) {
 		let tableSearchResults = [];
-		searchTerm = (searchTerm).toLowerCase().split(" ");
+		searchTerm = (searchTerm).toLowerCase().match(/(?:[^\s"]+|"[^"]*")+/g);
 		
 		for (let i = 0; i < searchTerm.length; i++) {
-			let splitTerm = searchTerm[i];
+			let splitTerm = searchTerm[i].replace(/\"/g, "");
 			if (splitTerm !== "") {
 				tableSearchResults.push(this.state.tables.map(table => {
 					let matchingColumns = [];
