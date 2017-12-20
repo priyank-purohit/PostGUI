@@ -151,48 +151,6 @@ class DbSchema extends Component {
 		}
 	}
 
-	addForeignKeyResults(searchResults) {
-		let updatedSearchResults = searchResults;
-		// Retrieve a list of foreign keys given a table using the /rpc/foreign_keys endpoint
-		// If the search result column has a foreign key, add that table+FK_column to the saerch result
-
-		_.keys(searchResults).forEach(table => {
-			if (table !== undefined && searchResults[table] !== undefined && searchResults[table]['columns'] !== undefined) {
-				_.forEach(searchResults[table]['columns'], column => {
-					let fk_result = _.find(this.state.dbFkSchema, function(fk) {
-						return fk.table_name === table && fk.column_name === column;
-					});
-					if (fk_result !== undefined) {
-						updatedSearchResults[table]["foreign_keys"] = {};
-							updatedSearchResults[table]["foreign_keys"][column] = {
-							"foreign_table": fk_result.foreign_table,
-							"foreign_column": fk_result.foreign_column
-						};
-
-						// add the FK as a normal search result too (until a good way to indicate FK is figured out)
-						// TODO: Indicate FK result clearly ... so user knows why the fk_result.foreign_table shows up even though there isn't any obvious match (potential)
-						if (updatedSearchResults[fk_result.foreign_table] && updatedSearchResults[fk_result.foreign_table]["columns"]) {
-							// fk_result.foreign_table and columns elements exist for the FK ... just ensure the column is part of columns element
-							if (_.find(updatedSearchResults[fk_result.foreign_table]["columns"], fk_result.foreign_column) === -1) {
-								// column not found, insert it
-								updatedSearchResults[fk_result.foreign_table]["columns"] = updatedSearchResults[fk_result.foreign_table]["columns"].push(fk_result.foreign_column);
-							}
-						} else if (updatedSearchResults[fk_result.foreign_table] && (updatedSearchResults[fk_result.foreign_table]["columns"] === null || updatedSearchResults[fk_result.foreign_table]["columns"] === undefined)) {
-							// fk_result.foreign_table exists but no columns defined for it
-							updatedSearchResults[fk_result.foreign_table]["columns"] = updatedSearchResults[fk_result.foreign_table]["columns"].push(fk_result.foreign_column);
-						} else {
-							// fk_result.foreign_table does not exist, and columns also doesn't.... obv
-							updatedSearchResults[fk_result.foreign_table] = {};
-							updatedSearchResults[fk_result.foreign_table]["columns"] = [fk_result.foreign_column];
-						}
-					}
-				});
-			}
-		});
-
-		return updatedSearchResults;
-	}
-
 	// Returns a list of tables matching state.saerchTerm from the current tables' raw and rename names
 	searchTables() {
 		let tableSearchResults = [];
@@ -255,6 +213,48 @@ class DbSchema extends Component {
 			}
 		}
 		return _.uniq(_.compact(_.flatten(tableSearchResults)));
+	}
+
+	addForeignKeyResults(searchResults) {
+		let updatedSearchResults = searchResults;
+		// Retrieve a list of foreign keys given a table using the /rpc/foreign_keys endpoint
+		// If the search result column has a foreign key, add that table+FK_column to the saerch result
+
+		_.keys(searchResults).forEach(table => {
+			if (table !== undefined && searchResults[table] !== undefined && searchResults[table]['columns'] !== undefined) {
+				_.forEach(searchResults[table]['columns'], column => {
+					let fk_result = _.find(this.state.dbFkSchema, function(fk) {
+						return fk.table_name === table && fk.column_name === column;
+					});
+					if (fk_result !== undefined) {
+						updatedSearchResults[table]["foreign_keys"] = {};
+							updatedSearchResults[table]["foreign_keys"][column] = {
+							"foreign_table": fk_result.foreign_table,
+							"foreign_column": fk_result.foreign_column
+						};
+
+						// add the FK as a normal search result too (until a good way to indicate FK is figured out)
+						// TODO: Indicate FK result clearly ... so user knows why the fk_result.foreign_table shows up even though there isn't any obvious match (potential)
+						if (updatedSearchResults[fk_result.foreign_table] && updatedSearchResults[fk_result.foreign_table]["columns"]) {
+							// fk_result.foreign_table and columns elements exist for the FK ... just ensure the column is part of columns element
+							if (_.find(updatedSearchResults[fk_result.foreign_table]["columns"], fk_result.foreign_column) === -1) {
+								// column not found, insert it
+								updatedSearchResults[fk_result.foreign_table]["columns"] = updatedSearchResults[fk_result.foreign_table]["columns"].push(fk_result.foreign_column);
+							}
+						} else if (updatedSearchResults[fk_result.foreign_table] && (updatedSearchResults[fk_result.foreign_table]["columns"] === null || updatedSearchResults[fk_result.foreign_table]["columns"] === undefined)) {
+							// fk_result.foreign_table exists but no columns defined for it
+							updatedSearchResults[fk_result.foreign_table]["columns"] = updatedSearchResults[fk_result.foreign_table]["columns"].push(fk_result.foreign_column);
+						} else {
+							// fk_result.foreign_table does not exist, and columns also doesn't.... obv
+							updatedSearchResults[fk_result.foreign_table] = {};
+							updatedSearchResults[fk_result.foreign_table]["columns"] = [fk_result.foreign_column];
+						}
+					}
+				});
+			}
+		});
+
+		return updatedSearchResults;
 	}
 
 	
