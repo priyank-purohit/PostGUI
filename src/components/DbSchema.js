@@ -146,7 +146,7 @@ class DbSchema extends Component {
 		annotations domain[tables] description[column]
 		"domain annotations"[table]
 		"domain annotations"[table] description[column]
-		"domain annotations"[table] description[column] "go id"[column]
+		"domain annotations"[table] "go id"[column]
 
 		These get split and separated based on the table or column value supplied in square brackets.
 		Ultimately, the ones without a table/column specific tag are combined with table or column search terms and passed to the correct method...
@@ -156,7 +156,7 @@ class DbSchema extends Component {
 		let tablesSearchTerm = "";
 		let columnsSearchTerm = "";
 
-		let rawSearchTerm = this.state.searchTerm.toLowerCase().match(/(?:[^\s"]+|"[^"]*")+/g);
+		let rawSearchTerm = this.state.searchTerm.toLowerCase().match(/(?:[^\s"]+|"[^"]*")+/g); // Splits on all sapces that are not contained within double quotes
 
 		console.log("Raw search term is", rawSearchTerm, "that was split as:");
 		_.forEach(rawSearchTerm, term => {
@@ -201,10 +201,10 @@ class DbSchema extends Component {
 	// Returns a list of tables matching state.saerchTerm from the current tables' raw and rename names
 	searchTables(searchTerm) {
 		let tableSearchResults = [];
-		searchTerm = (searchTerm).toLowerCase().match(/(?:[^\s"]+|"[^"]*")+/g);
+		searchTerm = (searchTerm).toLowerCase().match(/(?:[^\s"]+|"[^"]*")+/g); // Splits on all sapces that are not contained within double quotes
 		
 		for (let i = 0; i < searchTerm.length; i++) {
-			let splitTerm = searchTerm[i].replace(/\"/g, "");
+			let splitTerm = searchTerm[i].replace(/"/g, ""); // remove all quotes from the search term
 			if (splitTerm !== "") {
 				// First search the raw table names as returned by API
 				let splitTermResults = (this.state.tables).filter(table => table.toLowerCase().indexOf(splitTerm) > -1);
@@ -227,10 +227,10 @@ class DbSchema extends Component {
 	// Returns a list of tables that have columns matching state.saerchTerm from the tables' raw and rename column names
 	searchColumns(searchTerm) {
 		let tableSearchResults = [];
-		searchTerm = (searchTerm).toLowerCase().match(/(?:[^\s"]+|"[^"]*")+/g);
+		searchTerm = (searchTerm).toLowerCase().match(/(?:[^\s"]+|"[^"]*")+/g); // Splits on all sapces that are not contained within double quotes
 		
 		for (let i = 0; i < searchTerm.length; i++) {
-			let splitTerm = searchTerm[i].replace(/\"/g, "");
+			let splitTerm = searchTerm[i].replace(/"/g, ""); // remove all quotes from the search term
 			if (splitTerm !== "") {
 				tableSearchResults.push(this.state.tables.map(table => {
 					let matchingColumns = [];
