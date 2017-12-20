@@ -133,13 +133,60 @@ class DbSchema extends Component {
 	searchTablesColumnsFK() {
 		let dict = {};
 
+		// Separate search terms for the table and column searches
+		/*
+		annotations
+		annotations domain
+		domain annotations
+		annotations[table] domain[table]
+		annotations[table] domain[column]
+		annotations[column] domain[column]
+		annotations[table] id[column]
+		annotations domain[table] description[column]
+		annotations domain[tables] description[column]
+		"domain annotations"[table]
+		"domain annotations"[table] description[column]
+		"domain annotations"[table] "go id"[column]
+
+		These get split and separated based on the table or column value supplied in square brackets.
+		Ultimately, the ones without a table/column specific tag are combined with table or column search terms and passed to the correct method...
+		*/
+
+		let tablesColumnsSearchTerm = "";
+		let tablesSearchTerm = "";
+		let columnsSearchTerm = "";
+
+		let rawSearchTerm = this.state.searchTerm.toLowerCase().match(/(?:[^\s"]+|"[^"]*")+/g); // Splits on all sapces that are not contained within double quotes
+
+		//console.log("Raw search term is", rawSearchTerm, "that was split as:");
+		_.forEach(rawSearchTerm, term => {
+			if (term) {
+				//console.log("\tUnderstanding term", term);
+
+				if (term.indexOf("[table]") > -1 || term.indexOf("[tables]") > -1) {
+					//console.log("\t\tSeparating to the tables search term");
+					tablesSearchTerm += " " + term.replace("[table]", "").replace("[tables]", "");
+				} else if (term.indexOf("[column]") > -1 || term.indexOf("[columns]") > -1) {
+					//console.log("\t\tSeparating to the columns search term");
+					columnsSearchTerm += " " + term.replace("[column]", "").replace("[columns]", "");
+				} else {
+					//console.log("\t\tSeparating to the global search term");
+					tablesColumnsSearchTerm += " " + term;
+				}
+			}
+		});
+
+		//console.log("Global search is", tablesColumnsSearchTerm);
+		//console.log("Table search is", tablesColumnsSearchTerm + tablesSearchTerm);
+		//console.log("Column search is", tablesColumnsSearchTerm + columnsSearchTerm);
+
 		// Search tables
-		_.forEach(this.searchTables(), table => {
+		_.forEach(this.searchTables(tablesColumnsSearchTerm + tablesSearchTerm), table => {
 			dict[table] = [];
 		});
 
 		// Seach columns
-		_.forEach(this.searchColumns(), result => {
+		_.forEach(this.searchColumns(tablesColumnsSearchTerm + columnsSearchTerm), result => {
 			dict[result[0]] = result[1];
 		});
 
@@ -149,6 +196,70 @@ class DbSchema extends Component {
 		} else {
 			return dict;
 		}
+	}
+
+	// Returns a list of tables matching state.saerchTerm from the current tables' raw and rename names
+	searchTables(searchTerm) {
+		let tableSearchResults = [];
+		searchTerm = (searchTerm).toLowerCase().match(/(?:[^\s"]+|"[^"]*")+/g); // Splits on all sapces that are not contained within double quotes
+		
+		for (let i = 0; i < searchTerm.length; i++) {
+			let splitTerm = searchTerm[i].replace(/"/g, ""); // remove all quotes from the search term
+			if (splitTerm !== "") {
+				// First search the raw table names as returned by API
+				let splitTermResults = (this.state.tables).filter(table => table.toLowerCase().indexOf(splitTerm) > -1);
+
+				// Next search the config file renames
+				let splitTermResultsWithRename = (this.state.tables).filter(table => {
+					let tableRename = lib.getTableConfig(this.state.dbIndex, table, "rename");
+					let displayName = tableRename ? tableRename : table;
+					return displayName.toLowerCase().indexOf(splitTerm) > -1;
+				});
+
+				// Keep track of the matching tables
+				tableSearchResults.push(splitTermResults);
+				tableSearchResults.push(splitTermResultsWithRename);
+			}
+		}
+		return _.uniq(_.flattenDeep(tableSearchResults));
+	}
+
+	// Returns a list of tables that have columns matching state.saerchTerm from the tables' raw and rename column names
+	searchColumns(searchTerm) {
+		let tableSearchResults = [];
+		searchTerm = (searchTerm).toLowerCase().match(/(?:[^\s"]+|"[^"]*")+/g); // Splits on all sapces that are not contained within double quotes
+		
+		for (let i = 0; i < searchTerm.length; i++) {
+			let splitTerm = searchTerm[i].replace(/"/g, ""); // remove all quotes from the search term
+			if (splitTerm !== "") {
+				tableSearchResults.push(this.state.tables.map(table => {
+					let matchingColumns = [];
+					let currentTableColumns = this.state[table];
+
+					// First search raw table column names
+					let splitTermResults = _.compact(currentTableColumns.filter(column => column.toLowerCase().indexOf(splitTerm) > -1));
+
+					// Next search the column renames from config.json
+					let splitTermResultsWithRename = _.compact(currentTableColumns.filter(column => {
+						let columnRename = lib.getColumnConfig(this.state.dbIndex, table, column, "rename");
+						let displayName = columnRename ? columnRename : column;
+						return displayName.toLowerCase().indexOf(splitTerm) > -1;
+					}));
+
+					// Keep track of matching column names
+					matchingColumns.push(splitTermResults);
+					matchingColumns.push(splitTermResultsWithRename);
+
+					if (splitTermResults.length > 0 || splitTermResultsWithRename.length > 0) {
+						return [table, {columns: _.uniq(_.flattenDeep(matchingColumns))}];
+					}
+					else {
+						return [];
+					}
+				}));
+			}
+		}
+		return _.uniq(_.compact(_.flatten(tableSearchResults)));
 	}
 
 	addForeignKeyResults(searchResults) {
@@ -191,70 +302,6 @@ class DbSchema extends Component {
 		});
 
 		return updatedSearchResults;
-	}
-
-	// Returns a list of tables matching state.saerchTerm from the current tables' raw and rename names
-	searchTables() {
-		let tableSearchResults = [];
-		let searchTerm = (this.state.searchTerm).toLowerCase().split(" ");
-		
-		for (let i = 0; i < searchTerm.length; i++) {
-			let splitTerm = searchTerm[i];
-			if (splitTerm !== "") {
-				// First search the raw table names as returned by API
-				let splitTermResults = (this.state.tables).filter(table => table.toLowerCase().indexOf(splitTerm) > -1);
-
-				// Next search the config file renames
-				let splitTermResultsWithRename = (this.state.tables).filter(table => {
-					let tableRename = lib.getTableConfig(this.state.dbIndex, table, "rename");
-					let displayName = tableRename ? tableRename : table;
-					return displayName.toLowerCase().indexOf(splitTerm) > -1;
-				});
-
-				// Keep track of the matching tables
-				tableSearchResults.push(splitTermResults);
-				tableSearchResults.push(splitTermResultsWithRename);
-			}
-		}
-		return _.uniq(_.flattenDeep(tableSearchResults));
-	}
-
-	// Returns a list of tables that have columns matching state.saerchTerm from the tables' raw and rename column names
-	searchColumns() {
-		let tableSearchResults = [];
-		let searchTerm = (this.state.searchTerm).toLowerCase().split(" ");
-		
-		for (let i = 0; i < searchTerm.length; i++) {
-			let splitTerm = searchTerm[i];
-			if (splitTerm !== "") {
-				tableSearchResults.push(this.state.tables.map(table => {
-					let matchingColumns = [];
-					let currentTableColumns = this.state[table];
-
-					// First search raw table column names
-					let splitTermResults = _.compact(currentTableColumns.filter(column => column.toLowerCase().indexOf(splitTerm) > -1));
-
-					// Next search the column renames from config.json
-					let splitTermResultsWithRename = _.compact(currentTableColumns.filter(column => {
-						let columnRename = lib.getColumnConfig(this.state.dbIndex, table, column, "rename");
-						let displayName = columnRename ? columnRename : column;
-						return displayName.toLowerCase().indexOf(splitTerm) > -1;
-					}));
-
-					// Keep track of matching column names
-					matchingColumns.push(splitTermResults);
-					matchingColumns.push(splitTermResultsWithRename);
-
-					if (splitTermResults.length > 0 || splitTermResultsWithRename.length > 0) {
-						return [table, {columns: _.uniq(_.flattenDeep(matchingColumns))}];
-					}
-					else {
-						return [];
-					}
-				}));
-			}
-		}
-		return _.uniq(_.compact(_.flatten(tableSearchResults)));
 	}
 
 	
@@ -583,7 +630,7 @@ class DbSchema extends Component {
 		}
 		return (
 			<div>
-				{this.state.searchTerm !== "" ? <Chip label={"Searching: " + searchTermTrucated} className={classes.chipClasses} onRequestDelete={this.handleSearchClose} /> : null}
+				{this.state.searchTerm !== "" ? <Chip label={"Searching: " + searchTermTrucated} className={classes.chipClasses} onDelete={this.handleSearchClose} /> : null}
 				<Snackbar 	anchorOrigin={{vertical: "bottom", horizontal: "center"}}
 							open={this.state.snackBarVisibility}
 							onClose={this.handleRequestClose}
