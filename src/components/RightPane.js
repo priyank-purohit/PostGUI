@@ -62,7 +62,7 @@ class RightPane extends Component {
 
 		if (newProps.rulesFromHistoryPane !== null && newProps.rulesFromHistoryPane !== undefined) {
 			// There is something the user wants to load...
-			const filters = lib.getQBFilters(this.state.dbIndex, this.state.table, this.state.columns);
+			const filters = lib.getQBFilters(this.state.dbIndex, this.state.table, this.state.columns, this.state.dbSchemaDefinitions);
 			let rules = newProps.rulesFromHistoryPane;
 
 			this.setState({
@@ -102,6 +102,7 @@ class RightPane extends Component {
 		} else if (this.state.dbIndex !== newProps.dbIndex) {
 			this.setState({
 				dbIndex: newProps.dbIndex,
+				dbSchemaDefinitions: newProps.dbSchemaDefinitions,
 				table: "",
 				columns: [],
 				visibleColumns: [],
@@ -121,6 +122,7 @@ class RightPane extends Component {
 		} else {
 			this.setState({
 				dbIndex: newProps.dbIndex,
+				dbSchemaDefinitions: newProps.dbSchemaDefinitions,
 				table: newProps.table,
 				columns: newProps.columns,
 				visibleColumns: newProps.visibleColumns,
@@ -132,7 +134,7 @@ class RightPane extends Component {
 				rawData: [],
 				rows: null
 			}, () => {
-				this.rebuildQueryBuilder(this.refs.queryBuilder, newProps.dbIndex, newProps.table, newProps.columns);
+				this.rebuildQueryBuilder(this.refs.queryBuilder, newProps.dbIndex, newProps.table, newProps.columns, newProps.dbSchemaDefinitions);
 				let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
 				this.setState({ url: url + "?limit=10" });
 				this.fetchOutput(url + "?limit=10", true);
@@ -154,7 +156,7 @@ class RightPane extends Component {
 	// Creates the QB on first render with default table (error msg for now)
 	initializeQueryBuilder(element, newRules = null) {
 		try {
-			const filters = lib.getQBFilters(this.state.dbIndex, this.state.table, this.state.columns);
+			const filters = lib.getQBFilters(this.state.dbIndex, this.state.table, this.state.columns, this.state.dbSchemaDefinitions);
 			const rules = newRules ? newRules : defaultRules;
 
 			window.$(element).queryBuilder({ filters, rules, plugins: ['not-group'] });
@@ -164,11 +166,11 @@ class RightPane extends Component {
 	}
 
 	// Destroys the old one, and creates a new QB based on the selected view's attributes
-	rebuildQueryBuilder(element, dbIndex, table, columns, newRules = this.state.rulesFromHistoryPane) {
+	rebuildQueryBuilder(element, dbIndex, table, columns, dbSchemaDefinitions, newRules = this.state.rulesFromHistoryPane) {
 		window.$(this.refs.queryBuilder).queryBuilder('destroy');
 
 		const rules = newRules ? newRules : defaultRules;
-		const filters = lib.getQBFilters(dbIndex, table, columns);
+		const filters = lib.getQBFilters(dbIndex, table, columns, dbSchemaDefinitions);
 
 		if (newRules !== null && newRules !== undefined && this.checkIfRulesColumnsAreInStateTableColumns(rules)) {
 			window.$(element).queryBuilder({ filters, rules, plugins: ['not-group'] });

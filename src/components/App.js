@@ -24,7 +24,8 @@ export default class Layout extends React.Component {
 			visibleColumns: [],
 			leftPaneVisibility: true,
 			historyPaneVisibility: false,
-			searchTerm: ""
+			searchTerm: "",
+			dbSchemaDefinitions: null
 		};
 	}
 
@@ -80,6 +81,12 @@ export default class Layout extends React.Component {
 		});
 	}
 
+	changeDbSchemaDefinitions(newDefinitions) {
+		this.setState({
+			dbSchemaDefinitions: newDefinitions
+		});
+	}
+
 	changeColumns(newColumns) {
 		this.setState({
 			columns: newColumns
@@ -117,6 +124,7 @@ export default class Layout extends React.Component {
 						changeDbIndex={this.changeDbIndex.bind(this)}
 						changeTable={this.changeTable.bind(this)}
 						changeColumns={this.changeColumns.bind(this)}
+						changeDbSchemaDefinitions={this.changeDbSchemaDefinitions.bind(this)}
 						changeVisibleColumns={this.changeVisibleColumns.bind(this)} />
 					<HistoryPane 
 						newHistoryItem={this.state.newHistoryItem}
@@ -131,6 +139,7 @@ export default class Layout extends React.Component {
 						rulesFromHistoryPane={this.state.rulesFromHistoryPane}
 						changeRules={this.changeRules.bind(this)}
 						columns={this.state.columns}
+						dbSchemaDefinitions={this.state.dbSchemaDefinitions}
 						visibleColumns={this.state.visibleColumns}
 						leftPaneVisibility={this.state.leftPaneVisibility}
 						addToHistory={this.addToHistory.bind(this)} />

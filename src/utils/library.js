@@ -131,9 +131,12 @@ exports.getQBRules = function() {
 }
 
 // Returns a list of columns
-exports.getQBFilters = function(dbIndex, table, columns) {
+exports.getQBFilters = function(dbIndex, table, columns, definitions = null) {
 	// allSupportedQBFilters are the ones present in the translateOperatorToPostgrest() method below...
 	let allSupportedQBFilters = ["equal", "not_equal", "greater", "less", "greater_or_equal", "less_or_equal", "is_not_null", "is_null", "in", "contains"];
+	let numericQBFilters = ["equal", "not_equal", "greater", "less", "greater_or_equal", "less_or_equal", "is_not_null", "is_null", "in"];
+	let stringQBFilters = ["equal", "not_equal", "is_not_null", "is_null", "in", "contains"];
+	let booleanQBFilters = ["equal", "not_equal", "is_not_null", "is_null", "in"];
 
 	if (!columns || columns.length <= 0) {
 		return [{ id: 'error', label: 'ERROR: select a view...', type: 'string' }];
@@ -141,18 +144,45 @@ exports.getQBFilters = function(dbIndex, table, columns) {
 
 	let plain_strings_query_builder = [];
 	for (let i = 0; i < columns.length; i++) {
+		// PostgREST DEFINITIONS can be used to supplement TYPE and OPERATORS if they're not defined by the user
+		let type = this.getColumnConfig(dbIndex, table, columns[i], "type");
+		if (type === null && definitions !== null) {
+			let pgRestType = definitions[table]['properties'][columns[i]]['type'];
+			if (pgRestType === 'number' || pgRestType === 'numeric') {
+				pgRestType = 'double';
+			}
+			type = pgRestType;
+			console.log("Assigning type of column =", columns[i], "from the PostgREST resp as", type);
+		}
+		
+		let operators = this.getColumnConfig(dbIndex, table, columns[i], "operators");
+		if (operators === null && type !== null) {
+			if (type === 'integer' || type === 'double') {
+				operators = numericQBFilters;
+			} else if (type === 'string') {
+				operators = stringQBFilters;
+			} else if (type === 'boolean') {
+				operators = booleanQBFilters;
+			} else {
+				operators = allSupportedQBFilters;
+			}
+
+			//console.log("Assigning operators of column =", columns[i], "based on type =", type, "as opreators =", JSON.stringify(operators));
+		}
+
 		plain_strings_query_builder.push(
 			{
 				id: columns[i],
 				label: this.getColumnConfig(dbIndex, table, columns[i], "rename"),
-				type: this.getColumnConfig(dbIndex, table, columns[i], "type"),
+				type: type,
 				input: this.getColumnConfig(dbIndex, table, columns[i], "input"),
 				values: this.getColumnConfig(dbIndex, table, columns[i], "values"),
 				validation: this.getColumnConfig(dbIndex, table, columns[i], "validation"),
 				default_value: this.getColumnConfig(dbIndex, table, columns[i], "defaultValue"),
-				operators: this.getColumnConfig(dbIndex, table, columns[i], "operators") ? this.getColumnConfig(dbIndex, table, columns[i], "operators") : allSupportedQBFilters
+				operators: operators
 			});
 	}
+	//console.log(JSON.stringify(plain_strings_query_builder));
 	return plain_strings_query_builder;
 }
 

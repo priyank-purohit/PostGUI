@@ -319,6 +319,9 @@ class DbSchema extends Component {
 
 	// From the JSON resp, extract the names of db TABLES and update state
 	parseDbSchema(data = this.state.dbSchema) {
+		// update the db schema in the right panel
+		this.props.changeDbSchemaDefinitions(data.definitions);
+
 		let dbTables = [];
 		for (let i in data.definitions) {
 			if (lib.getTableConfig(this.state.dbIndex, i, "visible") !== false) {
