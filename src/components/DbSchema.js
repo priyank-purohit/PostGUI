@@ -133,6 +133,25 @@ class DbSchema extends Component {
 	searchTablesColumnsFK() {
 		let dict = {};
 
+		// Separate search terms for the table and column searches
+		/*
+		annotations
+		annotations domain
+		domain annotations
+		annotations[table] domain[table]
+		annotations[table] domain[column]
+		annotations[column] domain[column]
+		annotations[table] id[column]
+		annotations domain[table]
+
+		These get split and separated based on the table or column value supplied in square brackets.
+		Ultimately, the ones without a table/column specific tag are combined with table or column search terms and passed to the correct method...
+		*/
+
+		let tablesColumnsSearchTerm = "";
+		let tablesSearchTerm = "";
+		let columnsSearchTerm = "";
+
 		// Search tables
 		_.forEach(this.searchTables(this.state.searchTerm), table => {
 			dict[table] = [];
