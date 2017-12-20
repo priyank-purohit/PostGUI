@@ -152,7 +152,7 @@ exports.getQBFilters = function(dbIndex, table, columns, definitions = null) {
 				pgRestType = 'double';
 			}
 			type = pgRestType;
-			console.log("Assigning type of column =", columns[i], "from the PostgREST resp as", type);
+			//console.log("Assigning type of column =", columns[i], "from the PostgREST resp as", type);
 		}
 		
 		let operators = this.getColumnConfig(dbIndex, table, columns[i], "operators");

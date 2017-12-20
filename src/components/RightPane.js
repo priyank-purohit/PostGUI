@@ -444,8 +444,8 @@ class RightPane extends Component {
 
 						<Typography type="body1" className={classes.cardMarginLeftTop}>Options</Typography>
 
-						<div onClick={this.handleSubmitButtonClickCancelQuery.bind(this)}>
-							<SubmitButton 
+						<div title="Run Query" onClick={this.handleSubmitButtonClickCancelQuery.bind(this)}>
+							<SubmitButton
 								dbIndex={this.state.dbIndex} 
 								table={this.state.table} 
 								leftPaneVisibility={this.state.leftPaneVisibility} 
