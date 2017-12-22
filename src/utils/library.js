@@ -257,7 +257,7 @@ exports.translateOperatorToHuman = function(operator) {
 		['is_not_null', 'is not NULL'],
 		['in', 'in'],
 		['contains', 'CONTAINS'],
-		['regex', 'regex'],
+		['regex', 'matches'],
 		['is_null', 'is NULL']
 	];
 
