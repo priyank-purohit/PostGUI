@@ -77,7 +77,8 @@ class RightPane extends Component {
 				// the problem is if current table has the column names, then it will set it to null. When the actual table is laoded, it sets to blank rules ... so if you switch from GO to Domain annotation table, the rule won't load if the column is protein_id .. which exists in both tables.. 
 				this.props.changeRules(null);
 			} else {
-				window.$(this.refs.queryBuilder).queryBuilder.constructor.DEFAULTS.operators = lib.getQBOperators(); 
+				window.$(this.refs.queryBuilder).queryBuilder.constructor.DEFAULTS.operators = lib.getQBOperators();
+				window.$(this.refs.queryBuilder).queryBuilder.constructor.DEFAULTS.lang = lib.getQBLang(); 
 				window.$(this.refs.queryBuilder).queryBuilder('destroy');
 				window.$(this.refs.queryBuilder).queryBuilder({ filters, defaultRules, plugins: ['not-group'] });
 			}
@@ -156,7 +157,9 @@ class RightPane extends Component {
 	// Creates the QB on first render with default table (error msg for now)
 	initializeQueryBuilder(element, newRules = null) {
 		try {
-			window.$(this.refs.queryBuilder).queryBuilder.constructor.DEFAULTS.operators = lib.getQBOperators(); 
+			window.$(this.refs.queryBuilder).queryBuilder.constructor.DEFAULTS.operators = lib.getQBOperators();
+			window.$(this.refs.queryBuilder).queryBuilder.constructor.DEFAULTS.lang = lib.getQBLang();
+			
 			const filters = lib.getQBFilters(this.state.dbIndex, this.state.table, this.state.columns, this.state.dbSchemaDefinitions);
 			const rules = newRules ? newRules : defaultRules;
 
@@ -169,7 +172,8 @@ class RightPane extends Component {
 	// Destroys the old one, and creates a new QB based on the selected view's attributes
 	rebuildQueryBuilder(element, dbIndex, table, columns, dbSchemaDefinitions, newRules = this.state.rulesFromHistoryPane) {
 		window.$(this.refs.queryBuilder).queryBuilder('destroy');
-		window.$(this.refs.queryBuilder).queryBuilder.constructor.DEFAULTS.operators = lib.getQBOperators(); 
+		window.$(this.refs.queryBuilder).queryBuilder.constructor.DEFAULTS.operators = lib.getQBOperators();
+		window.$(this.refs.queryBuilder).queryBuilder.constructor.DEFAULTS.lang = lib.getQBLang(); 
 		const rules = newRules ? newRules : defaultRules;
 		const filters = lib.getQBFilters(dbIndex, table, columns, dbSchemaDefinitions);
 

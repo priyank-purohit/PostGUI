@@ -130,6 +130,16 @@ exports.getQBRules = function() {
 	};
 }
 
+// Returns operator translations
+exports.getQBLang = function() {
+	return {
+		operators: {
+			regex: 'matches regex'
+		}
+	};
+}
+
+// Returns the default operators
 exports.getQBOperators = function() {
 	return [ { type:"equal" },
 	{ type:"not_equal" },
