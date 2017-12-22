@@ -130,6 +130,41 @@ exports.getQBRules = function() {
 	};
 }
 
+// Returns operator translations
+exports.getQBLang = function() {
+	return {
+		operators: {
+			regex: 'matches regex'
+		}
+	};
+}
+
+// Returns the default operators
+exports.getQBOperators = function() {
+	return [ { type:"equal" },
+	{ type:"not_equal" },
+	{ type:"in" },
+	{ type:"not_in" },
+	{ type:"less" },
+	{ type:"less_or_equal" },
+	{ type:"greater" },
+	{ type:"greater_or_equal" },
+	{ type:"between" },
+	{ type:"not_between" },
+	{ type:"begins_with" },
+	{ type:"not_begins_with" },
+	{ type:"contains" },
+	{ type:"not_contains" },
+	{ type:"ends_with" },
+	{ type:"not_ends_with" },
+	{ type:"is_empty" },
+	{ type:"is_not_empty" },
+	{ type:"is_null" },
+	{ type:"is_not_null" },
+	{ type:"regex",  nb_inputs: 1, multiple: false, apply_to: ["string"] }];
+}
+
+
 // Returns a list of columns
 exports.getQBFilters = function(dbIndex, table, columns, definitions = null) {
 	// allSupportedQBFilters are the ones present in the translateOperatorToPostgrest() method below...
@@ -137,6 +172,11 @@ exports.getQBFilters = function(dbIndex, table, columns, definitions = null) {
 	let numericQBFilters = ["equal", "not_equal", "greater", "less", "greater_or_equal", "less_or_equal", "is_not_null", "is_null", "in"];
 	let stringQBFilters = ["equal", "not_equal", "is_not_null", "is_null", "in", "contains"];
 	let booleanQBFilters = ["equal", "not_equal", "is_not_null", "is_null", "in"];
+
+	if (this.getDbConfig(dbIndex, "regexSupport") === true) {
+		allSupportedQBFilters.push("regex");
+		stringQBFilters.push("regex");
+	}
 
 	if (!columns || columns.length <= 0) {
 		return [{ id: 'error', label: 'ERROR: select a view...', type: 'string' }];
@@ -198,6 +238,7 @@ exports.translateOperatorToPostgrest = function(operator) {
 		['is_not_null', 'not.is'],
 		['in', 'in'],
 		['contains', 'ilike'],
+		['regex', 'rx'],
 		['is_null', 'is']
 	];
 
@@ -221,6 +262,7 @@ exports.translateOperatorToHuman = function(operator) {
 		['is_not_null', 'is not NULL'],
 		['in', 'in'],
 		['contains', 'CONTAINS'],
+		['regex', 'matches'],
 		['is_null', 'is NULL']
 	];
 
