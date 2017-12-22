@@ -168,10 +168,15 @@ exports.getQBOperators = function() {
 // Returns a list of columns
 exports.getQBFilters = function(dbIndex, table, columns, definitions = null) {
 	// allSupportedQBFilters are the ones present in the translateOperatorToPostgrest() method below...
-	let allSupportedQBFilters = ["equal", "not_equal", "greater", "less", "greater_or_equal", "less_or_equal", "is_not_null", "is_null", "in", "contains", "regex"];
+	let allSupportedQBFilters = ["equal", "not_equal", "greater", "less", "greater_or_equal", "less_or_equal", "is_not_null", "is_null", "in", "contains"];
 	let numericQBFilters = ["equal", "not_equal", "greater", "less", "greater_or_equal", "less_or_equal", "is_not_null", "is_null", "in"];
-	let stringQBFilters = ["equal", "not_equal", "is_not_null", "is_null", "in", "contains", "regex"];
+	let stringQBFilters = ["equal", "not_equal", "is_not_null", "is_null", "in", "contains"];
 	let booleanQBFilters = ["equal", "not_equal", "is_not_null", "is_null", "in"];
+
+	if (this.getDbConfig(dbIndex, "regexSupport") === true) {
+		allSupportedQBFilters.push("regex");
+		stringQBFilters.push("regex");
+	}
 
 	if (!columns || columns.length <= 0) {
 		return [{ id: 'error', label: 'ERROR: select a view...', type: 'string' }];
