@@ -176,19 +176,23 @@ class DbSchema extends Component {
 			}
 		});
 
-		//console.log("Global search is", tablesColumnsSearchTerm);
-		//console.log("Table search is", tablesColumnsSearchTerm + tablesSearchTerm);
-		//console.log("Column search is", tablesColumnsSearchTerm + columnsSearchTerm);
+		//console.log("Global search is", JSON.stringify(tablesColumnsSearchTerm));
+		//console.log("Table search is", JSON.stringify(tablesColumnsSearchTerm), JSON.stringify(tablesSearchTerm));
+		//console.log("Column search is", JSON.stringify(tablesColumnsSearchTerm), JSON.stringify(columnsSearchTerm));
 
 		// Search tables
-		_.forEach(this.searchTables(tablesColumnsSearchTerm + tablesSearchTerm), table => {
-			dict[table] = [];
-		});
+		if (tablesColumnsSearchTerm || tablesSearchTerm) {
+			_.forEach(this.searchTables(tablesColumnsSearchTerm + tablesSearchTerm), table => {
+				dict[table] = [];
+			});
+		}
 
 		// Seach columns
-		_.forEach(this.searchColumns(tablesColumnsSearchTerm + columnsSearchTerm), result => {
-			dict[result[0]] = result[1];
-		});
+		if (tablesColumnsSearchTerm || columnsSearchTerm) {
+			_.forEach(this.searchColumns(tablesColumnsSearchTerm + columnsSearchTerm), result => {
+				dict[result[0]] = result[1];
+			});
+		}
 
 		// Search foreign keys IFF enabled in config explicitly
 		if (lib.getDbConfig(this.state.dbIndex, "foreignKeySearch") === true && this.state.dbFkSchema !== undefined && this.state.dbFkSchema !== null) {	
@@ -200,9 +204,12 @@ class DbSchema extends Component {
 
 	// Returns a list of tables matching state.saerchTerm from the current tables' raw and rename names
 	searchTables(searchTerm) {
+		//console.log("SearchTables Search term is", searchTerm);
 		let tableSearchResults = [];
 		searchTerm = (searchTerm).toLowerCase().match(/(?:[^\s"]+|"[^"]*")+/g); // Splits on all sapces that are not contained within double quotes
 		
+		//console.log("SearchTables Search term is now", JSON.stringify(searchTerm));
+
 		for (let i = 0; i < searchTerm.length; i++) {
 			let splitTerm = searchTerm[i].replace(/"/g, ""); // remove all quotes from the search term
 			if (splitTerm !== "") {
@@ -226,9 +233,10 @@ class DbSchema extends Component {
 
 	// Returns a list of tables that have columns matching state.saerchTerm from the tables' raw and rename column names
 	searchColumns(searchTerm) {
+		//console.log("SearchCOLUMNS Search term is", searchTerm);
 		let tableSearchResults = [];
 		searchTerm = (searchTerm).toLowerCase().match(/(?:[^\s"]+|"[^"]*")+/g); // Splits on all sapces that are not contained within double quotes
-		
+		//console.log("SEARCHCOLUMNS Search term is now", JSON.stringify(searchTerm));
 		for (let i = 0; i < searchTerm.length; i++) {
 			let splitTerm = searchTerm[i].replace(/"/g, ""); // remove all quotes from the search term
 			if (splitTerm !== "") {
