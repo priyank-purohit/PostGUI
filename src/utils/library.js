@@ -186,7 +186,7 @@ exports.getQBFilters = function(dbIndex, table, columns, definitions = null) {
 	for (let i = 0; i < columns.length; i++) {
 		// PostgREST DEFINITIONS can be used to supplement TYPE and OPERATORS if they're not defined by the user
 		let type = this.getColumnConfig(dbIndex, table, columns[i], "type");
-		if (type === null && definitions !== null) {
+		if (type === null && definitions !== null && definitions[table]['properties'][columns[i]] !== null && definitions[table]['properties'][columns[i]] !== undefined) {
 			let pgRestType = definitions[table]['properties'][columns[i]]['type'];
 			if (pgRestType === 'number' || pgRestType === 'numeric') {
 				pgRestType = 'double';
