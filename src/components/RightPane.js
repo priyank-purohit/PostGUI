@@ -439,7 +439,7 @@ class RightPane extends Component {
 							onClose={this.handleRequestClose}
 							SnackbarContentProps={{ 'aria-describedby': 'message-id', }}
 							message={<span id="message-id">{this.state.snackBarMessage}</span>}
-							action={[ <IconButton key="close" aria-label="Close" color="accent" className={classes.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton> ]} />
+							action={[ <IconButton key="close" aria-label="Close" color="secondary" className={classes.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton> ]} />
 
 				<Paper className={paperClasses} elevation={5}>
 					<CardHeader title={tableDisplayName} subheader={tableDescription} />

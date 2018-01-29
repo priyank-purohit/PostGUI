@@ -38,7 +38,7 @@ class Navigation extends Component {
 			<div className={classes.root}>
 				<AppBar position="absolute">
 					<Toolbar>
-						<IconButton color="contrast" aria-label="Menu" onClick={this.props.toggleLeftPane.bind(this)}>
+						<IconButton color="inherit" aria-label="Menu" onClick={this.props.toggleLeftPane.bind(this)}>
 							<MenuIcon />
 						</IconButton>
 						<Typography type="title" color="inherit" className={classes.dbTitleFlex}>
@@ -47,7 +47,7 @@ class Navigation extends Component {
 						<div className={classes.searchBarFlex}>
 							<TextField id="search" placeholder="Search tables and columns" onKeyPress={this.changeSearchTerm.bind(this)} onChange={this.changeSearchTerm.bind(this)} onFocus={this.changeSearchTerm.bind(this)} type="search" className={classes.searchBar}/>
 						</div>
-						<IconButton className={classes.rightIconsFlex} color="contrast" aria-label="Menu" onClick={this.props.toggleHistoryPane.bind(this)}>
+						<IconButton className={classes.rightIconsFlex} color="inherit" aria-label="Menu" onClick={this.props.toggleHistoryPane.bind(this)}>
 							<HistoryIcon className={classes.floatRight} />
 						</IconButton>
 					</Toolbar>
