@@ -654,7 +654,7 @@ class Downloads extends Component {
                         {this.state.copyLoading === true ? <LinearProgress color="primary" className={classes.linearProgressClass} /> : <Divider />}
                         
                         <Button color="primary" className={classes.button} onClick={this.handleDownloadClick.bind(this)} disabled={this.state.fileFormat === 'delimitedColumn'} >Download</Button>
-                        <Button disabled={this.state.fileFormat !== 'delimitedColumn' && this.state.fileFormat !== 'json' && this.state.fileFormat !== 'xml'} className={classes.button} onClick={this.handleCopyClick.bind(this)} >Copy</Button>
+                        <Button color="primary" disabled={this.state.fileFormat !== 'delimitedColumn' && this.state.fileFormat !== 'json' && this.state.fileFormat !== 'xml'} className={classes.button} onClick={this.handleCopyClick.bind(this)} >Copy</Button>
                         <Button className={classes.button && classes.floatRight} onClick={this.handleResetClick.bind(this)} >Reset</Button>
                         {/* <Button className={classes.button}>Help</Button> */}
                     </Paper>
