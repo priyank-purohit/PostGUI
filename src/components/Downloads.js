@@ -571,7 +571,7 @@ class Downloads extends Component {
                         <Typography type="body1" className={classes.cardcardMarginLeftTop}>File Format</Typography>
                         <FormControl component="fieldset" required>
                             <RadioGroup className={classes.cardcardMarginLeftTop} value={this.state.fileFormat} onChange={this.handleFileFormatChange} >
-                                <FormControlLabel control={ <Radio /> } label="Delimited" value="delimited" />
+                                <FormControlLabel control={ <Radio /> } label="Delimited File" value="delimited" />
                                 <span className={this.state.fileFormat !== 'delimited' ? classes.hidden : null}>
                                     <TextField
                                         required
@@ -584,15 +584,15 @@ class Downloads extends Component {
                                         disabled={this.state.fileFormat !== 'delimited' ? true : false} 
                                         onChange={this.handleDelimiterChange.bind(this)} />
                                 </span>
-                                <FormControlLabel control={ <Radio /> } label="JSON" value="json" />
-                                <FormControlLabel control={ <Radio /> } label="XML" value="xml" />
-                                <FormControlLabel control={ <Radio /> } label="FASTA" value="fasta" className={this.identifySeqColumnInStateColumns() === null ? classes.hidden : null}/>
+                                <FormControlLabel control={ <Radio /> } label="JSON File" value="json" />
+                                <FormControlLabel control={ <Radio /> } label="XML File" value="xml" />
+                                <FormControlLabel control={ <Radio /> } label="FASTA File" value="fasta" className={this.identifySeqColumnInStateColumns() === null ? classes.hidden : null}/>
 
                                 <span className={this.state.fileFormat !== 'fasta' ? classes.hidden : classes.inlineTextField}>
                                     <Typography>Note: FASTA header is composed from visible columns</Typography>
                                 </span>
 
-                                <FormControlLabel control={ <Radio /> } label="Delimited column values" value="delimitedColumn" />
+                                <FormControlLabel control={ <Radio /> } label="Copy Single Column Values" value="delimitedColumn" />
                                 <span className={this.state.fileFormat !== 'delimitedColumn' ? classes.hidden : classes.inlineTextField}>
                                     <List>
                                         <ListItem button aria-haspopup="true" aria-controls="columnMenu" aria-label="Choose column" onClick={this.handleClickListItem} >
