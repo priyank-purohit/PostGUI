@@ -17,6 +17,8 @@ import Menu, { MenuItem } from 'material-ui/Menu';
 import List, { ListItem, ListItemText } from 'material-ui/List';
 
 import CopyIcon from 'material-ui-icons/ContentCopy';
+import NavigateNextIcon from 'material-ui-icons/NavigateNext';
+import NavigateBeforeIcon from 'material-ui-icons/NavigateBefore';
 
 import worker_script from './WebWorker';
 var myWorker = new Worker(worker_script);
@@ -42,14 +44,15 @@ class Downloads extends Component {
             delimiterChoice: ',',
             columnChosen: 0,
             tableHeader: true,
-            getFullResult: false,
+            getRangeDownload: false,
             fileNameCustom: '',
             reRunQuery: false,
             fileNameAuto: '',
 			anchorEl: undefined,
             open: false,
             copyLoading: false,
-            copyResult: ""
+            copyResult: "",
+            downloadRangeSelected: "100K"
         };
     }
 
@@ -92,7 +95,7 @@ class Downloads extends Component {
         */
         let fileName = this.state.url.replace(lib.getDbConfig(this.state.dbIndex, "url") + "/", "").replace("?", "-").replace(/&/g, '-').replace(/=/g, '-').replace(/\([^()]{15,}\)/g, "(vals)").replace(/\(([^()]|\(vals\)){50,}\)/g,"(nested-vals)").replace(/[.]([\w,"\s]{30,})[,]/g, "(in-vals)");
 
-        if (this.state.getFullResult === true || dataFullStatus === true) {
+        if (this.state.getRangeDownload === true || dataFullStatus === true) {
             fileName = fileName.replace(/limit-\d*/g, "limit-" + maxRowsInDownload);
         }
 
@@ -374,16 +377,16 @@ class Downloads extends Component {
         }
     }
 
-    handleGetFullResultToggle() {
-        if (this.state.getFullResult === true) {
+    handleGetRangeDownload() {
+        if (this.state.getRangeDownload === true) {
             this.setState({
-                getFullResult: false
+                getRangeDownload: false
             }, () => {
                 this.createFileName();
             });
         } else {
             this.setState({
-                getFullResult: true
+                getRangeDownload: true
             }, () => {
                 this.createFileName();
             });
@@ -417,7 +420,7 @@ class Downloads extends Component {
             delimiterChoice: ',',
             columnChosen: 0,
             tableHeader: true,
-            getFullResult: false,
+            getRangeDownload: false,
             fileNameCustom: '',
             copyLoading: false,
             copyResult: ""
@@ -428,7 +431,7 @@ class Downloads extends Component {
     
     handleCopyClick() {
         this.setState({copyLoading: true}, () => {
-            if (this.state.getFullResult === true) {
+            if (this.state.getRangeDownload === true) {
                 let dataFullURL = this.state.url.replace(/limit=\d*/g, "limit=" + maxRowsInDownload);
                 this.fetchOutput(dataFullURL);
             } else {
@@ -469,6 +472,12 @@ class Downloads extends Component {
         //
     }
 
+    handleDownloadRangeChange(e) {
+        this.setState({
+            downloadRangeSelected: e
+        });
+    }
+
     handleDownloadClick() {
         this.createFileName();
 
@@ -478,7 +487,7 @@ class Downloads extends Component {
             submitError: false,
             dataFull: []
         }, () => {
-            if (this.state.getFullResult === true) {
+            if (this.state.getRangeDownload === true) {
                 let dataFullURL = this.state.url.replace(/limit=\d*/g, "limit=" + maxRowsInDownload);
                 this.fetchOutput(dataFullURL);
             } else {
@@ -618,7 +627,26 @@ class Downloads extends Component {
                         {/* ADDITIONAL DOWNLOADS OPTIONS */}
                         <Typography type="body1" className={classes.cardcardMarginLeftTop}>Options</Typography>
                         <FormGroup className={classes.cardcardMarginLeftTop}>
-                            <FormControlLabel disabled={true} control={ <Checkbox onChange={this.handleGetFullResultToggle.bind(this)} value="getFullResult" /> } label={"Download up to 2.5 million rows"} />
+                            <FormControlLabel control={ <Checkbox onChange={this.handleGetRangeDownload.bind(this)} value="getRangeDownload" /> } label={"Download selected range"} />
+                            <span className={this.state.getRangeDownload !== true ? classes.hidden : classes.inlineTextField1}>
+                                <div>
+                                    <Button onClick={this.handleDownloadRangeChange.bind(this, "10K")} color={this.state.downloadRangeSelected === "10K" ? 'primary' : 'inherit'} className={classes.button} >10K</Button>
+                                    <Button onClick={this.handleDownloadRangeChange.bind(this, "25K")} color={this.state.downloadRangeSelected === "25K" ? 'primary' : 'inherit'} className={classes.button} >25K</Button>
+                                    <Button onClick={this.handleDownloadRangeChange.bind(this, "100K")} color={this.state.downloadRangeSelected === "100K" ? 'primary' : 'inherit'} className={classes.button} >100K</Button>
+                                    <Button onClick={this.handleDownloadRangeChange.bind(this, "250K")} color={this.state.downloadRangeSelected === "250K" ? 'primary' : 'inherit'} className={classes.button} >250K</Button>
+                                </div>
+                                <div>
+                                    <Typography type="body1" className={classes.inlineTextField2}>{"100,000"} to {"200,000"} of 519,294,285 rows</Typography>
+                                </div>
+                                <div className={classes.inlineTextField3}>
+                                    <IconButton color="primary" className={classes.button} aria-label="COPY">
+                                        <NavigateBeforeIcon />
+                                    </IconButton>
+                                    <IconButton color="primary" className={classes.button} aria-label="COPY">
+                                        <NavigateNextIcon />
+                                    </IconButton>
+                                </div>
+                            </span>
 
                             <FormControlLabel control={ <Checkbox onChange={this.handleTableHeaderToggle.bind(this)} disabled={this.state.fileFormat !== 'delimited' ? true : false} value="tableHeader" /> } checked={this.state.tableHeader} label={"Include table headers"} />
                         </FormGroup>
@@ -678,6 +706,16 @@ const styleSheet = {
     },
     inlineTextField: {
         marginLeft: 34
+    },
+    inlineTextField1: {
+        float: "none",
+        margin: "0 auto"
+    },
+    inlineTextField2: {
+        marginLeft: 50
+    },
+    inlineTextField3: {
+        marginLeft: 135
     },
     button: {
         marginBottom: 4
