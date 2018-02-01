@@ -627,7 +627,7 @@ class Downloads extends Component {
                         {/* ADDITIONAL DOWNLOADS OPTIONS */}
                         <Typography type="body1" className={classes.cardcardMarginLeftTop}>Options</Typography>
                         <FormGroup className={classes.cardcardMarginLeftTop}>
-                            <FormControlLabel control={ <Checkbox onChange={this.handleGetRangeDownload.bind(this)} value="getRangeDownload" /> } checked={this.state.getRangeDownload} label={"Batch download (re-run with \"Get exact row count\" option selected)"} />
+                            <FormControlLabel control={ <Checkbox onChange={this.handleGetRangeDownload.bind(this)} value="getRangeDownload" /> } checked={this.state.getRangeDownload} label={"Batch download (re-run query with \"Get exact row count\" option selected)"} />
                                 <span className={this.state.getRangeDownload !== true ? classes.hidden : classes.inlineTextField1}>
                                     <div>
                                         <Button onClick={this.handleDownloadRangeChange.bind(this, "10K")} color={this.state.downloadRangeSelected === "10K" ? 'primary' : 'inherit'} className={classes.button} >10K</Button>
