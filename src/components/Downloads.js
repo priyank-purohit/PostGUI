@@ -627,26 +627,26 @@ class Downloads extends Component {
                         {/* ADDITIONAL DOWNLOADS OPTIONS */}
                         <Typography type="body1" className={classes.cardcardMarginLeftTop}>Options</Typography>
                         <FormGroup className={classes.cardcardMarginLeftTop}>
-                            <FormControlLabel control={ <Checkbox onChange={this.handleGetRangeDownload.bind(this)} value="getRangeDownload" /> } label={"Download selected range"} />
-                            <span className={this.state.getRangeDownload !== true ? classes.hidden : classes.inlineTextField1}>
-                                <div>
-                                    <Button onClick={this.handleDownloadRangeChange.bind(this, "10K")} color={this.state.downloadRangeSelected === "10K" ? 'primary' : 'inherit'} className={classes.button} >10K</Button>
-                                    <Button onClick={this.handleDownloadRangeChange.bind(this, "25K")} color={this.state.downloadRangeSelected === "25K" ? 'primary' : 'inherit'} className={classes.button} >25K</Button>
-                                    <Button onClick={this.handleDownloadRangeChange.bind(this, "100K")} color={this.state.downloadRangeSelected === "100K" ? 'primary' : 'inherit'} className={classes.button} >100K</Button>
-                                    <Button onClick={this.handleDownloadRangeChange.bind(this, "250K")} color={this.state.downloadRangeSelected === "250K" ? 'primary' : 'inherit'} className={classes.button} >250K</Button>
-                                </div>
-                                <div>
-                                    <Typography type="body1" className={classes.inlineTextField2}>{"100,000"} to {"200,000"} of 519,294,285 rows</Typography>
-                                </div>
-                                <div className={classes.inlineTextField3}>
-                                    <IconButton color="primary" className={classes.button} aria-label="COPY">
-                                        <NavigateBeforeIcon />
-                                    </IconButton>
-                                    <IconButton color="primary" className={classes.button} aria-label="COPY">
-                                        <NavigateNextIcon />
-                                    </IconButton>
-                                </div>
-                            </span>
+                            <FormControlLabel control={ <Checkbox onChange={this.handleGetRangeDownload.bind(this)} value="getRangeDownload" /> } checked={this.state.getRangeDownload} label={"Batch download (re-run with \"Get exact row count\" option selected)"} />
+                                <span className={this.state.getRangeDownload !== true ? classes.hidden : classes.inlineTextField1}>
+                                    <div>
+                                        <Button onClick={this.handleDownloadRangeChange.bind(this, "10K")} color={this.state.downloadRangeSelected === "10K" ? 'primary' : 'inherit'} className={classes.button} >10K</Button>
+                                        <Button onClick={this.handleDownloadRangeChange.bind(this, "25K")} color={this.state.downloadRangeSelected === "25K" ? 'primary' : 'inherit'} className={classes.button} >25K</Button>
+                                        <Button onClick={this.handleDownloadRangeChange.bind(this, "100K")} color={this.state.downloadRangeSelected === "100K" ? 'primary' : 'inherit'} className={classes.button} >100K</Button>
+                                        <Button onClick={this.handleDownloadRangeChange.bind(this, "250K")} color={this.state.downloadRangeSelected === "250K" ? 'primary' : 'inherit'} className={classes.button} >250K</Button>
+                                    </div>
+                                    <div>
+                                        <Typography type="body1" className={classes.inlineTextField2}>{"100,000"} to {"200,000"} of 519,294,285 rows</Typography>
+                                    </div>
+                                    <div className={classes.inlineTextField3}>
+                                        <IconButton color="primary" className={classes.button} aria-label="COPY">
+                                            <NavigateBeforeIcon />
+                                        </IconButton>
+                                        <IconButton color="primary" className={classes.button} aria-label="COPY">
+                                            <NavigateNextIcon />
+                                        </IconButton>
+                                    </div>
+                                </span>
 
                             <FormControlLabel control={ <Checkbox onChange={this.handleTableHeaderToggle.bind(this)} disabled={this.state.fileFormat !== 'delimited' ? true : false} value="tableHeader" /> } checked={this.state.tableHeader} label={"Include table headers"} />
                         </FormGroup>
