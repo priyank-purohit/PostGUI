@@ -455,7 +455,10 @@ class Downloads extends Component {
             getRangeDownload: false,
             fileNameCustom: '',
             copyLoading: false,
-            copyResult: ""
+            copyResult: "",
+            downloadRangeSelected: "100K",
+            downloadRangeLowerNum: 0,
+            downloadRangeUpperNum: 100000
         }, () => {
             this.createFileName();
         });
