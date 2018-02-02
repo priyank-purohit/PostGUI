@@ -482,6 +482,7 @@ class RightPane extends Component {
 								columns={this.state.visibleColumns ? this.state.visibleColumns : this.state.columns}
 								data={this.state.rawData}
 								url={this.state.url}
+								totalRows={this.state.totalRows}
 								noDataText={this.state.submitLoading ? "Loading ..." : (this.state.submitError ? "Query error" : (this.state.submitSuccess ? "Success!" : "No rows found"))} />
 						</div>
 				</Paper>

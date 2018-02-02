@@ -44,7 +44,7 @@ class Downloads extends Component {
             delimiterChoice: ',',
             columnChosen: 0,
             tableHeader: true,
-            getRangeDownload: false,
+            getRangeDownload: true,
             fileNameCustom: '',
             reRunQuery: false,
             fileNameAuto: '',
@@ -52,7 +52,9 @@ class Downloads extends Component {
             open: false,
             copyLoading: false,
             copyResult: "",
-            downloadRangeSelected: "100K"
+            downloadRangeSelected: "100K",
+            downloadRangeLowerNum: 0,
+            downloadRangeUpperNum: 100000
         };
     }
 
@@ -393,6 +395,36 @@ class Downloads extends Component {
         }
     }
 
+    handleLeftButtonClickRangeDownload() {
+        let range = parseInt(this.state.downloadRangeSelected.replace("K", ""), 10) * 1000;
+        if (this.state.downloadRangeLowerNum > 0 && this.state.downloadRangeLowerNum - range >= 0) {
+            this.setState({
+                downloadRangeLowerNum: this.state.downloadRangeLowerNum-range,
+                downloadRangeUpperNum: this.state.downloadRangeLowerNum
+            });
+        } else {
+            this.setState({
+                downloadRangeLowerNum: 0,
+                downloadRangeUpperNum: range
+            });
+        }
+    }
+
+    handleRightButtonClickRangeDownload() {
+        let range = parseInt(this.state.downloadRangeSelected.replace("K", ""), 10) * 1000;
+        if (this.props.totalRows && this.state.downloadRangeLowerNum+range+range > this.props.totalRows) {
+            this.setState({
+                downloadRangeLowerNum: Math.trunc(this.props.totalRows / range) * range,
+                downloadRangeUpperNum: this.props.totalRows
+            });
+        } else {
+            this.setState({
+                downloadRangeLowerNum: this.state.downloadRangeLowerNum+range,
+                downloadRangeUpperNum: this.state.downloadRangeLowerNum+range+range
+            });
+        }
+    }
+
     handleDelimiterChange(event) {
         let newValue = event.target.value;
 
@@ -636,13 +668,13 @@ class Downloads extends Component {
                                         <Button onClick={this.handleDownloadRangeChange.bind(this, "250K")} color={this.state.downloadRangeSelected === "250K" ? 'primary' : 'inherit'} className={classes.button} >250K</Button>
                                     </div>
                                     <div>
-                                        <Typography type="body1" className={classes.inlineTextField2}>{"100,000"} to {"200,000"} of 519,294,285 rows</Typography>
+                                        <Typography type="body1" className={classes.inlineTextField2}>{String(this.state.downloadRangeLowerNum).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} to {String(this.state.downloadRangeUpperNum).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} of {String(this.props.totalRows).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} rows</Typography>
                                     </div>
                                     <div className={classes.inlineTextField3}>
-                                        <IconButton color="primary" className={classes.button} aria-label="COPY">
+                                        <IconButton onClick={this.handleLeftButtonClickRangeDownload.bind(this)} color="primary" className={classes.button} aria-label="COPY">
                                             <NavigateBeforeIcon />
                                         </IconButton>
-                                        <IconButton color="primary" className={classes.button} aria-label="COPY">
+                                        <IconButton onClick={this.handleRightButtonClickRangeDownload.bind(this)} color="primary" className={classes.button} aria-label="COPY">
                                             <NavigateNextIcon />
                                         </IconButton>
                                     </div>
