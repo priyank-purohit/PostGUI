@@ -564,7 +564,12 @@ class Downloads extends Component {
     };
 
     fetchOutput(url) {
-        axios.get(url, { params: {}, requestId: "qbAxiosReq" })
+        let headersList = {};
+        if (this.state.getRangeDownload === true) {
+            headersList = {Range: String(this.state.downloadRangeLowerNum) + '-' + String(this.state.downloadRangeUpperNum)};
+        }
+
+        axios.get(url, { headers: headersList, requestId: "qbAxiosReq" })
             .then((response) => {
                 this.setState({
                     dataFull: response.data,
