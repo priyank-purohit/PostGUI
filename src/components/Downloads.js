@@ -566,7 +566,7 @@ class Downloads extends Component {
     fetchOutput(url) {
         let headersList = {};
         if (this.state.getRangeDownload === true) {
-            headersList = {Range: String(this.state.downloadRangeLowerNum) + '-' + String(this.state.downloadRangeUpperNum)};
+            headersList = {'Range': String(this.state.downloadRangeLowerNum) + '-' + String(this.state.downloadRangeUpperNum-1), 'Accept':'text/csv', 'Prefer':'count=exact'};
         }
 
         axios.get(url, { headers: headersList, requestId: "qbAxiosReq" })
