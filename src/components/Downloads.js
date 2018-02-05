@@ -566,7 +566,7 @@ class Downloads extends Component {
     fetchOutput(url) {
         let headersList = {};
         if (this.state.getRangeDownload === true) {
-            headersList = {'Range': String(this.state.downloadRangeLowerNum) + '-' + String(this.state.downloadRangeUpperNum-1), 'Accept':'text/csv', 'Prefer':'count=exact'};
+            headersList = {'Range': String(this.state.downloadRangeLowerNum) + '-' + String(this.state.downloadRangeUpperNum-1), 'Accept':'text/csv'};
         }
 
         axios.get(url, { headers: headersList, requestId: "qbAxiosReq" })
@@ -646,7 +646,7 @@ class Downloads extends Component {
                                     <Typography>Note: FASTA header is composed from visible columns</Typography>
                                 </span>
 
-                                <FormControlLabel control={ <Radio /> } label="Copy Single Column Values" value="delimitedColumn" />
+                                <FormControlLabel control={ <Radio /> } label="Copy single column values" value="delimitedColumn" />
                                 <span className={this.state.fileFormat !== 'delimitedColumn' ? classes.hidden : classes.inlineTextField}>
                                     <List>
                                         <ListItem button aria-haspopup="true" aria-controls="columnMenu" aria-label="Choose column" onClick={this.handleClickListItem} >
