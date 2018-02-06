@@ -395,6 +395,14 @@ class Downloads extends Component {
         }
     }
 
+    handleDownloadRangeChange(e) {
+        this.setState({
+            downloadRangeSelected: e,
+            downloadRangeLowerNum: 0,
+            downloadRangeUpperNum: parseInt(e.replace("K", ""), 10) * 1000
+        });
+    }
+
     handleLeftButtonClickRangeDownload() {
         let range = parseInt(this.state.downloadRangeSelected.replace("K", ""), 10) * 1000;
         if (this.state.downloadRangeLowerNum-range > this.props.totalRows) {
@@ -510,12 +518,6 @@ class Downloads extends Component {
 
     handleCopyOutputClick() {
         //
-    }
-
-    handleDownloadRangeChange(e) {
-        this.setState({
-            downloadRangeSelected: e
-        });
     }
 
     handleDownloadClick() {
