@@ -98,7 +98,7 @@ class Downloads extends Component {
         let fileName = this.state.url.replace(lib.getDbConfig(this.state.dbIndex, "url") + "/", "").replace("?", "-").replace(/&/g, '-').replace(/=/g, '-').replace(/\([^()]{15,}\)/g, "(vals)").replace(/\(([^()]|\(vals\)){50,}\)/g,"(nested-vals)").replace(/[.]([\w,"\s]{30,})[,]/g, "(in-vals)");
 
         if (this.state.getRangeDownload === true || dataFullStatus === true) {
-            fileName = fileName.replace(/limit-\d*/g, "limit-" + maxRowsInDownload);
+            fileName = fileName.replace(/limit-\d*/g, "limit-" + maxRowsInDownload + "-range-"+ this.state.downloadRangeLowerNum + "-" + this.state.downloadRangeUpperNum);
         }
 
         if (this.state.fileFormat === "delimited") {
@@ -400,7 +400,7 @@ class Downloads extends Component {
             downloadRangeSelected: e,
             downloadRangeLowerNum: 0,
             downloadRangeUpperNum: parseInt(e.replace("K", ""), 10) * 1000
-        });
+        }, () => {this.createFileName(true)} );
     }
 
     handleLeftButtonClickRangeDownload() {
@@ -409,17 +409,17 @@ class Downloads extends Component {
             this.setState({
                 downloadRangeLowerNum: Math.trunc(this.props.totalRows / range) * range,
                 downloadRangeUpperNum: this.props.totalRows
-            });
+            }, () => {this.createFileName(true)} );
         } else if (this.state.downloadRangeLowerNum > 0 && this.state.downloadRangeLowerNum - range >= 0) {
             this.setState({
                 downloadRangeLowerNum: this.state.downloadRangeLowerNum-range,
                 downloadRangeUpperNum: this.state.downloadRangeLowerNum
-            });
+            }, () => {this.createFileName(true)} );
         } else {
             this.setState({
                 downloadRangeLowerNum: 0,
                 downloadRangeUpperNum: range
-            });
+            }, () => {this.createFileName(true)} );
         }
     }
 
@@ -429,12 +429,12 @@ class Downloads extends Component {
             this.setState({
                 downloadRangeLowerNum: Math.trunc(this.props.totalRows / range) * range,
                 downloadRangeUpperNum: this.props.totalRows
-            });
+            }, () => {this.createFileName(true)} );
         } else {
             this.setState({
                 downloadRangeLowerNum: this.state.downloadRangeLowerNum+range,
                 downloadRangeUpperNum: this.state.downloadRangeLowerNum+range+range
-            });
+            }, () => {this.createFileName(true)} );
         }
     }
 
