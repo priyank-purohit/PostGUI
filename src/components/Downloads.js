@@ -52,9 +52,9 @@ class Downloads extends Component {
             open: false,
             copyLoading: false,
             copyResult: "",
-            downloadRangeSelected: "100K",
-            downloadRangeLowerNum: 0,
-            downloadRangeUpperNum: 100000
+            batchSize: "100K",
+            batchDownloadLowerNum: 0,
+            batchDownloadUpperNum: 100000
         };
     }
 
@@ -98,7 +98,7 @@ class Downloads extends Component {
         let fileName = this.state.url.replace(lib.getDbConfig(this.state.dbIndex, "url") + "/", "").replace("?", "-").replace(/&/g, '-').replace(/=/g, '-').replace(/\([^()]{15,}\)/g, "(vals)").replace(/\(([^()]|\(vals\)){50,}\)/g,"(nested-vals)").replace(/[.]([\w,"\s]{30,})[,]/g, "(in-vals)");
 
         if (this.state.batchDownloadCheckBox === true || dataFullStatus === true) {
-            fileName = fileName.replace(/limit-\d*/g, "limit-" + maxRowsInDownload + "-range-"+ this.state.downloadRangeLowerNum + "-" + this.state.downloadRangeUpperNum);
+            fileName = fileName.replace(/limit-\d*/g, "limit-" + maxRowsInDownload + "-range-"+ this.state.batchDownloadLowerNum + "-" + this.state.batchDownloadUpperNum);
         }
 
         if (this.state.fileFormat === "delimited") {
@@ -395,45 +395,45 @@ class Downloads extends Component {
         }
     }
 
-    handleDownloadRangeChange(e) {
+    handlebatchDownloadChange(e) {
         this.setState({
-            downloadRangeSelected: e,
-            downloadRangeLowerNum: 0,
-            downloadRangeUpperNum: parseInt(e.replace("K", ""), 10) * 1000
+            batchSize: e,
+            batchDownloadLowerNum: 0,
+            batchDownloadUpperNum: parseInt(e.replace("K", ""), 10) * 1000
         }, () => {this.createFileName(true)} );
     }
 
     handleLeftButtonClickRangeDownload() {
-        let range = parseInt(this.state.downloadRangeSelected.replace("K", ""), 10) * 1000;
-        if (this.state.downloadRangeLowerNum-range > this.props.totalRows) {
+        let range = parseInt(this.state.batchSize.replace("K", ""), 10) * 1000;
+        if (this.state.batchDownloadLowerNum-range > this.props.totalRows) {
             this.setState({
-                downloadRangeLowerNum: Math.trunc(this.props.totalRows / range) * range,
-                downloadRangeUpperNum: this.props.totalRows
+                batchDownloadLowerNum: Math.trunc(this.props.totalRows / range) * range,
+                batchDownloadUpperNum: this.props.totalRows
             }, () => {this.createFileName(true)} );
-        } else if (this.state.downloadRangeLowerNum > 0 && this.state.downloadRangeLowerNum - range >= 0) {
+        } else if (this.state.batchDownloadLowerNum > 0 && this.state.batchDownloadLowerNum - range >= 0) {
             this.setState({
-                downloadRangeLowerNum: this.state.downloadRangeLowerNum-range,
-                downloadRangeUpperNum: this.state.downloadRangeLowerNum
+                batchDownloadLowerNum: this.state.batchDownloadLowerNum-range,
+                batchDownloadUpperNum: this.state.batchDownloadLowerNum
             }, () => {this.createFileName(true)} );
         } else {
             this.setState({
-                downloadRangeLowerNum: 0,
-                downloadRangeUpperNum: range
+                batchDownloadLowerNum: 0,
+                batchDownloadUpperNum: range
             }, () => {this.createFileName(true)} );
         }
     }
 
     handleRightButtonClickRangeDownload() {
-        let range = parseInt(this.state.downloadRangeSelected.replace("K", ""), 10) * 1000;
-        if (this.props.totalRows && this.state.downloadRangeLowerNum+range+range > this.props.totalRows) {
+        let range = parseInt(this.state.batchSize.replace("K", ""), 10) * 1000;
+        if (this.props.totalRows && this.state.batchDownloadLowerNum+range+range > this.props.totalRows) {
             this.setState({
-                downloadRangeLowerNum: Math.trunc(this.props.totalRows / range) * range,
-                downloadRangeUpperNum: this.props.totalRows
+                batchDownloadLowerNum: Math.trunc(this.props.totalRows / range) * range,
+                batchDownloadUpperNum: this.props.totalRows
             }, () => {this.createFileName(true)} );
         } else {
             this.setState({
-                downloadRangeLowerNum: this.state.downloadRangeLowerNum+range,
-                downloadRangeUpperNum: this.state.downloadRangeLowerNum+range+range
+                batchDownloadLowerNum: this.state.batchDownloadLowerNum+range,
+                batchDownloadUpperNum: this.state.batchDownloadLowerNum+range+range
             }, () => {this.createFileName(true)} );
         }
     }
@@ -469,9 +469,9 @@ class Downloads extends Component {
             fileNameCustom: '',
             copyLoading: false,
             copyResult: "",
-            downloadRangeSelected: "100K",
-            downloadRangeLowerNum: 0,
-            downloadRangeUpperNum: 100000
+            batchSize: "100K",
+            batchDownloadLowerNum: 0,
+            batchDownloadUpperNum: 100000
         }, () => {
             this.createFileName();
         });
@@ -568,7 +568,7 @@ class Downloads extends Component {
     fetchOutput(url) {
         let headersList = {};
         if (this.state.batchDownloadCheckBox === true) {
-            headersList = {'Range': String(this.state.downloadRangeLowerNum) + '-' + String(this.state.downloadRangeUpperNum-1), 'Accept':'application/json', 'Prefer': 'count=exact'};
+            headersList = {'Range': String(this.state.batchDownloadLowerNum) + '-' + String(this.state.batchDownloadUpperNum-1), 'Accept':'application/json', 'Prefer': 'count=exact'};
         }
 
         axios.get(url, { headers: headersList, requestId: "qbAxiosReq" })
@@ -681,13 +681,13 @@ class Downloads extends Component {
                                         <Typography type="body2" className={classes.inlineTextField1}>Re-run query with "Get exact row count" option selected</Typography>
                                     </div>
                                     <div>
-                                        <Button onClick={this.handleDownloadRangeChange.bind(this, "10K")} color={this.state.downloadRangeSelected === "10K" ? 'primary' : 'inherit'} className={classes.button} >10K</Button>
-                                        <Button onClick={this.handleDownloadRangeChange.bind(this, "25K")} color={this.state.downloadRangeSelected === "25K" ? 'primary' : 'inherit'} className={classes.button} >25K</Button>
-                                        <Button onClick={this.handleDownloadRangeChange.bind(this, "100K")} color={this.state.downloadRangeSelected === "100K" ? 'primary' : 'inherit'} className={classes.button} >100K</Button>
-                                        <Button onClick={this.handleDownloadRangeChange.bind(this, "250K")} color={this.state.downloadRangeSelected === "250K" ? 'primary' : 'inherit'} className={classes.button} >250K</Button>
+                                        <Button onClick={this.handlebatchDownloadChange.bind(this, "10K")} color={this.state.batchSize === "10K" ? 'primary' : 'inherit'} className={classes.button} >10K</Button>
+                                        <Button onClick={this.handlebatchDownloadChange.bind(this, "25K")} color={this.state.batchSize === "25K" ? 'primary' : 'inherit'} className={classes.button} >25K</Button>
+                                        <Button onClick={this.handlebatchDownloadChange.bind(this, "100K")} color={this.state.batchSize === "100K" ? 'primary' : 'inherit'} className={classes.button} >100K</Button>
+                                        <Button onClick={this.handlebatchDownloadChange.bind(this, "250K")} color={this.state.batchSize === "250K" ? 'primary' : 'inherit'} className={classes.button} >250K</Button>
                                     </div>
                                     <div className={classes.inlineTextField}>
-                                        <Typography type="body1" className={classes.inlineTextField}>{String(this.state.downloadRangeLowerNum).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} to {String(this.state.downloadRangeUpperNum).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} of {String(this.props.totalRows).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} rows</Typography>
+                                        <Typography type="body1" className={classes.inlineTextField}>{String(this.state.batchDownloadLowerNum).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} to {String(this.state.batchDownloadUpperNum).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} of {String(this.props.totalRows).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} rows</Typography>
                                     </div>
                                     <div className={classes.inlineTextField3}>
                                         <IconButton onClick={this.handleLeftButtonClickRangeDownload.bind(this)} color="primary" className={classes.button} aria-label="COPY">
