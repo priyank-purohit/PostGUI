@@ -44,7 +44,7 @@ class Downloads extends Component {
             delimiterChoice: ',',
             columnChosen: 0,
             tableHeader: true,
-            getRangeDownload: true,
+            getRangeDownload: false,
             fileNameCustom: '',
             reRunQuery: false,
             fileNameAuto: '',
