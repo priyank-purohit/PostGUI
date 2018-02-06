@@ -627,16 +627,17 @@ class Downloads extends Component {
                         <Typography type="body1" className={classes.cardcardMarginLeftTop}>File Format</Typography>
                         <FormControl component="fieldset" required>
                             <RadioGroup className={classes.cardcardMarginLeftTop} value={this.state.fileFormat} onChange={this.handleFileFormatChange} >
-                                <FormControlLabel control={ <Radio /> } label="Delimited File" value="delimited" />
+                                <FormControlLabel control={ <Radio /> } label="Delimited file" value="delimited" />
                                 <span className={this.state.fileFormat !== 'delimited' ? classes.hidden : null}>
                                     <TextField
                                         required
                                         id="delimiterInput"
                                         type="text"
-                                        label={"Enter delimiter (e.g. \\t)"}
+                                        label={"Enter delimiter (\\t or , for Excel)"}
                                         value={this.state.delimiterChoice}
                                         className={classes.textField && classes.cardMarginLeft && classes.inlineTextField}
                                         margin="none"
+                                        fullWidth={true}
                                         disabled={this.state.fileFormat !== 'delimited' ? true : false} 
                                         onChange={this.handleDelimiterChange.bind(this)} />
                                 </span>
