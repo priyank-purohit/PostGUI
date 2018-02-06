@@ -44,7 +44,7 @@ class Downloads extends Component {
             delimiterChoice: ',',
             columnChosen: 0,
             tableHeader: true,
-            getRangeDownload: false,
+            batchDownloadCheckBox: false,
             fileNameCustom: '',
             reRunQuery: false,
             fileNameAuto: '',
@@ -97,7 +97,7 @@ class Downloads extends Component {
         */
         let fileName = this.state.url.replace(lib.getDbConfig(this.state.dbIndex, "url") + "/", "").replace("?", "-").replace(/&/g, '-').replace(/=/g, '-').replace(/\([^()]{15,}\)/g, "(vals)").replace(/\(([^()]|\(vals\)){50,}\)/g,"(nested-vals)").replace(/[.]([\w,"\s]{30,})[,]/g, "(in-vals)");
 
-        if (this.state.getRangeDownload === true || dataFullStatus === true) {
+        if (this.state.batchDownloadCheckBox === true || dataFullStatus === true) {
             fileName = fileName.replace(/limit-\d*/g, "limit-" + maxRowsInDownload + "-range-"+ this.state.downloadRangeLowerNum + "-" + this.state.downloadRangeUpperNum);
         }
 
@@ -379,16 +379,16 @@ class Downloads extends Component {
         }
     }
 
-    handleGetRangeDownload() {
-        if (this.state.getRangeDownload === true) {
+    handlebatchDownloadCheckBox() {
+        if (this.state.batchDownloadCheckBox === true) {
             this.setState({
-                getRangeDownload: false
+                batchDownloadCheckBox: false
             }, () => {
                 this.createFileName();
             });
         } else {
             this.setState({
-                getRangeDownload: true
+                batchDownloadCheckBox: true
             }, () => {
                 this.createFileName();
             });
@@ -465,7 +465,7 @@ class Downloads extends Component {
             delimiterChoice: ',',
             columnChosen: 0,
             tableHeader: true,
-            getRangeDownload: false,
+            batchDownloadCheckBox: false,
             fileNameCustom: '',
             copyLoading: false,
             copyResult: "",
@@ -479,7 +479,7 @@ class Downloads extends Component {
     
     handleCopyClick() {
         this.setState({copyLoading: true}, () => {
-            if (this.state.getRangeDownload === true) {
+            if (this.state.batchDownloadCheckBox === true) {
                 let dataFullURL = this.state.url.replace(/limit=\d*/g, "limit=" + maxRowsInDownload);
                 this.fetchOutput(dataFullURL);
             } else {
@@ -529,7 +529,7 @@ class Downloads extends Component {
             submitError: false,
             dataFull: []
         }, () => {
-            if (this.state.getRangeDownload === true) {
+            if (this.state.batchDownloadCheckBox === true) {
                 let dataFullURL = this.state.url.replace(/limit=\d*/g, "limit=" + maxRowsInDownload);
                 this.fetchOutput(dataFullURL);
             } else {
@@ -567,7 +567,7 @@ class Downloads extends Component {
 
     fetchOutput(url) {
         let headersList = {};
-        if (this.state.getRangeDownload === true) {
+        if (this.state.batchDownloadCheckBox === true) {
             headersList = {'Range': String(this.state.downloadRangeLowerNum) + '-' + String(this.state.downloadRangeUpperNum-1), 'Accept':'application/json', 'Prefer': 'count=exact'};
         }
 
@@ -675,9 +675,9 @@ class Downloads extends Component {
                         {/* ADDITIONAL DOWNLOADS OPTIONS */}
                         <Typography type="body1" className={classes.cardcardMarginLeftTop}>Options</Typography>
                         <FormGroup className={classes.cardcardMarginLeftTop}>
-                            <FormControlLabel control={ <Checkbox onChange={this.handleGetRangeDownload.bind(this)} value="getRangeDownload" /> } checked={this.state.getRangeDownload} label={"Batch download"} />
-                                <span className={this.state.getRangeDownload !== true ? classes.hidden : classes.inlineTextField1}>
-                                    <div className={this.props.totalRows !== NaN && this.props.totalRows >= 0 ? classes.hidden : null} >
+                            <FormControlLabel control={ <Checkbox onChange={this.handlebatchDownloadCheckBox.bind(this)} value="batchDownloadCheckBox" /> } checked={this.state.batchDownloadCheckBox} label={"Batch download"} />
+                                <span className={this.state.batchDownloadCheckBox !== true ? classes.hidden : classes.inlineTextField1}>
+                                    <div className={isNaN(this.props.totalRows) === false && this.props.totalRows >= 0 ? classes.hidden : null} >
                                         <Typography type="body2" className={classes.inlineTextField1}>Re-run query with "Get exact row count" option selected</Typography>
                                     </div>
                                     <div>
