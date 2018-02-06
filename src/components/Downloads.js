@@ -686,8 +686,8 @@ class Downloads extends Component {
                                         <Button onClick={this.handleDownloadRangeChange.bind(this, "100K")} color={this.state.downloadRangeSelected === "100K" ? 'primary' : 'inherit'} className={classes.button} >100K</Button>
                                         <Button onClick={this.handleDownloadRangeChange.bind(this, "250K")} color={this.state.downloadRangeSelected === "250K" ? 'primary' : 'inherit'} className={classes.button} >250K</Button>
                                     </div>
-                                    <div>
-                                        <Typography type="body1" className={classes.inlineTextField2}>{String(this.state.downloadRangeLowerNum).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} to {String(this.state.downloadRangeUpperNum).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} of {String(this.props.totalRows).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} rows</Typography>
+                                    <div className={classes.inlineTextField}>
+                                        <Typography type="body1" className={classes.inlineTextField}>{String(this.state.downloadRangeLowerNum).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} to {String(this.state.downloadRangeUpperNum).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} of {String(this.props.totalRows).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} rows</Typography>
                                     </div>
                                     <div className={classes.inlineTextField3}>
                                         <IconButton onClick={this.handleLeftButtonClickRangeDownload.bind(this)} color="primary" className={classes.button} aria-label="COPY">
