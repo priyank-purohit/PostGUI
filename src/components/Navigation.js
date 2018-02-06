@@ -41,7 +41,7 @@ class Navigation extends Component {
 						<IconButton color="inherit" aria-label="Menu" onClick={this.props.toggleLeftPane.bind(this)}>
 							<MenuIcon />
 						</IconButton>
-						<Typography type="title" color="inherit" className={classes.dbTitleFlex}>
+						<Typography variant="title" color="inherit" className={classes.dbTitleFlex}>
 							{dbTitle}
 						</Typography>
 						<div className={classes.searchBarFlex}>

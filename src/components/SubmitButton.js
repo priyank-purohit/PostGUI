@@ -57,7 +57,7 @@ class CircularFab extends Component {
 		return (
 			<div className={classes.wrapper}>
 				<Button
-					fab
+					variant="fab"
 					color="secondary"
 					className={buttonClass}
 					onClick={this.handleButtonClick.bind(this)}>{success ? (error ? <CloseIcon /> : <CheckIcon />) : <ArrowForwardIcon />}</Button>

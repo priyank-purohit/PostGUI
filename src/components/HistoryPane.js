@@ -181,8 +181,8 @@ class HistoryPane extends Component {
 					{/* Delete History Button and Dialog */}
 					<div style={{ height: "100px", width: "100%", marginLeft: "130px" }} className={this.state.deleteHistoryDialogVisibility}>
 						<ListSubheader style={{ marginLeft: "10px" }}>Delete history?</ListSubheader>
-						<Button onClick={this.deleteHistory.bind(this)} dense raised style={{ margin: "5px" }}>Yes</Button>
-						<Button onClick={this.showDeleteHistoryDialog.bind(this)} dense raised color="primary" style={{ margin: "5px" }}>No</Button>
+						<Button onClick={this.deleteHistory.bind(this)} dense variant="raised" style={{ margin: "5px" }}>Yes</Button>
+						<Button onClick={this.showDeleteHistoryDialog.bind(this)} dense variant="raised" color="primary" style={{ margin: "5px" }}>No</Button>
 					</div>
 
 					{/* History Items List */}
