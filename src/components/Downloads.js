@@ -628,26 +628,26 @@ class Downloads extends Component {
                         <FormControl component="fieldset" required>
                             <RadioGroup className={classes.cardcardMarginLeftTop} value={this.state.fileFormat} onChange={this.handleFileFormatChange} >
                                 <FormControlLabel control={ <Radio /> } label="Delimited file" value="delimited" />
-                                <span className={this.state.fileFormat !== 'delimited' ? classes.hidden : null}>
-                                    <TextField
-                                        required
-                                        id="delimiterInput"
-                                        type="text"
-                                        label={"Enter delimiter (\\t or , for Excel)"}
-                                        value={this.state.delimiterChoice}
-                                        className={classes.textField && classes.cardMarginLeft && classes.inlineTextField}
-                                        margin="none"
-                                        fullWidth={true}
-                                        disabled={this.state.fileFormat !== 'delimited' ? true : false} 
-                                        onChange={this.handleDelimiterChange.bind(this)} />
-                                </span>
+                                {
+                                    this.state.fileFormat === 'delimited' && (
+                                        <TextField
+                                            required
+                                            id="delimiterInput"
+                                            type="text"
+                                            label={"Enter delimiter (\\t or , for Excel)"}
+                                            value={this.state.delimiterChoice}
+                                            className={classes.textField && classes.cardMarginLeft && classes.inlineTextField}
+                                            margin="none"
+                                            fullWidth={true}
+                                            disabled={this.state.fileFormat !== 'delimited' ? true : false} 
+                                            onChange={this.handleDelimiterChange.bind(this)} />
+                                    )
+                                }
                                 <FormControlLabel control={ <Radio /> } label="JSON File" value="json" />
                                 <FormControlLabel control={ <Radio /> } label="XML File" value="xml" />
                                 <FormControlLabel control={ <Radio /> } label="FASTA File" value="fasta" className={this.identifySeqColumnInStateColumns() === null ? classes.hidden : null}/>
 
-                                <span className={this.state.fileFormat !== 'fasta' ? classes.hidden : classes.inlineTextField}>
-                                    <Typography>Note: FASTA header is composed from visible columns</Typography>
-                                </span>
+                                {this.state.fileFormat === 'fasta' && <Typography className={classes.inlineTextField}>Note: FASTA header is composed from visible columns</Typography>}
 
                                 <FormControlLabel control={ <Radio /> } label="Copy single column values" value="delimitedColumn" />
                                 <span className={this.state.fileFormat !== 'delimitedColumn' ? classes.hidden : classes.inlineTextField}>
