@@ -17,6 +17,8 @@ import Menu, { MenuItem } from 'material-ui/Menu';
 import List, { ListItem, ListItemText } from 'material-ui/List';
 
 import CopyIcon from 'material-ui-icons/ContentCopy';
+import NavigateNextIcon from 'material-ui-icons/NavigateNext';
+import NavigateBeforeIcon from 'material-ui-icons/NavigateBefore';
 
 import worker_script from './WebWorker';
 var myWorker = new Worker(worker_script);
@@ -42,14 +44,17 @@ class Downloads extends Component {
             delimiterChoice: ',',
             columnChosen: 0,
             tableHeader: true,
-            getFullResult: false,
+            batchDownloadCheckBox: false,
             fileNameCustom: '',
             reRunQuery: false,
             fileNameAuto: '',
 			anchorEl: undefined,
             open: false,
             copyLoading: false,
-            copyResult: ""
+            copyResult: "",
+            batchSize: "100K",
+            batchDownloadLowerNum: 0,
+            batchDownloadUpperNum: 100000
         };
     }
 
@@ -92,8 +97,8 @@ class Downloads extends Component {
         */
         let fileName = this.state.url.replace(lib.getDbConfig(this.state.dbIndex, "url") + "/", "").replace("?", "-").replace(/&/g, '-').replace(/=/g, '-').replace(/\([^()]{15,}\)/g, "(vals)").replace(/\(([^()]|\(vals\)){50,}\)/g,"(nested-vals)").replace(/[.]([\w,"\s]{30,})[,]/g, "(in-vals)");
 
-        if (this.state.getFullResult === true || dataFullStatus === true) {
-            fileName = fileName.replace(/limit-\d*/g, "limit-" + maxRowsInDownload);
+        if (this.state.batchDownloadCheckBox === true || dataFullStatus === true) {
+            fileName = fileName.replace(/limit-\d*/g, "limit-" + maxRowsInDownload + "-range-"+ this.state.batchDownloadLowerNum + "-" + this.state.batchDownloadUpperNum);
         }
 
         if (this.state.fileFormat === "delimited") {
@@ -374,19 +379,62 @@ class Downloads extends Component {
         }
     }
 
-    handleGetFullResultToggle() {
-        if (this.state.getFullResult === true) {
+    handlebatchDownloadCheckBox() {
+        if (this.state.batchDownloadCheckBox === true) {
             this.setState({
-                getFullResult: false
+                batchDownloadCheckBox: false
             }, () => {
                 this.createFileName();
             });
         } else {
             this.setState({
-                getFullResult: true
+                batchDownloadCheckBox: true
             }, () => {
                 this.createFileName();
             });
+        }
+    }
+
+    handlebatchDownloadChange(e) {
+        this.setState({
+            batchSize: e,
+            batchDownloadLowerNum: 0,
+            batchDownloadUpperNum: parseInt(e.replace("K", ""), 10) * 1000
+        }, () => {this.createFileName(true)} );
+    }
+
+    handleLeftButtonClickRangeDownload() {
+        let range = parseInt(this.state.batchSize.replace("K", ""), 10) * 1000;
+        if (this.state.batchDownloadLowerNum-range > this.props.totalRows) {
+            this.setState({
+                batchDownloadLowerNum: Math.trunc(this.props.totalRows / range) * range,
+                batchDownloadUpperNum: this.props.totalRows
+            }, () => {this.createFileName(true)} );
+        } else if (this.state.batchDownloadLowerNum > 0 && this.state.batchDownloadLowerNum - range >= 0) {
+            this.setState({
+                batchDownloadLowerNum: this.state.batchDownloadLowerNum-range,
+                batchDownloadUpperNum: this.state.batchDownloadLowerNum
+            }, () => {this.createFileName(true)} );
+        } else {
+            this.setState({
+                batchDownloadLowerNum: 0,
+                batchDownloadUpperNum: range
+            }, () => {this.createFileName(true)} );
+        }
+    }
+
+    handleRightButtonClickRangeDownload() {
+        let range = parseInt(this.state.batchSize.replace("K", ""), 10) * 1000;
+        if (this.props.totalRows && this.state.batchDownloadLowerNum+range+range > this.props.totalRows) {
+            this.setState({
+                batchDownloadLowerNum: Math.trunc(this.props.totalRows / range) * range,
+                batchDownloadUpperNum: this.props.totalRows
+            }, () => {this.createFileName(true)} );
+        } else {
+            this.setState({
+                batchDownloadLowerNum: this.state.batchDownloadLowerNum+range,
+                batchDownloadUpperNum: this.state.batchDownloadLowerNum+range+range
+            }, () => {this.createFileName(true)} );
         }
     }
 
@@ -417,10 +465,13 @@ class Downloads extends Component {
             delimiterChoice: ',',
             columnChosen: 0,
             tableHeader: true,
-            getFullResult: false,
+            batchDownloadCheckBox: false,
             fileNameCustom: '',
             copyLoading: false,
-            copyResult: ""
+            copyResult: "",
+            batchSize: "100K",
+            batchDownloadLowerNum: 0,
+            batchDownloadUpperNum: 100000
         }, () => {
             this.createFileName();
         });
@@ -428,7 +479,7 @@ class Downloads extends Component {
     
     handleCopyClick() {
         this.setState({copyLoading: true}, () => {
-            if (this.state.getFullResult === true) {
+            if (this.state.batchDownloadCheckBox === true) {
                 let dataFullURL = this.state.url.replace(/limit=\d*/g, "limit=" + maxRowsInDownload);
                 this.fetchOutput(dataFullURL);
             } else {
@@ -478,7 +529,7 @@ class Downloads extends Component {
             submitError: false,
             dataFull: []
         }, () => {
-            if (this.state.getFullResult === true) {
+            if (this.state.batchDownloadCheckBox === true) {
                 let dataFullURL = this.state.url.replace(/limit=\d*/g, "limit=" + maxRowsInDownload);
                 this.fetchOutput(dataFullURL);
             } else {
@@ -515,7 +566,12 @@ class Downloads extends Component {
     };
 
     fetchOutput(url) {
-        axios.get(url, { params: {}, requestId: "qbAxiosReq" })
+        let headersList = {};
+        if (this.state.batchDownloadCheckBox === true) {
+            headersList = {'Range': String(this.state.batchDownloadLowerNum) + '-' + String(this.state.batchDownloadUpperNum-1), 'Accept':'application/json', 'Prefer': 'count=exact'};
+        }
+
+        axios.get(url, { headers: headersList, requestId: "qbAxiosReq" })
             .then((response) => {
                 this.setState({
                     dataFull: response.data,
@@ -571,28 +627,29 @@ class Downloads extends Component {
                         <Typography type="body1" className={classes.cardcardMarginLeftTop}>File Format</Typography>
                         <FormControl component="fieldset" required>
                             <RadioGroup className={classes.cardcardMarginLeftTop} value={this.state.fileFormat} onChange={this.handleFileFormatChange} >
-                                <FormControlLabel control={ <Radio /> } label="Delimited" value="delimited" />
+                                <FormControlLabel control={ <Radio /> } label="Delimited file" value="delimited" />
                                 <span className={this.state.fileFormat !== 'delimited' ? classes.hidden : null}>
                                     <TextField
                                         required
                                         id="delimiterInput"
                                         type="text"
-                                        label={"Enter delimiter (e.g. \\t)"}
+                                        label={"Enter delimiter (\\t or , for Excel)"}
                                         value={this.state.delimiterChoice}
                                         className={classes.textField && classes.cardMarginLeft && classes.inlineTextField}
                                         margin="none"
+                                        fullWidth={true}
                                         disabled={this.state.fileFormat !== 'delimited' ? true : false} 
                                         onChange={this.handleDelimiterChange.bind(this)} />
                                 </span>
-                                <FormControlLabel control={ <Radio /> } label="JSON" value="json" />
-                                <FormControlLabel control={ <Radio /> } label="XML" value="xml" />
-                                <FormControlLabel control={ <Radio /> } label="FASTA" value="fasta" className={this.identifySeqColumnInStateColumns() === null ? classes.hidden : null}/>
+                                <FormControlLabel control={ <Radio /> } label="JSON File" value="json" />
+                                <FormControlLabel control={ <Radio /> } label="XML File" value="xml" />
+                                <FormControlLabel control={ <Radio /> } label="FASTA File" value="fasta" className={this.identifySeqColumnInStateColumns() === null ? classes.hidden : null}/>
 
                                 <span className={this.state.fileFormat !== 'fasta' ? classes.hidden : classes.inlineTextField}>
                                     <Typography>Note: FASTA header is composed from visible columns</Typography>
                                 </span>
 
-                                <FormControlLabel control={ <Radio /> } label="Delimited column values" value="delimitedColumn" />
+                                <FormControlLabel control={ <Radio /> } label="Copy single column values" value="delimitedColumn" />
                                 <span className={this.state.fileFormat !== 'delimitedColumn' ? classes.hidden : classes.inlineTextField}>
                                     <List>
                                         <ListItem button aria-haspopup="true" aria-controls="columnMenu" aria-label="Choose column" onClick={this.handleClickListItem} >
@@ -618,7 +675,29 @@ class Downloads extends Component {
                         {/* ADDITIONAL DOWNLOADS OPTIONS */}
                         <Typography type="body1" className={classes.cardcardMarginLeftTop}>Options</Typography>
                         <FormGroup className={classes.cardcardMarginLeftTop}>
-                            <FormControlLabel disabled={true} control={ <Checkbox onChange={this.handleGetFullResultToggle.bind(this)} value="getFullResult" /> } label={"Download up to 2.5 million rows"} />
+                            <FormControlLabel control={ <Checkbox onChange={this.handlebatchDownloadCheckBox.bind(this)} value="batchDownloadCheckBox" /> } checked={this.state.batchDownloadCheckBox} label={"Batch download"} />
+                                <span className={this.state.batchDownloadCheckBox !== true ? classes.hidden : classes.inlineTextField1}>
+                                    <div className={isNaN(this.props.totalRows) === false && this.props.totalRows >= 0 ? classes.hidden : null} >
+                                        <Typography type="body2" className={classes.inlineTextField1}>Re-run query with "Get exact row count" option selected</Typography>
+                                    </div>
+                                    <div>
+                                        <Button onClick={this.handlebatchDownloadChange.bind(this, "10K")} color={this.state.batchSize === "10K" ? 'primary' : 'inherit'} className={classes.button} >10K</Button>
+                                        <Button onClick={this.handlebatchDownloadChange.bind(this, "25K")} color={this.state.batchSize === "25K" ? 'primary' : 'inherit'} className={classes.button} >25K</Button>
+                                        <Button onClick={this.handlebatchDownloadChange.bind(this, "100K")} color={this.state.batchSize === "100K" ? 'primary' : 'inherit'} className={classes.button} >100K</Button>
+                                        <Button onClick={this.handlebatchDownloadChange.bind(this, "250K")} color={this.state.batchSize === "250K" ? 'primary' : 'inherit'} className={classes.button} >250K</Button>
+                                    </div>
+                                    <div className={classes.inlineTextField}>
+                                        <Typography type="body1" className={classes.inlineTextField}>{String(this.state.batchDownloadLowerNum).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} to {String(this.state.batchDownloadUpperNum).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} of {String(this.props.totalRows).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} rows</Typography>
+                                    </div>
+                                    <div className={classes.inlineTextField3}>
+                                        <IconButton onClick={this.handleLeftButtonClickRangeDownload.bind(this)} color="primary" className={classes.button} aria-label="COPY">
+                                            <NavigateBeforeIcon />
+                                        </IconButton>
+                                        <IconButton onClick={this.handleRightButtonClickRangeDownload.bind(this)} color="primary" className={classes.button} aria-label="COPY">
+                                            <NavigateNextIcon />
+                                        </IconButton>
+                                    </div>
+                                </span>
 
                             <FormControlLabel control={ <Checkbox onChange={this.handleTableHeaderToggle.bind(this)} disabled={this.state.fileFormat !== 'delimited' ? true : false} value="tableHeader" /> } checked={this.state.tableHeader} label={"Include table headers"} />
                         </FormGroup>
@@ -654,7 +733,7 @@ class Downloads extends Component {
                         {this.state.copyLoading === true ? <LinearProgress color="primary" className={classes.linearProgressClass} /> : <Divider />}
                         
                         <Button color="primary" className={classes.button} onClick={this.handleDownloadClick.bind(this)} disabled={this.state.fileFormat === 'delimitedColumn'} >Download</Button>
-                        <Button disabled={this.state.fileFormat !== 'delimitedColumn' && this.state.fileFormat !== 'json' && this.state.fileFormat !== 'xml'} className={classes.button} onClick={this.handleCopyClick.bind(this)} >Copy</Button>
+                        <Button color="primary" disabled={this.state.fileFormat !== 'delimitedColumn' && this.state.fileFormat !== 'json' && this.state.fileFormat !== 'xml'} className={classes.button} onClick={this.handleCopyClick.bind(this)} >Copy</Button>
                         <Button className={classes.button && classes.floatRight} onClick={this.handleResetClick.bind(this)} >Reset</Button>
                         {/* <Button className={classes.button}>Help</Button> */}
                     </Paper>
@@ -678,6 +757,16 @@ const styleSheet = {
     },
     inlineTextField: {
         marginLeft: 34
+    },
+    inlineTextField1: {
+        float: "none",
+        margin: "0 auto"
+    },
+    inlineTextField2: {
+        marginLeft: 50
+    },
+    inlineTextField3: {
+        marginLeft: 135
     },
     button: {
         marginBottom: 4
