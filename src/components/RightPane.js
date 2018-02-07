@@ -244,10 +244,16 @@ class RightPane extends Component {
 				let leftBracket = rules[i]['operator'] === "in" ? "(" : "";
 				let rightBracket = rules[i]['operator'] === "in" ? ")" : "";
 
+				let containsSpecialChars = "";
+				if (rules[i]['operator'] !== "in") {
+					let regexContainsSpecialChars = /\W/g;
+					containsSpecialChars = regexContainsSpecialChars.test(rules[i]['value']) ? "\"" : "";
+				}
+
 				if (i === (rules.length - 1)) {
-					select += rules[i]['id'] + "." + lib.translateOperatorToPostgrest(rules[i]['operator']) + "." + containsWildCards + leftBracket + rules[i]['value'] + rightBracket + containsWildCards;
+					select += rules[i]['id'] + "." + lib.translateOperatorToPostgrest(rules[i]['operator']) + "." + containsWildCards + containsSpecialChars + leftBracket + rules[i]['value'] + rightBracket + containsWildCards + containsSpecialChars;
 				} else {
-					select += rules[i]['id'] + "." + lib.translateOperatorToPostgrest(rules[i]['operator']) + "." + containsWildCards + leftBracket + rules[i]['value'] + rightBracket + containsWildCards + ",";
+					select += rules[i]['id'] + "." + lib.translateOperatorToPostgrest(rules[i]['operator']) + "." + containsWildCards + containsSpecialChars + leftBracket + rules[i]['value'] + rightBracket + containsWildCards + containsSpecialChars + ",";
 				}
 			}
 		}
