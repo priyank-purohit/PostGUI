@@ -12,7 +12,6 @@ import Checkbox from 'material-ui/Checkbox';
 import TextField from 'material-ui/TextField';
 import Divider from 'material-ui/Divider';
 import IconButton from 'material-ui/IconButton';
-import { LinearProgress } from 'material-ui/Progress';
 import Menu, { MenuItem } from 'material-ui/Menu';
 import List, { ListItem, ListItemText } from 'material-ui/List';
 
@@ -730,7 +729,7 @@ class Downloads extends Component {
                             </IconButton>
                         </div>
 
-                        {this.state.copyLoading === true ? <img src={require('../resources/progress.gif')} width="100%"/> : <Divider />}
+                        {this.state.copyLoading === true ? <img src={require('../resources/progress.gif')} width="100%" alt="Progress indicator" /> : <Divider />}
                         
                         <Button color="primary" className={classes.button} onClick={this.handleDownloadClick.bind(this)} disabled={this.state.fileFormat === 'delimitedColumn'} >Download</Button>
                         <Button color="primary" disabled={this.state.fileFormat !== 'delimitedColumn' && this.state.fileFormat !== 'json' && this.state.fileFormat !== 'xml'} className={classes.button} onClick={this.handleCopyClick.bind(this)} >Copy</Button>
