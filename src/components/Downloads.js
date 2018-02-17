@@ -675,8 +675,8 @@ class Downloads extends Component {
                         {/* ADDITIONAL DOWNLOADS OPTIONS */}
                         <Typography type="body1" className={classes.cardcardMarginLeftTop}>Options</Typography>
                         <FormGroup className={classes.cardcardMarginLeftTop}>
-                            <FormControlLabel control={ <Checkbox onChange={this.handlebatchDownloadCheckBox.bind(this)} value="batchDownloadCheckBox" /> } checked={this.state.batchDownloadCheckBox} label={"Batch download"} />
-                                <span className={this.state.batchDownloadCheckBox !== true ? classes.hidden : classes.inlineTextField1}>
+                            <FormControlLabel control={ <Checkbox onChange={this.handlebatchDownloadCheckBox.bind(this)} value="batchDownloadCheckBox" /> } disabled={this.state.fileFormat === 'delimitedColumn' ? true : false} checked={this.state.batchDownloadCheckBox} label={"Batch download"} />
+                                <span className={this.state.batchDownloadCheckBox !== true || this.state.fileFormat === 'delimitedColumn' ? classes.hidden : classes.inlineTextField1}>
                                     <div className={isNaN(this.props.totalRows) === false && this.props.totalRows >= 0 ? classes.hidden : null} >
                                         <Typography type="body2" className={classes.inlineTextField1}>Re-run query with "Get exact row count" option selected</Typography>
                                     </div>
