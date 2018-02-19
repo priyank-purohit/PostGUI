@@ -550,11 +550,13 @@ class DbSchema extends Component {
 		let classNames = this.props.classes.column;
 		if (this.state.table !== table && this.state.hoverTable !== table) {
 			classNames = this.props.classes.column + " " + this.props.classes.hide;
+			return null;
 		}
 
 		// Specifically hide columns if they do not belong to current search results
 		if (this.state.searchTerm !== "" && this.state.searchResults && (this.state.searchResults[table] === undefined || this.state.searchResults[table] === null)) {
 			classNames = this.props.classes.column + " " + this.props.classes.hide;
+			return null;
 		}
 
 		let referencedResults = this.isForeignKey(table, columnName);
