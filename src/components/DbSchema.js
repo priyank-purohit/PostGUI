@@ -11,7 +11,7 @@ import IconButton from 'material-ui/IconButton';
 import CloseIcon from 'material-ui-icons/Close';
 import FolderIcon from 'material-ui-icons/Folder';
 import FolderIconOpen from 'material-ui-icons/FolderOpen';
-import AddIcon from 'material-ui-icons/Add';
+import KeyboardArrowDownIcon from 'material-ui-icons/KeyboardArrowDown';
 import ClearIcon from 'material-ui-icons/Clear';
 import VisibilityIcon from 'material-ui-icons/Visibility';
 import VisibilityOffIcon from 'material-ui-icons/VisibilityOff';;
@@ -524,7 +524,7 @@ class DbSchema extends Component {
 				</ListItemIcon>
 				<ListItemText primary={displayName} style={truncTextStyle} />
 				<ListItemIcon onClick={(event) => {event.stopPropagation(); this.handleTableOpenClick(tableName);}} title="Show columns without loading in Query Builder.">
-					{this.state.hoverTable === tableName ? (this.state.table === tableName ? <div></div> : <ClearIcon className={this.props.classes.primaryColoured} />) : (this.state.table === tableName ? <div></div> : <AddIcon />) }
+					{this.state.hoverTable === tableName ? (this.state.table === tableName ? <div></div> : <ClearIcon className={this.props.classes.primaryColoured} />) : (this.state.table === tableName ? <div></div> : <KeyboardArrowDownIcon />) }
 				</ListItemIcon>
 			</ListItem>
 		);
