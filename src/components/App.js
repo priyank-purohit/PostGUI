@@ -15,6 +15,7 @@ import '../styles/index.css';
 export default class Layout extends React.Component {
 	constructor() {
 		super();
+		this.parseURL();
 		this.state = {
 			dbIndex: 0,
 			table: "",
@@ -27,6 +28,10 @@ export default class Layout extends React.Component {
 			searchTerm: "",
 			dbSchemaDefinitions: null
 		};
+	}
+
+	parseURL() {
+		console.log(window.location.href);
 	}
 
 	toggleLeftPane() {
