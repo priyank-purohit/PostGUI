@@ -67,10 +67,21 @@ export default class Layout extends React.Component {
 			table = null;
 		}
 		console.log("Extracted table as " + table);
+		
+		// Extract the query
+		let queryRx = /query=[^&\s]*/g;
+		let query = queryRx.exec(url);
+		if (query) {
+			query = query[0].replace("query=", "");
+		} else {
+			query = null;
+		}
+		console.log("Extracted query as " + query);
 
 		return ({
 			db: db,
-			table: table
+			table: table,
+			query: query
 		});
 	}
 
