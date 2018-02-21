@@ -77,20 +77,31 @@ export default class Layout extends React.Component {
 		console.log("Extracted query as " + query);
 
 		// Extract the rowLimit
-		let rowLimitRx = /\/rowLimit\/\d\//g;
+		let rowLimitRx = /rowLimit=\d+/g;
 		let rowLimit = rowLimitRx.exec(url);
 		if (rowLimit) {
-			rowLimit = parseInt(rowLimit[0].replace(/\/rowLimit\//g, "").replace(/\//g, ""), 10);
+			rowLimit = parseInt(rowLimit[0].replace(/rowLimit=/g, ""), 10);
 		} else {
 			rowLimit = null;
 		}
 		console.log("Extracted rowLimit as " + rowLimit);
 
+		// Extract the exactCount
+		let exactCountRx = /exactCount=True|exactCount=False/g;
+		let exactCount = exactCountRx.exec(url);
+		if (exactCount) {
+			exactCount = exactCount[0].replace(/exactCount=/g, "") === "True";
+		} else {
+			exactCount = false;
+		}
+		console.log("Extracted exactCount as " + exactCount);
+
 		return ({
 			db: db,
 			table: table,
 			query: query,
-			rowLimit: rowLimit
+			rowLimit: rowLimit,
+			exactCount: exactCount
 		});
 	}
 
