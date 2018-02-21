@@ -10,14 +10,20 @@ import LeftPane from './LeftPane.js';
 
 import '../styles/index.css';
 
-//let lib = require("../utils/library.js");
+let lib = require("../utils/library.js");
 
 export default class Layout extends React.Component {
 	constructor() {
 		super();
-		this.parseURL();
+		
+		// Parse URL
+		let parsedDbTable = this.parseURL();
+		let db = parsedDbTable['db'];
+		
+
+
 		this.state = {
-			dbIndex: 0,
+			dbIndex: db || 0,
 			table: "",
 			rulesFromHistoryPane: null,
 			columns: [],
@@ -30,8 +36,30 @@ export default class Layout extends React.Component {
 		};
 	}
 
+	// This should be called once per session
 	parseURL() {
-		console.log(window.location.href);
+		let url = "" + window.location.href;
+		console.log("Parsing URL: " + url);
+		
+		// Extract the db
+		let databaseRx = /\/db\/\d\//g;
+		let db = databaseRx.exec(url);
+		if (db) {
+			db = parseInt(db[0].replace(/\/db\//g, "").replace(/\//g, ""), 10);
+		} else {
+			db = null;
+		}
+		// Confirm DB exists
+		let databasesMapped = [];
+		lib.getValueFromConfig("databases").map((obj, index) => databasesMapped[index] = obj.title || "Untitled database");
+		if (!databasesMapped[db]) {
+			db = null;
+		}
+		console.log("Extracted db as " + db);
+		
+		return ({
+			db: db
+		});
 	}
 
 	toggleLeftPane() {
