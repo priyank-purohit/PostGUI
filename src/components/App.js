@@ -42,7 +42,6 @@ export default class Layout extends React.Component {
 	// This should be called once per session
 	parseURL() {
 		let url = "" + window.location.href;
-		console.log("Parsing URL: " + url);
 		
 		// Extract the db
 		let databaseRx = /\/db\/\d\//g;
@@ -58,7 +57,6 @@ export default class Layout extends React.Component {
 		if (!databasesMapped[db]) {
 			db = null;
 		}
-		console.log("Extracted db as " + db);
 		
 		// Extract the table
 		let tableRx = /\/table\/\w+\/?/g;
@@ -68,7 +66,6 @@ export default class Layout extends React.Component {
 		} else {
 			table = null;
 		}
-		console.log("Extracted table as " + table);
 		
 		// Extract the query
 		let queryRx = /query=[^&\s]*/g;
@@ -78,7 +75,6 @@ export default class Layout extends React.Component {
 		} else {
 			query = null;
 		}
-		console.log("Extracted query as " + query);
 
 		// Extract the rowLimit
 		let rowLimitRx = /rowLimit=\d+/g;
@@ -88,7 +84,6 @@ export default class Layout extends React.Component {
 		} else {
 			rowLimit = null;
 		}
-		console.log("Extracted rowLimit as " + rowLimit);
 
 		// Extract the exactCount
 		let exactCountRx = /exactCount=True|exactCount=False/g;
@@ -98,7 +93,6 @@ export default class Layout extends React.Component {
 		} else {
 			exactCount = false;
 		}
-		console.log("Extracted exactCount as " + exactCount);
 
 		return ({
 			db: db,
