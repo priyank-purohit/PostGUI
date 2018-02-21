@@ -20,8 +20,6 @@ export default class Layout extends React.Component {
 		let parsedDbTable = this.parseURL();
 		let db = parsedDbTable['db'];
 		let table = parsedDbTable['table'];
-		
-
 
 		this.state = {
 			dbIndex: db || 0,
