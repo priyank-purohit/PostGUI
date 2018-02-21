@@ -20,10 +20,14 @@ export default class Layout extends React.Component {
 		let parsedDbTable = this.parseURL();
 		let db = parsedDbTable['db'];
 		let table = parsedDbTable['table'];
+		let rowLimit = parsedDbTable['rowLimit'];
+		let exactCount = parsedDbTable['exactCount'];
 
 		this.state = {
 			dbIndex: db || 0,
 			table: table || "",
+			rowLimit: rowLimit || null,
+			exactCount: exactCount || null,
 			rulesFromHistoryPane: null,
 			columns: [],
 			newHistoryItem: [],
@@ -218,7 +222,9 @@ export default class Layout extends React.Component {
 						dbSchemaDefinitions={this.state.dbSchemaDefinitions}
 						visibleColumns={this.state.visibleColumns}
 						leftPaneVisibility={this.state.leftPaneVisibility}
-						addToHistory={this.addToHistory.bind(this)} />
+						addToHistory={this.addToHistory.bind(this)}
+						rowLimit={this.state.rowLimit}
+						exactCount={this.state.exactCount} />
 
 				</div>
 			</div>
