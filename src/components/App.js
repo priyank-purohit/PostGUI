@@ -19,12 +19,13 @@ export default class Layout extends React.Component {
 		// Parse URL
 		let parsedDbTable = this.parseURL();
 		let db = parsedDbTable['db'];
+		let table = parsedDbTable['table'];
 		
 
 
 		this.state = {
 			dbIndex: db || 0,
-			table: "",
+			table: table || "",
 			rulesFromHistoryPane: null,
 			columns: [],
 			newHistoryItem: [],
@@ -57,8 +58,19 @@ export default class Layout extends React.Component {
 		}
 		console.log("Extracted db as " + db);
 		
+		// Extract the table
+		let tableRx = /\/table\/\w+\/?/g;
+		let table = tableRx.exec(url);
+		if (table) {
+			table = table[0].replace(/\/table\//g, "").replace(/\//g, "");
+		} else {
+			table = null;
+		}
+		console.log("Extracted table as " + table);
+
 		return ({
-			db: db
+			db: db,
+			table: table
 		});
 	}
 
