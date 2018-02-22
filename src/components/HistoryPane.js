@@ -8,7 +8,7 @@ import Drawer from 'material-ui/Drawer';
 import List, { ListItem, ListItemIcon, ListItemText, ListSubheader } from 'material-ui/List';
 import IconButton from 'material-ui/IconButton';
 import Button from 'material-ui/Button';
-import EditIcon from 'material-ui-icons/Edit';
+import LinkIcon from 'material-ui-icons/Link';
 import DeleteIcon from 'material-ui-icons/Delete';
 import CloseIcon from 'material-ui-icons/Close';
 //import LinkIcon from 'material-ui-icons/Link';
@@ -87,7 +87,7 @@ class HistoryPane extends Component {
 	}
 
 	// Inserts shareable URL to clipboard
-	handleShareIconClick(index) {
+	handleLinkIconClick(index) {
 		let url = this.state.historyArray[index][0];
 		let rules = this.state.historyArray[index][1];
 		console.log("[",JSON.stringify(url),"," ,JSON.stringify(rules),"]");
@@ -108,7 +108,7 @@ class HistoryPane extends Component {
 		}
 
 		// Extract the rules
-		let rulesFromURL = url.replace(lib.getDbConfig(this.props.dbIndex, "url"), "").replace("/" + tableName + "?", "").replace("&limit=", "&rowLimit=");
+		//let rulesFromURL = url.replace(lib.getDbConfig(this.props.dbIndex, "url"), "").replace("/" + tableName + "?", "").replace("&limit=", "&rowLimit=");
 		
 		// Create the URL needed for sharing
 		let shareUrl = "";
@@ -251,8 +251,8 @@ class HistoryPane extends Component {
 									return (
 										<ListItem button key={index} onMouseEnter={this.changeDisplayIndex.bind(this, index)} onClick={this.handleHistoryItemClick.bind(this, index)}>
 											{/* Clicking on this edit button should load the history item in the Query Builder */}
-											<ListItemIcon className={classes.noStyleButton} onClick={this.handleShareIconClick.bind(this, index)}>
-												<EditIcon />
+											<ListItemIcon className={classes.noStyleButton} onClick={this.handleLinkIconClick.bind(this, index)}>
+												<LinkIcon />
 											</ListItemIcon>
 
 											{/* Nicely formatted history item */}
@@ -301,7 +301,7 @@ class HistoryPane extends Component {
 										<ListItem button key={index} onMouseEnter={this.changeDisplayIndex.bind(this, index)} onClick={this.handleHistoryItemClick.bind(this, index)}>
 
 											<ListItemIcon className={classes.noStyleButton} onClick={this.handleHistoryItemClick.bind(this, index)}>
-												<EditIcon />
+												<LinkIcon />
 											</ListItemIcon>
 
 											<div>
