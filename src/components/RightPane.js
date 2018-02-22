@@ -47,9 +47,9 @@ class RightPane extends Component {
 			submitSuccess: false,
 			rows: null,
 			snackBarVisibility: false,
-			exactRowCount: false,
+			exactRowCount: this.props.exactCount || false,
 			snackBarMessage: "Unknown error occured",
-			rowLimit: 25000,
+			rowLimit: Math.min(this.props.rowLimit, maxRowsInOutput) || 25000,
 			url: ""
 		}
 	}

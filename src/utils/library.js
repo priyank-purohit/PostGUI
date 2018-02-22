@@ -3,7 +3,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Returns value of KEY from config file
-exports.getValueFromConfig = function(key) {
+exports.getValueFromConfig = function (key) {
 	try {
 		let file, config;
 		file = require("../data/config.json");
@@ -21,7 +21,7 @@ exports.getValueFromConfig = function(key) {
 
 // Returns value of OPTION for specific TABLE and DBINDEX
 // NOTE: check for null value when this function is used
-exports.getDbConfig = function(dbIndex, option) {
+exports.getDbConfig = function (dbIndex, option) {
 	if (dbIndex !== null && option !== null) {
 		try {
 			let dbConfig = this.getValueFromConfig("databases");
@@ -41,7 +41,7 @@ exports.getDbConfig = function(dbIndex, option) {
 
 // Returns value of OPTION for specific TABLE and DBINDEX
 // NOTE: check for null value when this function is used
-exports.getTableConfig = function(dbIndex, table, option) {
+exports.getTableConfig = function (dbIndex, table, option) {
 	if (dbIndex !== null && table !== null && option !== null) {
 		try {
 			let tableConfig = this.getDbConfig(dbIndex, "tableRules");
@@ -61,7 +61,7 @@ exports.getTableConfig = function(dbIndex, table, option) {
 
 // Returns value of OPTION for specific COLUMN and DBINDEX .. from the defined global configs
 // NOTE: do not use this function, it is called automatically from the getColumnConfig() function
-exports.getColumnConfigGlobal = function(dbIndex, column, option) {
+exports.getColumnConfigGlobal = function (dbIndex, column, option) {
 	try {
 		if (this.getDbConfig(dbIndex, "columnRulesGlobal")) {
 			let allGlobalColumnConfigs = (this.getDbConfig(dbIndex, "columnRulesGlobal"))[column];
@@ -79,7 +79,7 @@ exports.getColumnConfigGlobal = function(dbIndex, column, option) {
 
 // Returns value of OPTION for specific TABLE and COLUMN and DBINDEX
 // NOTE: check for null value when this function is used
-exports.getColumnConfig = function(dbIndex, table, column, option) {
+exports.getColumnConfig = function (dbIndex, table, column, option) {
 	if (dbIndex !== null && table !== null && option !== null && option !== null) {
 		try {
 			let columnRules = this.getTableConfig(dbIndex, table, "columnRules");
@@ -98,7 +98,7 @@ exports.getColumnConfig = function(dbIndex, table, column, option) {
 }
 
 // Returns true iff COLUMN is part of the default columns defined for TABLE and DBINDEX
-exports.isColumnInDefaultView = function(dbIndex, table, column) {
+exports.isColumnInDefaultView = function (dbIndex, table, column) {
 	if (dbIndex !== null && table !== null && column !== null) {
 		try {
 			let defaultColumns = this.getTableConfig(dbIndex, table, "defaultViewColumns");
@@ -121,7 +121,7 @@ exports.isColumnInDefaultView = function(dbIndex, table, column) {
 // Returns the initial query (i.e. pre-formatted default query for a table)
 // Convert this into a function that loads a default entry for ALL tables
 // If no rules are defined, it will return a blank default entry.
-exports.getQBRules = function() {
+exports.getQBRules = function () {
 	return {
 		condition: 'AND',
 		rules: [{
@@ -131,7 +131,7 @@ exports.getQBRules = function() {
 }
 
 // Returns operator translations
-exports.getQBLang = function() {
+exports.getQBLang = function () {
 	return {
 		operators: {
 			regex: 'matches regex'
@@ -140,33 +140,33 @@ exports.getQBLang = function() {
 }
 
 // Returns the default operators
-exports.getQBOperators = function() {
-	return [ { type:"equal" },
-	{ type:"not_equal" },
-	{ type:"in" },
-	{ type:"not_in" },
-	{ type:"less" },
-	{ type:"less_or_equal" },
-	{ type:"greater" },
-	{ type:"greater_or_equal" },
-	{ type:"between" },
-	{ type:"not_between" },
-	{ type:"begins_with" },
-	{ type:"not_begins_with" },
-	{ type:"contains" },
-	{ type:"not_contains" },
-	{ type:"ends_with" },
-	{ type:"not_ends_with" },
-	{ type:"is_empty" },
-	{ type:"is_not_empty" },
-	{ type:"is_null" },
-	{ type:"is_not_null" },
-	{ type:"regex",  nb_inputs: 1, multiple: false, apply_to: ["string"] }];
+exports.getQBOperators = function () {
+	return [{ type: "equal" },
+	{ type: "not_equal" },
+	{ type: "in" },
+	{ type: "not_in" },
+	{ type: "less" },
+	{ type: "less_or_equal" },
+	{ type: "greater" },
+	{ type: "greater_or_equal" },
+	{ type: "between" },
+	{ type: "not_between" },
+	{ type: "begins_with" },
+	{ type: "not_begins_with" },
+	{ type: "contains" },
+	{ type: "not_contains" },
+	{ type: "ends_with" },
+	{ type: "not_ends_with" },
+	{ type: "is_empty" },
+	{ type: "is_not_empty" },
+	{ type: "is_null" },
+	{ type: "is_not_null" },
+	{ type: "regex", nb_inputs: 1, multiple: false, apply_to: ["string"] }];
 }
 
 
 // Returns a list of columns
-exports.getQBFilters = function(dbIndex, table, columns, definitions = null) {
+exports.getQBFilters = function (dbIndex, table, columns, definitions = null) {
 	// allSupportedQBFilters are the ones present in the translateOperatorToPostgrest() method below...
 	let allSupportedQBFilters = ["equal", "not_equal", "greater", "less", "greater_or_equal", "less_or_equal", "is_not_null", "is_null", "in", "contains"];
 	let numericQBFilters = ["equal", "not_equal", "greater", "less", "greater_or_equal", "less_or_equal", "is_not_null", "is_null", "in"];
@@ -194,7 +194,7 @@ exports.getQBFilters = function(dbIndex, table, columns, definitions = null) {
 			type = pgRestType;
 			//console.log("Assigning type of column =", columns[i], "from the PostgREST resp as", type);
 		}
-		
+
 		let operators = this.getColumnConfig(dbIndex, table, columns[i], "operators");
 		if (operators === null && type !== null) {
 			if (type === 'integer' || type === 'double') {
@@ -227,7 +227,7 @@ exports.getQBFilters = function(dbIndex, table, columns, definitions = null) {
 }
 
 // Accepts jQB operator, and returns PostgREST equivalent of it
-exports.translateOperatorToPostgrest = function(operator) {
+exports.translateOperatorToPostgrest = function (operator) {
 	let dict = [
 		['equal', 'eq'],
 		['not_equal', 'neq'],
@@ -250,8 +250,32 @@ exports.translateOperatorToPostgrest = function(operator) {
 	return "eq";
 }
 
+// Accepts PostgREST operator, and returns jQB equivalent of it
+exports.translateOperatorTojQB = function (operator) {
+	let dict = [
+		['eq', 'equal'],
+		['neq', 'not_equal'],
+		['gt', 'greater'],
+		['lt', 'less'],
+		['gte', 'greater_or_equal'],
+		['lte', 'less_or_equal'],
+		['not.s', 'is_not_null'],
+		['in', 'in'],
+		['ilike', 'contains'],
+		['rx', 'regex'],
+		['is', 'is_null']
+	];
+
+	for (let i = 0; i < dict.length; i++) {
+		if (dict[i][0] === operator) {
+			return dict[i][1];
+		}
+	}
+	return "equal";
+}
+
 // Accepts jQB operator, and returns HUMAN equivalent of it
-exports.translateOperatorToHuman = function(operator) {
+exports.translateOperatorToHuman = function (operator) {
 	let dict = [
 		['equal', '='],
 		['not_equal', '!='],
@@ -278,13 +302,13 @@ exports.translateOperatorToHuman = function(operator) {
 // Other Methods
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // 
-exports.isJsonString = function(str) {
-    try {
-        JSON.parse(str);
-    } catch (e) {
-        return false;
-    }
-    return true;
+exports.isJsonString = function (str) {
+	try {
+		JSON.parse(str);
+	} catch (e) {
+		return false;
+	}
+	return true;
 }
 
 // searches for an array element in an array of arrays (2D only)
@@ -307,7 +331,7 @@ exports.searchForArrayInArray = function (element, array) {
 }
 
 // returns true if ELEMENT is in ARRAY
-exports.inArray = function(element, array) {
+exports.inArray = function (element, array) {
 	if (array && element)
 		if (element.constructor === Array) {
 			return this.searchForArrayInArray(element, array) > -1;
@@ -319,7 +343,7 @@ exports.inArray = function(element, array) {
 }
 
 // returns index of ELEMENT is in ARRAY
-exports.elementPositionInArray = function(element, array) {
+exports.elementPositionInArray = function (element, array) {
 	if (array && element)
 		if (element.constructor === Array) {
 			return this.searchForArrayInArray(element, array);
@@ -330,11 +354,11 @@ exports.elementPositionInArray = function(element, array) {
 		return -1;
 }
 
-exports.moveArrayElementFromTo = function(targetArray, indexFrom, indexTo) {
+exports.moveArrayElementFromTo = function (targetArray, indexFrom, indexTo) {
 	let targetElement = targetArray[indexFrom];
-	let magicIncrement = (indexTo - indexFrom) / Math.abs (indexTo - indexFrom);
+	let magicIncrement = (indexTo - indexFrom) / Math.abs(indexTo - indexFrom);
 
-	for (let e = indexFrom; e !== indexTo; e += magicIncrement){
+	for (let e = indexFrom; e !== indexTo; e += magicIncrement) {
 		targetArray[e] = targetArray[e + magicIncrement];
 	}
 
@@ -343,16 +367,16 @@ exports.moveArrayElementFromTo = function(targetArray, indexFrom, indexTo) {
 }
 
 // Opens the specified URL in a different tab
-exports.visitPage = function(url = "http://www.google.ca") {
+exports.visitPage = function (url = "http://www.google.ca") {
 	window.open(url, "_blank");
 }
 
 // Extracts the keys from a JSON string DATA
-exports.getKeysFromJSON = function(data) {
+exports.getKeysFromJSON = function (data) {
 	let keys = [];
-	for(let i in data){
+	for (let i in data) {
 		let val = data[i];
-		for(let j in val){
+		for (let j in val) {
 			let sub_key = j;
 			keys.push(sub_key);
 		}
@@ -361,7 +385,7 @@ exports.getKeysFromJSON = function(data) {
 }
 
 // Extracts unique values from an array ARR
-exports.arrNoDup = function(arr) {
+exports.arrNoDup = function (arr) {
 	var temp = {};
 	for (var i = 0; i < arr.length; i++) {
 		temp[arr[i]] = true;
