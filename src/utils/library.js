@@ -250,6 +250,30 @@ exports.translateOperatorToPostgrest = function(operator) {
 	return "eq";
 }
 
+// Accepts PostgREST operator, and returns jQB equivalent of it
+exports.translateOperatorTojQB = function(operator) {
+	let dict = [
+		['eq', 'equal'],
+		['neq', 'not_equal'],
+		['gt', 'greater'],
+		['lt', 'less'],
+		['gte', 'greater_or_equal'],
+		['lte', 'less_or_equal'],
+		['not.s' , 'is_not_null'],
+		['in', 'in'],
+		['ilike', 'contains'],
+		['rx', 'regex'],
+		['is', 'is_null']
+	];
+
+	for (let i = 0; i < dict.length; i++) {
+		if (dict[i][0] === operator) {
+			return dict[i][1];
+		}
+	}
+	return "equal";
+}
+
 // Accepts jQB operator, and returns HUMAN equivalent of it
 exports.translateOperatorToHuman = function(operator) {
 	let dict = [
