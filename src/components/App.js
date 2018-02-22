@@ -22,12 +22,14 @@ export default class Layout extends React.Component {
 		let table = parsedDbTable['table'];
 		let rowLimit = parsedDbTable['rowLimit'];
 		let exactCount = parsedDbTable['exactCount'];
+		let urlRules = parsedDbTable['urlRules'];
 
 		this.state = {
 			dbIndex: db || 0,
 			table: table || "",
 			rowLimit: rowLimit || null,
 			exactCount: exactCount || null,
+			rulesFromURL: this.parseURLRules(urlRules) || null,
 			rulesFromHistoryPane: null,
 			columns: [],
 			newHistoryItem: [],
@@ -97,10 +99,65 @@ export default class Layout extends React.Component {
 		return ({
 			db: db,
 			table: table,
-			query: query,
+			urlRules: query,
 			rowLimit: rowLimit,
 			exactCount: exactCount
 		});
+	}
+
+	// Takes the query part of the URL used to make PostgREST API call and converts to an array object that can be traversed
+	parseURLRules(urlQuery) {
+		if (urlQuery === null) {
+			return null;
+		}
+
+		urlQuery = urlQuery.replace(/not.and=\(/g, "(not.and,").replace(/not.or=\(/g, "(not.or,");
+		urlQuery = urlQuery.replace(/not.and\(/g, "(not.and,").replace(/not.or\(/g, "(not.or,");
+		urlQuery = urlQuery.replace(/and=\(/g, "(and,").replace(/or=\(/g, "(or,");
+		urlQuery = urlQuery.replace(/and\(/g, "(and,").replace(/or\(/g, "(or,");
+		
+		urlQuery = urlQuery.replace(/\(/g, "[").replace(/\)\s/g, "], ");
+		urlQuery = urlQuery.replace(/\)/g, "]");
+		urlQuery = urlQuery.replace(/\s+/, ", ");
+		urlQuery = "[" + urlQuery + "]";
+		urlQuery = urlQuery.replace(/[^[\],\s]+/g, "\"$&\"");
+		urlQuery = urlQuery.replace(/" /g, "\", ");
+
+		urlQuery = JSON.parse(urlQuery);
+		if (urlQuery.length === 1 && urlQuery[0] instanceof Array) {
+			urlQuery = urlQuery[0];
+		}
+		
+		return this.recursiveRulesCreation(urlQuery);
+	}
+
+	// Takes a tranversable array object and converts to jQB compliant JSON object
+	recursiveRulesCreation(arrayObj) {
+		let rules = {};
+		let rulesElement = [];
+		for (let i = 0; i < arrayObj.length; i++) {
+			if (i === 0) {
+				// Condition + Not + Valid
+				rules.condition = arrayObj[0].replace("not.","").toUpperCase();
+				rules.not = arrayObj[0].replace(".and", "").replace(".or", "") === "not";
+				rules.valid = true;
+			} else {
+				// Rules
+				if (arrayObj[i] instanceof Array) {
+					rulesElement.push(this.recursiveRulesCreation(arrayObj[i]));
+				} else {
+					let rule = arrayObj[i].split(".");
+					rulesElement.push({
+						id: rule[0],
+						field: rule[0],
+						operator: lib.translateOperatorTojQB(rule[1]),
+						value: rule[2]
+					});
+				}
+				rules.rules = rulesElement;
+			}
+		}
+		return rules;
 	}
 
 	toggleLeftPane() {
@@ -177,6 +234,15 @@ export default class Layout extends React.Component {
 		this.setState({
 			visibleColumns: newVisibleColumns
 		});
+	}
+
+	componentDidMount() { 
+		if (this.state.rulesFromURL) {
+			this.changeRules(this.state.rulesFromURL);
+			// setTimeout( ()=> {
+			// 	history.pushState('Shared Query', 'Shared Query', 'http://localhost:3000/');
+			// }, 1000);
+		}
 	}
 
 	render() {
