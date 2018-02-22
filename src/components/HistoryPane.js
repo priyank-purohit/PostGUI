@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-//import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Drawer from 'material-ui/Drawer';
-//import Typography from 'material-ui/Typography';
 import List, { ListItem, ListItemIcon, ListItemText, ListSubheader } from 'material-ui/List';
 import IconButton from 'material-ui/IconButton';
 import Button from 'material-ui/Button';
@@ -87,16 +85,12 @@ class HistoryPane extends Component {
 
 	// Inserts shareable URL to clipboard
 	handleLinkIconClick(index) {
+		let error = false, insertSuccess = false;
+
 		let url = this.state.historyArray[index][0];
 		let rules = this.state.historyArray[index][1];
-		//console.log("[",JSON.stringify(url),"," ,JSON.stringify(rules),"]");
-		
-		let error = false;
 
-		// "http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(protein_id.ilike.*ALP80*,genome_designation.eq.PfrICMP7712,description.ilike.*kinase*,or(significance_value.eq.\"2.6e-200\",significance_value.lte.2e-28,and(significance_value.gte.5.4e-27,significance_value.lte.1.9e-22)))&limit=25000"
-		// http://hopper.csb.utoronto.ca:3000/queryBuilder/table/annotation_domain?query= not.and=(protein_id.ilike.%22*\_*%22)&rowLimit=25000&exactCount=True
-
-		// Extract the table
+		// Extract the table name from URL
 		let tableRx = /\/\w+/g;
 		let tableName = tableRx.exec(url.replace(lib.getDbConfig(this.props.dbIndex, "url"), ""));
 		if (tableName) {
@@ -112,24 +106,22 @@ class HistoryPane extends Component {
 			shareUrl = window.location.origin + "/queryBuilder/db/" + this.props.dbIndex + "/table/" + tableName + "?query=" + encodeURIComponent(JSON.stringify(rules));
 
 			// Insert to clipboard
-			this.insertToClipboard(shareUrl);
+			insertSuccess = this.insertToClipboard(shareUrl);
 		}
 
-		//console.log("Raw rules: " + JSON.stringify(rules));
-		//console.log("encoded rules: " + encodeURIComponent(JSON.stringify(rules)));
-		//console.log("Share URL: " + shareUrl);
+		// if no errors, show a successfully inserted message to user...
 	}
 
 	insertToClipboard(str) {
-        //based on https://stackoverflow.com/a/12693636
-        document.oncopy = function (event) {
-            event.clipboardData.setData("Text", str);
-            event.preventDefault();
-        };
-        let copySuccess = document.execCommand("Copy");
-        document.oncopy = undefined;
-        return copySuccess;
-    }
+		//based on https://stackoverflow.com/a/12693636
+		document.oncopy = function (event) {
+			event.clipboardData.setData("Text", str);
+			event.preventDefault();
+		};
+		let copySuccess = document.execCommand("Copy");
+		document.oncopy = undefined;
+		return copySuccess;
+	}
 
 	closeDrawer() {
 		this.props.closeHistoryPane();
