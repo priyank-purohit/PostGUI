@@ -11,7 +11,6 @@ import Button from 'material-ui/Button';
 import LinkIcon from 'material-ui-icons/Link';
 import DeleteIcon from 'material-ui-icons/Delete';
 import CloseIcon from 'material-ui-icons/Close';
-//import LinkIcon from 'material-ui-icons/Link';
 
 let _ = require('lodash');
 let lib = require("../utils/library.js");
@@ -90,7 +89,7 @@ class HistoryPane extends Component {
 	handleLinkIconClick(index) {
 		let url = this.state.historyArray[index][0];
 		let rules = this.state.historyArray[index][1];
-		console.log("[",JSON.stringify(url),"," ,JSON.stringify(rules),"]");
+		//console.log("[",JSON.stringify(url),"," ,JSON.stringify(rules),"]");
 		
 		let error = false;
 
@@ -107,21 +106,30 @@ class HistoryPane extends Component {
 			error = true;
 		}
 
-		// Extract the rules
-		//let rulesFromURL = url.replace(lib.getDbConfig(this.props.dbIndex, "url"), "").replace("/" + tableName + "?", "").replace("&limit=", "&rowLimit=");
-		
 		// Create the URL needed for sharing
 		let shareUrl = "";
 		if (!error) {
 			shareUrl = window.location.href + "queryBuilder/db/" + this.props.dbIndex + "/table/" + tableName + "?query=" + encodeURIComponent(JSON.stringify(rules));
+
+			// Insert to clipboard
+			this.insertToClipboard(shareUrl);
 		}
 
-		console.log("Raw rules: " + JSON.stringify(rules));
-		console.log("encoded rules: " + encodeURIComponent(JSON.stringify(rules)));
-		console.log("Share URL: " + shareUrl);
-
-		// Insert to clipboard
+		//console.log("Raw rules: " + JSON.stringify(rules));
+		//console.log("encoded rules: " + encodeURIComponent(JSON.stringify(rules)));
+		//console.log("Share URL: " + shareUrl);
 	}
+
+	insertToClipboard(str) {
+        //based on https://stackoverflow.com/a/12693636
+        document.oncopy = function (event) {
+            event.clipboardData.setData("Text", str);
+            event.preventDefault();
+        };
+        let copySuccess = document.execCommand("Copy");
+        document.oncopy = undefined;
+        return copySuccess;
+    }
 
 	closeDrawer() {
 		this.props.closeHistoryPane();
