@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Drawer from 'material-ui/Drawer';
 import List, { ListItem, ListItemIcon, ListItemText, ListSubheader } from 'material-ui/List';
+import Snackbar from 'material-ui/Snackbar';
+
 import IconButton from 'material-ui/IconButton';
 import Button from 'material-ui/Button';
 import LinkIcon from 'material-ui-icons/Link';
@@ -28,7 +30,9 @@ class HistoryPane extends Component {
 			newHistoryItem: this.props.newHistoryItem,
 			displayIndex: -1,
 			historyArray: localHistoryArray ? localHistoryArray : [],
-			deleteHistoryDialogVisibility: this.props.classes.hide
+			deleteHistoryDialogVisibility: this.props.classes.hide,
+			snackBarVisibility: false,
+			snackBarMessage: "Unknown error occured",
 		};
 		this.changeDisplayIndexDebounce = _.debounce(value => this.setState({ displayIndex: value }), 300);
 	}
@@ -110,6 +114,19 @@ class HistoryPane extends Component {
 		}
 
 		// if no errors, show a successfully inserted message to user...
+		if (!error && insertSuccess) {
+			this.setState({
+				snackBarVisibility: true,
+				snackBarMessage: "Link copied!",
+			}, () => {
+				this.timer = setTimeout(() => {
+					this.setState({
+						snackBarVisibility: false,
+						snackBarMessage: "Unknown error"
+					});
+				}, 2500);
+			});
+		}
 	}
 
 	insertToClipboard(str) {
@@ -316,6 +333,12 @@ class HistoryPane extends Component {
 						})
 					}
 				</List>
+				<Snackbar 	anchorOrigin={{vertical: "bottom", horizontal: "center"}}
+							open={this.state.snackBarVisibility}
+							onClose={this.handleRequestClose}
+							SnackbarContentProps={{ 'aria-describedby': 'message-id', }}
+							message={<span id="message-id">{this.state.snackBarMessage}</span>}
+							action={[ <IconButton key="close" aria-label="Close" color="secondary" className={classes.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton> ]} />
 			</div>
 		);
 
