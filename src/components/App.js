@@ -15,7 +15,7 @@ let lib = require("../utils/library.js");
 export default class Layout extends React.Component {
 	constructor() {
 		super();
-		
+
 		// Parse URL
 		let parsedDbTable = this.parseURL();
 		let db = parsedDbTable['db'];
@@ -48,7 +48,7 @@ export default class Layout extends React.Component {
 	// This should be called once per session
 	parseURL() {
 		let url = "" + window.location.href;
-		
+
 		// Extract the db
 		let databaseRx = /\/db\/\d\//g;
 		let db = databaseRx.exec(url);
@@ -63,7 +63,7 @@ export default class Layout extends React.Component {
 		if (!databasesMapped[db]) {
 			db = null;
 		}
-		
+
 		// Extract the table
 		let tableRx = /\/table\/\w+\/?/g;
 		let table = tableRx.exec(url);
@@ -72,7 +72,7 @@ export default class Layout extends React.Component {
 		} else {
 			table = null;
 		}
-		
+
 		// Extract the query
 		let queryRx = /query=.*/g;
 		let query = queryRx.exec(url);
@@ -146,7 +146,7 @@ export default class Layout extends React.Component {
 	}
 
 	changeSearchTerm(newTerm) {
-		this.setState({searchTerm: newTerm});
+		this.setState({ searchTerm: newTerm });
 	}
 
 	changeTable(newTable) {
@@ -185,7 +185,7 @@ export default class Layout extends React.Component {
 		});
 	}
 
-	componentDidMount() { 
+	componentDidMount() {
 		if (this.state.rulesFromURL) {
 			this.changeRules(this.state.rulesFromURL);
 			// setTimeout( ()=> {
@@ -215,7 +215,7 @@ export default class Layout extends React.Component {
 						changeColumns={this.changeColumns.bind(this)}
 						changeDbSchemaDefinitions={this.changeDbSchemaDefinitions.bind(this)}
 						changeVisibleColumns={this.changeVisibleColumns.bind(this)} />
-					<HistoryPane 
+					<HistoryPane
 						newHistoryItem={this.state.newHistoryItem}
 						dbIndex={this.state.dbIndex}
 						historyPaneVisibility={this.state.historyPaneVisibility}
@@ -242,7 +242,7 @@ export default class Layout extends React.Component {
 }
 
 const app = document.getElementById('root');
-ReactDOM.render(<Layout/>, app);
+ReactDOM.render(<Layout />, app);
 
 	// Takes the query part of the URL used to make PostgREST API call and converts to an array object that can be traversed
 	/*parseURLRules(urlQuery) {
