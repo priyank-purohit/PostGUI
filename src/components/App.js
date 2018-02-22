@@ -17,23 +17,14 @@ export default class Layout extends React.Component {
 		super();
 
 		// Parse URL
-		let parsedDbTable = this.parseURL();
-		let db = parsedDbTable['db'];
-		let table = parsedDbTable['table'];
-		let rowLimit = parsedDbTable['rowLimit'];
-		let exactCount = parsedDbTable['exactCount'];
-		let urlRules = parsedDbTable['urlRules'];
-
-		if (urlRules) {
-			urlRules = JSON.parse(urlRules);
-		}
+		let parsedURL = this.parseURL();
 
 		this.state = {
-			dbIndex: db || 0,
-			table: table || "",
-			rowLimit: rowLimit || null,
-			exactCount: exactCount || null,
-			rulesFromURL: urlRules || null,
+			dbIndex: parsedURL['db'] || 0,
+			table: parsedURL['table'] || "",
+			rowLimit:  parsedURL['rowLimit'] || null,
+			exactCount: parsedURL['exactCount'] || null,
+			rulesFromURL: parsedURL['urlRules'] || null,
 			rulesFromHistoryPane: null,
 			columns: [],
 			newHistoryItem: [],
@@ -81,6 +72,10 @@ export default class Layout extends React.Component {
 		} else {
 			query = null;
 		}
+		query = decodeURIComponent(query);
+		if (query) {
+			query = JSON.parse(query);
+		}
 
 		// Extract the rowLimit
 		let rowLimitRx = /rowLimit=\d+/g;
@@ -103,7 +98,7 @@ export default class Layout extends React.Component {
 		return ({
 			db: db,
 			table: table,
-			urlRules: decodeURIComponent(query),
+			urlRules: query,
 			rowLimit: rowLimit,
 			exactCount: exactCount
 		});
