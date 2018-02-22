@@ -22,7 +22,7 @@ export default class Layout extends React.Component {
 		this.state = {
 			dbIndex: parsedURL['db'] || 0,
 			table: parsedURL['table'] || "",
-			rowLimit:  parsedURL['rowLimit'] || null,
+			rowLimit: parsedURL['rowLimit'] || null,
 			exactCount: parsedURL['exactCount'] || null,
 			rulesFromURL: parsedURL['urlRules'] || null,
 			rulesFromHistoryPane: null,
@@ -36,12 +36,17 @@ export default class Layout extends React.Component {
 		};
 	}
 
-	// This should be called once per session
+	// This should be called once, when app loads, to load a shared query via URL
 	parseURL() {
 		let url = "" + window.location.href;
 
-		// Extract the db
 		let databaseRx = /\/db\/\d\//g;
+		let tableRx = /\/table\/\w+\/?/g;
+		let queryRx = /query=.*/g;
+		let rowLimitRx = /rowLimit=\d+/g;
+		let exactCountRx = /exactCount=True|exactCount=False/g;
+
+		// Extract the db
 		let db = databaseRx.exec(url);
 		if (db) {
 			db = parseInt(db[0].replace(/\/db\//g, "").replace(/\//g, ""), 10);
@@ -56,7 +61,6 @@ export default class Layout extends React.Component {
 		}
 
 		// Extract the table
-		let tableRx = /\/table\/\w+\/?/g;
 		let table = tableRx.exec(url);
 		if (table) {
 			table = table[0].replace(/\/table\//g, "").replace(/\//g, "");
@@ -65,7 +69,6 @@ export default class Layout extends React.Component {
 		}
 
 		// Extract the query
-		let queryRx = /query=.*/g;
 		let query = queryRx.exec(url);
 		if (query) {
 			query = query[0].replace("query=", "");
@@ -78,7 +81,6 @@ export default class Layout extends React.Component {
 		}
 
 		// Extract the rowLimit
-		let rowLimitRx = /rowLimit=\d+/g;
 		let rowLimit = rowLimitRx.exec(url);
 		if (rowLimit) {
 			rowLimit = parseInt(rowLimit[0].replace(/rowLimit=/g, ""), 10);
@@ -87,7 +89,6 @@ export default class Layout extends React.Component {
 		}
 
 		// Extract the exactCount
-		let exactCountRx = /exactCount=True|exactCount=False/g;
 		let exactCount = exactCountRx.exec(url);
 		if (exactCount) {
 			exactCount = exactCount[0].replace(/exactCount=/g, "") === "True";
