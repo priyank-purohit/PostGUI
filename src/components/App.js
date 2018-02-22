@@ -24,12 +24,16 @@ export default class Layout extends React.Component {
 		let exactCount = parsedDbTable['exactCount'];
 		let urlRules = parsedDbTable['urlRules'];
 
+		if (urlRules) {
+			urlRules = JSON.parse(urlRules);
+		}
+
 		this.state = {
 			dbIndex: db || 0,
 			table: table || "",
 			rowLimit: rowLimit || null,
 			exactCount: exactCount || null,
-			rulesFromURL: this.parseURLRules(urlRules) || null,
+			rulesFromURL: urlRules || null,
 			rulesFromHistoryPane: null,
 			columns: [],
 			newHistoryItem: [],
@@ -70,7 +74,7 @@ export default class Layout extends React.Component {
 		}
 		
 		// Extract the query
-		let queryRx = /query=[^&\s]*/g;
+		let queryRx = /query=.*/g;
 		let query = queryRx.exec(url);
 		if (query) {
 			query = query[0].replace("query=", "");
@@ -99,7 +103,7 @@ export default class Layout extends React.Component {
 		return ({
 			db: db,
 			table: table,
-			urlRules: query,
+			urlRules: decodeURIComponent(query),
 			rowLimit: rowLimit,
 			exactCount: exactCount
 		});

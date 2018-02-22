@@ -116,7 +116,9 @@ class HistoryPane extends Component {
 			shareUrl = window.location.href + "queryBuilder/db/" + this.props.dbIndex + "/table/" + tableName + "?query=" + encodeURIComponent(JSON.stringify(rules));
 		}
 
-		console.log("SHARE: " + shareUrl);
+		console.log("Raw rules: " + JSON.stringify(rules));
+		console.log("encoded rules: " + encodeURIComponent(JSON.stringify(rules)));
+		console.log("Share URL: " + shareUrl);
 
 		// Insert to clipboard
 	}
