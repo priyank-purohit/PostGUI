@@ -30,7 +30,7 @@ class HistoryPane extends Component {
 			historyPaneVisibility: this.props.historyPaneVisibility || false,
 			newHistoryItem: this.props.newHistoryItem,
 			displayIndex: -1,
-			historyArray: localHistoryArray ? localHistoryArray : [["http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(protein_id.eq.ALP80_00672,genome_designation.eq.PfrICMP7712)&limit=25000", { "condition": "AND", "rules": [{ "id": "protein_id", "field": "protein_id", "type": "string", "input": "text", "operator": "equal", "value": "ALP80_00672" }, { "id": "genome_designation", "field": "genome_designation", "type": "string", "input": "text", "operator": "equal", "value": "PfrICMP7712" }], "not": false, "valid": true }], ["http://hopper.csb.utoronto.ca:3001/annotation_go?and=(go_id.eq.GO:0005215)&limit=25000", { "condition": "AND", "rules": [{ "id": "go_id", "field": "go_id", "type": "string", "input": "text", "operator": "equal", "value": "GO:0005215" }], "not": false, "valid": true }], ["http://hopper.csb.utoronto.ca:3001/annotation_pathway?and=(pathway_name.ilike.*Lipid metabolism*)&limit=25000", { "condition": "AND", "rules": [{ "id": "pathway_name", "field": "pathway_name", "type": "string", "input": "text", "operator": "contains", "value": "Lipid metabolism" }], "not": false, "valid": true }], ["http://hopper.csb.utoronto.ca:3001/gene_feature?and=(nuc_length.gte.2500)&limit=25000", { "condition": "AND", "rules": [{ "id": "nuc_length", "field": "nuc_length", "type": "string", "input": "text", "operator": "greater_or_equal", "value": "2500" }], "not": false, "valid": true }], ["http://hopper.csb.utoronto.ca:3001/genome_characteristics?and=(host_common.eq.wheat)&limit=25000", { "condition": "AND", "rules": [{ "id": "host_common", "field": "host_common", "type": "string", "input": "text", "operator": "equal", "value": "wheat" }], "not": false, "valid": true }], ["http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(protein_id.ilike.*ALP80*,genome_designation.eq.PfrICMP7712,description.ilike.*kinase*,or(significance_value.eq.2.6e-200,significance_value.lte.2e-28))&limit=25000", { "condition": "AND", "rules": [{ "id": "protein_id", "field": "protein_id", "type": "string", "input": "text", "operator": "contains", "value": "ALP80" }, { "id": "genome_designation", "field": "genome_designation", "type": "string", "input": "text", "operator": "equal", "value": "PfrICMP7712" }, { "id": "description", "field": "description", "type": "string", "input": "text", "operator": "contains", "value": "kinase" }, { "condition": "OR", "rules": [{ "id": "significance_value", "field": "significance_value", "type": "double", "input": "number", "operator": "equal", "value": "2.6e-200" }, { "id": "significance_value", "field": "significance_value", "type": "double", "input": "number", "operator": "less_or_equal", "value": "2e-28" }], "not": false }], "not": false, "valid": true }], ["http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(protein_id.ilike.*ALP80*,genome_designation.eq.PfrICMP7712,description.ilike.*kinase*,or(significance_value.eq.2.6e-200,significance_value.lte.2e-28,and(significance_value.gte.5.4e-27,significance_value.lte.1.9e-22)))&limit=25000", { "condition": "AND", "rules": [{ "id": "protein_id", "field": "protein_id", "type": "string", "input": "text", "operator": "contains", "value": "ALP80" }, { "id": "genome_designation", "field": "genome_designation", "type": "string", "input": "text", "operator": "equal", "value": "PfrICMP7712" }, { "id": "description", "field": "description", "type": "string", "input": "text", "operator": "contains", "value": "kinase" }, { "condition": "OR", "rules": [{ "id": "significance_value", "field": "significance_value", "type": "double", "input": "number", "operator": "equal", "value": "2.6e-200" }, { "id": "significance_value", "field": "significance_value", "type": "double", "input": "number", "operator": "less_or_equal", "value": "2e-28" }, { "condition": "AND", "rules": [{ "id": "significance_value", "field": "significance_value", "type": "double", "input": "number", "operator": "greater_or_equal", "value": "5.4e-27" }, { "id": "significance_value", "field": "significance_value", "type": "double", "input": "number", "operator": "less_or_equal", "value": "1.9e-22" }], "not": false }], "not": false }], "not": false, "valid": true }], ["http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(protein_id.ilike.*ALP80*,genome_designation.eq.PfrICMP7712,description.ilike.*kinase*,or(significance_value.eq.2.6e-200,significance_value.lte.2e-28,and(significance_value.gte.5.4e-27,significance_value.lte.1.9e-22)),not.and(description.ilike.*Shikimate*))&limit=25000", { "condition": "AND", "rules": [{ "id": "protein_id", "field": "protein_id", "type": "string", "input": "text", "operator": "contains", "value": "ALP80" }, { "id": "genome_designation", "field": "genome_designation", "type": "string", "input": "text", "operator": "equal", "value": "PfrICMP7712" }, { "id": "description", "field": "description", "type": "string", "input": "text", "operator": "contains", "value": "kinase" }, { "condition": "OR", "rules": [{ "id": "significance_value", "field": "significance_value", "type": "double", "input": "number", "operator": "equal", "value": "2.6e-200" }, { "id": "significance_value", "field": "significance_value", "type": "double", "input": "number", "operator": "less_or_equal", "value": "2e-28" }, { "condition": "AND", "rules": [{ "id": "significance_value", "field": "significance_value", "type": "double", "input": "number", "operator": "greater_or_equal", "value": "5.4e-27" }, { "id": "significance_value", "field": "significance_value", "type": "double", "input": "number", "operator": "less_or_equal", "value": "1.9e-22" }], "not": false }], "not": false }, { "condition": "AND", "rules": [{ "id": "description", "field": "description", "type": "string", "input": "text", "operator": "contains", "value": "Shikimate" }], "not": true }], "not": false, "valid": true }]],
+			historyArray: localHistoryArray ? localHistoryArray : [],
 			deleteHistoryDialogVisibility: this.props.classes.hide
 		};
 		this.changeDisplayIndexDebounce = _.debounce(value => this.setState({ displayIndex: value }), 300);
@@ -84,6 +84,41 @@ class HistoryPane extends Component {
 		//console.log("[",JSON.stringify(url),"," ,JSON.stringify(rules),"]");
 		this.props.changeTable(this.extractTableNameFromURL(url, true));
 		this.props.changeRules(rules);
+	}
+
+	// Inserts shareable URL to clipboard
+	handleShareIconClick(index) {
+		let url = this.state.historyArray[index][0];
+		//let rules = this.state.historyArray[index][1];
+		//console.log("[",JSON.stringify(url),"," ,JSON.stringify(rules),"]");
+		
+		let error = false;
+
+		// "http://hopper.csb.utoronto.ca:3001/annotation_domain?and=(protein_id.ilike.*ALP80*,genome_designation.eq.PfrICMP7712,description.ilike.*kinase*,or(significance_value.eq.\"2.6e-200\",significance_value.lte.2e-28,and(significance_value.gte.5.4e-27,significance_value.lte.1.9e-22)))&limit=25000"
+		// http://hopper.csb.utoronto.ca:3000/queryBuilder/table/annotation_domain?query= not.and=(protein_id.ilike.%22*\_*%22)&rowLimit=25000&exactCount=True
+
+		// Extract the table
+		let tableRx = /\/\w+/g;
+		let tableName = tableRx.exec(url.replace(lib.getDbConfig(this.props.dbIndex, "url"), ""));
+		if (tableName) {
+			tableName = tableName[0].replace(/\//g, "");
+		} else {
+			tableName = null;
+			error = true;
+		}
+
+		// Extract the rules
+		let rulesFromURL = url.replace(lib.getDbConfig(this.props.dbIndex, "url"), "").replace("/" + tableName + "?", "").replace("&limit=", "&rowLimit=");
+		
+		// Create the URL needed for sharing
+		let shareUrl = "";
+		if (!error) {
+			shareUrl = window.location.href + "queryBuilder/db/" + this.props.dbIndex + "/table/" + tableName + "?query=" + rulesFromURL;
+		}
+
+		console.log("SHARE: " + shareUrl);
+
+		// Insert to clipboard
 	}
 
 	closeDrawer() {
@@ -214,7 +249,7 @@ class HistoryPane extends Component {
 									return (
 										<ListItem button key={index} onMouseEnter={this.changeDisplayIndex.bind(this, index)} onClick={this.handleHistoryItemClick.bind(this, index)}>
 											{/* Clicking on this edit button should load the history item in the Query Builder */}
-											<ListItemIcon className={classes.noStyleButton} onClick={this.handleHistoryItemClick.bind(this, index)}>
+											<ListItemIcon className={classes.noStyleButton} onClick={this.handleShareIconClick.bind(this, index)}>
 												<EditIcon />
 											</ListItemIcon>
 
