@@ -89,8 +89,8 @@ class HistoryPane extends Component {
 	// Inserts shareable URL to clipboard
 	handleShareIconClick(index) {
 		let url = this.state.historyArray[index][0];
-		//let rules = this.state.historyArray[index][1];
-		//console.log("[",JSON.stringify(url),"," ,JSON.stringify(rules),"]");
+		let rules = this.state.historyArray[index][1];
+		console.log("[",JSON.stringify(url),"," ,JSON.stringify(rules),"]");
 		
 		let error = false;
 
@@ -113,7 +113,7 @@ class HistoryPane extends Component {
 		// Create the URL needed for sharing
 		let shareUrl = "";
 		if (!error) {
-			shareUrl = window.location.href + "queryBuilder/db/" + this.props.dbIndex + "/table/" + tableName + "?query=" + rulesFromURL;
+			shareUrl = window.location.href + "queryBuilder/db/" + this.props.dbIndex + "/table/" + tableName + "?query=" + encodeURIComponent(JSON.stringify(rules));
 		}
 
 		console.log("SHARE: " + shareUrl);
