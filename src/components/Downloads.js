@@ -14,13 +14,14 @@ import Divider from 'material-ui/Divider';
 import IconButton from 'material-ui/IconButton';
 import Menu, { MenuItem } from 'material-ui/Menu';
 import List, { ListItem, ListItemText } from 'material-ui/List';
+import Snackbar from 'material-ui/Snackbar';
 
-import CopyIcon from 'material-ui-icons/ContentCopy';
 import NavigateNextIcon from 'material-ui-icons/NavigateNext';
 import NavigateBeforeIcon from 'material-ui-icons/NavigateBefore';
+import CloseIcon from 'material-ui-icons/Close';
 
-import worker_script from './WebWorker';
-var myWorker = new Worker(worker_script);
+//import worker_script from './WebWorker';
+//var myWorker = new Worker(worker_script);
 
 const timeout = 2000;
 const maxRowsInDownload = 2500000;
@@ -53,7 +54,9 @@ class Downloads extends Component {
             copyResult: "",
             batchSize: "100K",
             batchDownloadLowerNum: 0,
-            batchDownloadUpperNum: 100000
+            batchDownloadUpperNum: 100000,
+			snackBarVisibility: false,
+			snackBarMessage: "Unknown error occured",
         };
     }
 
@@ -95,13 +98,13 @@ class Downloads extends Component {
             .replace(/[.]([\w,"\s]{30,})[,]/g, "(in-vals)"); /////// Specifically targets the IN operator's comma separated vals .. replace if longer than 30 chars
         */
         let fileName = this.state.url
-                            .replace(lib.getDbConfig(this.state.dbIndex, "url") + "/", "")
-                            .replace("?", "-")
-                            .replace(/&/g, '-')
-                            .replace(/=/g, '-')
-                            .replace(/\([^()]{15,}\)/g, "(vals)")
-                            .replace(/\(([^()]|\(vals\)){50,}\)/g, "(nested-vals)")
-                            .replace(/[.]([\w,"\s]{30,})[,]/g, "(in-vals)");
+            .replace(lib.getDbConfig(this.state.dbIndex, "url") + "/", "")
+            .replace("?", "-")
+            .replace(/&/g, '-')
+            .replace(/=/g, '-')
+            .replace(/\([^()]{15,}\)/g, "(vals)")
+            .replace(/\(([^()]|\(vals\)){50,}\)/g, "(nested-vals)")
+            .replace(/[.]([\w,"\s]{30,})[,]/g, "(in-vals)");
 
         if (this.state.batchDownloadCheckBox === true || dataFullStatus === true) {
             fileName = fileName.replace(/limit-\d*/g, "limit-" + maxRowsInDownload + "-range-" + this.state.batchDownloadLowerNum + "-" + this.state.batchDownloadUpperNum);
@@ -485,17 +488,52 @@ class Downloads extends Component {
 
     handleCopyClick() {
         this.setState({ copyLoading: true }, () => {
-            if (this.state.batchDownloadCheckBox === true) {
+            if (this.state.batchDownloadCheckBox === true && this.state.fileFormat !== 'delimitedColumn' && 1 === 0) { // DISABLED FOR NOW
                 let dataFullURL = this.state.url.replace(/limit=\d*/g, "limit=" + maxRowsInDownload);
                 this.fetchOutput(dataFullURL);
             } else {
                 if (this.state.fileFormat === "delimited") {
                     //this.downloadTableWithDelimiter();
                 } else if (this.state.fileFormat === "delimitedColumn") {
+                    // With threads
+                    /*
                     myWorker.postMessage({ method: 'delimitedColumn', column: this.state.columnChosen, data: this.state.data, columns: this.state.columns });
                     myWorker.onmessage = (m) => {
                         this.setState({ copyLoading: false, copyResult: m.data });
                     };
+                    */
+
+                    // Without threads
+                    let column = this.state.columnChosen;
+                    let data = this.state.data;
+                    let columns = this.state.columns;
+
+                    let output = "";
+                    for (let i = 0; i < data.length; i++) {
+                        let valueToCopy = data[i][columns[column]];
+                        if (String(valueToCopy) && String(valueToCopy).match(/[\W|\s]/g)) {
+                            output += "\"" + valueToCopy + "\",";
+                        } else {
+                            output += valueToCopy + ",";
+                        }
+                    }
+
+                    output = output.replace(/,$/g, "");
+
+                    let result = this.insertToClipboard(output);
+
+                    this.setState({
+                        copyLoading: false,
+                        snackBarVisibility: true,
+                        snackBarMessage: result ? "Copied!" : "Error copying data ...",
+                    }, () => {
+                        this.timer = setTimeout(() => {
+                            this.setState({
+                                snackBarVisibility: false,
+                                snackBarMessage: "Unknown error"
+                            });
+                        }, 2500);
+                    });
                 } else if (this.state.fileFormat === "json") {
                     this.copyTableAsJSON();
                     // myWorker.postMessage({method: 'json', data: this.state.data});
@@ -720,7 +758,7 @@ class Downloads extends Component {
                 </FormGroup>
 
                 {/* COPY FEATURE OUTPUT BOX + 2ND BUTTON */}
-                <div className={classes.cardcardMarginLeftTop && classes.cardcardMarginBottomRight}>
+                {/*<div className={classes.cardcardMarginLeftTop && classes.cardcardMarginBottomRight}>
                     <TextField
                         id="copyOutput"
                         type="text"
@@ -732,7 +770,7 @@ class Downloads extends Component {
                     <IconButton onClick={this.insertToClipboard.bind(this, this.state.copyResult)} className={this.state.copyResult === "" ? classes.hidden : classes.button} aria-label="Copy">
                         <CopyIcon />
                     </IconButton>
-                </div>
+                </div>*/}
 
                 {this.state.copyLoading === true ? <img src={require('../resources/progress.gif')} width="100%" alt="Progress indicator" /> : <Divider />}
 
@@ -741,6 +779,14 @@ class Downloads extends Component {
                 <Button className={classes.button && classes.floatRight} onClick={this.handleResetClick.bind(this)} >Reset</Button>
                 {/* <Button className={classes.button}>Help</Button> */}
             </Paper>
+
+            <Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                open={this.state.snackBarVisibility}
+                onClose={this.handleRequestClose}
+                SnackbarContentProps={{ 'aria-describedby': 'message-id', }}
+                message={<span id="message-id">{this.state.snackBarMessage}</span>}
+                action={[<IconButton key="close" aria-label="Close" color="secondary" className={classes.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton>]} />
+
         </div>);
     }
 }
