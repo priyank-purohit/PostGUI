@@ -107,7 +107,10 @@ class HistoryPane extends Component {
 		// Create the URL needed for sharing
 		let shareUrl = "";
 		if (!error) {
-			shareUrl = window.location.origin + "/queryBuilder/db/" + this.props.dbIndex + "/table/" + tableName + "?query=" + encodeURIComponent(JSON.stringify(rules));
+			shareUrl = window.location.origin + "/queryBuilder/db/" + this.props.dbIndex + "/table/" + tableName;
+			if (rules !== null) {
+				shareUrl += "?query=" + encodeURIComponent(JSON.stringify(rules));
+			}
 
 			// Insert to clipboard
 			insertSuccess = this.insertToClipboard(shareUrl);
