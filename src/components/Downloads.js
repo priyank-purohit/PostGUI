@@ -94,7 +94,14 @@ class Downloads extends Component {
             .replace(/\(([^()]|\(vals\)){50,}\)/g,"(nested-vals)") /////// Replaces any AND/OR conds with a single (vals) if it's longer than 50 chars
             .replace(/[.]([\w,"\s]{30,})[,]/g, "(in-vals)"); /////// Specifically targets the IN operator's comma separated vals .. replace if longer than 30 chars
         */
-        let fileName = this.state.url.replace(lib.getDbConfig(this.state.dbIndex, "url") + "/", "").replace("?", "-").replace(/&/g, '-').replace(/=/g, '-').replace(/\([^()]{15,}\)/g, "(vals)").replace(/\(([^()]|\(vals\)){50,}\)/g, "(nested-vals)").replace(/[.]([\w,"\s]{30,})[,]/g, "(in-vals)");
+        let fileName = this.state.url
+                            .replace(lib.getDbConfig(this.state.dbIndex, "url") + "/", "")
+                            .replace("?", "-")
+                            .replace(/&/g, '-')
+                            .replace(/=/g, '-')
+                            .replace(/\([^()]{15,}\)/g, "(vals)")
+                            .replace(/\(([^()]|\(vals\)){50,}\)/g, "(nested-vals)")
+                            .replace(/[.]([\w,"\s]{30,})[,]/g, "(in-vals)");
 
         if (this.state.batchDownloadCheckBox === true || dataFullStatus === true) {
             fileName = fileName.replace(/limit-\d*/g, "limit-" + maxRowsInDownload + "-range-" + this.state.batchDownloadLowerNum + "-" + this.state.batchDownloadUpperNum);
