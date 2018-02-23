@@ -632,56 +632,53 @@ class Downloads extends Component {
                 {/* FILE FORMAT RADIO GROUP */}
                 <Typography type="body1" className={classes.cardcardMarginLeftTop}>File Format</Typography>
                 <FormControl component="fieldset" required>
-                    <RadioGroup className={classes.cardcardMarginLeftTop} value={this.state.fileFormat} onChange={this.handleFileFormatChange} >
-                        <FormControlLabel control={<Radio />} label="Delimited file" value="delimited" />
+                    <RadioGroup onChange={this.handleFileFormatChange} value={this.state.fileFormat} className={classes.cardcardMarginLeftTop} >
+                        <FormControlLabel label="Delimited file" value="delimited" control={<Radio />} />
                         {
                             this.state.fileFormat === 'delimited' && (
                                 <TextField
                                     required
-                                    id="delimiterInput"
-                                    type="text"
+                                    onChange={this.handleDelimiterChange.bind(this)}
                                     label={"Enter delimiter (\\t or , for Excel)"}
                                     value={this.state.delimiterChoice}
-                                    className={classes.textField && classes.cardMarginLeft && classes.inlineTextField}
-                                    margin="none"
-                                    fullWidth={true}
                                     disabled={this.state.fileFormat !== 'delimited' ? true : false}
-                                    onChange={this.handleDelimiterChange.bind(this)} />
+                                    className={classes.textField && classes.cardMarginLeft && classes.inlineTextField}
+                                    id="delimiterInput"
+                                    type="text"
+                                    margin="none"
+                                    fullWidth={true} />
                             )
                         }
-                        <FormControlLabel control={<Radio />} label="JSON File" value="json" />
-                        <FormControlLabel control={<Radio />} label="XML File" value="xml" />
-                        <FormControlLabel control={<Radio />} label="FASTA File" value="fasta" className={this.identifySeqColumnInStateColumns() === null ? classes.hidden : null} />
+                        <FormControlLabel label="JSON File" value="json" control={<Radio />} />
+                        <FormControlLabel label="XML File" value="xml" control={<Radio />} />
+                        <FormControlLabel label="FASTA File" value="fasta" control={<Radio />} className={this.identifySeqColumnInStateColumns() === null ? classes.hidden : null} />
 
                         {this.state.fileFormat === 'fasta' && <Typography className={classes.inlineTextField}>Note: FASTA header is composed from visible columns</Typography>}
 
-                        <FormControlLabel control={<Radio />} label="Copy single column values" value="delimitedColumn" />
+                        <FormControlLabel label="Copy single column values" value="delimitedColumn" control={<Radio />} />
                         <span className={this.state.fileFormat !== 'delimitedColumn' ? classes.hidden : classes.inlineTextField}>
                             <List>
-                                <ListItem button aria-haspopup="true" aria-controls="columnMenu" aria-label="Choose column" onClick={this.handleClickListItem} >
+                                <ListItem button onClick={this.handleClickListItem} aria-haspopup="true" aria-controls="columnMenu" aria-label="Choose column" >
                                     <ListItemText primary="Choose a column" secondary={this.state.columns[this.state.columnChosen]} />
                                 </ListItem>
                             </List>
-                            <Menu id="columnMenu" anchorEl={this.state.anchorEl} open={this.state.open} onClose={this.handleRequestClose} >
+                            <Menu open={this.state.open} onClose={this.handleRequestClose} id="columnMenu" anchorEl={this.state.anchorEl} >
                                 {
                                     this.state.columns.map((option, index) =>
-                                        <MenuItem key={option} selected={index === this.state.columnChosen} onClick={event => this.handleMenuItemClick(event, index)} >
+                                        <MenuItem selected={index === this.state.columnChosen} onClick={event => this.handleMenuItemClick(event, index)} key={option} >
                                             {option}
                                         </MenuItem>
                                     )
                                 }
                             </Menu>
                         </span>
-                        {/*<FormControlLabel disabled control={ <Radio /> } label="Newick Tree" value="newicktree" />
-                                <FormControlLabel disabled control={ <Radio /> } label="Nexus Tree" value="nexustree" />
-                                <FormControlLabel disabled control={ <Radio /> } label="PhyloXML" value="phyloxml" />*/}
                     </RadioGroup>
                 </FormControl>
 
                 {/* ADDITIONAL DOWNLOADS OPTIONS */}
                 <Typography type="body1" className={classes.cardcardMarginLeftTop}>Options</Typography>
                 <FormGroup className={classes.cardcardMarginLeftTop}>
-                    <FormControlLabel control={<Checkbox onChange={this.handlebatchDownloadCheckBox.bind(this)} value="batchDownloadCheckBox" />} disabled={this.state.fileFormat === 'delimitedColumn' ? true : false} checked={this.state.batchDownloadCheckBox} label={"Batch download"} />
+                    <FormControlLabel label={"Batch download"} control={<Checkbox onChange={this.handlebatchDownloadCheckBox.bind(this)} value="batchDownloadCheckBox" />} disabled={this.state.fileFormat === 'delimitedColumn' ? true : false} checked={this.state.batchDownloadCheckBox} />
                     <span className={this.state.batchDownloadCheckBox !== true || this.state.fileFormat === 'delimitedColumn' ? classes.hidden : classes.inlineTextField1}>
                         <div className={isNaN(this.props.totalRows) === false && this.props.totalRows >= 0 ? classes.hidden : null} >
                             <Typography type="body2" className={classes.inlineTextField1}>Re-run query with "Get exact row count" option selected</Typography>
@@ -693,7 +690,7 @@ class Downloads extends Component {
                             <Button onClick={this.handlebatchDownloadChange.bind(this, "250K")} color={this.state.batchSize === "250K" ? 'primary' : 'inherit'} className={classes.button} >250K</Button>
                         </div>
                         <div className={classes.inlineTextField}>
-                            <Typography type="body1" className={classes.inlineTextField}>{String(this.state.batchDownloadLowerNum).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} to {String(this.state.batchDownloadUpperNum).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} of {String(this.props.totalRows).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} rows</Typography>
+                            <Typography type="body1" className={classes.inlineTextField}>{String(this.state.batchDownloadLowerNum).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} to {String(this.state.batchDownloadUpperNum).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} of {String(this.props.totalRows).replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace("NaN", "unknown")} rows</Typography>
                         </div>
                         <div className={classes.inlineTextField3}>
                             <IconButton onClick={this.handleLeftButtonClickRangeDownload.bind(this)} color="primary" className={classes.button} aria-label="COPY">
@@ -705,7 +702,7 @@ class Downloads extends Component {
                         </div>
                     </span>
 
-                    <FormControlLabel control={<Checkbox onChange={this.handleTableHeaderToggle.bind(this)} disabled={this.state.fileFormat !== 'delimited' ? true : false} value="tableHeader" />} checked={this.state.tableHeader} label={"Include table headers"} />
+                    <FormControlLabel label={"Include table headers"} control={<Checkbox onChange={this.handleTableHeaderToggle.bind(this)} disabled={this.state.fileFormat !== 'delimited' ? true : false} value="tableHeader" />} checked={this.state.tableHeader} />
                 </FormGroup>
 
                 {/* FILE NAME INPUT */}
@@ -722,6 +719,7 @@ class Downloads extends Component {
                         margin="normal" />
                 </FormGroup>
 
+                {/* COPY FEATURE OUTPUT BOX + 2ND BUTTON */}
                 <div className={classes.cardcardMarginLeftTop && classes.cardcardMarginBottomRight}>
                     <TextField
                         id="copyOutput"
