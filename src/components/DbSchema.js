@@ -535,6 +535,14 @@ class DbSchema extends Component {
 				let columnName = this.state[tableName][i];
 				tableColumnElements.push(this.createColumnElement(columnName, tableName));
 			}	
+		} else {
+			tableColumnElements.push(
+				<ListItem button title={"Administrator has hidden the columns ... can work with them in query builder"} key={"hiddenColsOf"+tableName+this.state.dbIndex} className={this.state.table !== tableName && this.state.hoverTable !== tableName ? this.props.classes.column + " " + this.props.classes.hide : this.props.classes.column} >
+					<ListItemIcon>
+						<VisibilityOffIcon />
+					</ListItemIcon>
+					<ListItemText secondary={"*Too many Columns...*"} />
+				</ListItem>);
 		}
 
 		return tableColumnElements;
