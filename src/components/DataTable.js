@@ -68,7 +68,7 @@ class DataTable extends Component {
                 suppressContentEditableWarning
                 onBlur={e => {
                     const data = [...this.state.data];
-                    if (data[cellInfo.index][cellInfo.column.id] !== e.target.innerHTML) {
+                    if (String(data[cellInfo.index][cellInfo.column.id]) !== String(e.target.innerHTML)) {
                         console.log(cellInfo.column.id, "column of row #", cellInfo.index, "changed from ", data[cellInfo.index][cellInfo.column.id], "to", e.target.innerHTML);
                         data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
                         this.setState({ data });
