@@ -21,6 +21,7 @@ class DataTable extends Component {
             data: props.data,
             url: props.url
         };
+        this.renderEditableCell = this.renderEditableCell.bind(this);
     }
 
     componentWillReceiveProps(newProps) {
@@ -59,6 +60,25 @@ class DataTable extends Component {
         }
     }
 
+    renderEditableCell(cellInfo) {
+        return (
+          <div
+            style={{ backgroundColor: "#fafafa" }}
+            contentEditable
+            suppressContentEditableWarning
+            onBlur={e => {
+              const data = [...this.state.data];
+              console.log(cellInfo.column.id, "column of row #", cellInfo.index, "changed from ", data[cellInfo.index][cellInfo.column.id], "to" ,e.target.innerHTML);
+              data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
+              this.setState({ data });
+            }}
+            dangerouslySetInnerHTML={{
+              __html: this.state.data[cellInfo.index][cellInfo.column.id]
+            }}
+          />
+        );
+      }
+
     render() {
         //const classes = this.props.classes;
         let { columns, data } = this.state;
@@ -84,7 +104,8 @@ class DataTable extends Component {
                     width: columnWidth !== null ? columnWidth : (columnWidthDefault ? columnWidthDefault : undefined),
                     maxWidth: columnMaxWidth !== null ? columnMaxWidth : undefined,
                     minWidth: columnMinWidth !== null ? columnMinWidth : 100,
-                    headerStyle: { fontWeight: 'bold' }
+                    headerStyle: { fontWeight: 'bold' },
+                    Cell: this.renderEditableCell
                 });
             });
         }
