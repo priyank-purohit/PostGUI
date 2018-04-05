@@ -62,22 +62,24 @@ class DataTable extends Component {
 
     renderEditableCell(cellInfo) {
         return (
-          <div
-            style={{ backgroundColor: "#fafafa" }}
-            contentEditable
-            suppressContentEditableWarning
-            onBlur={e => {
-              const data = [...this.state.data];
-              console.log(cellInfo.column.id, "column of row #", cellInfo.index, "changed from ", data[cellInfo.index][cellInfo.column.id], "to" ,e.target.innerHTML);
-              data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
-              this.setState({ data });
-            }}
-            dangerouslySetInnerHTML={{
-              __html: this.state.data[cellInfo.index][cellInfo.column.id]
-            }}
-          />
+            <div
+                style={{ backgroundColor: "#fafafa" }}
+                contentEditable
+                suppressContentEditableWarning
+                onBlur={e => {
+                    const data = [...this.state.data];
+                    if (data[cellInfo.index][cellInfo.column.id] !== e.target.innerHTML) {
+                        console.log(cellInfo.column.id, "column of row #", cellInfo.index, "changed from ", data[cellInfo.index][cellInfo.column.id], "to", e.target.innerHTML);
+                        data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
+                        this.setState({ data });
+                    }
+                }}
+                dangerouslySetInnerHTML={{
+                    __html: this.state.data[cellInfo.index][cellInfo.column.id]
+                }}
+            />
         );
-      }
+    }
 
     render() {
         //const classes = this.props.classes;
@@ -111,23 +113,23 @@ class DataTable extends Component {
         }
 
         return (<div>
-                    <ReactTable
-                        data={ data }   
-                        columns={ parsedColumns }
-                        defaultPageSize={ 10 } className="-striped -highlight"
-                        pageSizeOptions={ [10, 50, 100, 200, 500, 1000] }
-                        previousText="Previous Page"
-                        nextText="Next Page"
-                        noDataText={this.props.noDataText} />
+            <ReactTable
+                data={data}
+                columns={parsedColumns}
+                defaultPageSize={10} className="-striped -highlight"
+                pageSizeOptions={[10, 50, 100, 200, 500, 1000]}
+                previousText="Previous Page"
+                nextText="Next Page"
+                noDataText={this.props.noDataText} />
 
-                    <Downloads
-                        dbIndex={this.state.dbIndex}
-                        table={this.state.table}
-                        columns={this.state.columns}
-                        data={this.state.data}
-                        url={this.state.url}
-                        totalRows={this.props.totalRows} />
-                </div>);
+            <Downloads
+                dbIndex={this.state.dbIndex}
+                table={this.state.table}
+                columns={this.state.columns}
+                data={this.state.data}
+                url={this.state.url}
+                totalRows={this.props.totalRows} />
+        </div>);
     }
 }
 
