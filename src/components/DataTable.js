@@ -60,6 +60,50 @@ class DataTable extends Component {
         }
     }
 
+    updateDbIfNeeded(oldRow, newRow, columnChanged) {
+        // Get the values out from the old and new rows for the columnChanged
+        oldRow = JSON.parse(oldRow);
+        let oldValue = oldRow[columnChanged];
+        let newValue = newRow[columnChanged];
+
+        // Figure out if the values have changed
+        if (String(oldValue) !== String(newValue)) {
+            console.log("Sending PATCH request to server...");
+
+            // Create a URL
+            let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
+
+            console.log(url);
+
+            // Post the request
+            /*axios.get(url + "/", { params: {} })
+                .then((response) => {
+                    // Save the raw resp + parse tables and columns...
+                    this.setState({
+                        dbSchema: response.data
+                    }, () => {
+                        this.parseDbSchema(response.data);
+                    });
+                })
+                .catch((error) => {
+                    // Show error in top-right Snack-Bar
+                    this.setState({
+                        snackBarVisibility: true,
+                        snackBarMessage: "Database does not exist."
+                    }, () => {
+                        this.timer = setTimeout(() => {
+                            this.setState({
+                                snackBarVisibility: false,
+                                snackBarMessage: "Unknown error"
+                            });
+                        }, 5000);
+                    });
+                });*/
+        } else {
+            console.log(String(oldValue) , String(newValue) , oldValue , newValue, String(oldValue) !== String(newValue) && (oldValue !== null && newValue !== null && String(oldValue) !== "" && String(newValue) !== ""),          String(oldValue) !== String(newValue) , (oldValue !== null && newValue !== null && String(oldValue) !== "" && String(newValue) !== ""));
+        }
+    }
+
     renderEditableCell(cellInfo) {
         return (
             <div
@@ -68,10 +112,17 @@ class DataTable extends Component {
                 suppressContentEditableWarning
                 onBlur={e => {
                     const data = [...this.state.data];
+                    // ToDo: when original value is NULL, and you don't change it, it sets it to "" from NULL... prevent it
                     if (String(data[cellInfo.index][cellInfo.column.id]) !== String(e.target.innerHTML)) {
                         console.log(cellInfo.column.id, "column of row #", cellInfo.index, "changed from ", data[cellInfo.index][cellInfo.column.id], "to", e.target.innerHTML);
+                        let oldRow = JSON.stringify(this.state.data[cellInfo.index]);
+                        console.log("Original row: " + JSON.stringify(this.state.data[cellInfo.index]));
                         data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
-                        this.setState({ data });
+                        let newRow = this.state.data[cellInfo.index];
+                        this.updateDbIfNeeded(oldRow, newRow, cellInfo.column.id);
+                        this.setState({ data }, () => {
+                            console.log("Updated row: " + JSON.stringify(this.state.data[cellInfo.index]));
+                        });
                     }
                 }}
                 dangerouslySetInnerHTML={{
