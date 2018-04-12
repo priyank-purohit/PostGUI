@@ -5,6 +5,7 @@ import { withStyles } from 'material-ui/styles';
 
 import Downloads from './Downloads.js';
 
+import axios from 'axios';
 import "react-table/react-table.css";
 
 let lib = require('../utils/library.js');
@@ -19,7 +20,9 @@ class DataTable extends Component {
             table: props.table,
             columns: props.columns,
             data: props.data,
-            url: props.url
+            url: props.url,
+            dbPrimaryKeys: [],
+            tablePrimaryKeys: []
         };
         this.renderEditableCell = this.renderEditableCell.bind(this);
     }
@@ -70,26 +73,71 @@ class DataTable extends Component {
         if (String(oldValue) !== String(newValue)) {
             console.log("Sending PATCH request to server...");
 
-            // Create a URL
-            let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
-
-            console.log(url);
-
-            // Post the request
-            /*axios.get(url + "/", { params: {} })
+            axios.get(lib.getDbConfig(this.state.dbIndex, "url") + "/rpc/primary_keys", { params: {} })
                 .then((response) => {
                     // Save the raw resp + parse tables and columns...
-                    this.setState({
-                        dbSchema: response.data
-                    }, () => {
-                        this.parseDbSchema(response.data);
-                    });
+                    if (response.data[0]["primary_keys"] && response.data[0]["primary_keys"] !== []) {
+                        this.setState({
+                            dbPrimaryKeys: response.data[0]["primary_keys"]
+                        }, () => {
+                            console.log(response.data[0]["primary_keys"]);
+                            for (let i = 0; i < response.data[0]["primary_keys"].length; i++) {
+                                //get the FK for the current table...
+                                if (response.data[0]["primary_keys"][i]["table"] === this.state.table) {
+                                    this.setState({
+                                        tablePrimaryKeys: response.data[0]["primary_keys"][i]["primary_keys"]
+                                    }, () => {
+                                        // Create a URL
+                                        let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table + "?and=(";
+                                        console.log(this.state.tablePrimaryKeys);
+                                        for (let i = 0; i < this.state.tablePrimaryKeys.length; i++) {
+                                            url += this.state.tablePrimaryKeys[i] + ".eq." + oldRow[this.state.tablePrimaryKeys[i]];
+                                            if (i + 1 !== this.state.tablePrimaryKeys.length) {
+                                                // Add a comma...
+                                                url += ",";
+                                            } else {
+                                                url += ")";
+                                            }
+                                        }
+                                        console.log("URL=", url);
+
+                                        let patchBody = {};
+                                        patchBody[columnChanged] = newValue;
+
+                                        console.log(JSON.stringify(patchBody));
+
+                                        // PATCH the request
+                                        axios.patch(url, {[columnChanged]: newValue}, {headers: { Prefer: 'return=representation' }})
+                                            .then((response) => {
+                                                console.log("PATCH RESPONSE:", JSON.stringify(response.data));
+                                            })
+                                            .catch((error) => {
+                                                // Show error in top-right Snack-Bar
+                                                this.setState({
+                                                    snackBarVisibility: true,
+                                                    snackBarMessage: "Database update failed."
+                                                }, () => {
+                                                    this.timer = setTimeout(() => {
+                                                        this.setState({
+                                                            snackBarVisibility: false,
+                                                            snackBarMessage: "Unknown error"
+                                                        });
+                                                    }, 5000);
+                                                });
+                                            });
+                                    });
+                                }
+                            }
+                        });
+                    } else {
+                        console.log("Elsed out", JSON.stringify(response.data));
+                    }
                 })
                 .catch((error) => {
                     // Show error in top-right Snack-Bar
                     this.setState({
                         snackBarVisibility: true,
-                        snackBarMessage: "Database does not exist."
+                        snackBarMessage: "Could not retrieve primary keys."
                     }, () => {
                         this.timer = setTimeout(() => {
                             this.setState({
@@ -98,9 +146,10 @@ class DataTable extends Component {
                             });
                         }, 5000);
                     });
-                });*/
+                });
+
         } else {
-            console.log(String(oldValue) , String(newValue) , oldValue , newValue, String(oldValue) !== String(newValue) && (oldValue !== null && newValue !== null && String(oldValue) !== "" && String(newValue) !== ""),          String(oldValue) !== String(newValue) , (oldValue !== null && newValue !== null && String(oldValue) !== "" && String(newValue) !== ""));
+            console.log(String(oldValue), String(newValue), oldValue, newValue, String(oldValue) !== String(newValue) && (oldValue !== null && newValue !== null && String(oldValue) !== "" && String(newValue) !== ""), String(oldValue) !== String(newValue), (oldValue !== null && newValue !== null && String(oldValue) !== "" && String(newValue) !== ""));
         }
     }
 
