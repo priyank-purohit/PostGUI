@@ -63,6 +63,7 @@ class DataTable extends Component {
         }
     }
 
+    // Very poorly design here, need to fix it when the login system and the edit buttons are implemented... shouldn't be making 2 requests each time...
     updateDbIfNeeded(oldRow, newRow, columnChanged) {
         // Get the values out from the old and new rows for the columnChanged
         oldRow = JSON.parse(oldRow);
