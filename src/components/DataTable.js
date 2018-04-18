@@ -231,9 +231,7 @@ class DataTable extends Component {
                         dbIndex={this.state.dbIndex}
                         table={this.state.table}
                         columns={this.state.columns}
-                        data={this.state.data}
-                        url={this.state.url}
-                        totalRows={this.props.totalRows} />
+                        url={this.state.url} />
                     <Downloads
                         dbIndex={this.state.dbIndex}
                         table={this.state.table}
