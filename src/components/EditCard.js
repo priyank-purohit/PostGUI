@@ -7,9 +7,11 @@ import Paper from 'material-ui/Paper';
 import Typography from 'material-ui/Typography';
 //import TextField from 'material-ui/TextField';
 import Divider from 'material-ui/Divider';
-import IconButton from 'material-ui/IconButton';
+import { FormLabel, FormControl, FormGroup, FormControlLabel, FormHelperText } from 'material-ui/Form';
 //import List, { ListItem, ListItemText } from 'material-ui/List';
+import Switch from 'material-ui/Switch';
 import Snackbar from 'material-ui/Snackbar';
+import IconButton from 'material-ui/IconButton';
 import CloseIcon from 'material-ui-icons/Close';
 
 //const timeout = 2000;
@@ -49,7 +51,13 @@ class EditCard extends Component {
 
         return (<div className={classes.limitWidth} >
             <Paper elevation={2} className={classes.topMargin}>
-                <Typography type="subheading" className={classes.cardcardMarginLeftTop}>Edit this table</Typography>
+                <Typography type="subheading" className={classes.cardcardMarginLeftTop}>Edit table</Typography>
+
+                <FormGroup className={classes.cardMarginLeft}>
+                    <FormControlLabel
+                        control={ <Switch checked={true} value="gilad" /> }
+                        label="Enable cell edit feature" />
+                </FormGroup>
 
                 <Divider />
 
@@ -74,11 +82,14 @@ const styleSheet = {
     },
     limitWidth: {
         width: '50%',
-        display: 'inline-block'
+        display: 'block'
     },
     topMargin: {
         marginTop: 16,
         marginLeft: 16
+    },
+    cardMarginLeft: { // For items within the same section
+        marginLeft: 32
     },
     cardcardMarginLeftTop: { // For a new section
         marginLeft: 16,
