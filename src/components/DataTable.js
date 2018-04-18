@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 
 import Downloads from './Downloads.js';
+import EditCard from './EditCard.js';
 
 import axios from 'axios';
 import "react-table/react-table.css";
@@ -108,7 +109,7 @@ class DataTable extends Component {
                                         console.log(JSON.stringify(patchBody));
 
                                         // PATCH the request
-                                        axios.patch(url, {[columnChanged]: newValue}, {headers: { Prefer: 'return=representation' }})
+                                        axios.patch(url, { [columnChanged]: newValue }, { headers: { Prefer: 'return=representation' } })
                                             .then((response) => {
                                                 console.log("PATCH RESPONSE:", JSON.stringify(response.data));
                                             })
@@ -213,24 +214,35 @@ class DataTable extends Component {
             });
         }
 
-        return (<div>
-            <ReactTable
-                data={data}
-                columns={parsedColumns}
-                defaultPageSize={10} className="-striped -highlight"
-                pageSizeOptions={[10, 50, 100, 200, 500, 1000]}
-                previousText="Previous Page"
-                nextText="Next Page"
-                noDataText={this.props.noDataText} />
+        return (
+            <div>
+                <ReactTable
+                    data={data}
+                    columns={parsedColumns}
+                    defaultPageSize={10} className="-striped -highlight"
+                    pageSizeOptions={[10, 50, 100, 200, 500, 1000]}
+                    previousText="Previous Page"
+                    nextText="Next Page"
+                    noDataText={this.props.noDataText} />
 
-            <Downloads
-                dbIndex={this.state.dbIndex}
-                table={this.state.table}
-                columns={this.state.columns}
-                data={this.state.data}
-                url={this.state.url}
-                totalRows={this.props.totalRows} />
-        </div>);
+                <div className={this.props.classes.cardGroups} >
+
+                    <EditCard
+                        dbIndex={this.state.dbIndex}
+                        table={this.state.table}
+                        columns={this.state.columns}
+                        data={this.state.data}
+                        url={this.state.url}
+                        totalRows={this.props.totalRows} />
+                    <Downloads
+                        dbIndex={this.state.dbIndex}
+                        table={this.state.table}
+                        columns={this.state.columns}
+                        data={this.state.data}
+                        url={this.state.url}
+                        totalRows={this.props.totalRows} />
+                </div>
+            </div>);
     }
 }
 
@@ -254,6 +266,9 @@ const styleSheet = {
     topMargin: {
         margin: 5,
         marginTop: (5) * 5
+    },
+    cardGroups: {
+        display: 'block'
     }
 };
 export default withStyles(styleSheet)(DataTable);

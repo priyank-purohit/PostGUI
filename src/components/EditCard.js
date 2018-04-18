@@ -30,7 +30,7 @@ let lib = require('../utils/library.js');
 let json2csv = require('json2csv');
 var js2xmlparser = require("js2xmlparser");
 
-class Downloads extends Component {
+class EditCard extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -665,7 +665,7 @@ class Downloads extends Component {
 
         return (<div className={classes.limitWidth} >
             <Paper elevation={2} className={classes.topMargin}>
-                <Typography type="subheading" className={classes.cardcardMarginLeftTop}>Download Query Results</Typography>
+                <Typography type="subheading" className={classes.cardcardMarginLeftTop}>Edit this table</Typography>
 
                 {/* FILE FORMAT RADIO GROUP */}
                 <Typography type="body1" className={classes.cardcardMarginLeftTop}>File Format</Typography>
@@ -713,7 +713,7 @@ class Downloads extends Component {
                     </RadioGroup>
                 </FormControl>
 
-                {/* ADDITIONAL DOWNLOADS OPTIONS */}
+                {/* ADDITIONAL EditCard OPTIONS */}
                 <Typography type="body1" className={classes.cardcardMarginLeftTop}>Options</Typography>
                 <FormGroup className={classes.cardcardMarginLeftTop}>
                     <FormControlLabel label={"Batch download"} control={<Checkbox onChange={this.handlebatchDownloadCheckBox.bind(this)} value="batchDownloadCheckBox" />} disabled={this.state.fileFormat === 'delimitedColumn' ? true : false} checked={this.state.batchDownloadCheckBox} />
@@ -774,8 +774,7 @@ class Downloads extends Component {
 
                 {this.state.copyLoading === true ? <img src={require('../resources/progress.gif')} width="100%" alt="Progress indicator" /> : <Divider />}
 
-                <Button color="primary" className={classes.button} onClick={this.handleDownloadClick.bind(this)} disabled={this.state.fileFormat === 'delimitedColumn'} >Download</Button>
-                <Button color="primary" disabled={this.state.fileFormat !== 'delimitedColumn' && this.state.fileFormat !== 'json' && this.state.fileFormat !== 'xml'} className={classes.button} onClick={this.handleCopyClick.bind(this)} >Copy</Button>
+                <Button color="primary" className={classes.button} onClick={this.handleDownloadClick.bind(this)} disabled={this.state.fileFormat === 'delimitedColumn'} >Commit</Button>
                 <Button className={classes.button && classes.floatRight} onClick={this.handleResetClick.bind(this)} >Reset</Button>
                 {/* <Button className={classes.button}>Help</Button> */}
             </Paper>
@@ -791,7 +790,7 @@ class Downloads extends Component {
     }
 }
 
-Downloads.propTypes = {
+EditCard.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
@@ -866,4 +865,4 @@ const styleSheet = {
 };
 
 
-export default withStyles(styleSheet)(Downloads);
+export default withStyles(styleSheet)(EditCard);
