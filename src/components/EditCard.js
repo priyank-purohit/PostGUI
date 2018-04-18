@@ -59,6 +59,9 @@ class EditCard extends Component {
                         label="Enable cell edit feature" />
                 </FormGroup>
 
+                {/* Changes made LIST */}
+                <Typography type="body1" className={classes.cardcardMarginLeftTop}>Changes made to this table</Typography>
+
                 <Divider />
 
                 <Button color="primary" className={classes.button} onClick={this.handleDownloadClick.bind(this)} disabled={this.state.fileFormat === 'delimitedColumn'} >Commit</Button>
