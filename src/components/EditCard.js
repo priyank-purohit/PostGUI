@@ -23,6 +23,7 @@ import ErrorIcon from 'material-ui-icons/Error';
 import DeleteIcon from 'material-ui-icons/Delete';
 
 import pink from 'material-ui/colors/pink';
+import { StringDecoder } from 'string_decoder';
 
 //const timeout = 2000;
 
@@ -34,8 +35,13 @@ class EditCard extends Component {
             table: props.table,
             columns: props.columns,
             url: props.url,
+
             primaryKeysAvailable: true,
+            primaryKeys: [],
+
             featureEnabled: false,
+            changesMade: { "stats": { "assists": { "4309247|20172018": { "oldValue": 123, "newValue": 124, "primaryKey": { "playerid": 43092472, "seasonid": 20172018 } } }, "goals": { "4309247|20172018": { "oldValue": 12, "newValue": 13, "primaryKey": { "playerid": 43092472, "seasonid": 20172018 } } } }, "stats2": { "OT Goals": { "4309247|20172018": { "oldValue": 1, "newValue": 2, "primaryKey": { "playerid": 43092472, "seasonid": 20172018 } } }, "points": { "4309247|20172018": { "oldValue": 120, "newValue": 130, "primaryKey": { "playerid": 43092472, "seasonid": 20172018 } } } } },
+
             snackBarVisibility: false,
             snackBarMessage: "Unknown error occured",
         };
@@ -65,6 +71,46 @@ class EditCard extends Component {
         });
     }
 
+    primaryKeyStringify(primaryKey) {
+        let keys = Object.keys(primaryKey);
+        let stringified = "";
+
+        for (let i in Object.keys(primaryKey)) {
+            stringified += keys[i] + " = " + primaryKey[keys[i]];
+            if (i != keys.length - 1) { stringified += " and "; }
+        }
+
+        return stringified;
+    }
+
+    createChangeLogList() {
+        let length = Object.keys(this.state.changesMade[this.state.table]).length;
+        let keys = Object.keys(this.state.changesMade[this.state.table]);
+        let listItems = [];
+
+        for (let i = 0; i < length; i++) {
+            let change = this.state.changesMade[this.state.table][keys[i]];
+
+            listItems.push(
+                <ListItem key={i}>
+                    <ListItemAvatar>
+                        <Avatar>
+                            <CreateIcon />
+                        </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                        primary={keys[i] + " column changed"}
+                        secondary={"From " + change[Object.keys(change)[0]]['oldValue'] + " to " + change[Object.keys(change)[0]]['newValue'] + " where " + this.primaryKeyStringify(change[Object.keys(change)[0]]['primaryKey'])} />
+                    <ListItemSecondaryAction>
+                        <IconButton aria-label="Delete">
+                            <DeleteIcon />
+                        </IconButton>
+                    </ListItemSecondaryAction>
+                </ListItem>);
+        }
+        return listItems;
+    }
+
     render() {
         const classes = this.props.classes;
 
@@ -81,7 +127,7 @@ class EditCard extends Component {
                         <ListItem>
                             <ListItemAvatar>
                                 <Avatar className={classes.secondaryAvatar}>
-                                <ErrorIcon />
+                                    <ErrorIcon />
                                 </Avatar>
                             </ListItemAvatar>
                             <ListItemText
@@ -95,27 +141,13 @@ class EditCard extends Component {
                     <Typography variant="body1" className={classes.cardcardMarginLeftTop}>Changes made to this table</Typography>
 
                     <List dense={true}>
-                        <ListItem>
-                            <ListItemAvatar>
-                                <Avatar>
-                                    <CreateIcon />
-                                </Avatar>
-                            </ListItemAvatar>
-                            <ListItemText
-                                primary="'Player Birth Country' column changed"
-                                secondary={"From 'CAN' to 'Canada' where playerid = 9999999 and seasonid = 20182019"} />
-                            <ListItemSecondaryAction>
-                                <IconButton aria-label="Delete">
-                                    <DeleteIcon />
-                                </IconButton>
-                            </ListItemSecondaryAction>
-                        </ListItem>
+                        {this.createChangeLogList()}
                     </List>
                 </div>) : (<div></div>)}
                 <Divider />
 
-                <Button onClick={this.handleDownloadClick.bind(this)} disabled={! (this.state.featureEnabled && this.state.primaryKeysAvailable)} color="primary" className={classes.button}>Submit</Button>
-                <Button onClick={this.handleResetClick.bind(this)} disabled={! (this.state.featureEnabled && this.state.primaryKeysAvailable)} className={classes.button && classes.floatRight}>Remove All</Button>
+                <Button onClick={this.handleDownloadClick.bind(this)} disabled={!(this.state.featureEnabled && this.state.primaryKeysAvailable)} color="primary" className={classes.button}>Submit</Button>
+                <Button onClick={this.handleResetClick.bind(this)} disabled={!(this.state.featureEnabled && this.state.primaryKeysAvailable)} className={classes.button && classes.floatRight}>Remove All</Button>
             </Paper>
 
             <Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
