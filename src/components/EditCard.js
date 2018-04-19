@@ -14,13 +14,7 @@ import Snackbar from 'material-ui/Snackbar';
 import IconButton from 'material-ui/IconButton';
 import CloseIcon from 'material-ui-icons/Close';
 
-import List, {
-    ListItem,
-    ListItemAvatar,
-    ListItemIcon,
-    ListItemSecondaryAction,
-    ListItemText,
-} from 'material-ui/List';
+import List, { ListItem, ListItemAvatar, ListItemIcon, ListItemSecondaryAction, ListItemText, } from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
@@ -37,6 +31,7 @@ class EditCard extends Component {
             table: props.table,
             columns: props.columns,
             url: props.url,
+            featureEnabled: false,
             snackBarVisibility: false,
             snackBarMessage: "Unknown error occured",
         };
@@ -59,6 +54,13 @@ class EditCard extends Component {
     handleDownloadClick() {
     }
 
+    handleFeatureEnabledSwitch() {
+        // Set the featureEnabled state to opposite of what it is at the moment...
+        this.setState({
+            featureEnabled: !this.state.featureEnabled
+        });
+    }
+
     render() {
         const classes = this.props.classes;
 
@@ -68,7 +70,7 @@ class EditCard extends Component {
 
                 <FormGroup className={classes.cardMarginLeft}>
                     <FormControlLabel
-                        control={<Switch checked={true} value="gilad" />}
+                        control={<Switch checked={this.state.featureEnabled} onChange={this.handleFeatureEnabledSwitch.bind(this)} value="featureStatus" />}
                         label="Turn on editable table" />
                 </FormGroup>
 
