@@ -19,7 +19,10 @@ import Avatar from 'material-ui/Avatar';
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
 import CreateIcon from 'material-ui-icons/Create';
+import ErrorIcon from 'material-ui-icons/Error';
 import DeleteIcon from 'material-ui-icons/Delete';
+
+import pink from 'material-ui/colors/pink';
 
 //const timeout = 2000;
 
@@ -66,7 +69,7 @@ class EditCard extends Component {
 
         return (<div className={classes.limitWidth} >
             <Paper elevation={2} className={classes.topMargin}>
-                <Typography type="subheading" className={classes.cardcardMarginLeftTop}>Edit Table Contents</Typography>
+                <Typography variant="subheading" className={classes.cardcardMarginLeftTop}>Edit Table Contents</Typography>
 
                 <FormGroup className={classes.cardMarginLeft}>
                     <FormControlLabel
@@ -74,28 +77,41 @@ class EditCard extends Component {
                         label="Turn on editable table" />
                 </FormGroup>
 
-                {/* Changes made LIST */}
-                <Typography type="body1" className={classes.cardcardMarginLeftTop}>Changes made to this table</Typography>
+                {this.state.featureEnabled ? (<div>
+                    <Typography variant="body1" className={classes.cardcardMarginLeftTop}>Changes made to this table</Typography>
 
-                <List dense={true}>
-                    <ListItem>
-                        <ListItemAvatar>
-                            <Avatar>
-                                <CreateIcon />
-                            </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText
-                            primary="'Player Birth Country' column changed where playerid=9999999 and seasonid=20182019"
-                            secondary={"From 'CAN' to 'Canada'"}
-                        />
-                        <ListItemSecondaryAction>
-                            <IconButton aria-label="Delete">
-                                <DeleteIcon />
-                            </IconButton>
-                        </ListItemSecondaryAction>
-                    </ListItem>
-                </List>
-
+                    <List dense={true}>
+                        <ListItem>
+                            <ListItemAvatar>
+                                <Avatar>
+                                    <CreateIcon />
+                                </Avatar>
+                            </ListItemAvatar>
+                            <ListItemText
+                                primary="'Player Birth Country' column changed"
+                                secondary={"From 'CAN' to 'Canada' where playerid = 9999999 and seasonid = 20182019"}
+                            />
+                            <ListItemSecondaryAction>
+                                <IconButton aria-label="Delete">
+                                    <DeleteIcon />
+                                </IconButton>
+                            </ListItemSecondaryAction>
+                        </ListItem>
+                    </List>
+                </div>) : (<div>
+                    <List dense={true}>
+                        <ListItem>
+                            <ListItemAvatar>
+                                <Avatar className={classes.secondaryAvatar}>
+                                <ErrorIcon />
+                                </Avatar>
+                            </ListItemAvatar>
+                            <ListItemText
+                                primary="This table cannot be edited because it does not have any Primary Key defined in the PostgreSQL database."
+                            />
+                        </ListItem>
+                    </List>
+                </div>)}
                 <Divider />
 
                 <Button color="primary" className={classes.button} onClick={this.handleDownloadClick.bind(this)} disabled={this.state.fileFormat === 'delimitedColumn'} >Submit</Button>
@@ -133,6 +149,11 @@ const styleSheet = {
     },
     floatRight: {
         float: 'right'
+    },
+    secondaryAvatar: {
+        margin: 10,
+        color: '#fff',
+        backgroundColor: pink[500]
     }
 };
 

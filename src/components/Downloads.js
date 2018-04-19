@@ -665,10 +665,10 @@ class Downloads extends Component {
 
         return (<div className={classes.limitWidth} >
             <Paper elevation={2} className={classes.topMargin}>
-                <Typography type="subheading" className={classes.cardcardMarginLeftTop}>Download Query Results</Typography>
+                <Typography variant="subheading" className={classes.cardcardMarginLeftTop}>Download Query Results</Typography>
 
                 {/* FILE FORMAT RADIO GROUP */}
-                <Typography type="body1" className={classes.cardcardMarginLeftTop}>File Format</Typography>
+                <Typography variant="body1" className={classes.cardcardMarginLeftTop}>File Format</Typography>
                 <FormControl component="fieldset" required>
                     <RadioGroup onChange={this.handleFileFormatChange} value={this.state.fileFormat} className={classes.cardcardMarginLeftTop} >
                         <FormControlLabel label="Delimited file" value="delimited" control={<Radio />} />
@@ -714,12 +714,12 @@ class Downloads extends Component {
                 </FormControl>
 
                 {/* ADDITIONAL DOWNLOADS OPTIONS */}
-                <Typography type="body1" className={classes.cardcardMarginLeftTop}>Options</Typography>
+                <Typography variant="body1" className={classes.cardcardMarginLeftTop}>Options</Typography>
                 <FormGroup className={classes.cardcardMarginLeftTop}>
                     <FormControlLabel label={"Batch download"} control={<Checkbox onChange={this.handlebatchDownloadCheckBox.bind(this)} value="batchDownloadCheckBox" />} disabled={this.state.fileFormat === 'delimitedColumn' ? true : false} checked={this.state.batchDownloadCheckBox} />
                     <span className={this.state.batchDownloadCheckBox !== true || this.state.fileFormat === 'delimitedColumn' ? classes.hidden : classes.inlineTextField1}>
                         <div className={isNaN(this.props.totalRows) === false && this.props.totalRows >= 0 ? classes.hidden : null} >
-                            <Typography type="body2" className={classes.inlineTextField1}>Re-run query with "Get exact row count" option selected</Typography>
+                            <Typography variant="body2" className={classes.inlineTextField1}>Re-run query with "Get exact row count" option selected</Typography>
                         </div>
                         <div>
                             <Button onClick={this.handlebatchDownloadChange.bind(this, "10K")} color={this.state.batchSize === "10K" ? 'primary' : 'inherit'} className={classes.button} >10K</Button>
@@ -728,7 +728,7 @@ class Downloads extends Component {
                             <Button onClick={this.handlebatchDownloadChange.bind(this, "250K")} color={this.state.batchSize === "250K" ? 'primary' : 'inherit'} className={classes.button} >250K</Button>
                         </div>
                         <div className={classes.inlineTextField}>
-                            <Typography type="body1" className={classes.inlineTextField}>{String(this.state.batchDownloadLowerNum).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} to {String(this.state.batchDownloadUpperNum).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} of {String(this.props.totalRows).replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace("NaN", "unknown")} rows</Typography>
+                            <Typography variant="body1" className={classes.inlineTextField}>{String(this.state.batchDownloadLowerNum).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} to {String(this.state.batchDownloadUpperNum).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} of {String(this.props.totalRows).replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace("NaN", "unknown")} rows</Typography>
                         </div>
                         <div className={classes.inlineTextField3}>
                             <IconButton onClick={this.handleLeftButtonClickRangeDownload.bind(this)} color="primary" className={classes.button} aria-label="COPY">
