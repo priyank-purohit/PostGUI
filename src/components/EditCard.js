@@ -34,7 +34,7 @@ class EditCard extends Component {
             table: props.table,
             columns: props.columns,
             url: props.url,
-            primaryKeysAvailable: false,
+            primaryKeysAvailable: true,
             featureEnabled: false,
             snackBarVisibility: false,
             snackBarMessage: "Unknown error occured",
@@ -114,8 +114,8 @@ class EditCard extends Component {
                 </div>) : (<div></div>)}
                 <Divider />
 
-                <Button color="primary" className={classes.button} onClick={this.handleDownloadClick.bind(this)} disabled={this.state.fileFormat === 'delimitedColumn'} >Submit</Button>
-                <Button className={classes.button && classes.floatRight} onClick={this.handleResetClick.bind(this)} >Remove All</Button>
+                <Button onClick={this.handleDownloadClick.bind(this)} disabled={! (this.state.featureEnabled && this.state.primaryKeysAvailable)} color="primary" className={classes.button}>Submit</Button>
+                <Button onClick={this.handleResetClick.bind(this)} disabled={! (this.state.featureEnabled && this.state.primaryKeysAvailable)} className={classes.button && classes.floatRight}>Remove All</Button>
             </Paper>
 
             <Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
