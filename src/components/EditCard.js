@@ -7,23 +7,20 @@ import Paper from 'material-ui/Paper';
 import Typography from 'material-ui/Typography';
 //import TextField from 'material-ui/TextField';
 import Divider from 'material-ui/Divider';
-import { FormLabel, FormControl, FormGroup, FormControlLabel, FormHelperText } from 'material-ui/Form';
+import { FormGroup, FormControlLabel } from 'material-ui/Form';
 //import List, { ListItem, ListItemText } from 'material-ui/List';
 import Switch from 'material-ui/Switch';
 import Snackbar from 'material-ui/Snackbar';
 import IconButton from 'material-ui/IconButton';
 import CloseIcon from 'material-ui-icons/Close';
 
-import List, { ListItem, ListItemAvatar, ListItemIcon, ListItemSecondaryAction, ListItemText, } from 'material-ui/List';
+import List, { ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText, } from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
-import Checkbox from 'material-ui/Checkbox';
-import Grid from 'material-ui/Grid';
 import CreateIcon from 'material-ui-icons/Create';
 import ErrorIcon from 'material-ui-icons/Error';
 import DeleteIcon from 'material-ui-icons/Delete';
 
 import pink from 'material-ui/colors/pink';
-import { StringDecoder } from 'string_decoder';
 
 //const timeout = 2000;
 
@@ -79,7 +76,7 @@ class EditCard extends Component {
 
         for (let i in Object.keys(primaryKey)) {
             stringified += keys[i] + " = " + primaryKey[keys[i]];
-            if (i != keys.length - 1) { stringified += " and "; }
+            if (i !== keys.length - 1) { stringified += " and "; }
         }
 
         return stringified;
