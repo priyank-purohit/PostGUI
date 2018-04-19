@@ -34,6 +34,7 @@ class EditCard extends Component {
             table: props.table,
             columns: props.columns,
             url: props.url,
+            primaryKeysAvailable: false,
             featureEnabled: false,
             snackBarVisibility: false,
             snackBarMessage: "Unknown error occured",
@@ -71,34 +72,11 @@ class EditCard extends Component {
             <Paper elevation={2} className={classes.topMargin}>
                 <Typography variant="subheading" className={classes.cardcardMarginLeftTop}>Edit Table Contents</Typography>
 
-                <FormGroup className={classes.cardMarginLeft}>
+                {this.state.primaryKeysAvailable ? (<FormGroup className={classes.cardMarginLeft}>
                     <FormControlLabel
                         control={<Switch checked={this.state.featureEnabled} onChange={this.handleFeatureEnabledSwitch.bind(this)} value="featureStatus" />}
                         label="Turn on editable table" />
-                </FormGroup>
-
-                {this.state.featureEnabled ? (<div>
-                    <Typography variant="body1" className={classes.cardcardMarginLeftTop}>Changes made to this table</Typography>
-
-                    <List dense={true}>
-                        <ListItem>
-                            <ListItemAvatar>
-                                <Avatar>
-                                    <CreateIcon />
-                                </Avatar>
-                            </ListItemAvatar>
-                            <ListItemText
-                                primary="'Player Birth Country' column changed"
-                                secondary={"From 'CAN' to 'Canada' where playerid = 9999999 and seasonid = 20182019"}
-                            />
-                            <ListItemSecondaryAction>
-                                <IconButton aria-label="Delete">
-                                    <DeleteIcon />
-                                </IconButton>
-                            </ListItemSecondaryAction>
-                        </ListItem>
-                    </List>
-                </div>) : (<div>
+                </FormGroup>) : (<div>
                     <List dense={true}>
                         <ListItem>
                             <ListItemAvatar>
@@ -112,6 +90,28 @@ class EditCard extends Component {
                         </ListItem>
                     </List>
                 </div>)}
+
+                {this.state.featureEnabled && this.state.primaryKeysAvailable ? (<div>
+                    <Typography variant="body1" className={classes.cardcardMarginLeftTop}>Changes made to this table</Typography>
+
+                    <List dense={true}>
+                        <ListItem>
+                            <ListItemAvatar>
+                                <Avatar>
+                                    <CreateIcon />
+                                </Avatar>
+                            </ListItemAvatar>
+                            <ListItemText
+                                primary="'Player Birth Country' column changed"
+                                secondary={"From 'CAN' to 'Canada' where playerid = 9999999 and seasonid = 20182019"} />
+                            <ListItemSecondaryAction>
+                                <IconButton aria-label="Delete">
+                                    <DeleteIcon />
+                                </IconButton>
+                            </ListItemSecondaryAction>
+                        </ListItem>
+                    </List>
+                </div>) : (<div></div>)}
                 <Divider />
 
                 <Button color="primary" className={classes.button} onClick={this.handleDownloadClick.bind(this)} disabled={this.state.fileFormat === 'delimitedColumn'} >Submit</Button>
