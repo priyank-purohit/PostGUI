@@ -266,7 +266,8 @@ const styleSheet = {
         marginTop: (5) * 5
     },
     cardGroups: {
-        display: 'block'
+        display: 'flex',
+        flexDirection: 'row'
     }
 };
 export default withStyles(styleSheet)(DataTable);

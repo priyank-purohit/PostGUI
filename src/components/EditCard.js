@@ -84,8 +84,7 @@ const styleSheet = {
         marginBottom: 4
     },
     limitWidth: {
-        width: '50%',
-        display: 'block'
+        width: '50%'
     },
     topMargin: {
         marginTop: 16,

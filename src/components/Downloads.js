@@ -822,8 +822,7 @@ const styleSheet = {
         marginBottom: 4
     },
     limitWidth: {
-        width: '50%',
-        display: 'inline-block'
+        width: '50%'
     },
     topMargin: {
         marginTop: 16,
