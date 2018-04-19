@@ -14,6 +14,19 @@ import Snackbar from 'material-ui/Snackbar';
 import IconButton from 'material-ui/IconButton';
 import CloseIcon from 'material-ui-icons/Close';
 
+import List, {
+    ListItem,
+    ListItemAvatar,
+    ListItemIcon,
+    ListItemSecondaryAction,
+    ListItemText,
+} from 'material-ui/List';
+import Avatar from 'material-ui/Avatar';
+import Checkbox from 'material-ui/Checkbox';
+import Grid from 'material-ui/Grid';
+import CreateIcon from 'material-ui-icons/Create';
+import DeleteIcon from 'material-ui-icons/Delete';
+
 //const timeout = 2000;
 
 class EditCard extends Component {
@@ -51,20 +64,39 @@ class EditCard extends Component {
 
         return (<div className={classes.limitWidth} >
             <Paper elevation={2} className={classes.topMargin}>
-                <Typography type="subheading" className={classes.cardcardMarginLeftTop}>Edit table</Typography>
+                <Typography type="subheading" className={classes.cardcardMarginLeftTop}>Edit Table Contents</Typography>
 
                 <FormGroup className={classes.cardMarginLeft}>
                     <FormControlLabel
-                        control={ <Switch checked={true} value="gilad" /> }
+                        control={<Switch checked={true} value="gilad" />}
                         label="Turn on editable table" />
                 </FormGroup>
 
                 {/* Changes made LIST */}
                 <Typography type="body1" className={classes.cardcardMarginLeftTop}>Changes made to this table</Typography>
 
+                <List dense={true}>
+                    <ListItem>
+                        <ListItemAvatar>
+                            <Avatar>
+                                <CreateIcon />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                            primary="'Player Birth Country' column changed where playerid=9999999 and seasonid=20182019"
+                            secondary={"From 'CAN' to 'Canada'"}
+                        />
+                        <ListItemSecondaryAction>
+                            <IconButton aria-label="Delete">
+                                <DeleteIcon />
+                            </IconButton>
+                        </ListItemSecondaryAction>
+                    </ListItem>
+                </List>
+
                 <Divider />
 
-                <Button color="primary" className={classes.button} onClick={this.handleDownloadClick.bind(this)} disabled={this.state.fileFormat === 'delimitedColumn'} >Commit</Button>
+                <Button color="primary" className={classes.button} onClick={this.handleDownloadClick.bind(this)} disabled={this.state.fileFormat === 'delimitedColumn'} >Submit</Button>
                 <Button className={classes.button && classes.floatRight} onClick={this.handleResetClick.bind(this)} >Remove All</Button>
             </Paper>
 
