@@ -83,9 +83,6 @@ class EditCard extends Component {
 
     // Given a COLUMN and KEY, deletes the change from the state's changesMade value
     deleteChange(column, key) {
-        console.log(column, key);
-        console.log(this.state.table, column, key);
-
         // First delete the exact change
         let tempChanges = this.state.changesMade;
         delete tempChanges[this.state.table][column][key];
@@ -110,7 +107,7 @@ class EditCard extends Component {
         if (this.state.table === "" || JSON.stringify(this.state.changesMade) === "{}" || this.state.changesMade[this.state.table] === null  || this.state.changesMade[this.state.table] === undefined) {
             return;
         }
-        console.log(JSON.stringify(this.state.changesMade));
+        
         let length = Object.keys(this.state.changesMade[this.state.table]).length;
         let keys = Object.keys(this.state.changesMade[this.state.table]);
         let listItems = [];
@@ -168,8 +165,6 @@ class EditCard extends Component {
                         </ListItem>
                     </List>
                 </div>)}
-
-                <p>{JSON.stringify(this.state.changesMade[this.state.table])}</p>
 
                 {this.state.featureEnabled && this.state.primaryKeysAvailable ? (<div>
                     <Typography variant="body1" className={classes.cardcardMarginLeftTop}>Changes made to this table</Typography>
