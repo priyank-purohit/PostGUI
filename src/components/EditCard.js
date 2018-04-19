@@ -39,7 +39,7 @@ class EditCard extends Component {
             primaryKeysAvailable: true,
             primaryKeys: [],
 
-            featureEnabled: false,
+            featureEnabled: true,
             changesMade: { "stats": { "assists": { "4309247|20172018": { "oldValue": 123, "newValue": 124, "primaryKey": { "playerid": 43092472, "seasonid": 20172018 } } }, "goals": { "4309247|20172018": { "oldValue": 12, "newValue": 13, "primaryKey": { "playerid": 43092472, "seasonid": 20172018 } } } }, "stats2": { "OT Goals": { "4309247|20172018": { "oldValue": 1, "newValue": 2, "primaryKey": { "playerid": 43092472, "seasonid": 20172018 } } }, "points": { "4309247|20172018": { "oldValue": 120, "newValue": 130, "primaryKey": { "playerid": 43092472, "seasonid": 20172018 } } } } },
 
             snackBarVisibility: false,
@@ -84,12 +84,21 @@ class EditCard extends Component {
     }
 
     createChangeLogList() {
+        if (this.state.table === "" || this.state.changesMade === {}) {
+            return;
+        }
+        
         let length = Object.keys(this.state.changesMade[this.state.table]).length;
         let keys = Object.keys(this.state.changesMade[this.state.table]);
         let listItems = [];
 
         for (let i = 0; i < length; i++) {
-            let change = this.state.changesMade[this.state.table][keys[i]];
+            let column = keys[i];
+
+            let change = this.state.changesMade[this.state.table][column];
+            let oldValue = change[Object.keys(change)[0]]['oldValue'];
+            let newValue = change[Object.keys(change)[0]]['newValue'];
+            let primaryKey = change[Object.keys(change)[0]]['primaryKey'];
 
             listItems.push(
                 <ListItem key={i}>
@@ -99,8 +108,8 @@ class EditCard extends Component {
                         </Avatar>
                     </ListItemAvatar>
                     <ListItemText
-                        primary={keys[i] + " column changed"}
-                        secondary={"From " + change[Object.keys(change)[0]]['oldValue'] + " to " + change[Object.keys(change)[0]]['newValue'] + " where " + this.primaryKeyStringify(change[Object.keys(change)[0]]['primaryKey'])} />
+                        primary={column + " column changed"}
+                        secondary={"From " + oldValue + " to " + newValue + " where " + this.primaryKeyStringify(primaryKey)} />
                     <ListItemSecondaryAction>
                         <IconButton aria-label="Delete">
                             <DeleteIcon />
