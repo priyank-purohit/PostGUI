@@ -87,7 +87,7 @@ class EditCard extends Component {
 
     // Creates the <list> that shows the changes made
     createChangeLogList() {
-        if (this.state.table === "" || this.state.changesMade === {}) {
+        if (this.state.table === "" || JSON.stringify(this.state.changesMade) === "{}") {
             return;
         }
         
