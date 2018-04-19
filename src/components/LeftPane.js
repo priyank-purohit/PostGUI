@@ -13,20 +13,20 @@ class LeftPane extends Component {
 		let rootClasses = this.props.leftPaneVisibility === true ? classes.root : classes.rootHide;
 		return (
 			<div className={rootClasses}>
-				<DbPicker 
-					dbIndex={this.props.dbIndex} 
+				<DbPicker
+					dbIndex={this.props.dbIndex}
 					changeDbIndex={this.props.changeDbIndex} />
 				<Divider />
-				<CardHeader subheader="Tables and Columns" className={classes.lowBottomPadding}/>
-				<DbSchema 
-					dbIndex={this.props.dbIndex} 
-					table={this.props.table} 
+				<CardHeader subheader="Tables and Columns" className={classes.lowBottomPadding} />
+				<DbSchema
+					dbIndex={this.props.dbIndex}
+					table={this.props.table}
 					searchTerm={this.props.searchTerm}
 					changeSearchTerm={this.props.changeSearchTerm}
-					changeTable={this.props.changeTable} 
-					changeColumns={this.props.changeColumns} 
+					changeTable={this.props.changeTable}
+					changeColumns={this.props.changeColumns}
 					changeDbSchemaDefinitions={this.props.changeDbSchemaDefinitions}
-					changeVisibleColumns={this.props.changeVisibleColumns} /> 
+					changeVisibleColumns={this.props.changeVisibleColumns} />
 			</div>
 		);
 	}

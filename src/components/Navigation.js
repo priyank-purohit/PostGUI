@@ -12,9 +12,10 @@ import HistoryIcon from 'material-ui-icons/History';
 let _ = require('lodash');
 let lib = require('../utils/library.js');
 
+
 //join: predicted genes, protein seqs
 class Navigation extends Component {
-	
+
 	constructor(props) {
 		super(props);
 		this.changeSearchTermDebounce = _.debounce(value => this.props.changeSearchTerm(value), 350);
@@ -45,7 +46,7 @@ class Navigation extends Component {
 							{dbTitle}
 						</Typography>
 						<div className={classes.searchBarFlex}>
-							<TextField id="search" placeholder="Search tables and columns" onKeyPress={this.changeSearchTerm.bind(this)} onChange={this.changeSearchTerm.bind(this)} onFocus={this.changeSearchTerm.bind(this)} type="search" className={classes.searchBar}/>
+							<TextField id="search" placeholder="Search tables and columns" onKeyPress={this.changeSearchTerm.bind(this)} onChange={this.changeSearchTerm.bind(this)} onFocus={this.changeSearchTerm.bind(this)} type="search" className={classes.searchBar} />
 						</div>
 						<IconButton className={classes.rightIconsFlex} color="inherit" aria-label="Menu" onClick={this.props.toggleHistoryPane.bind(this)}>
 							<HistoryIcon className={classes.floatRight} />
@@ -72,19 +73,19 @@ const styleSheet = {
 		flex: 0.6,
 		display: 'block',
 		marginLeft: 5,
-    	marginRight: 5,
-    	marginTop: 0,
+		marginRight: 5,
+		marginTop: 0,
 	},
 	searchBar: {
 		width: 300,
 		marginLeft: 5,
-    	marginRight: 5,
-    	background: 'white',
-    	padding: 10,
-    	paddingBottom: 5,
-    	border: '1px solid grey',
-    	borderRadius: 3,
-    	float: 'right'
+		marginRight: 5,
+		background: 'white',
+		padding: 10,
+		paddingBottom: 5,
+		border: '1px solid grey',
+		borderRadius: 3,
+		float: 'right'
 	},
 	rightIconsFlex: {
 		flex: 0.1,

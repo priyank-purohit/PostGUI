@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Chip from 'material-ui/Chip';
 
+
 class RightPaneChips extends Component {
 	constructor(props) {
 		super(props);

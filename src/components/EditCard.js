@@ -104,10 +104,10 @@ class EditCard extends Component {
 
     // Creates the <list> that shows the changes made
     createChangeLogList() {
-        if (this.state.table === "" || JSON.stringify(this.state.changesMade) === "{}" || this.state.changesMade[this.state.table] === null  || this.state.changesMade[this.state.table] === undefined) {
+        if (this.state.table === "" || JSON.stringify(this.state.changesMade) === "{}" || this.state.changesMade[this.state.table] === null || this.state.changesMade[this.state.table] === undefined) {
             return;
         }
-        
+
         let length = Object.keys(this.state.changesMade[this.state.table]).length;
         let keys = Object.keys(this.state.changesMade[this.state.table]);
         let listItems = [];

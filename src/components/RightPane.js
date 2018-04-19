@@ -31,6 +31,7 @@ axiosCancel(axios, {
 	debug: false // default 
 });
 
+
 class RightPane extends Component {
 	constructor(props) {
 		super(props);
@@ -78,7 +79,7 @@ class RightPane extends Component {
 				this.props.changeRules(null);
 			} else {
 				window.$(this.refs.queryBuilder).queryBuilder.constructor.DEFAULTS.operators = lib.getQBOperators();
-				window.$(this.refs.queryBuilder).queryBuilder.constructor.DEFAULTS.lang = lib.getQBLang(); 
+				window.$(this.refs.queryBuilder).queryBuilder.constructor.DEFAULTS.lang = lib.getQBLang();
 				window.$(this.refs.queryBuilder).queryBuilder('destroy');
 				window.$(this.refs.queryBuilder).queryBuilder({ filters, defaultRules, plugins: ['not-group'] });
 			}
@@ -88,11 +89,11 @@ class RightPane extends Component {
 			});
 		}
 
-		if (newProps.visibleColumns !== undefined && 
-				this.state.dbIndex === newProps.dbIndex && 
-				this.state.table === newProps.table && 
-				this.state.columns === newProps.columns &&  
-				this.state.leftPaneVisibility === newProps.leftPaneVisibility) {
+		if (newProps.visibleColumns !== undefined &&
+			this.state.dbIndex === newProps.dbIndex &&
+			this.state.table === newProps.table &&
+			this.state.columns === newProps.columns &&
+			this.state.leftPaneVisibility === newProps.leftPaneVisibility) {
 			this.setState({
 				visibleColumns: newProps.visibleColumns
 			});
@@ -159,7 +160,7 @@ class RightPane extends Component {
 		try {
 			window.$(this.refs.queryBuilder).queryBuilder.constructor.DEFAULTS.operators = lib.getQBOperators();
 			window.$(this.refs.queryBuilder).queryBuilder.constructor.DEFAULTS.lang = lib.getQBLang();
-			
+
 			const filters = lib.getQBFilters(this.state.dbIndex, this.state.table, this.state.columns, this.state.dbSchemaDefinitions);
 			const rules = newRules ? newRules : defaultRules;
 
@@ -173,7 +174,7 @@ class RightPane extends Component {
 	rebuildQueryBuilder(element, dbIndex, table, columns, dbSchemaDefinitions, newRules = this.state.rulesFromHistoryPane) {
 		window.$(this.refs.queryBuilder).queryBuilder('destroy');
 		window.$(this.refs.queryBuilder).queryBuilder.constructor.DEFAULTS.operators = lib.getQBOperators();
-		window.$(this.refs.queryBuilder).queryBuilder.constructor.DEFAULTS.lang = lib.getQBLang(); 
+		window.$(this.refs.queryBuilder).queryBuilder.constructor.DEFAULTS.lang = lib.getQBLang();
 		const rules = newRules ? newRules : defaultRules;
 		const filters = lib.getQBFilters(dbIndex, table, columns, dbSchemaDefinitions);
 
@@ -230,7 +231,7 @@ class RightPane extends Component {
 		for (let i = 0; i < rules.length; i++) {
 			// iterating over the first rules
 			let notPrefixLocal = rules[i]['not'] === true ? "not." : "";
-			
+
 			if (rules[i]['condition'] === "OR" || rules[i]['condition'] === "AND") {
 				if (i === (rules.length - 1)) {
 					select += this.recursiveRulesExtraction(notPrefixLocal, rules[i]['condition'], rules[i]['rules']);
@@ -326,7 +327,7 @@ class RightPane extends Component {
 					responseRows = 1 + parseInt(response.headers["content-range"].replace("/*", "").replace("0-", ""), 10);
 					totalRows = parseInt(response.headers["content-range"].replace(/0-\d*\//, ""), 10);
 				}
-				
+
 				this.setState({
 					rawData: response.data,
 					rows: responseRows,
@@ -411,20 +412,20 @@ class RightPane extends Component {
 	}
 
 	handleGetExactRowCountToggle() {
-        if (this.state.exactRowCount === true) {
-            this.setState({
-                exactRowCount: false
-            }/*, () => {
+		if (this.state.exactRowCount === true) {
+			this.setState({
+				exactRowCount: false
+			}/*, () => {
                 this.createFileName();
             }*/);
-        } else {
-            this.setState({
-                exactRowCount: true
-            }/*, () => {
+		} else {
+			this.setState({
+				exactRowCount: true
+			}/*, () => {
                 this.createFileName();
             }*/);
-        }
-    }
+		}
+	}
 
 	render() {
 		const classes = this.props.classes;
@@ -441,57 +442,57 @@ class RightPane extends Component {
 		return (
 			<div className={classes.middlePaperSection}>
 
-				<Snackbar 	anchorOrigin={{vertical: "bottom", horizontal: "center"}}
-							open={this.state.snackBarVisibility}
-							onClose={this.handleRequestClose}
-							SnackbarContentProps={{ 'aria-describedby': 'message-id', }}
-							message={<span id="message-id">{this.state.snackBarMessage}</span>}
-							action={[ <IconButton key="close" aria-label="Close" color="secondary" className={classes.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton> ]} />
+				<Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+					open={this.state.snackBarVisibility}
+					onClose={this.handleRequestClose}
+					SnackbarContentProps={{ 'aria-describedby': 'message-id', }}
+					message={<span id="message-id">{this.state.snackBarMessage}</span>}
+					action={[<IconButton key="close" aria-label="Close" color="secondary" className={classes.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton>]} />
 
 				<Paper className={paperClasses} elevation={5}>
 					<CardHeader title={tableDisplayName} subheader={tableDescription} />
-					
+
 					<Typography type="subheading" className={classes.cardMarginLeftTop} >Query Builder</Typography>
-						<div id='query-builder' ref='queryBuilder'/>
+					<div id='query-builder' ref='queryBuilder' />
 
-						<Typography type="body1" className={classes.cardMarginLeftTop}>Options</Typography>
+					<Typography type="body1" className={classes.cardMarginLeftTop}>Options</Typography>
 
-						<div title="Run Query" onClick={this.handleSubmitButtonClickCancelQuery.bind(this)}>
-							<SubmitButton
-								dbIndex={this.state.dbIndex} 
-								table={this.state.table} 
-								leftPaneVisibility={this.state.leftPaneVisibility} 
-								getRules={this.handleSubmitButtonClick.bind(this)} 
-								loading={this.state.submitLoading} 
-								success={this.state.submitSuccess} 
-								error={this.state.submitError} />
-						</div>
+					<div title="Run Query" onClick={this.handleSubmitButtonClickCancelQuery.bind(this)}>
+						<SubmitButton
+							dbIndex={this.state.dbIndex}
+							table={this.state.table}
+							leftPaneVisibility={this.state.leftPaneVisibility}
+							getRules={this.handleSubmitButtonClick.bind(this)}
+							loading={this.state.submitLoading}
+							success={this.state.submitSuccess}
+							error={this.state.submitError} />
+					</div>
 
-						<TextField 
-							required 
-							id="rowLimit" 
-							type="number" 
-							label="Row-limit" 
-							value={this.state.rowLimit.toString()} 
-							className={classes.textField && classes.cardMarginLeft} 
-							margin="normal" 
-							onChange={this.handleRowLimitChange.bind(this)} />
+					<TextField
+						required
+						id="rowLimit"
+						type="number"
+						label="Row-limit"
+						value={this.state.rowLimit.toString()}
+						className={classes.textField && classes.cardMarginLeft}
+						margin="normal"
+						onChange={this.handleRowLimitChange.bind(this)} />
 
-						<FormControlLabel control={ <Checkbox onChange={this.handleGetExactRowCountToggle.bind(this)} value="getExactRowCount" /> } checked={this.state.exactRowCount} label={"Get exact row count (slow)"} className={classes.marginLeft} />
+					<FormControlLabel control={<Checkbox onChange={this.handleGetExactRowCountToggle.bind(this)} value="getExactRowCount" />} checked={this.state.exactRowCount} label={"Get exact row count (slow)"} className={classes.marginLeft} />
 
 					<Typography type="subheading" className={classes.cardMarginLeftTop}>Query Results</Typography>
-						<RightPaneChips rows={this.state.rows} totalRows={this.state.totalRows} rowLimit={this.state.rowLimit} maxRows={maxRowsInOutput}/>
+					<RightPaneChips rows={this.state.rows} totalRows={this.state.totalRows} rowLimit={this.state.rowLimit} maxRows={maxRowsInOutput} />
 
-						<div className={ classes.cardMarginLeftRightTop } >
-							<DataTable
-								dbIndex={this.state.dbIndex}
-								table={this.state.table}
-								columns={this.state.visibleColumns ? this.state.visibleColumns : this.state.columns}
-								data={this.state.rawData}
-								url={this.state.url}
-								totalRows={this.state.totalRows}
-								noDataText={this.state.submitLoading ? "Loading ..." : (this.state.submitError ? "Query error" : (this.state.submitSuccess ? "Success!" : "No rows found"))} />
-						</div>
+					<div className={classes.cardMarginLeftRightTop} >
+						<DataTable
+							dbIndex={this.state.dbIndex}
+							table={this.state.table}
+							columns={this.state.visibleColumns ? this.state.visibleColumns : this.state.columns}
+							data={this.state.rawData}
+							url={this.state.url}
+							totalRows={this.state.totalRows}
+							noDataText={this.state.submitLoading ? "Loading ..." : (this.state.submitError ? "Query error" : (this.state.submitSuccess ? "Success!" : "No rows found"))} />
+					</div>
 				</Paper>
 			</div>
 		);
