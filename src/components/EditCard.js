@@ -56,7 +56,7 @@ class EditCard extends Component {
                 <FormGroup className={classes.cardMarginLeft}>
                     <FormControlLabel
                         control={ <Switch checked={true} value="gilad" /> }
-                        label="Enable cell edit feature" />
+                        label="Turn on editable table" />
                 </FormGroup>
 
                 {/* Changes made LIST */}
@@ -65,7 +65,7 @@ class EditCard extends Component {
                 <Divider />
 
                 <Button color="primary" className={classes.button} onClick={this.handleDownloadClick.bind(this)} disabled={this.state.fileFormat === 'delimitedColumn'} >Commit</Button>
-                <Button className={classes.button && classes.floatRight} onClick={this.handleResetClick.bind(this)} >Reset</Button>
+                <Button className={classes.button && classes.floatRight} onClick={this.handleResetClick.bind(this)} >Remove All</Button>
             </Paper>
 
             <Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
