@@ -64,6 +64,7 @@ class EditCard extends Component {
     handleDownloadClick() {
     }
 
+    // Toggle the switch
     handleFeatureEnabledSwitch() {
         // Set the featureEnabled state to opposite of what it is at the moment...
         this.setState({
@@ -71,6 +72,7 @@ class EditCard extends Component {
         });
     }
 
+    // Converts the JSON object for PK into a string that can be displayed to user
     primaryKeyStringify(primaryKey) {
         let keys = Object.keys(primaryKey);
         let stringified = "";
@@ -83,6 +85,7 @@ class EditCard extends Component {
         return stringified;
     }
 
+    // Creates the <list> that shows the changes made
     createChangeLogList() {
         if (this.state.table === "" || this.state.changesMade === {}) {
             return;
