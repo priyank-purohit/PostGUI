@@ -78,16 +78,39 @@ class EditCard extends Component {
             stringified += keys[i] + " = " + primaryKey[keys[i]];
             if (i !== keys.length - 1) { stringified += " and "; }
         }
-
         return stringified;
+    }
+
+    // Given a COLUMN and KEY, deletes the change from the state's changesMade value
+    deleteChange(column, key) {
+        console.log(column, key);
+        console.log(this.state.table, column, key);
+
+        // First delete the exact change
+        let tempChanges = this.state.changesMade;
+        delete tempChanges[this.state.table][column][key];
+
+        // Delete the column object if that was the only change for that column...
+        if (JSON.stringify(tempChanges[this.state.table][column]) === "{}") {
+            delete tempChanges[this.state.table][column];
+        }
+
+        // Delete the table object if that was the only change for that table...
+        if (JSON.stringify(tempChanges[this.state.table]) === "{}") {
+            delete tempChanges[this.state.table];
+        }
+
+        this.setState({
+            changesMade: tempChanges
+        });
     }
 
     // Creates the <list> that shows the changes made
     createChangeLogList() {
-        if (this.state.table === "" || JSON.stringify(this.state.changesMade) === "{}") {
+        if (this.state.table === "" || JSON.stringify(this.state.changesMade) === "{}" || this.state.changesMade[this.state.table] === null  || this.state.changesMade[this.state.table] === undefined) {
             return;
         }
-        
+        console.log(JSON.stringify(this.state.changesMade));
         let length = Object.keys(this.state.changesMade[this.state.table]).length;
         let keys = Object.keys(this.state.changesMade[this.state.table]);
         let listItems = [];
@@ -110,7 +133,7 @@ class EditCard extends Component {
                     <ListItemText
                         primary={column + " column changed"}
                         secondary={"From " + oldValue + " to " + newValue + " where " + this.primaryKeyStringify(primaryKey)} />
-                    <ListItemSecondaryAction>
+                    <ListItemSecondaryAction onClick={this.deleteChange.bind(this, column, Object.keys(change)[0])}>
                         <IconButton aria-label="Delete">
                             <DeleteIcon />
                         </IconButton>
@@ -145,6 +168,8 @@ class EditCard extends Component {
                         </ListItem>
                     </List>
                 </div>)}
+
+                <p>{JSON.stringify(this.state.changesMade[this.state.table])}</p>
 
                 {this.state.featureEnabled && this.state.primaryKeysAvailable ? (<div>
                     <Typography variant="body1" className={classes.cardcardMarginLeftTop}>Changes made to this table</Typography>
