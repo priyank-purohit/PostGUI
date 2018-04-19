@@ -64,97 +64,6 @@ class DataTable extends Component {
         }
     }
 
-    // Very poorly design here, need to fix it when the login system and the edit buttons are implemented... shouldn't be making 2 requests each time...
-    updateDbIfNeeded(oldRow, newRow, columnChanged) {
-        // Get the values out from the old and new rows for the columnChanged
-        oldRow = JSON.parse(oldRow);
-        let oldValue = oldRow[columnChanged];
-        let newValue = newRow[columnChanged];
-
-        // Figure out if the values have changed
-        if (String(oldValue) !== String(newValue)) {
-            console.log("Sending PATCH request to server...");
-
-            axios.get(lib.getDbConfig(this.state.dbIndex, "url") + "/rpc/primary_keys", { params: {} })
-                .then((response) => {
-                    // Save the raw resp + parse tables and columns...
-                    if (response.data[0]["primary_keys"] && response.data[0]["primary_keys"] !== []) {
-                        this.setState({
-                            dbPrimaryKeys: response.data[0]["primary_keys"]
-                        }, () => {
-                            console.log(response.data[0]["primary_keys"]);
-                            for (let i = 0; i < response.data[0]["primary_keys"].length; i++) {
-                                //get the FK for the current table...
-                                if (response.data[0]["primary_keys"][i]["table"] === this.state.table) {
-                                    this.setState({
-                                        tablePrimaryKeys: response.data[0]["primary_keys"][i]["primary_keys"]
-                                    }, () => {
-                                        // Create a URL
-                                        let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table + "?and=(";
-                                        console.log(this.state.tablePrimaryKeys);
-                                        for (let i = 0; i < this.state.tablePrimaryKeys.length; i++) {
-                                            url += this.state.tablePrimaryKeys[i] + ".eq." + oldRow[this.state.tablePrimaryKeys[i]];
-                                            if (i + 1 !== this.state.tablePrimaryKeys.length) {
-                                                // Add a comma...
-                                                url += ",";
-                                            } else {
-                                                url += ")";
-                                            }
-                                        }
-                                        console.log("URL=", url);
-
-                                        let patchBody = {};
-                                        patchBody[columnChanged] = newValue;
-
-                                        console.log(JSON.stringify(patchBody));
-
-                                        // PATCH the request
-                                        axios.patch(url, { [columnChanged]: newValue }, { headers: { Prefer: 'return=representation' } })
-                                            .then((response) => {
-                                                console.log("PATCH RESPONSE:", JSON.stringify(response.data));
-                                            })
-                                            .catch((error) => {
-                                                // Show error in top-right Snack-Bar
-                                                this.setState({
-                                                    snackBarVisibility: true,
-                                                    snackBarMessage: "Database update failed."
-                                                }, () => {
-                                                    this.timer = setTimeout(() => {
-                                                        this.setState({
-                                                            snackBarVisibility: false,
-                                                            snackBarMessage: "Unknown error"
-                                                        });
-                                                    }, 5000);
-                                                });
-                                            });
-                                    });
-                                }
-                            }
-                        });
-                    } else {
-                        console.log("Elsed out", JSON.stringify(response.data));
-                    }
-                })
-                .catch((error) => {
-                    // Show error in top-right Snack-Bar
-                    this.setState({
-                        snackBarVisibility: true,
-                        snackBarMessage: "Could not retrieve primary keys."
-                    }, () => {
-                        this.timer = setTimeout(() => {
-                            this.setState({
-                                snackBarVisibility: false,
-                                snackBarMessage: "Unknown error"
-                            });
-                        }, 5000);
-                    });
-                });
-
-        } else {
-            console.log(String(oldValue), String(newValue), oldValue, newValue, String(oldValue) !== String(newValue) && (oldValue !== null && newValue !== null && String(oldValue) !== "" && String(newValue) !== ""), String(oldValue) !== String(newValue), (oldValue !== null && newValue !== null && String(oldValue) !== "" && String(newValue) !== ""));
-        }
-    }
-
     renderEditableCell(cellInfo) {
         return (
             <div
@@ -170,7 +79,7 @@ class DataTable extends Component {
                         console.log("Original row: " + JSON.stringify(this.state.data[cellInfo.index]));
                         data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
                         let newRow = this.state.data[cellInfo.index];
-                        this.updateDbIfNeeded(oldRow, newRow, cellInfo.column.id);
+                        //this.updateDbIfNeeded(oldRow, newRow, cellInfo.column.id);
                         this.setState({ data }, () => {
                             console.log("Updated row: " + JSON.stringify(this.state.data[cellInfo.index]));
                         });
@@ -209,7 +118,7 @@ class DataTable extends Component {
                     maxWidth: columnMaxWidth !== null ? columnMaxWidth : undefined,
                     minWidth: columnMinWidth !== null ? columnMinWidth : 100,
                     headerStyle: { fontWeight: 'bold' },
-                    Cell: this.renderEditableCell
+                    // Cell: this.renderEditableCell
                 });
             });
         }
