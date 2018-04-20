@@ -165,7 +165,6 @@ export default class Layout extends React.Component {
 	}
 
 	changeDbPkInfo(pkInfo) {
-		console.log("App.js dbPkInfo", JSON.stringify(pkInfo));
 		this.setState({
 			dbPkInfo: pkInfo
 		});

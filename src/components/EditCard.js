@@ -60,11 +60,8 @@ class EditCard extends Component {
 
         // Enable PK related features if table has a PK
         if (newProps.dbPkInfo && this.state.table) {
-            console.log("Found DbPkInfo and state.table");
             for (let i = 0; i < newProps.dbPkInfo.length; i++) {
-                console.log("Considering Pk info for some table....");
                 if (newProps.dbPkInfo[i]["table"] === this.state.table) {
-                    console.log("Found matching PK info and table!!!!", JSON.stringify(newProps.dbPkInfo[i]["primary_keys"]));
                     this.setState({
                         primaryKeys: newProps.dbPkInfo[i]["primary_keys"],
                         primaryKeysAvailable: JSON.stringify(newProps.dbPkInfo[i]["primary_keys"]) !== "[]"

@@ -383,7 +383,7 @@ class DbSchema extends Component {
 							this.props.changeDbPkInfo(response.data[0]["primary_keys"]);
 						}
 					});
-					console.log(JSON.stringify(response.data[0]["primary_keys"]), pkAvailable);
+					//console.log(JSON.stringify(response.data[0]["primary_keys"]), pkAvailable);
 				})
 				.catch((error) => {
 					// Show error in top-right Snack-Bar
