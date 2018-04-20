@@ -29,6 +29,8 @@ class DbSchema extends Component {
 			table: props.table,
 			dbSchema: null,
 			dbFkSchema: null,
+			dbPkInfo: null,
+			primaryKeysAvailable: false,
 			tables: [],
 			snackBarVisibility: false,
 			snackBarMessage: "Unknown error occured",
@@ -373,9 +375,10 @@ class DbSchema extends Component {
 				.then((response) => {
 					// Save the raw resp + parse tables and columns...
 					this.setState({
-						dbPkInfo: response.data
+						dbPkInfo: response.data[0]["primary_keys"],
+						primaryKeysAvailable: JSON.stringify(response.data[0]["primary_keys"]) !== "[]"
 					});
-					console.log(JSON.stringify(response.data));
+					console.log(JSON.stringify(response.data[0]["primary_keys"]), JSON.stringify(response.data[0]["primary_keys"]) !== "[]");
 				})
 				.catch((error) => {
 					// Show error in top-right Snack-Bar
