@@ -41,6 +41,8 @@ class EditCard extends Component {
 
             snackBarVisibility: false,
             snackBarMessage: "Unknown error occured",
+
+            removeButtonLabel: "Remove All"
         };
     }
 
@@ -53,9 +55,54 @@ class EditCard extends Component {
         });
     }
 
-    handleResetClick() {
+    // Given a COLUMN and KEY, deletes the change from the state's changesMade value
+    deleteTableChanges() {
+        // First delete the exact change
+        let tempChanges = this.state.changesMade;
+        delete tempChanges[this.state.table];
+
         this.setState({
+            changesMade: tempChanges
         });
+    }
+
+    // Given a COLUMN and KEY, deletes the change from the state's changesMade value
+    deleteChange(column, key) {
+        // First delete the exact change
+        let tempChanges = this.state.changesMade;
+        delete tempChanges[this.state.table][column][key];
+
+        // Delete the column object if that was the only change for that column...
+        if (JSON.stringify(tempChanges[this.state.table][column]) === "{}") {
+            delete tempChanges[this.state.table][column];
+        }
+
+        // Delete the table object if that was the only change for that table...
+        if (JSON.stringify(tempChanges[this.state.table]) === "{}") {
+            delete tempChanges[this.state.table];
+        }
+
+        this.setState({
+            changesMade: tempChanges
+        });
+    }
+
+    handleRemoveAllClick(e) {
+        if (this.state.removeButtonLabel === "Remove All") {
+            this.setState({
+                removeButtonLabel: "Confirm Remove All?"
+            });
+            this.timer = setTimeout(() => {
+                this.setState({
+                    removeButtonLabel: "Remove All"
+                });
+            }, 4000);
+        } else {
+            this.setState({
+                removeButtonLabel: "Remove All"
+            });
+            this.deleteTableChanges();
+        }
     }
 
     handleDownloadClick() {
@@ -79,27 +126,6 @@ class EditCard extends Component {
             if (i !== keys.length - 1) { stringified += " and "; }
         }
         return stringified;
-    }
-
-    // Given a COLUMN and KEY, deletes the change from the state's changesMade value
-    deleteChange(column, key) {
-        // First delete the exact change
-        let tempChanges = this.state.changesMade;
-        delete tempChanges[this.state.table][column][key];
-
-        // Delete the column object if that was the only change for that column...
-        if (JSON.stringify(tempChanges[this.state.table][column]) === "{}") {
-            delete tempChanges[this.state.table][column];
-        }
-
-        // Delete the table object if that was the only change for that table...
-        if (JSON.stringify(tempChanges[this.state.table]) === "{}") {
-            delete tempChanges[this.state.table];
-        }
-
-        this.setState({
-            changesMade: tempChanges
-        });
     }
 
     // Creates the <list> that shows the changes made
@@ -176,7 +202,7 @@ class EditCard extends Component {
                 <Divider />
 
                 <Button onClick={this.handleDownloadClick.bind(this)} disabled={!(this.state.featureEnabled && this.state.primaryKeysAvailable)} color="primary" className={classes.button}>Submit</Button>
-                <Button onClick={this.handleResetClick.bind(this)} disabled={!(this.state.featureEnabled && this.state.primaryKeysAvailable)} className={classes.button && classes.floatRight}>Remove All</Button>
+                <Button onClick={this.handleRemoveAllClick.bind(this)} disabled={!(this.state.featureEnabled && this.state.primaryKeysAvailable)} className={classes.button && classes.floatRight} value={this.state.removeButtonLabel}>{this.state.removeButtonLabel}</Button>
             </Paper>
 
             <Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
