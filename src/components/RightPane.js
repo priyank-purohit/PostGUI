@@ -491,6 +491,7 @@ class RightPane extends Component {
 							data={this.state.rawData}
 							url={this.state.url}
 							totalRows={this.state.totalRows}
+							dbPkInfo={this.props.dbPkInfo}
 							noDataText={this.state.submitLoading ? "Loading ..." : (this.state.submitError ? "Query error" : (this.state.submitSuccess ? "Success!" : "No rows found"))} />
 					</div>
 				</Paper>

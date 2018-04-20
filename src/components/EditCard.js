@@ -33,7 +33,8 @@ class EditCard extends Component {
             columns: props.columns,
             url: props.url,
 
-            primaryKeysAvailable: true,
+            dbPkInfo: {},
+            primaryKeysAvailable: false,
             primaryKeys: [],
 
             featureEnabled: true,
@@ -51,8 +52,26 @@ class EditCard extends Component {
             dbIndex: newProps.dbIndex,
             table: newProps.table,
             columns: newProps.columns,
-            url: newProps.url
+            url: newProps.url,
+            dbPkInfo: newProps.dbPkInfo,
+            primaryKeys: [],
+            primaryKeysAvailable: false
         });
+
+        // Enable PK related features if table has a PK
+        if (newProps.dbPkInfo && this.state.table) {
+            console.log("Found DbPkInfo and state.table");
+            for (let i = 0; i < newProps.dbPkInfo.length; i++) {
+                console.log("Considering Pk info for some table....");
+                if (newProps.dbPkInfo[i]["table"] === this.state.table) {
+                    console.log("Found matching PK info and table!!!!", JSON.stringify(newProps.dbPkInfo[i]["primary_keys"]));
+                    this.setState({
+                        primaryKeys: newProps.dbPkInfo[i]["primary_keys"],
+                        primaryKeysAvailable: JSON.stringify(newProps.dbPkInfo[i]["primary_keys"]) !== "[]"
+                    });
+                }
+            }
+        }
     }
 
     // Given a COLUMN and KEY, deletes the change from the state's changesMade value

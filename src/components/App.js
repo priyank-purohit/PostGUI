@@ -32,7 +32,8 @@ export default class Layout extends React.Component {
 			leftPaneVisibility: true,
 			historyPaneVisibility: false,
 			searchTerm: "",
-			dbSchemaDefinitions: null
+			dbSchemaDefinitions: null,
+			dbPkInfo: null
 		};
 	}
 
@@ -163,6 +164,13 @@ export default class Layout extends React.Component {
 		});
 	}
 
+	changeDbPkInfo(pkInfo) {
+		console.log("App.js dbPkInfo", JSON.stringify(pkInfo));
+		this.setState({
+			dbPkInfo: pkInfo
+		});
+	}
+
 	changeColumns(newColumns) {
 		this.setState({
 			columns: newColumns
@@ -210,6 +218,7 @@ export default class Layout extends React.Component {
 						changeTable={this.changeTable.bind(this)}
 						changeColumns={this.changeColumns.bind(this)}
 						changeDbSchemaDefinitions={this.changeDbSchemaDefinitions.bind(this)}
+						changeDbPkInfo={this.changeDbPkInfo.bind(this)}
 						changeVisibleColumns={this.changeVisibleColumns.bind(this)} />
 					<HistoryPane
 						newHistoryItem={this.state.newHistoryItem}
@@ -225,6 +234,7 @@ export default class Layout extends React.Component {
 						changeRules={this.changeRules.bind(this)}
 						columns={this.state.columns}
 						dbSchemaDefinitions={this.state.dbSchemaDefinitions}
+						dbPkInfo={this.state.dbPkInfo}
 						visibleColumns={this.state.visibleColumns}
 						leftPaneVisibility={this.state.leftPaneVisibility}
 						addToHistory={this.addToHistory.bind(this)}

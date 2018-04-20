@@ -373,12 +373,17 @@ class DbSchema extends Component {
 		if (lib.getDbConfig(this.state.dbIndex, "primaryKeyFunction") === true) {
 			axios.post(url + "/rpc/primary_keys", {})
 				.then((response) => {
+					let pkAvailable = JSON.stringify(response.data[0]["primary_keys"]) !== "[]";
 					// Save the raw resp + parse tables and columns...
 					this.setState({
 						dbPkInfo: response.data[0]["primary_keys"],
-						primaryKeysAvailable: JSON.stringify(response.data[0]["primary_keys"]) !== "[]"
+						primaryKeysAvailable: pkAvailable
+					}, () => {
+						if (pkAvailable) {
+							this.props.changeDbPkInfo(response.data[0]["primary_keys"]);
+						}
 					});
-					console.log(JSON.stringify(response.data[0]["primary_keys"]), JSON.stringify(response.data[0]["primary_keys"]) !== "[]");
+					console.log(JSON.stringify(response.data[0]["primary_keys"]), pkAvailable);
 				})
 				.catch((error) => {
 					// Show error in top-right Snack-Bar
