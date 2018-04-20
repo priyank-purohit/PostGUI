@@ -105,7 +105,7 @@ class EditCard extends Component {
         }
     }
 
-    handleDownloadClick() {
+    handleSubmitClick() {
     }
 
     // Toggle the switch
@@ -201,7 +201,7 @@ class EditCard extends Component {
                 </div>) : (<div></div>)}
                 <Divider />
 
-                <Button onClick={this.handleDownloadClick.bind(this)} disabled={!(this.state.featureEnabled && this.state.primaryKeysAvailable)} color="primary" className={classes.button}>Submit</Button>
+                <Button onClick={this.handleSubmitClick.bind(this)} disabled={!(this.state.featureEnabled && this.state.primaryKeysAvailable)} color="primary" className={classes.button}>Submit</Button>
                 <Button onClick={this.handleRemoveAllClick.bind(this)} disabled={!(this.state.featureEnabled && this.state.primaryKeysAvailable)} className={classes.button && classes.floatRight} value={this.state.removeButtonLabel}>{this.state.removeButtonLabel}</Button>
             </Paper>
 
