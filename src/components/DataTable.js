@@ -41,7 +41,7 @@ class DataTable extends Component {
     renderEditableCell(cellInfo) {
         return (
             <div
-                style={{ backgroundColor: "#fafafa" }}
+                style={{ backgroundColor: "#fafafa", border: "1px solid red" }}
                 contentEditable
                 suppressContentEditableWarning
                 onBlur={e => {
@@ -92,7 +92,7 @@ class DataTable extends Component {
                     maxWidth: columnMaxWidth !== null ? columnMaxWidth : undefined,
                     minWidth: columnMinWidth !== null ? columnMinWidth : 100,
                     headerStyle: { fontWeight: 'bold' },
-                    // Cell: this.renderEditableCell
+                    Cell: this.renderEditableCell
                 });
             });
         }
