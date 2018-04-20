@@ -38,32 +38,6 @@ class DataTable extends Component {
         });
     }
 
-    downloadFile(data, fileName, mimeType) {
-        window.download(data, fileName, mimeType);
-    }
-
-    downloadTableWithDelimiter(delimiter) {
-        if (JSON.stringify(this.state.data) !== "[]") {
-            try {
-                let result = json2csv({ data: this.state.data, fields: this.state.columns, del: delimiter });
-
-                // Create a good file name for the file so user knows what the data in the file is all about
-                let fileName = this.state.url.replace(lib.getDbConfig(this.state.dbIndex, "url") + "/", "").replace("?", "-").replace(/&/g, '-');
-                if (delimiter === ",") {
-                    fileName += ".csv";
-                } else if (delimiter === "\t") {
-                    fileName += ".tsv";
-                } else {
-                    fileName += ".txt";
-                }
-
-                this.downloadFile(result, fileName, "text/plain");
-            } catch (err) {
-                console.error(err);
-            }
-        }
-    }
-
     renderEditableCell(cellInfo) {
         return (
             <div
@@ -135,13 +109,13 @@ class DataTable extends Component {
                     noDataText={this.props.noDataText} />
 
                 <div className={this.props.classes.cardGroups} >
-
                     <EditCard
                         dbIndex={this.state.dbIndex}
                         table={this.state.table}
                         columns={this.state.columns}
                         dbPkInfo={this.props.dbPkInfo}
                         url={this.state.url} />
+
                     <Downloads
                         dbIndex={this.state.dbIndex}
                         table={this.state.table}
