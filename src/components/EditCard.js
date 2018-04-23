@@ -196,14 +196,8 @@ class EditCard extends Component {
                 </FormGroup>) : (<div>
                     <List dense={true}>
                         <ListItem>
-                            <ListItemAvatar>
-                                <Avatar className={classes.secondaryAvatar}>
-                                    <ErrorIcon />
-                                </Avatar>
-                            </ListItemAvatar>
-                            <ListItemText
-                                primary="This table cannot be edited because it does not have any Primary Key defined in the PostgreSQL database."
-                            />
+                            <ListItemAvatar> <Avatar className={classes.secondaryAvatar}> <ErrorIcon /> </Avatar> </ListItemAvatar>
+                            <ListItemText primary="This table cannot be edited because it does not have any Primary Key defined in the PostgreSQL database." />
                         </ListItem>
                     </List>
                 </div>)}
