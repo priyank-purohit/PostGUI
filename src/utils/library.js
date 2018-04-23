@@ -80,11 +80,11 @@ exports.getColumnConfigGlobal = function (dbIndex, column, option) {
 // Returns value of OPTION for specific TABLE and COLUMN and DBINDEX
 // NOTE: check for null value when this function is used
 exports.getColumnConfig = function (dbIndex, table, column, option) {
-	if (dbIndex !== null && table !== null && option !== null && option !== null) {
+	if (dbIndex !== null && table !== null && column !== null && option !== null) {
 		try {
 			let columnRules = this.getTableConfig(dbIndex, table, "columnRules");
-
-			if (columnRules[column][option]) {
+			
+			if (columnRules[column][option] !== null && columnRules[column][option] !== undefined) {
 				return columnRules[column][option];
 			} else {
 				return this.getColumnConfigGlobal(dbIndex, column, option);
