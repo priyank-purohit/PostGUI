@@ -373,35 +373,19 @@ class Downloads extends Component {
     };
 
     handleTableHeaderToggle() {
-        if (this.state.tableHeader === true) {
-            this.setState({
-                tableHeader: false
-            }, () => {
-                this.createFileName();
-            });
-        } else {
-            this.setState({
-                tableHeader: true
-            }, () => {
-                this.createFileName();
-            });
-        }
+        this.setState({
+            tableHeader: !this.state.tableHeader
+        }, () => {
+            this.createFileName();
+        });
     }
 
     handlebatchDownloadCheckBox() {
-        if (this.state.batchDownloadCheckBox === true) {
-            this.setState({
-                batchDownloadCheckBox: false
-            }, () => {
-                this.createFileName();
-            });
-        } else {
-            this.setState({
-                batchDownloadCheckBox: true
-            }, () => {
-                this.createFileName();
-            });
-        }
+        this.setState({
+            batchDownloadCheckBox: !this.state.batchDownloadCheckBox
+        }, () => {
+            this.createFileName();
+        });
     }
 
     handlebatchDownloadChange(e) {

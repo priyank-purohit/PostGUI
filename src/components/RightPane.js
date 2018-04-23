@@ -412,19 +412,11 @@ class RightPane extends Component {
 	}
 
 	handleGetExactRowCountToggle() {
-		if (this.state.exactRowCount === true) {
-			this.setState({
-				exactRowCount: false
-			}/*, () => {
-                this.createFileName();
-            }*/);
-		} else {
-			this.setState({
-				exactRowCount: true
-			}/*, () => {
-                this.createFileName();
-            }*/);
-		}
+		this.setState({
+			exactRowCount: !this.state.exactRowCount
+		}/*, () => {
+			this.createFileName();
+		}*/);
 	}
 
 	render() {
