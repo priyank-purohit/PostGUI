@@ -17,6 +17,7 @@ import CloseIcon from 'material-ui-icons/Close';
 import List, { ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText, } from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import CreateIcon from 'material-ui-icons/Create';
+import SearchIcon from 'material-ui-icons/Search';
 import ErrorIcon from 'material-ui-icons/Error';
 import DeleteIcon from 'material-ui-icons/Delete';
 
@@ -155,7 +156,15 @@ class EditCard extends Component {
     // Creates the <list> that shows the changes made
     createChangeLogList() {
         if (this.state.table === "" || JSON.stringify(this.state.changesMade) === "{}" || this.state.changesMade[this.state.table] === null || this.state.changesMade[this.state.table] === undefined) {
-            return;
+            return (
+                <ListItem key={-1}>
+                    <ListItemAvatar>
+                        <Avatar>
+                            <SearchIcon />
+                        </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText primary={"No unsubmitted changes found..."} />
+                </ListItem>);
         }
 
         let length = Object.keys(this.state.changesMade[this.state.table]).length;

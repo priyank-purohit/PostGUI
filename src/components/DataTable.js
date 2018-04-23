@@ -25,7 +25,7 @@ class DataTable extends Component {
             dbPrimaryKeys: [],
             tablePrimaryKeys: [],
             editFeatureEnabled: false,
-            editFeatureChangesMade: { "stats": { "assists": { "4309247|20172018": { "oldValue": 123, "newValue": 124, "primaryKey": { "playerid": 43092472, "seasonid": 20172018 } } }, "goals": { "4309247|20172018": { "oldValue": 12, "newValue": 13, "primaryKey": { "playerid": 43092472, "seasonid": 20172018 } } } }, "stats2": { "OT Goals": { "4309247|20172018": { "oldValue": 1, "newValue": 2, "primaryKey": { "playerid": 43092472, "seasonid": 20172018 } } }, "points": { "4309247|20172018": { "oldValue": 120, "newValue": 130, "primaryKey": { "playerid": 43092472, "seasonid": 20172018 } } } } }
+            editFeatureChangesMade: {}
         };
         this.renderEditableCell = this.renderEditableCell.bind(this);
     }
