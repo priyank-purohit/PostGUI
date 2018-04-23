@@ -23,7 +23,9 @@ class DataTable extends Component {
             data: props.data,
             url: props.url,
             dbPrimaryKeys: [],
-            tablePrimaryKeys: []
+            tablePrimaryKeys: [],
+            editFeatureEnabled: false,
+            editFeatureChangesMade: { "stats": { "assists": { "4309247|20172018": { "oldValue": 123, "newValue": 124, "primaryKey": { "playerid": 43092472, "seasonid": 20172018 } } }, "goals": { "4309247|20172018": { "oldValue": 12, "newValue": 13, "primaryKey": { "playerid": 43092472, "seasonid": 20172018 } } } }, "stats2": { "OT Goals": { "4309247|20172018": { "oldValue": 1, "newValue": 2, "primaryKey": { "playerid": 43092472, "seasonid": 20172018 } } }, "points": { "4309247|20172018": { "oldValue": 120, "newValue": 130, "primaryKey": { "playerid": 43092472, "seasonid": 20172018 } } } } }
         };
         this.renderEditableCell = this.renderEditableCell.bind(this);
     }
@@ -35,6 +37,18 @@ class DataTable extends Component {
             columns: newProps.columns,
             url: newProps.url,
             data: newProps.data
+        });
+    }
+
+    changeEditFeatureEnabled(fetureEnabled) {
+        this.setState({
+            editFeatureEnabled: fetureEnabled
+        });
+    }
+
+    changeEditFeatureChangesMade(newChanges) {
+        this.setState({
+            editFeatureChangesMade: newChanges
         });
     }
 
@@ -115,7 +129,11 @@ class DataTable extends Component {
                         table={this.state.table}
                         columns={this.state.columns}
                         dbPkInfo={this.props.dbPkInfo}
-                        url={this.state.url} />
+                        url={this.state.url}
+                        feautureEnabled={this.state.editFeatureEnabled}
+                        changesMade={this.state.editFeatureChangesMade}
+                        changeEditFeatureChangesMade={this.changeEditFeatureChangesMade.bind(this)}
+                        changeEditFeatureEnabled={this.changeEditFeatureEnabled.bind(this)} />
 
                     <Downloads
                         dbIndex={this.state.dbIndex}

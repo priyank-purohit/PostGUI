@@ -37,8 +37,8 @@ class EditCard extends Component {
             primaryKeysAvailable: false,
             primaryKeys: [],
 
-            featureEnabled: true,
-            changesMade: { "stats": { "assists": { "4309247|20172018": { "oldValue": 123, "newValue": 124, "primaryKey": { "playerid": 43092472, "seasonid": 20172018 } } }, "goals": { "4309247|20172018": { "oldValue": 12, "newValue": 13, "primaryKey": { "playerid": 43092472, "seasonid": 20172018 } } } }, "stats2": { "OT Goals": { "4309247|20172018": { "oldValue": 1, "newValue": 2, "primaryKey": { "playerid": 43092472, "seasonid": 20172018 } } }, "points": { "4309247|20172018": { "oldValue": 120, "newValue": 130, "primaryKey": { "playerid": 43092472, "seasonid": 20172018 } } } } },
+            featureEnabled: props.featureEnabled | false,
+            changesMade: props.changesMade | {},
 
             snackBarVisibility: false,
             snackBarMessage: "Unknown error occured",
@@ -55,7 +55,8 @@ class EditCard extends Component {
             url: newProps.url,
             dbPkInfo: newProps.dbPkInfo,
             primaryKeys: [],
-            primaryKeysAvailable: false
+            primaryKeysAvailable: false,
+            changesMade: newProps.changesMade
         });
 
         // Enable PK related features if table has a PK
@@ -79,6 +80,8 @@ class EditCard extends Component {
 
         this.setState({
             changesMade: tempChanges
+        }, () => {
+            this.props.changeEditFeatureChangesMade(tempChanges);
         });
     }
 
@@ -100,6 +103,8 @@ class EditCard extends Component {
 
         this.setState({
             changesMade: tempChanges
+        }, () => {
+            this.props.changeEditFeatureChangesMade(tempChanges);
         });
     }
 
@@ -129,6 +134,8 @@ class EditCard extends Component {
         // Set the featureEnabled state to opposite of what it is at the moment...
         this.setState({
             featureEnabled: !this.state.featureEnabled
+        }, () => {
+            this.props.changeEditFeatureEnabled(this.state.featureEnabled);
         });
     }
 
