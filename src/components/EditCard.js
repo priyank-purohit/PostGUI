@@ -199,7 +199,7 @@ class EditCard extends Component {
                 {this.state.primaryKeysAvailable ? (<FormGroup className={classes.cardMarginLeft}>
                     <FormControlLabel
                         control={<Switch checked={this.state.featureEnabled} onChange={this.handleFeatureEnabledSwitch.bind(this)} value="featureStatus" />}
-                        label="Turn on editable table" />
+                        label="Enable table edit feature" />
                 </FormGroup>) : (<div>
                     <List dense={true}>
                         <ListItem>

@@ -36,13 +36,14 @@ class DataTable extends Component {
             table: newProps.table,
             columns: newProps.columns,
             url: newProps.url,
-            data: newProps.data
+            data: newProps.data,
+            editFeatureEnabled: newProps.editFeatureEnabled | false
         });
     }
 
-    changeEditFeatureEnabled(fetureEnabled) {
+    changeEditFeatureEnabled(featureEnabled) {
         this.setState({
-            editFeatureEnabled: fetureEnabled
+            editFeatureEnabled: featureEnabled
         });
     }
 
@@ -107,7 +108,7 @@ class DataTable extends Component {
                     maxWidth: columnMaxWidth !== null ? columnMaxWidth : undefined,
                     minWidth: columnMinWidth !== null ? columnMinWidth : 100,
                     headerStyle: { fontWeight: 'bold' },
-                    Cell: columnEditability !== false ? this.renderEditableCell : null
+                    Cell: this.state.editFeatureEnabled === true && columnEditability !== false ? this.renderEditableCell : null
                 });
             });
         }
@@ -130,7 +131,7 @@ class DataTable extends Component {
                         columns={this.state.columns}
                         dbPkInfo={this.props.dbPkInfo}
                         url={this.state.url}
-                        feautureEnabled={this.state.editFeatureEnabled}
+                        featureEnabled={this.state.editFeatureEnabled}
                         changesMade={this.state.editFeatureChangesMade}
                         changeEditFeatureChangesMade={this.changeEditFeatureChangesMade.bind(this)}
                         changeEditFeatureEnabled={this.changeEditFeatureEnabled.bind(this)} />
