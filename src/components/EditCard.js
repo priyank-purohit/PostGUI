@@ -56,7 +56,8 @@ class EditCard extends Component {
             dbPkInfo: newProps.dbPkInfo,
             primaryKeys: [],
             primaryKeysAvailable: false,
-            changesMade: newProps.changesMade
+            changesMade: newProps.changesMade,
+            featureEnabled: newProps.featureEnabled
         });
 
         // Enable PK related features if table has a PK

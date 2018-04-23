@@ -37,7 +37,7 @@ class DataTable extends Component {
             columns: newProps.columns,
             url: newProps.url,
             data: newProps.data,
-            editFeatureEnabled: newProps.editFeatureEnabled | false
+            editFeatureEnabled: this.state.table !== newProps.table ? false : this.state.editFeatureEnabled
         });
     }
 
