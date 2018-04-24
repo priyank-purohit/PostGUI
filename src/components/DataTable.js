@@ -59,7 +59,7 @@ class DataTable extends Component {
     renderEditableCell(cellInfo) {
         return (
             <div
-                style={{ backgroundColor: "#fafafa", border: "1px solid red" }}
+                style={{ backgroundColor: "#fafafa", "border": "none", "borderBottom": "1px solid lightpink", padding: "1px" }}
                 contentEditable
                 suppressContentEditableWarning
                 onBlur={e => {
@@ -71,6 +71,7 @@ class DataTable extends Component {
                         console.log("Original row: " + JSON.stringify(this.state.data[cellInfo.index]));
                         data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
                         let newRow = this.state.data[cellInfo.index];
+
                         //this.updateDbIfNeeded(oldRow, newRow, cellInfo.column.id);
                         this.setState({ data }, () => {
                             console.log("Updated row: " + JSON.stringify(this.state.data[cellInfo.index]));
