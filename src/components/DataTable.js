@@ -102,7 +102,6 @@ class DataTable extends Component {
                 let columnMinWidth = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "minWidthPx");
                 let columnMaxWidth = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "maxWidthPx");
 
-
                 return ({
                     id: columnName,
                     Header: columnRename ? columnRename : columnName,
