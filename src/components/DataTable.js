@@ -85,19 +85,38 @@ class DataTable extends Component {
                     // ToDo: when original value is NULL, and you don't change it, it sets it to "" from NULL... prevent it
                     if (String(oldCellValue) !== String(newCellValue)) {
                         let changedRowPk = {};
+                        let changedRowPkStr = "";
                         for (let i = 0; i < this.state.tablePrimaryKeys.length; i++) {
-                            changedRowPk[this.state.tablePrimaryKeys[i]] = data[changedRowIndex][this.state.tablePrimaryKeys[i]]
+                            changedRowPk[this.state.tablePrimaryKeys[i]] = data[changedRowIndex][this.state.tablePrimaryKeys[i]];
+                            changedRowPkStr += String(data[changedRowIndex][this.state.tablePrimaryKeys[i]]);
                         }
 
-                        console.log(changedColumnName, "column of row #", changedRowIndex, "with pk = (", JSON.stringify(changedRowPk), ") changed from ", oldCellValue, "to", newCellValue);
+                        // console.log(changedColumnName, "column of row #", changedRowIndex, "with pk = (", JSON.stringify(changedRowPk), ") changed from ", oldCellValue, "to", newCellValue);
 
-
+                        // Update the local variable to this function
                         data[changedRowIndex][changedColumnName] = newCellValue;
-
                         let newRow = data[changedRowIndex];
 
+                        let currentChanges = this.state.editFeatureChangesMade;
+
+                        // Create the JSON objects if they do not exist
+                        if (!currentChanges[this.state.table]) { currentChanges[this.state.table] = {} }
+                        if (!currentChanges[this.state.table][changedColumnName]) { currentChanges[this.state.table][changedColumnName] = {} }
+                        if (!currentChanges[this.state.table][changedColumnName][changedRowPkStr]) { currentChanges[this.state.table][changedColumnName][changedRowPkStr] = {} }
+
+                        // Keep track of the original* value.
+                        // * Original means the value in the db on server
+                        if (!currentChanges[this.state.table][changedColumnName][changedRowPkStr]["oldValue"]) { currentChanges[this.state.table][changedColumnName][changedRowPkStr]["oldValue"] = oldCellValue; }
+
+                        // Insert the updates + keep track of the PK
+                        currentChanges[this.state.table][changedColumnName][changedRowPkStr]["newValue"] = newCellValue;
+                        currentChanges[this.state.table][changedColumnName][changedRowPkStr]["primaryKey"] = changedRowPk;
+
                         //this.updateDbIfNeeded(oldRow, newRow, changedColumnName);
-                        this.setState({ data });
+                        this.setState({
+                            data: data,
+                            editFeatureChangesMade: currentChanges
+                        });
                     }
                 }}
                 dangerouslySetInnerHTML={{

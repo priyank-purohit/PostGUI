@@ -148,7 +148,7 @@ class EditCard extends Component {
 
         for (let i in Object.keys(primaryKey)) {
             stringified += keys[i] + " = " + primaryKey[keys[i]];
-            if (i !== keys.length - 1) { stringified += " and "; }
+            if (parseInt(i) !== keys.length - 1) { stringified += " and "; }
         }
         return stringified;
     }
