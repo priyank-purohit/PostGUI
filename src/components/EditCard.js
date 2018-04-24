@@ -12,14 +12,14 @@ import { FormGroup, FormControlLabel } from 'material-ui/Form';
 import Switch from 'material-ui/Switch';
 import Snackbar from 'material-ui/Snackbar';
 import IconButton from 'material-ui/IconButton';
-import CloseIcon from 'material-ui-icons/Close';
+import CloseIcon from '@material-ui/icons/Close';
 
 import List, { ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText, } from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
-import CreateIcon from 'material-ui-icons/Create';
-import SearchIcon from 'material-ui-icons/Search';
-import ErrorIcon from 'material-ui-icons/Error';
-import DeleteIcon from 'material-ui-icons/Delete';
+import CreateIcon from '@material-ui/icons/Create';
+import SearchIcon from '@material-ui/icons/Search';
+import ErrorIcon from '@material-ui/icons/Error';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import pink from 'material-ui/colors/pink';
 
