@@ -6,9 +6,9 @@ import { CircularProgress } from 'material-ui/Progress';
 import green from 'material-ui/colors/green';
 import red from 'material-ui/colors/red';
 import Button from 'material-ui/Button';
-import CheckIcon from 'material-ui-icons/Check';
-import CloseIcon from 'material-ui-icons/Close';
-import ArrowForwardIcon from 'material-ui-icons/ArrowForward';
+import CheckIcon from '@material-ui/icons/Check';
+import CloseIcon from '@material-ui/icons/Close';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 
 
 class CircularFab extends Component {

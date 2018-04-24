@@ -3,6 +3,7 @@
   "version": "1.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/icons": "^1.0.0-beta.43",
     "axios": "^0.16.1",
     "axios-cancel": "^0.2.2",
     "dot": "^1.1.1",
@@ -11,7 +12,6 @@
     "json2csv": "^3.11.5",
     "lodash": "^4.17.5",
     "material-ui": "^1.0.0-beta.43",
-    "material-ui-icons": "^1.0.0-beta.36",
     "react": "^15.6.1",
     "react-copy-to-clipboard": "^5.0.0",
     "react-dom": "^15.5.4",

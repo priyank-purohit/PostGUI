@@ -8,13 +8,13 @@ import Snackbar from 'material-ui/Snackbar';
 import Chip from 'material-ui/Chip';
 
 import IconButton from 'material-ui/IconButton';
-import CloseIcon from 'material-ui-icons/Close';
-import FolderIcon from 'material-ui-icons/Folder';
-import FolderIconOpen from 'material-ui-icons/FolderOpen';
-import KeyboardArrowDownIcon from 'material-ui-icons/KeyboardArrowDown';
-import ClearIcon from 'material-ui-icons/Clear';
-import VisibilityIcon from 'material-ui-icons/Visibility';
-import VisibilityOffIcon from 'material-ui-icons/VisibilityOff';;
+import CloseIcon from '@material-ui/icons/Close';
+import FolderIcon from '@material-ui/icons/Folder';
+import FolderIconOpen from '@material-ui/icons/FolderOpen';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import ClearIcon from '@material-ui/icons/Clear';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';;
 
 import { indigo } from 'material-ui/colors';
 
@@ -53,7 +53,7 @@ class DbSchema extends Component {
 				dbSchema: null,
 				dbFkSchema: null,
 				tables: []
-			}, function() {
+			}, function () {
 				this.props.changeTable("");
 				this.props.changeColumns(this.state[""]);
 				this.getDbSchema();
@@ -76,54 +76,54 @@ class DbSchema extends Component {
 			});
 		}
 	}
-	
-		// Returns the list of foreign keys given a table, column
-		hasForeignKey(table, column) {
-			let fkSearchResults = {};
-			// Retrieve a list of foreign keys given a table using the /rpc/foreign_keys endpoint
-			// If the search result column has a foreign key, add that table+FK_column to the saerch result
-	
-			// Finds a foreign key
-			fkSearchResults = _.find(this.state.dbFkSchema, function(fk) {
-				return fk.table_name === table && fk.column_name === column;
-			});
-	
-			if (fkSearchResults === {} || fkSearchResults === null || fkSearchResults === undefined) {
-				return false;
-			}
-	
-			return fkSearchResults;
+
+	// Returns the list of foreign keys given a table, column
+	hasForeignKey(table, column) {
+		let fkSearchResults = {};
+		// Retrieve a list of foreign keys given a table using the /rpc/foreign_keys endpoint
+		// If the search result column has a foreign key, add that table+FK_column to the saerch result
+
+		// Finds a foreign key
+		fkSearchResults = _.find(this.state.dbFkSchema, function (fk) {
+			return fk.table_name === table && fk.column_name === column;
+		});
+
+		if (fkSearchResults === {} || fkSearchResults === null || fkSearchResults === undefined) {
+			return false;
 		}
-		
-		// Returns the list of foreign keys referencing to the table, column
-		isForeignKey(table, column) {
-			let fkSearchResults = {};
-			// Retrieve a list of foreign keys given a table using the /rpc/foreign_keys endpoint
-			// If the search result column has a foreign key, add that table+FK_column to the saerch result
-	
-			// Finds a foreign key
-			fkSearchResults = _.filter(this.state.dbFkSchema, function(fk) {
-				return fk.foreign_table === table && fk.foreign_column === column;
-			});
-	
-			if (fkSearchResults === {} || fkSearchResults === null || fkSearchResults === undefined) {
-				return false;
-			}
 
-			//console.log("isForeignKey() .. fkSearchResults = " + JSON.stringify(fkSearchResults));
+		return fkSearchResults;
+	}
 
-			let prettifiedStr = "";
-			_.forEach(fkSearchResults, function(result) {
-				prettifiedStr += result["table_name"] + "." + result["column_name"] + ", ";
-			});
+	// Returns the list of foreign keys referencing to the table, column
+	isForeignKey(table, column) {
+		let fkSearchResults = {};
+		// Retrieve a list of foreign keys given a table using the /rpc/foreign_keys endpoint
+		// If the search result column has a foreign key, add that table+FK_column to the saerch result
 
-			if (prettifiedStr !== "") {
-				prettifiedStr = prettifiedStr.replace(/,\s$/g, "");
-				//console.log("isForeignKey(" + table + ", " + column + ") = " + prettifiedStr);
-			}
-	
-			return prettifiedStr;
+		// Finds a foreign key
+		fkSearchResults = _.filter(this.state.dbFkSchema, function (fk) {
+			return fk.foreign_table === table && fk.foreign_column === column;
+		});
+
+		if (fkSearchResults === {} || fkSearchResults === null || fkSearchResults === undefined) {
+			return false;
 		}
+
+		//console.log("isForeignKey() .. fkSearchResults = " + JSON.stringify(fkSearchResults));
+
+		let prettifiedStr = "";
+		_.forEach(fkSearchResults, function (result) {
+			prettifiedStr += result["table_name"] + "." + result["column_name"] + ", ";
+		});
+
+		if (prettifiedStr !== "") {
+			prettifiedStr = prettifiedStr.replace(/,\s$/g, "");
+			//console.log("isForeignKey(" + table + ", " + column + ") = " + prettifiedStr);
+		}
+
+		return prettifiedStr;
+	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Search Methods
@@ -195,7 +195,7 @@ class DbSchema extends Component {
 		}
 
 		// Search foreign keys IFF enabled in config explicitly
-		if (lib.getDbConfig(this.state.dbIndex, "foreignKeySearch") === true && this.state.dbFkSchema !== undefined && this.state.dbFkSchema !== null) {	
+		if (lib.getDbConfig(this.state.dbIndex, "foreignKeySearch") === true && this.state.dbFkSchema !== undefined && this.state.dbFkSchema !== null) {
 			return this.addForeignKeyResults(dict);
 		} else {
 			return dict;
@@ -207,7 +207,7 @@ class DbSchema extends Component {
 		//console.log("SearchTables Search term is", searchTerm);
 		let tableSearchResults = [];
 		searchTerm = (searchTerm).toLowerCase().match(/(?:[^\s"]+|"[^"]*")+/g); // Splits on all sapces that are not contained within double quotes
-		
+
 		//console.log("SearchTables Search term is now", JSON.stringify(searchTerm));
 
 		for (let i = 0; i < searchTerm.length; i++) {
@@ -259,7 +259,7 @@ class DbSchema extends Component {
 					matchingColumns.push(splitTermResultsWithRename);
 
 					if (splitTermResults.length > 0 || splitTermResultsWithRename.length > 0) {
-						return [table, {columns: _.uniq(_.flattenDeep(matchingColumns))}];
+						return [table, { columns: _.uniq(_.flattenDeep(matchingColumns)) }];
 					}
 					else {
 						return [];
@@ -278,12 +278,12 @@ class DbSchema extends Component {
 		_.keys(searchResults).forEach(table => {
 			if (table !== undefined && searchResults[table] !== undefined && searchResults[table]['columns'] !== undefined) {
 				_.forEach(searchResults[table]['columns'], column => {
-					let fk_result = _.find(this.state.dbFkSchema, function(fk) {
+					let fk_result = _.find(this.state.dbFkSchema, function (fk) {
 						return fk.table_name === table && fk.column_name === column;
 					});
 					if (fk_result !== undefined) {
 						updatedSearchResults[table]["foreign_keys"] = {};
-							updatedSearchResults[table]["foreign_keys"][column] = {
+						updatedSearchResults[table]["foreign_keys"][column] = {
 							"foreign_table": fk_result.foreign_table,
 							"foreign_column": fk_result.foreign_column
 						};
@@ -312,7 +312,7 @@ class DbSchema extends Component {
 		return updatedSearchResults;
 	}
 
-	
+
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// HTTP Methods
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -517,14 +517,14 @@ class DbSchema extends Component {
 
 		// First push the table itself
 		tableColumnElements.push(
-			<ListItem button key={this.state.dbIndex+tableName} id={tableName} className={classNames} 
-				 title={displayName} onClick={(event) => this.handleTableClick(tableName)} >
+			<ListItem button key={this.state.dbIndex + tableName} id={tableName} className={classNames}
+				title={displayName} onClick={(event) => this.handleTableClick(tableName)} >
 				<ListItemIcon >
-					{this.state.table === tableName ? <FolderIconOpen className={this.props.classes.primaryColoured} /> : <FolderIcon /> }
+					{this.state.table === tableName ? <FolderIconOpen className={this.props.classes.primaryColoured} /> : <FolderIcon />}
 				</ListItemIcon>
 				<ListItemText primary={displayName} style={truncTextStyle} />
-				<ListItemIcon onClick={(event) => {event.stopPropagation(); this.handleTableOpenClick(tableName);}} title="Show columns without loading in Query Builder.">
-					{this.state.hoverTable === tableName ? (this.state.table === tableName ? <div></div> : <ClearIcon className={this.props.classes.primaryColoured} />) : (this.state.table === tableName ? <div></div> : <KeyboardArrowDownIcon />) }
+				<ListItemIcon onClick={(event) => { event.stopPropagation(); this.handleTableOpenClick(tableName); }} title="Show columns without loading in Query Builder.">
+					{this.state.hoverTable === tableName ? (this.state.table === tableName ? <div></div> : <ClearIcon className={this.props.classes.primaryColoured} />) : (this.state.table === tableName ? <div></div> : <KeyboardArrowDownIcon />)}
 				</ListItemIcon>
 			</ListItem>
 		);
@@ -534,10 +534,10 @@ class DbSchema extends Component {
 			for (let i in this.state[tableName]) {
 				let columnName = this.state[tableName][i];
 				tableColumnElements.push(this.createColumnElement(columnName, tableName));
-			}	
+			}
 		} else {
 			tableColumnElements.push(
-				<ListItem button title={"Administrator has hidden the columns ... can work with them in query builder"} key={"hiddenColsOf"+tableName+this.state.dbIndex} className={this.state.table !== tableName && this.state.hoverTable !== tableName ? this.props.classes.column + " " + this.props.classes.hide : this.props.classes.column} >
+				<ListItem button title={"Administrator has hidden the columns ... can work with them in query builder"} key={"hiddenColsOf" + tableName + this.state.dbIndex} className={this.state.table !== tableName && this.state.hoverTable !== tableName ? this.props.classes.column + " " + this.props.classes.hide : this.props.classes.column} >
 					<ListItemIcon>
 						<VisibilityOffIcon />
 					</ListItemIcon>
@@ -580,14 +580,14 @@ class DbSchema extends Component {
 		}
 
 		return (
-			<ListItem button key={columnName+table+this.state.dbIndex} id={columnName}
-				 title={displayName} className={classNames} onClick={(event) => this.handleColumnClick(columnName, table)}>
+			<ListItem button key={columnName + table + this.state.dbIndex} id={columnName}
+				title={displayName} className={classNames} onClick={(event) => this.handleColumnClick(columnName, table)}>
 				<ListItemIcon>
-					{visibility ? <VisibilityIcon className={this.props.classes.primaryColoured} /> : <VisibilityOffIcon /> }
+					{visibility ? <VisibilityIcon className={this.props.classes.primaryColoured} /> : <VisibilityOffIcon />}
 				</ListItemIcon>
 				<ListItemText secondary={displayName} />
-				{fkResults === false ? null : <Chip style={{maxWidth: 175}} label={fkText} title={"Foreign Key to " + fkResults.foreign_table + "." + fkResults.foreign_column} />}
-				{referencedResults === "" ? null : <Chip style={{maxWidth: 175}} label={referencedResultsText} title={"Referenced by " + referencedResults} />}
+				{fkResults === false ? null : <Chip style={{ maxWidth: 175 }} label={fkText} title={"Foreign Key to " + fkResults.foreign_table + "." + fkResults.foreign_column} />}
+				{referencedResults === "" ? null : <Chip style={{ maxWidth: 175 }} label={referencedResultsText} title={"Referenced by " + referencedResults} />}
 			</ListItem>
 		);
 	}
@@ -643,25 +643,25 @@ class DbSchema extends Component {
 		const classes = this.props.classes;
 		let searchTermTrucated = this.state.searchTerm;
 		if (searchTermTrucated.length > 34) {
-			searchTermTrucated = searchTermTrucated.substring(0,34);
+			searchTermTrucated = searchTermTrucated.substring(0, 34);
 			searchTermTrucated += " ...";
 		}
 		return (
 			<div>
 				{this.state.searchTerm !== "" ? <Chip label={"Searching: " + searchTermTrucated} className={classes.chipClasses} onDelete={this.handleSearchClose} /> : null}
-				<Snackbar 	anchorOrigin={{vertical: "bottom", horizontal: "center"}}
-							open={this.state.snackBarVisibility}
-							onClose={this.handleRequestClose}
-							SnackbarContentProps={{ 'aria-describedby': 'message-id', }}
-							message={<span id="message-id">{this.state.snackBarMessage}</span>}
-							action={[ <IconButton key="close" aria-label="Close" color="secondary" className={classes.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton> ]} />
+				<Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+					open={this.state.snackBarVisibility}
+					onClose={this.handleRequestClose}
+					SnackbarContentProps={{ 'aria-describedby': 'message-id', }}
+					message={<span id="message-id">{this.state.snackBarMessage}</span>}
+					action={[<IconButton key="close" aria-label="Close" color="secondary" className={classes.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton>]} />
 				<List>
-					{ this.state.tables.map((table) => {
-							// For each table, push TABLE + COLUMN elements
-							return (
-								this.createTableElement(table)
-							);
-						})
+					{this.state.tables.map((table) => {
+						// For each table, push TABLE + COLUMN elements
+						return (
+							this.createTableElement(table)
+						);
+					})
 					}
 				</List>
 			</div>

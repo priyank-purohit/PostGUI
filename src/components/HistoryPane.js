@@ -8,9 +8,9 @@ import Snackbar from 'material-ui/Snackbar';
 
 import IconButton from 'material-ui/IconButton';
 import Button from 'material-ui/Button';
-import LinkIcon from 'material-ui-icons/Link';
-import DeleteIcon from 'material-ui-icons/Delete';
-import CloseIcon from 'material-ui-icons/Close';
+import LinkIcon from '@material-ui/icons/Link';
+import DeleteIcon from '@material-ui/icons/Delete';
+import CloseIcon from '@material-ui/icons/Close';
 
 let _ = require('lodash');
 let lib = require("../utils/library.js");
@@ -337,12 +337,12 @@ class HistoryPane extends Component {
 						})
 					}
 				</List>
-				<Snackbar 	anchorOrigin={{vertical: "bottom", horizontal: "center"}}
-							open={this.state.snackBarVisibility}
-							onClose={this.handleRequestClose}
-							SnackbarContentProps={{ 'aria-describedby': 'message-id', }}
-							message={<span id="message-id">{this.state.snackBarMessage}</span>}
-							action={[ <IconButton key="close" aria-label="Close" color="secondary" className={classes.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton> ]} />
+				<Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+					open={this.state.snackBarVisibility}
+					onClose={this.handleRequestClose}
+					SnackbarContentProps={{ 'aria-describedby': 'message-id', }}
+					message={<span id="message-id">{this.state.snackBarMessage}</span>}
+					action={[<IconButton key="close" aria-label="Close" color="secondary" className={classes.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton>]} />
 			</div>
 		);
 

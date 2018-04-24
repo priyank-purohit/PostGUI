@@ -16,9 +16,9 @@ import Menu, { MenuItem } from 'material-ui/Menu';
 import List, { ListItem, ListItemText } from 'material-ui/List';
 import Snackbar from 'material-ui/Snackbar';
 
-import NavigateNextIcon from 'material-ui-icons/NavigateNext';
-import NavigateBeforeIcon from 'material-ui-icons/NavigateBefore';
-import CloseIcon from 'material-ui-icons/Close';
+import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
+import CloseIcon from '@material-ui/icons/Close';
 
 //import worker_script from './WebWorker';
 //var myWorker = new Worker(worker_script);
