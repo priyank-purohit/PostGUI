@@ -66,6 +66,7 @@ class DataTable extends Component {
         });
     }
 
+    // TODO: re-write this method so it iterates over the changes, and uses the deleteChange() method to delete one at a time. This allows app to undo the changes to state.data...
     // Given a COLUMN and KEY, deletes the change from the state's changesMade value
     deleteTableChanges() {
         // First delete the exact change
