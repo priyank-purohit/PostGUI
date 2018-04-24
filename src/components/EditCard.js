@@ -74,42 +74,6 @@ class EditCard extends Component {
         }
     }
 
-    // Given a COLUMN and KEY, deletes the change from the state's changesMade value
-    deleteTableChanges() {
-        // First delete the exact change
-        let tempChanges = this.state.changesMade;
-        delete tempChanges[this.state.table];
-
-        this.setState({
-            changesMade: tempChanges
-        }, () => {
-            this.props.changeEditFeatureChangesMade(tempChanges);
-        });
-    }
-
-    // Given a COLUMN and KEY, deletes the change from the state's changesMade value
-    deleteChange(column, key) {
-        // First delete the exact change
-        let tempChanges = this.state.changesMade;
-        delete tempChanges[this.state.table][column][key];
-
-        // Delete the column object if that was the only change for that column...
-        if (JSON.stringify(tempChanges[this.state.table][column]) === "{}") {
-            delete tempChanges[this.state.table][column];
-        }
-
-        // Delete the table object if that was the only change for that table...
-        if (JSON.stringify(tempChanges[this.state.table]) === "{}") {
-            delete tempChanges[this.state.table];
-        }
-
-        this.setState({
-            changesMade: tempChanges
-        }, () => {
-            this.props.changeEditFeatureChangesMade(tempChanges);
-        });
-    }
-
     handleRemoveAllClick(e) {
         if (this.state.removeButtonLabel === "Remove All") {
             this.setState({
@@ -124,7 +88,7 @@ class EditCard extends Component {
             this.setState({
                 removeButtonLabel: "Remove All"
             });
-            this.deleteTableChanges();
+            this.props.deleteTableChanges();
         }
     }
 
@@ -189,7 +153,7 @@ class EditCard extends Component {
                     <ListItemText
                         primary={column + " column changed"}
                         secondary={"From " + oldValue + " to " + newValue + " where " + this.primaryKeyStringify(primaryKey)} />
-                    <ListItemSecondaryAction onClick={this.deleteChange.bind(this, column, Object.keys(change)[0])}>
+                    <ListItemSecondaryAction onClick={this.props.deleteChange.bind(this, column, Object.keys(change)[0])}>
                         <IconButton aria-label="Delete">
                             <DeleteIcon />
                         </IconButton>

@@ -66,6 +66,38 @@ class DataTable extends Component {
         });
     }
 
+    // Given a COLUMN and KEY, deletes the change from the state's changesMade value
+    deleteTableChanges() {
+        // First delete the exact change
+        let tempChanges = this.state.editFeatureChangesMade;
+        delete tempChanges[this.state.table];
+
+        this.setState({
+            editFeatureChangesMade: tempChanges
+        });
+    }
+
+    // Given a COLUMN and KEY, deletes the change from the state's changesMade value
+    deleteChange(column, key) {
+        // First delete the exact change
+        let tempChanges = this.state.editFeatureChangesMade;
+        delete tempChanges[this.state.table][column][key];
+
+        // Delete the column object if that was the only change for that column...
+        if (JSON.stringify(tempChanges[this.state.table][column]) === "{}") {
+            delete tempChanges[this.state.table][column];
+        }
+
+        // Delete the table object if that was the only change for that table...
+        if (JSON.stringify(tempChanges[this.state.table]) === "{}") {
+            delete tempChanges[this.state.table];
+        }
+
+        this.setState({
+            editFeatureChangesMade: tempChanges
+        });
+    }
+
     // Renders an editable cell + manages changes made to it using helpers
     renderEditableCell(cellInfo) {
         return (
@@ -179,7 +211,8 @@ class DataTable extends Component {
                         url={this.state.url}
                         featureEnabled={this.state.editFeatureEnabled}
                         changesMade={this.state.editFeatureChangesMade}
-                        changeEditFeatureChangesMade={this.changeEditFeatureChangesMade.bind(this)}
+                        deleteChange={this.deleteChange.bind(this)}
+                        deleteTableChanges={this.deleteTableChanges.bind(this)}
                         changeEditFeatureEnabled={this.changeEditFeatureEnabled.bind(this)} />
 
                     <Downloads
