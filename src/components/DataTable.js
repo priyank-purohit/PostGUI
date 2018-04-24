@@ -39,6 +39,17 @@ class DataTable extends Component {
             data: newProps.data,
             editFeatureEnabled: this.state.table !== newProps.table ? false : this.state.editFeatureEnabled
         });
+
+        // Enable PK related features if table has a PK
+        if (newProps.dbPkInfo && this.state.table) {
+            for (let i = 0; i < newProps.dbPkInfo.length; i++) {
+                if (newProps.dbPkInfo[i]["table"] === this.state.table) {
+                    this.setState({
+                        tablePrimaryKeys: newProps.dbPkInfo[i]["primary_keys"]
+                    });
+                }
+            }
+        }
     }
 
     // Allows EditCard.js to change the state here
@@ -63,19 +74,30 @@ class DataTable extends Component {
                 contentEditable
                 suppressContentEditableWarning
                 onBlur={e => {
-                    const data = [...this.state.data];
-                    // ToDo: when original value is NULL, and you don't change it, it sets it to "" from NULL... prevent it
-                    if (String(data[cellInfo.index][cellInfo.column.id]) !== String(e.target.innerHTML)) {
-                        console.log(cellInfo.column.id, "column of row #", cellInfo.index, "changed from ", data[cellInfo.index][cellInfo.column.id], "to", e.target.innerHTML);
-                        let oldRow = JSON.stringify(this.state.data[cellInfo.index]);
-                        console.log("Original row: " + JSON.stringify(this.state.data[cellInfo.index]));
-                        data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
-                        let newRow = this.state.data[cellInfo.index];
+                    let data = [...this.state.data];
 
-                        //this.updateDbIfNeeded(oldRow, newRow, cellInfo.column.id);
-                        this.setState({ data }, () => {
-                            console.log("Updated row: " + JSON.stringify(this.state.data[cellInfo.index]));
-                        });
+                    let changedRowIndex = cellInfo.index;
+                    let changedColumnName = cellInfo.column.id;
+                    let oldRow = JSON.stringify(this.state.data[changedRowIndex]);
+                    let oldCellValue = data[changedRowIndex][changedColumnName];
+                    let newCellValue = e.target.innerHTML;
+
+                    // ToDo: when original value is NULL, and you don't change it, it sets it to "" from NULL... prevent it
+                    if (String(oldCellValue) !== String(newCellValue)) {
+                        let changedRowPk = {};
+                        for (let i = 0; i < this.state.tablePrimaryKeys.length; i++) {
+                            changedRowPk[this.state.tablePrimaryKeys[i]] = data[changedRowIndex][this.state.tablePrimaryKeys[i]]
+                        }
+
+                        console.log(changedColumnName, "column of row #", changedRowIndex, "with pk = (", JSON.stringify(changedRowPk), ") changed from ", oldCellValue, "to", newCellValue);
+
+
+                        data[changedRowIndex][changedColumnName] = newCellValue;
+
+                        let newRow = data[changedRowIndex];
+
+                        //this.updateDbIfNeeded(oldRow, newRow, changedColumnName);
+                        this.setState({ data });
                     }
                 }}
                 dangerouslySetInnerHTML={{
