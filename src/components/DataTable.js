@@ -41,18 +41,21 @@ class DataTable extends Component {
         });
     }
 
+    // Allows EditCard.js to change the state here
     changeEditFeatureEnabled(featureEnabled) {
         this.setState({
             editFeatureEnabled: featureEnabled
         });
     }
 
+    // Allows EditCard.js to change the state here
     changeEditFeatureChangesMade(newChanges) {
         this.setState({
             editFeatureChangesMade: newChanges
         });
     }
 
+    // Renders an editable cell + manages changes made to it using helpers
     renderEditableCell(cellInfo) {
         return (
             <div
@@ -86,6 +89,7 @@ class DataTable extends Component {
         let { columns, data } = this.state;
         let parsedColumns = [];
 
+        // Create columns with expected column properties
         if (columns) {
             parsedColumns = columns.map((columnName) => {
                 let columnRename = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "rename");
@@ -113,6 +117,7 @@ class DataTable extends Component {
             });
         }
 
+        // render()
         return (
             <div>
                 <ReactTable
