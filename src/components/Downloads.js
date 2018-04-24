@@ -55,8 +55,8 @@ class Downloads extends Component {
             batchSize: "100K",
             batchDownloadLowerNum: 0,
             batchDownloadUpperNum: 100000,
-			snackBarVisibility: false,
-			snackBarMessage: "Unknown error occured",
+            snackBarVisibility: false,
+            snackBarMessage: "Unknown error occured",
         };
     }
 
