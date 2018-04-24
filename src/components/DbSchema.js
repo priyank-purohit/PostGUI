@@ -8,13 +8,13 @@ import Snackbar from 'material-ui/Snackbar';
 import Chip from 'material-ui/Chip';
 
 import IconButton from 'material-ui/IconButton';
-import CloseIcon from 'material-ui-icons/Close';
-import FolderIcon from 'material-ui-icons/Folder';
-import FolderIconOpen from 'material-ui-icons/FolderOpen';
-import KeyboardArrowDownIcon from 'material-ui-icons/KeyboardArrowDown';
-import ClearIcon from 'material-ui-icons/Clear';
-import VisibilityIcon from 'material-ui-icons/Visibility';
-import VisibilityOffIcon from 'material-ui-icons/VisibilityOff';;
+import CloseIcon from '@material-ui/icons/Close';
+import FolderIcon from '@material-ui/icons/Folder';
+import FolderIconOpen from '@material-ui/icons/FolderOpen';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import ClearIcon from '@material-ui/icons/Clear';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';;
 
 import { indigo } from 'material-ui/colors';
 

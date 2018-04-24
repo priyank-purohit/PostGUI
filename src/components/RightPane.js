@@ -14,7 +14,7 @@ import { FormControlLabel } from 'material-ui/Form';
 import Checkbox from 'material-ui/Checkbox';
 
 import IconButton from 'material-ui/IconButton';
-import CloseIcon from 'material-ui-icons/Close';
+import CloseIcon from '@material-ui/icons/Close';
 
 import DataTable from './DataTable.js';
 import RightPaneChips from './RightPaneChips.js';

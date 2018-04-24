@@ -6,8 +6,8 @@ import Toolbar from 'material-ui/Toolbar';
 import TextField from 'material-ui/TextField';
 import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
-import MenuIcon from 'material-ui-icons/Menu';
-import HistoryIcon from 'material-ui-icons/History';
+import MenuIcon from '@material-ui/icons/Menu';
+import HistoryIcon from '@material-ui/icons/History';
 
 let _ = require('lodash');
 let lib = require('../utils/library.js');

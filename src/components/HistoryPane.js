@@ -8,9 +8,9 @@ import Snackbar from 'material-ui/Snackbar';
 
 import IconButton from 'material-ui/IconButton';
 import Button from 'material-ui/Button';
-import LinkIcon from 'material-ui-icons/Link';
-import DeleteIcon from 'material-ui-icons/Delete';
-import CloseIcon from 'material-ui-icons/Close';
+import LinkIcon from '@material-ui/icons/Link';
+import DeleteIcon from '@material-ui/icons/Delete';
+import CloseIcon from '@material-ui/icons/Close';
 
 let _ = require('lodash');
 let lib = require("../utils/library.js");
