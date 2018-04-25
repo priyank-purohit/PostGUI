@@ -93,6 +93,7 @@ class EditCard extends Component {
     }
 
     handleSubmitClick() {
+        console.log(JSON.stringify(this.state.changesMade));
     }
 
     // Toggle the switch
@@ -139,26 +140,30 @@ class EditCard extends Component {
             let column = keys[i];
 
             let change = this.state.changesMade[this.state.table][column];
-            let oldValue = change[Object.keys(change)[0]]['oldValue'];
-            let newValue = change[Object.keys(change)[0]]['newValue'];
-            let primaryKey = change[Object.keys(change)[0]]['primaryKey'];
+            let changeCount = Object.keys(change).length;
 
-            listItems.push(
-                <ListItem key={i}>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <CreateIcon />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText
-                        primary={column + " column changed"}
-                        secondary={"From " + oldValue + " to " + newValue + " where " + this.primaryKeyStringify(primaryKey)} />
-                    <ListItemSecondaryAction onClick={this.props.deleteChange.bind(this, column, Object.keys(change)[0])}>
-                        <IconButton aria-label="Delete">
-                            <DeleteIcon />
-                        </IconButton>
-                    </ListItemSecondaryAction>
-                </ListItem>);
+            for (let ii = 0; ii < changeCount; ii++) {
+                let oldValue = change[Object.keys(change)[ii]]['oldValue'];
+                let newValue = change[Object.keys(change)[ii]]['newValue'];
+                let primaryKey = change[Object.keys(change)[ii]]['primaryKey'];
+
+                listItems.push(
+                    <ListItem key={String(i) + String(ii)}>
+                        <ListItemAvatar>
+                            <Avatar>
+                                <CreateIcon />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                            primary={column + " column changed"}
+                            secondary={"From " + oldValue + " to " + newValue + " where " + this.primaryKeyStringify(primaryKey)} />
+                        <ListItemSecondaryAction onClick={this.props.deleteChange.bind(this, column, Object.keys(change)[ii])}>
+                            <IconButton aria-label="Delete">
+                                <DeleteIcon />
+                            </IconButton>
+                        </ListItemSecondaryAction>
+                    </ListItem>);
+            }
         }
         return listItems;
     }
