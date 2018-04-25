@@ -66,16 +66,26 @@ class DataTable extends Component {
         });
     }
 
-    // TODO: re-write this method so it iterates over the changes, and uses the deleteChange() method to delete one at a time. This allows app to undo the changes to state.data...
-    // Given a COLUMN and KEY, deletes the change from the state's changesMade value
+    // Deletes all changes in the current table
     deleteTableChanges() {
-        // First delete the exact change
-        let tempChanges = this.state.editFeatureChangesMade;
-        delete tempChanges[this.state.table];
+        let tempChanges = this.state.editFeatureChangesMade[this.state.table];
+        let columnsChanged = Object.keys(tempChanges);
+        let columnsChangeCount = columnsChanged.length;
 
-        this.setState({
-            editFeatureChangesMade: tempChanges
-        });
+        // Iterate over all keys (list of column specific changes)
+        for (let i = 0; i < columnsChangeCount; i++) {
+            let column = columnsChanged[i];
+            let keysChanged = Object.keys(tempChanges[column]);
+            let changeCount = keysChanged.length;
+
+            // Iterate over all keys (all changes individually)
+            for (let ii = 0; ii < changeCount; ii++) {
+                let key = keysChanged[ii];
+
+                // delete using column + key
+                this.deleteChange(column, key);
+            }
+        }
     }
 
     // Given a COLUMN and KEY, deletes the change from the state's changesMade value
