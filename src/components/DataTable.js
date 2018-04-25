@@ -80,8 +80,14 @@ class DataTable extends Component {
 
     // Given a COLUMN and KEY, deletes the change from the state's changesMade value
     deleteChange(column, key) {
-        // First delete the exact change
         let tempChanges = this.state.editFeatureChangesMade;
+
+        // Restore original value in state.data
+        let originalValue = tempChanges[this.state.table][column][key]["oldValue"];
+        let data = this.state.data;
+        data[tempChanges[this.state.table][column][key]["rowIndex"]][column] = originalValue;
+
+        // Delete the change from list of changes
         delete tempChanges[this.state.table][column][key];
 
         // Delete the column object if that was the only change for that column...
@@ -95,7 +101,8 @@ class DataTable extends Component {
         }
 
         this.setState({
-            editFeatureChangesMade: tempChanges
+            editFeatureChangesMade: tempChanges,
+            data: data
         });
     }
 
@@ -144,6 +151,7 @@ class DataTable extends Component {
                         // Insert the updates + keep track of the PK
                         currentChanges[this.state.table][changedColumnName][changedRowPkStr]["newValue"] = newCellValue;
                         currentChanges[this.state.table][changedColumnName][changedRowPkStr]["primaryKey"] = changedRowPk;
+                        currentChanges[this.state.table][changedColumnName][changedRowPkStr]["rowIndex"] = changedRowIndex;
 
                         //this.updateDbIfNeeded(oldRow, newRow, changedColumnName);
                         this.setState({
