@@ -133,7 +133,7 @@ class DataTable extends Component {
                     let newCellValue = e.target.innerHTML;
 
                     // ToDo: when original value is NULL, and you don't change it, it sets it to "" from NULL... prevent it
-                    if (String(oldCellValue) !== String(newCellValue)) {
+                    if (String(oldCellValue) !== String(newCellValue) && !(String(oldCellValue) === "null" && String(newCellValue) === "")) {
                         let changedRowPk = {};
                         let changedRowPkStr = "";
                         for (let i = 0; i < this.state.tablePrimaryKeys.length; i++) {
