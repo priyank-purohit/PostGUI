@@ -116,6 +116,31 @@ class DataTable extends Component {
         });
     }
 
+    // Makes PATCH calls to submit current table's changes + deletes them as the reqs are successful. Keeps track of all changes in the updates table.
+    // Marks any changes that are not successful.
+    submitChanges() {
+        //
+        let currentChanges = this.state.editFeatureChangesMade[this.state.table];
+
+        for (let i = 0; i < Object.keys(currentChanges).length; i++) {
+            let currentColumnChanges = currentChanges[Object.keys(currentChanges)[i]];
+            for (let ii = 0; ii < Object.keys(currentColumnChanges).length; ii++) {
+                let change = currentChanges[Object.keys(currentChanges)[i]][Object.keys(currentColumnChanges)[ii]];
+                console.log("change", JSON.stringify(change));
+
+                let primaryKey = change["primaryKey"];
+                let oldValue = change["oldValue"];
+                let newValue = change["newValue"];
+                let rowIndex = change["rowIndex"];
+
+                let success = false; // Keep track of change success ...
+
+                // Create the URL, add in the new value as URL param
+
+            }
+        }
+    }
+
     // Renders an editable cell + manages changes made to it using helpers
     renderEditableCell(cellInfo) {
         return (
@@ -163,7 +188,6 @@ class DataTable extends Component {
                         currentChanges[this.state.table][changedColumnName][changedRowPkStr]["primaryKey"] = changedRowPk;
                         currentChanges[this.state.table][changedColumnName][changedRowPkStr]["rowIndex"] = changedRowIndex;
 
-                        //this.updateDbIfNeeded(oldRow, newRow, changedColumnName);
                         this.setState({
                             data: data,
                             editFeatureChangesMade: currentChanges
@@ -230,6 +254,7 @@ class DataTable extends Component {
                         url={this.state.url}
                         featureEnabled={this.state.editFeatureEnabled}
                         changesMade={this.state.editFeatureChangesMade}
+                        submitChanges={this.submitChanges.bind(this)}
                         deleteChange={this.deleteChange.bind(this)}
                         deleteTableChanges={this.deleteTableChanges.bind(this)}
                         changeEditFeatureEnabled={this.changeEditFeatureEnabled.bind(this)} />

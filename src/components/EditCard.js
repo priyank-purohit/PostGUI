@@ -94,7 +94,8 @@ class EditCard extends Component {
     }
 
     handleSubmitClick() {
-        console.log(JSON.stringify(this.state.changesMade));
+        console.clear();
+        this.props.submitChanges();
     }
 
     // Toggle the switch

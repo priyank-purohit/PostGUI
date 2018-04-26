@@ -380,7 +380,7 @@ class DbSchema extends Component {
 						primaryKeysAvailable: pkAvailable
 					}, () => {
 						if (pkAvailable) {
-							this.props.changeDbPkInfo(response.data[0]["primary_keys"]);
+							this.props.changeDbPkInfo(response.data);
 						}
 					});
 					//console.log(JSON.stringify(response.data[0]["primary_keys"]), pkAvailable);
