@@ -197,7 +197,7 @@ class EditCard extends Component {
                     <List dense={true}>
                         {this.createChangeLogList()}
                     </List>
-                </div>) : this.state.changesMade[this.state.table] && JSON.stringify(this.state.changesMade[this.state.table]) !== "{}" ? (<div>
+                </div>) : JSON.stringify(this.state.changesMade) !== "{}" ? (<div>
                     <List dense={false}>
                         <ListItem>
                             <ListItemAvatar>
