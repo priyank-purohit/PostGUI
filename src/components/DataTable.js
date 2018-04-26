@@ -116,31 +116,21 @@ class DataTable extends Component {
         });
     }
 
-    // Given a COLUMN and KEY, deletes the change from the state's changesMade value
-    toggleChangeError(column, key) {
+    // Given a COLUMN and KEY, toggles the error code for a change
+    setChangeError(column, key, error) {
         let tempChanges = this.state.editFeatureChangesMade;
 
-        // Restore original value in state.data
-        //let originalValue = tempChanges[this.state.table][column][key]["oldValue"];
-        //let data = this.state.data;
-        //data[tempChanges[this.state.table][column][key]["rowIndex"]][column] = originalValue;
-
-        // Delete the change from list of changes
-        tempChanges[this.state.table][column][key]["error"] = true;
-
-        console.log(JSON.stringify(tempChanges));
+        // Toggle the change...
+        tempChanges[this.state.table][column][key]["error"] = error | true;
 
         this.setState({
             editFeatureChangesMade: tempChanges,
-            // data: data
         });
     }
 
 
-    // Converts the JSON object for PK into a string that can be displayed to user
+    // Converts the JSON object for PK into a string into part of a PostgREST compliant URL
     primaryKeyParams(primaryKey) {
-        console.log(JSON.stringify(primaryKey));
-
         let keys = Object.keys(primaryKey);
         let stringified = "";
 
@@ -175,7 +165,6 @@ class DataTable extends Component {
 
                     // Create the URL, add in the new value as URL param
                     let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table + "?and=(" + this.primaryKeyParams(primaryKey) + ")";
-                    console.log("URL:", url, columnChanged);
 
                     // Patch body
                     let patchReqBody = {};
@@ -189,7 +178,7 @@ class DataTable extends Component {
                             this.deleteChange(columnChanged, keyChanged);
                         })
                         .catch((error) => {
-                            this.toggleChangeError(columnChanged, keyChanged);
+                            this.setChangeError(columnChanged, keyChanged, true);
                             // Show error in top-right Snack-Bar
                             this.setState({
                                 snackBarVisibility: true,
