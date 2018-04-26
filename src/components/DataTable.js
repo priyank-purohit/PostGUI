@@ -116,6 +116,41 @@ class DataTable extends Component {
         });
     }
 
+    // Given a COLUMN and KEY, deletes the change from the state's changesMade value
+    toggleChangeError(column, key) {
+        let tempChanges = this.state.editFeatureChangesMade;
+
+        // Restore original value in state.data
+        //let originalValue = tempChanges[this.state.table][column][key]["oldValue"];
+        //let data = this.state.data;
+        //data[tempChanges[this.state.table][column][key]["rowIndex"]][column] = originalValue;
+
+        // Delete the change from list of changes
+        tempChanges[this.state.table][column][key]["error"] = true;
+
+        console.log(JSON.stringify(tempChanges));
+
+        this.setState({
+            editFeatureChangesMade: tempChanges,
+            // data: data
+        });
+    }
+
+
+    // Converts the JSON object for PK into a string that can be displayed to user
+    primaryKeyParams(primaryKey) {
+        console.log(JSON.stringify(primaryKey));
+
+        let keys = Object.keys(primaryKey);
+        let stringified = "";
+
+        for (let i in Object.keys(primaryKey)) {
+            stringified += keys[i] + ".eq." + primaryKey[keys[i]];
+            if (parseInt(i, 10) !== keys.length - 1) { stringified += ","; }
+        }
+        return stringified;
+    }
+
     // Makes PATCH calls to submit current table's changes + deletes them as the reqs are successful. Keeps track of all changes in the updates table.
     // Marks any changes that are not successful.
     submitChanges() {
@@ -126,17 +161,52 @@ class DataTable extends Component {
             let currentColumnChanges = currentChanges[Object.keys(currentChanges)[i]];
             for (let ii = 0; ii < Object.keys(currentColumnChanges).length; ii++) {
                 let change = currentChanges[Object.keys(currentChanges)[i]][Object.keys(currentColumnChanges)[ii]];
-                console.log("change", JSON.stringify(change));
+
 
                 let primaryKey = change["primaryKey"];
+                let columnChanged = Object.keys(currentChanges)[i];
+                let keyChanged = Object.keys(currentColumnChanges)[ii];
                 let oldValue = change["oldValue"];
                 let newValue = change["newValue"];
                 let rowIndex = change["rowIndex"];
 
-                let success = false; // Keep track of change success ...
+                if (String(oldValue) !== String(newValue)) { // There is a change...
+                    let success = false; // Keep track of change success ...
 
-                // Create the URL, add in the new value as URL param
+                    // Create the URL, add in the new value as URL param
+                    let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table + "?and=(" + this.primaryKeyParams(primaryKey) + ")";
+                    console.log("URL:", url, columnChanged);
 
+                    // Patch body
+                    let patchReqBody = {};
+                    patchReqBody[columnChanged] = newValue;
+
+                    // Send the Request and check its response:
+                    // PATCH the request
+                    axios.patch(url, { [columnChanged]: newValue }, { headers: { Prefer: 'return=representation' } })
+                        .then((response) => {
+                            console.log("PATCH RESPONSE:", JSON.stringify(response.data));
+                            this.deleteChange(columnChanged, keyChanged);
+                        })
+                        .catch((error) => {
+                            this.toggleChangeError(columnChanged, keyChanged);
+                            // Show error in top-right Snack-Bar
+                            this.setState({
+                                snackBarVisibility: true,
+                                snackBarMessage: "Database update failed."
+                            }, () => {
+                                this.timer = setTimeout(() => {
+                                    this.setState({
+                                        snackBarVisibility: false,
+                                        snackBarMessage: "Unknown error"
+                                    });
+                                }, 5000);
+                            });
+                        });
+                } else {
+                    // Tell user that the change was not actually detected... and that they should submit a bug
+                    console.log("Tell user that the change was not actually detected... and that they should submit a bug");
+                }
             }
         }
     }

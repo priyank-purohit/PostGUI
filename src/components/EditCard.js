@@ -23,6 +23,8 @@ import WarningIcon from '@material-ui/icons/Warning';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import pink from 'material-ui/colors/pink';
+import red from 'material-ui/colors/red';
+import amber from 'material-ui/colors/amber';
 
 //const timeout = 2000;
 
@@ -148,13 +150,12 @@ class EditCard extends Component {
                 let oldValue = change[Object.keys(change)[ii]]['oldValue'];
                 let newValue = change[Object.keys(change)[ii]]['newValue'];
                 let primaryKey = change[Object.keys(change)[ii]]['primaryKey'];
+                let error = change[Object.keys(change)[ii]]['error'];
 
                 listItems.push(
                     <ListItem key={String(i) + String(ii)}>
                         <ListItemAvatar>
-                            <Avatar>
-                                <CreateIcon />
-                            </Avatar>
+                            {error ? (<Avatar className={this.props.classes.errorAvatar}><CloseIcon /></Avatar>) : (<Avatar> <CreateIcon /> </Avatar>)}
                         </ListItemAvatar>
                         <ListItemText
                             primary={column + " column changed"}
@@ -202,7 +203,7 @@ class EditCard extends Component {
                     <List dense={false}>
                         <ListItem>
                             <ListItemAvatar>
-                                <Avatar className={classes.secondaryAvatar}><WarningIcon /></Avatar>
+                                <Avatar className={classes.amberAvatar}><WarningIcon /></Avatar>
                             </ListItemAvatar>
                             <ListItemText primary="Unsubmitted changes are detected, these changes will be lost if not submitted." />
                         </ListItem>
@@ -247,9 +248,16 @@ const styleSheet = {
         float: 'right'
     },
     secondaryAvatar: {
-        margin: 10,
         color: '#fff',
         backgroundColor: pink[500]
+    },
+    amberAvatar: {
+        color: '#fff',
+        backgroundColor: amber[500]
+    },
+    errorAvatar: {
+        color: '#fff',
+        backgroundColor: red[500]
     }
 };
 
