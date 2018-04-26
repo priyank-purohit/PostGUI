@@ -19,6 +19,7 @@ import Avatar from 'material-ui/Avatar';
 import CreateIcon from '@material-ui/icons/Create';
 import SearchIcon from '@material-ui/icons/Search';
 import ErrorIcon from '@material-ui/icons/Error';
+import WarningIcon from '@material-ui/icons/Warning';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import pink from 'material-ui/colors/pink';
@@ -195,6 +196,15 @@ class EditCard extends Component {
 
                     <List dense={true}>
                         {this.createChangeLogList()}
+                    </List>
+                </div>) : this.state.changesMade[this.state.table] && JSON.stringify(this.state.changesMade[this.state.table]) !== "{}" ? (<div>
+                    <List dense={true}>
+                        <ListItem>
+                            <ListItemAvatar>
+                                <Avatar className={classes.secondaryAvatar}><WarningIcon /></Avatar>
+                            </ListItemAvatar>
+                            <ListItemText primary="Unsubmitted changes are detected, these changes will be lost if not submitted." />
+                        </ListItem>
                     </List>
                 </div>) : (<div></div>)}
                 <Divider />
