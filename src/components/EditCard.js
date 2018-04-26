@@ -181,7 +181,7 @@ class EditCard extends Component {
                         control={<Switch checked={this.state.featureEnabled} onChange={this.handleFeatureEnabledSwitch.bind(this)} value="featureStatus" />}
                         label="Enable table edit feature" />
                 </FormGroup>) : (<div>
-                    <List dense={true}>
+                    <List dense={false}>
                         <ListItem>
                             <ListItemAvatar>
                                 <Avatar className={classes.secondaryAvatar}><ErrorIcon /></Avatar>
@@ -198,7 +198,7 @@ class EditCard extends Component {
                         {this.createChangeLogList()}
                     </List>
                 </div>) : this.state.changesMade[this.state.table] && JSON.stringify(this.state.changesMade[this.state.table]) !== "{}" ? (<div>
-                    <List dense={true}>
+                    <List dense={false}>
                         <ListItem>
                             <ListItemAvatar>
                                 <Avatar className={classes.secondaryAvatar}><WarningIcon /></Avatar>
