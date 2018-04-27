@@ -151,6 +151,10 @@ class DataTable extends Component {
         //
         let currentChanges = this.state.editFeatureChangesMade[this.state.table];
 
+        if (currentChanges === null || currentChanges === undefined) {
+            return;
+        }
+
         for (let i = 0; i < Object.keys(currentChanges).length; i++) {
             let currentColumnChanges = currentChanges[Object.keys(currentChanges)[i]];
             for (let ii = 0; ii < Object.keys(currentColumnChanges).length; ii++) {
