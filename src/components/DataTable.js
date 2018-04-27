@@ -160,7 +160,6 @@ class DataTable extends Component {
             for (let ii = 0; ii < Object.keys(currentColumnChanges).length; ii++) {
                 let change = currentChanges[Object.keys(currentChanges)[i]][Object.keys(currentColumnChanges)[ii]];
 
-
                 let primaryKey = change["primaryKey"];
                 let columnChanged = Object.keys(currentChanges)[i];
                 let keyChanged = Object.keys(currentColumnChanges)[ii];
