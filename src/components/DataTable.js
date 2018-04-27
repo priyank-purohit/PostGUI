@@ -176,7 +176,7 @@ class DataTable extends Component {
                     axios.patch(url, { [columnChanged]: newValue }, { headers: { Prefer: 'return=representation' } })
                         .then((response) => {
                             console.log("PATCH RESPONSE:", JSON.stringify(response.data));
-                            this.deleteChange(columnChanged, keyChanged, true);
+                            this.deleteChange(columnChanged, keyChanged, true); // true => do not restore original value when deleting change
                         })
                         .catch((error) => {
                             this.setChangeError(columnChanged, keyChanged, true);
