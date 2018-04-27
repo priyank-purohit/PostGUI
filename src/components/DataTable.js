@@ -115,6 +115,29 @@ class DataTable extends Component {
         });
     }
 
+    // Given a COLUMN and KEY, removes the change from the state's changesMade value
+    // Does not delete the change (does not undo the change from data table)
+    removeSuccessfulChange(column, key) {
+        let tempChanges = this.state.editFeatureChangesMade;
+
+        // Delete the change from list of changes
+        delete tempChanges[this.state.table][column][key];
+
+        // Delete the column object if that was the only change for that column...
+        if (JSON.stringify(tempChanges[this.state.table][column]) === "{}") {
+            delete tempChanges[this.state.table][column];
+        }
+
+        // Delete the table object if that was the only change for that table...
+        if (JSON.stringify(tempChanges[this.state.table]) === "{}") {
+            delete tempChanges[this.state.table];
+        }
+
+        this.setState({
+            editFeatureChangesMade: tempChanges
+        });
+    }
+
     // Given a COLUMN and KEY, toggles the error code for a change
     setChangeError(column, key, error) {
         let tempChanges = this.state.editFeatureChangesMade;
@@ -171,7 +194,7 @@ class DataTable extends Component {
                     axios.patch(url, { [columnChanged]: newValue }, { headers: { Prefer: 'return=representation' } })
                         .then((response) => {
                             console.log("PATCH RESPONSE:", JSON.stringify(response.data));
-                            this.deleteChange(columnChanged, keyChanged);
+                            this.removeSuccessfulChange(columnChanged, keyChanged);
                         })
                         .catch((error) => {
                             this.setChangeError(columnChanged, keyChanged, true);
