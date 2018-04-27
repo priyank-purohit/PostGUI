@@ -88,37 +88,19 @@ class DataTable extends Component {
     }
 
     // Given a COLUMN and KEY, deletes the change from the state's changesMade value
-    deleteChange(column, key) {
+    // If noRestore is true, it does not restore the original value (used for successfully submitted changes)
+    deleteChange(column, key, noRestore = false) {
         let tempChanges = this.state.editFeatureChangesMade;
 
-        // Restore original value in state.data
-        let originalValue = tempChanges[this.state.table][column][key]["oldValue"];
-        let data = this.state.data;
-        data[tempChanges[this.state.table][column][key]["rowIndex"]][column] = originalValue;
-
-        // Delete the change from list of changes
-        delete tempChanges[this.state.table][column][key];
-
-        // Delete the column object if that was the only change for that column...
-        if (JSON.stringify(tempChanges[this.state.table][column]) === "{}") {
-            delete tempChanges[this.state.table][column];
+        if (noRestore === false) {
+            // Restore original value in state.data
+            let originalValue = tempChanges[this.state.table][column][key]["oldValue"];
+            let data = this.state.data;
+            data[tempChanges[this.state.table][column][key]["rowIndex"]][column] = originalValue;
+            this.setState({
+                data: data
+            });
         }
-
-        // Delete the table object if that was the only change for that table...
-        if (JSON.stringify(tempChanges[this.state.table]) === "{}") {
-            delete tempChanges[this.state.table];
-        }
-
-        this.setState({
-            editFeatureChangesMade: tempChanges,
-            data: data
-        });
-    }
-
-    // Given a COLUMN and KEY, removes the change from the state's changesMade value
-    // Does not delete the change (does not undo the change from data table)
-    removeSuccessfulChange(column, key) {
-        let tempChanges = this.state.editFeatureChangesMade;
 
         // Delete the change from list of changes
         delete tempChanges[this.state.table][column][key];
@@ -194,7 +176,7 @@ class DataTable extends Component {
                     axios.patch(url, { [columnChanged]: newValue }, { headers: { Prefer: 'return=representation' } })
                         .then((response) => {
                             console.log("PATCH RESPONSE:", JSON.stringify(response.data));
-                            this.removeSuccessfulChange(columnChanged, keyChanged);
+                            this.deleteChange(columnChanged, keyChanged, true);
                         })
                         .catch((error) => {
                             this.setChangeError(columnChanged, keyChanged, true);
