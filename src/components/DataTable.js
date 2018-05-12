@@ -204,7 +204,7 @@ class DataTable extends Component {
                     maxWidth: columnMaxWidth !== null ? columnMaxWidth : undefined,
                     minWidth: columnMinWidth !== null ? columnMinWidth : 100,
                     headerStyle: { fontWeight: 'bold' },
-                    Cell: this.state.editFeatureEnabled === true && columnEditability !== false ? this.renderEditableCell : null
+                    Cell: this.state.editFeatureEnabled === true && columnEditability !== false ? this.renderEditableCell : row => (row.value !== undefined && row.value !== null ? String(row.value) : row.value)
                 });
             });
         }
