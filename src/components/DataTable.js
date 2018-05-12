@@ -6,11 +6,11 @@ import { withStyles } from 'material-ui/styles';
 import Downloads from './Downloads.js';
 import EditCard from './EditCard.js';
 
-import axios from 'axios';
+//import axios from 'axios';
 import "react-table/react-table.css";
 
 let lib = require('../utils/library.js');
-let json2csv = require('json2csv');
+//let json2csv = require('json2csv');
 
 
 class DataTable extends Component {
@@ -128,7 +128,7 @@ class DataTable extends Component {
 
                     let changedRowIndex = cellInfo.index;
                     let changedColumnName = cellInfo.column.id;
-                    let oldRow = JSON.stringify(this.state.data[changedRowIndex]);
+                    //let oldRow = JSON.stringify(this.state.data[changedRowIndex]);
                     let oldCellValue = data[changedRowIndex][changedColumnName];
                     let newCellValue = e.target.innerHTML;
 
@@ -145,7 +145,7 @@ class DataTable extends Component {
 
                         // Update the local variable to this function
                         data[changedRowIndex][changedColumnName] = newCellValue;
-                        let newRow = data[changedRowIndex];
+                        //let newRow = data[changedRowIndex];
 
                         let currentChanges = this.state.editFeatureChangesMade;
 
