@@ -6,7 +6,7 @@ import { withStyles } from 'material-ui/styles';
 import Downloads from './Downloads.js';
 import EditCard from './EditCard.js';
 
-//import axios from 'axios';
+import axios from 'axios';
 import "react-table/react-table.css";
 
 let lib = require('../utils/library.js');
