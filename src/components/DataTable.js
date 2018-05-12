@@ -6,11 +6,10 @@ import { withStyles } from 'material-ui/styles';
 import Downloads from './Downloads.js';
 import EditCard from './EditCard.js';
 
-import axios from 'axios';
+//import axios from 'axios';
 import "react-table/react-table.css";
 
 let lib = require('../utils/library.js');
-
 
 class DataTable extends Component {
     constructor(props) {
@@ -291,7 +290,7 @@ class DataTable extends Component {
                     maxWidth: columnMaxWidth !== null ? columnMaxWidth : undefined,
                     minWidth: columnMinWidth !== null ? columnMinWidth : 100,
                     headerStyle: { fontWeight: 'bold' },
-                    Cell: this.state.editFeatureEnabled === true && columnEditability !== false ? this.renderEditableCell : null
+                    Cell: this.state.editFeatureEnabled === true && columnEditability !== false ? this.renderEditableCell : row => (row.value !== undefined && row.value !== null ? String(row.value) : row.value)
                 });
             });
         }
