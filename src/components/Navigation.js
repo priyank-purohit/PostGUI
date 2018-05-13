@@ -46,7 +46,7 @@ class Navigation extends Component {
 							{dbTitle}
 						</Typography>
 						<div className={classes.searchBarFlex}>
-							<TextField id="search" placeholder="Search tables and columns" onKeyPress={this.changeSearchTerm.bind(this)} onChange={this.changeSearchTerm.bind(this)} onFocus={this.changeSearchTerm.bind(this)} type="search" className={classes.searchBar} autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+							<TextField id="search" placeholder="Search tables and columns" onKeyPress={this.changeSearchTerm.bind(this)} onChange={this.changeSearchTerm.bind(this)} onFocus={this.changeSearchTerm.bind(this)} type="search" className={classes.searchBar} autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck="false" />
 						</div>
 						<IconButton className={classes.rightIconsFlex} color="inherit" aria-label="Menu" onClick={this.props.toggleHistoryPane.bind(this)}>
 							<HistoryIcon className={classes.floatRight} />
