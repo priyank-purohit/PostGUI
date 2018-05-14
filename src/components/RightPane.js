@@ -119,7 +119,9 @@ class RightPane extends Component {
 				this.rebuildQueryBuilder(this.refs.queryBuilder, newProps.dbIndex, newProps.table, newProps.columns);
 				let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
 				this.setState({ url: url + "?limit=10" });
-				this.fetchOutput(url + "?limit=10", true);
+				if (this.state.table !== "") {
+					this.fetchOutput(url + "?limit=10", true);
+				}
 			});
 		} else {
 			this.setState({
@@ -139,7 +141,9 @@ class RightPane extends Component {
 				this.rebuildQueryBuilder(this.refs.queryBuilder, newProps.dbIndex, newProps.table, newProps.columns, newProps.dbSchemaDefinitions);
 				let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
 				this.setState({ url: url + "?limit=10" });
-				this.fetchOutput(url + "?limit=10", true);
+				if (this.state.table !== "") {
+					this.fetchOutput(url + "?limit=10", true);
+				}
 			});
 		}
 	}
@@ -376,7 +380,7 @@ class RightPane extends Component {
 		clearTimeout(this.timer);
 		this.timer = null;
 
-		event.stopPropagation();
+		//event.stopPropagation();
 		// first show loading
 		this.setState({
 			rawData: [],
@@ -431,68 +435,64 @@ class RightPane extends Component {
 		let leftMarginClass = this.state.leftPaneVisibility === true ? classes.root : classes.rootInvisibleLeft;
 		let paperClasses = hideClass + " " + leftMarginClass;
 
-		if (this.state.table === "") {
-			return (<div id='query-builder' ref='queryBuilder' className={hideClass} />);
-		} else {
-			return (
-				<div className={classes.middlePaperSection}>
+		return (
+			<div className={classes.middlePaperSection}>
 
-					<Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-						open={this.state.snackBarVisibility}
-						onClose={this.handleRequestClose}
-						SnackbarContentProps={{ 'aria-describedby': 'message-id', }}
-						message={<span id="message-id">{this.state.snackBarMessage}</span>}
-						action={[<IconButton key="close" aria-label="Close" color="secondary" className={classes.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton>]} />
+				<Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+					open={this.state.snackBarVisibility}
+					onClose={this.handleRequestClose}
+					SnackbarContentProps={{ 'aria-describedby': 'message-id', }}
+					message={<span id="message-id">{this.state.snackBarMessage}</span>}
+					action={[<IconButton key="close" aria-label="Close" color="secondary" className={classes.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton>]} />
 
-					<Paper className={paperClasses} elevation={5}>
-						<CardHeader title={tableDisplayName} subheader={tableDescription} />
+				<Paper className={paperClasses} elevation={5}>
+					<CardHeader title={tableDisplayName} subheader={tableDescription} />
 
-						<Typography type="subheading" className={classes.cardMarginLeftTop} >Query Builder</Typography>
-						<div id='query-builder' ref='queryBuilder' />
+					<Typography type="subheading" className={classes.cardMarginLeftTop} >Query Builder</Typography>
+					<div id='query-builder' ref='queryBuilder' />
 
-						<Typography type="body1" className={classes.cardMarginLeftTop}>Options</Typography>
+					<Typography type="body1" className={classes.cardMarginLeftTop}>Options</Typography>
 
-						<div title="Run Query" onClick={this.handleSubmitButtonClickCancelQuery.bind(this)}>
-							<SubmitButton
-								dbIndex={this.state.dbIndex}
-								table={this.state.table}
-								leftPaneVisibility={this.state.leftPaneVisibility}
-								getRules={this.handleSubmitButtonClick.bind(this)}
-								loading={this.state.submitLoading}
-								success={this.state.submitSuccess}
-								error={this.state.submitError} />
-						</div>
+					<div title="Run Query" onClick={this.handleSubmitButtonClickCancelQuery.bind(this)}>
+						<SubmitButton
+							dbIndex={this.state.dbIndex}
+							table={this.state.table}
+							leftPaneVisibility={this.state.leftPaneVisibility}
+							getRules={this.handleSubmitButtonClick.bind(this)}
+							loading={this.state.submitLoading}
+							success={this.state.submitSuccess}
+							error={this.state.submitError} />
+					</div>
 
-						<TextField
-							required
-							id="rowLimit"
-							type="number"
-							label="Row-limit"
-							value={this.state.rowLimit.toString()}
-							className={classes.textField && classes.cardMarginLeft}
-							margin="normal"
-							onChange={this.handleRowLimitChange.bind(this)} />
+					<TextField
+						required
+						id="rowLimit"
+						type="number"
+						label="Row-limit"
+						value={this.state.rowLimit.toString()}
+						className={classes.textField && classes.cardMarginLeft}
+						margin="normal"
+						onChange={this.handleRowLimitChange.bind(this)} />
 
-						<FormControlLabel control={<Checkbox onChange={this.handleGetExactRowCountToggle.bind(this)} value="getExactRowCount" />} checked={this.state.exactRowCount} label={"Get exact row count (slow)"} className={classes.marginLeft} />
+					<FormControlLabel control={<Checkbox onChange={this.handleGetExactRowCountToggle.bind(this)} value="getExactRowCount" />} checked={this.state.exactRowCount} label={"Get exact row count (slow)"} className={classes.marginLeft} />
 
-						<Typography type="subheading" className={classes.cardMarginLeftTop}>Query Results</Typography>
-						<RightPaneChips rows={this.state.rows} totalRows={this.state.totalRows} rowLimit={this.state.rowLimit} maxRows={maxRowsInOutput} />
+					<Typography type="subheading" className={classes.cardMarginLeftTop}>Query Results</Typography>
+					<RightPaneChips rows={this.state.rows} totalRows={this.state.totalRows} rowLimit={this.state.rowLimit} maxRows={maxRowsInOutput} />
 
-						<div className={classes.cardMarginLeftRightTop} >
-							<DataTable
-								dbIndex={this.state.dbIndex}
-								table={this.state.table}
-								columns={this.state.visibleColumns ? this.state.visibleColumns : this.state.columns}
-								data={this.state.rawData}
-								url={this.state.url}
-								totalRows={this.state.totalRows}
-								dbPkInfo={this.props.dbPkInfo}
-								noDataText={this.state.submitLoading ? "Loading ..." : (this.state.submitError ? "Query error" : (this.state.submitSuccess ? "Success!" : "No rows found"))} />
-						</div>
-					</Paper>
-				</div>
-			);
-		}
+					<div className={classes.cardMarginLeftRightTop} >
+						<DataTable
+							dbIndex={this.state.dbIndex}
+							table={this.state.table}
+							columns={this.state.visibleColumns ? this.state.visibleColumns : this.state.columns}
+							data={this.state.rawData}
+							url={this.state.url}
+							totalRows={this.state.totalRows}
+							dbPkInfo={this.props.dbPkInfo}
+							noDataText={this.state.submitLoading ? "Loading ..." : (this.state.submitError ? "Query error" : (this.state.submitSuccess ? "Success!" : "No rows found"))} />
+					</div>
+				</Paper>
+			</div>
+		);
 	}
 }
 
