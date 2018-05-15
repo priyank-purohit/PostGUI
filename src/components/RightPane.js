@@ -389,7 +389,13 @@ class RightPane extends Component {
 			submitError: false,
 			submitSuccess: false
 		}, () => {
-			const rules = window.$(this.refs.queryBuilder).queryBuilder('getRules');
+			let rules = null;
+			try {
+				rules = window.$(this.refs.queryBuilder).queryBuilder('getRules');
+			} catch (e) {
+				console.log(e.toString());
+			}
+
 			this.setState({ rules: rules }, () => {
 				let url = this.buildURLFromRules(rules);
 				this.fetchOutput(url);
