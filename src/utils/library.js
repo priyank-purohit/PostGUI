@@ -83,7 +83,7 @@ exports.getColumnConfig = function (dbIndex, table, column, option) {
 	if (dbIndex !== null && table !== null && column !== null && option !== null) {
 		try {
 			let columnRules = this.getTableConfig(dbIndex, table, "columnRules");
-			
+
 			if (columnRules[column][option] !== null && columnRules[column][option] !== undefined) {
 				return columnRules[column][option];
 			} else {
@@ -215,7 +215,8 @@ exports.getQBFilters = function (dbIndex, table, columns, definitions = null) {
 				id: columns[i],
 				label: this.getColumnConfig(dbIndex, table, columns[i], "rename"),
 				type: type,
-				input: this.getColumnConfig(dbIndex, table, columns[i], "input"),
+				input: type === 'integer' || type === 'double' ? 'text' : this.getColumnConfig(dbIndex, table, columns[i], "input"),
+				value_separator: ',',
 				values: this.getColumnConfig(dbIndex, table, columns[i], "values"),
 				validation: this.getColumnConfig(dbIndex, table, columns[i], "validation"),
 				default_value: this.getColumnConfig(dbIndex, table, columns[i], "defaultValue"),
