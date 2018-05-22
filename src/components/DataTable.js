@@ -173,6 +173,10 @@ class DataTable extends Component {
                     let patchReqBody = {};
                     patchReqBody[columnChanged] = newValue;
 
+                    console.log("Submitting change: PATCH: " + url);
+                    console.log("Change=" + JSON.stringify(change));
+                    console.log("PATCH req BODY=" + JSON.stringify({ [columnChanged]: newValue }));
+
                     // Send the Request and check its response:
                     // PATCH the request
                     axios.patch(url, { [columnChanged]: newValue }, { headers: { Prefer: 'return=representation' } })
@@ -181,6 +185,7 @@ class DataTable extends Component {
                             this.deleteChange(columnChanged, keyChanged, true); // true => do not restore original value when deleting change
                         })
                         .catch((error) => {
+                            console.log("PATCH ERROR RESP:" + String(error));
                             this.setChangeError(columnChanged, keyChanged, true);
                             // Show error in top-right Snack-Bar
                             this.setState({
