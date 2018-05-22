@@ -169,6 +169,19 @@ class DataTable extends Component {
                     // Create the URL, add in the new value as URL param
                     let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table + "?and=(" + this.primaryKeyParams(primaryKey) + ")";
 
+                    // Data type assignment for newValue based on the data type of oldValue
+                    if (String(newValue) === "") {
+                        newValue = null;
+                    } else {
+                        if (typeof oldValue === 'string') {
+                            newValue = String(newValue);
+                        } else if (typeof oldValue === 'number') {
+                            newValue = Number(newValue);
+                        } else if (typeof oldValue === 'boolean') {
+                            newValue = Boolean(newValue);
+                        }
+                    }
+
                     // Patch body
                     let patchReqBody = {};
                     patchReqBody[columnChanged] = newValue;
