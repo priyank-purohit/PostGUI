@@ -81,7 +81,7 @@ class DataTable extends Component {
                 let key = keysChanged[ii];
 
                 // delete using column + key
-                this.deleteChange(column, key);
+                this.deleteChange(column, key, false);
             }
         }
     }
