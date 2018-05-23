@@ -46,7 +46,7 @@ class DataTable extends Component {
             tablePrimaryKeys: [],
             editFeatureEnabled: false,
             editFeatureChangesMade: {},
-            selection: []
+            rowsStrikedOut: []
         };
         this.renderEditableCell = this.renderEditableCell.bind(this);
     }
@@ -306,35 +306,35 @@ class DataTable extends Component {
 
     toggleAll = () => {
         // Intentioanlly removed the functionality to select all, can only unselect all
-        let selection = [];
-        this.setState({ selection });
+        let rowsStrikedOut = [];
+        this.setState({ rowsStrikedOut });
     };
 
     toggleSelection = (key, shift, row) => {
         // start off with the existing state
-        let selection = [...this.state.selection];
-        let keyIndex = selection.indexOf(key);
+        let rowsStrikedOut = [...this.state.rowsStrikedOut];
+        let keyIndex = rowsStrikedOut.indexOf(key);
         // check to see if the key exists
         if (keyIndex >= 0) {
             // it does exist so we will remove it using destructing
-            selection = [
-                ...selection.slice(0, keyIndex),
-                ...selection.slice(keyIndex + 1)
+            rowsStrikedOut = [
+                ...rowsStrikedOut.slice(0, keyIndex),
+                ...rowsStrikedOut.slice(keyIndex + 1)
             ];
         } else {
             // it does not exist so add it
-            selection.push(key);
+            rowsStrikedOut.push(key);
         }
 
-        this.setState({ selection });
+        this.setState({ rowsStrikedOut });
     };
 
     isSelected = key => {
-        return this.state.selection.includes(key);
+        return this.state.rowsStrikedOut.includes(key);
     };
 
     logSelection = () => {
-        console.log("selection:", JSON.stringify(this.state.selection));
+        console.log("rowsStrikedOut:", JSON.stringify(this.state.rowsStrikedOut));
     };
 
     render() {
@@ -418,8 +418,6 @@ class DataTable extends Component {
                             nextText="Next Page"
                             noDataText={this.props.noDataText} />)}
 
-                <button onClick={logSelection}>Get Selected Rows' PKs</button>
-
                 <div className={this.props.classes.cardGroups} >
                     <EditCard
                         dbIndex={this.state.dbIndex}
@@ -429,6 +427,7 @@ class DataTable extends Component {
                         url={this.state.url}
                         featureEnabled={this.state.editFeatureEnabled}
                         changesMade={this.state.editFeatureChangesMade}
+                        rowsStrikedOut={this.state.rowsStrikedOut}
                         submitChanges={this.submitChanges.bind(this)}
                         deleteChange={this.deleteChange.bind(this)}
                         deleteTableChanges={this.deleteTableChanges.bind(this)}

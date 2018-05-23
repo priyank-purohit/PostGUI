@@ -43,6 +43,7 @@ class EditCard extends Component {
 
             featureEnabled: props.featureEnabled | false,
             changesMade: props.changesMade | {},
+            rowsStrikedOut: props.rowsStrikedOut,
 
             snackBarVisibility: false,
             snackBarMessage: "Unknown error occured",
@@ -61,6 +62,7 @@ class EditCard extends Component {
             primaryKeys: [],
             primaryKeysAvailable: false,
             changesMade: newProps.changesMade,
+            rowsStrikedOut: newProps.rowsStrikedOut,
             featureEnabled: newProps.featureEnabled
         });
 
