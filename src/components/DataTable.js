@@ -9,7 +9,29 @@ import EditCard from './EditCard.js';
 import axios from 'axios';
 import "react-table/react-table.css";
 
+import checkboxHOC from "react-table/lib/hoc/selectTable";
+const CheckboxTable = checkboxHOC(ReactTable);
+
 let lib = require('../utils/library.js');
+
+// Adds a PK column to each row for the selection part
+function addPkAsId(originalData) {
+    if (!originalData) {
+        return [];
+    }
+
+    const data = originalData.map(item => {
+        // using chancejs to generate guid
+        // shortid is probably better but seems to have performance issues
+        // on codesandbox.io
+        const _id = [item.playerid, item.seasonid];
+        return {
+            _id,
+            ...item
+        };
+    });
+    return data;
+}
 
 class DataTable extends Component {
     constructor(props) {
@@ -18,12 +40,13 @@ class DataTable extends Component {
             dbIndex: props.dbIndex,
             table: props.table,
             columns: props.columns,
-            data: props.data,
+            data: [],
             url: props.url,
             dbPrimaryKeys: [],
             tablePrimaryKeys: [],
             editFeatureEnabled: false,
-            editFeatureChangesMade: {}
+            editFeatureChangesMade: {},
+            selection: []
         };
         this.renderEditableCell = this.renderEditableCell.bind(this);
     }
@@ -34,7 +57,7 @@ class DataTable extends Component {
             table: newProps.table,
             columns: newProps.columns,
             url: newProps.url,
-            data: newProps.data,
+            data: addPkAsId(newProps.data),
             editFeatureEnabled: this.state.table !== newProps.table ? false : this.state.editFeatureEnabled
         });
 
@@ -281,6 +304,39 @@ class DataTable extends Component {
         );
     }
 
+    toggleAll = () => {
+        // Intentioanlly removed the functionality to select all, can only unselect all
+        const selection = [];
+        this.setState({ selection });
+    };
+
+    toggleSelection = (key, shift, row) => {
+        // start off with the existing state
+        let selection = [...this.state.selection];
+        const keyIndex = selection.indexOf(key);
+        // check to see if the key exists
+        if (keyIndex >= 0) {
+            // it does exist so we will remove it using destructing
+            selection = [
+                ...selection.slice(0, keyIndex),
+                ...selection.slice(keyIndex + 1)
+            ];
+        } else {
+            // it does not exist so add it
+            selection.push(key);
+        }
+
+        this.setState({ selection });
+    };
+
+    isSelected = key => {
+        return this.state.selection.includes(key);
+    };
+
+    logSelection = () => {
+        console.log("selection:", JSON.stringify(this.state.selection));
+    };
+
     render() {
         //const classes = this.props.classes;
         let { columns, data } = this.state;
@@ -313,17 +369,47 @@ class DataTable extends Component {
             });
         }
 
+        const { toggleSelection, isSelected, logSelection, toggleAll } = this;
+
+        const checkboxProps = {
+            isSelected,
+            toggleSelection,
+            toggleAll,
+            selectType: "checkbox",
+            getTrProps: (s, r) => {
+                // someone asked for an example of a background color change
+                // here it is...
+                let selected = false;
+                try {
+                    selected = this.isSelected(r.original._id);
+                } catch (error) {
+                    selected = false;
+                    //console.log("error:" + String(error));
+                }
+                return {
+                    style: {
+                        backgroundColor: selected ? "lightpink" : "inherit",
+                        textDecoration: selected ? "line-through" : "none"
+                        // color: selected ? 'white' : 'inherit',
+                    }
+                };
+            }
+        };
+
         // render()
         return (
             <div>
-                <ReactTable
+                <CheckboxTable
                     data={data}
                     columns={parsedColumns}
                     defaultPageSize={10} className="-striped -highlight"
                     pageSizeOptions={[10, 50, 100, 200, 500, 1000]}
                     previousText="Previous Page"
                     nextText="Next Page"
-                    noDataText={this.props.noDataText} />
+                    noDataText={this.props.noDataText}
+                    {...checkboxProps} />
+
+                <button onClick={logSelection}>Get Selected Rows' PKs</button>
 
                 <div className={this.props.classes.cardGroups} >
                     <EditCard
