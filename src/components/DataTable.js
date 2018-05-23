@@ -10,7 +10,7 @@ import axios from 'axios';
 import "react-table/react-table.css";
 
 import checkboxHOC from "react-table/lib/hoc/selectTable";
-const CheckboxTable = checkboxHOC(ReactTable);
+let CheckboxTable = checkboxHOC(ReactTable);
 
 let lib = require('../utils/library.js');
 
@@ -20,11 +20,11 @@ function addPkAsId(originalData) {
         return [];
     }
 
-    const data = originalData.map(item => {
+    let data = originalData.map(item => {
         // using chancejs to generate guid
         // shortid is probably better but seems to have performance issues
         // on codesandbox.io
-        const _id = [item.playerid, item.seasonid];
+        let _id = [item.playerid, item.seasonid];
         return {
             _id,
             ...item
@@ -306,14 +306,14 @@ class DataTable extends Component {
 
     toggleAll = () => {
         // Intentioanlly removed the functionality to select all, can only unselect all
-        const selection = [];
+        let selection = [];
         this.setState({ selection });
     };
 
     toggleSelection = (key, shift, row) => {
         // start off with the existing state
         let selection = [...this.state.selection];
-        const keyIndex = selection.indexOf(key);
+        let keyIndex = selection.indexOf(key);
         // check to see if the key exists
         if (keyIndex >= 0) {
             // it does exist so we will remove it using destructing
@@ -338,7 +338,7 @@ class DataTable extends Component {
     };
 
     render() {
-        //const classes = this.props.classes;
+        //let classes = this.props.classes;
         let { columns, data } = this.state;
         let parsedColumns = [];
 
@@ -369,9 +369,9 @@ class DataTable extends Component {
             });
         }
 
-        const { toggleSelection, isSelected, logSelection, toggleAll } = this;
+        let { toggleSelection, isSelected, logSelection, toggleAll } = this;
 
-        const checkboxProps = {
+        let checkboxProps = {
             isSelected,
             toggleSelection,
             toggleAll,
