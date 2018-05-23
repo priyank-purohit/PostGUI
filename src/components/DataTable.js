@@ -291,6 +291,8 @@ class DataTable extends Component {
                         currentChanges[this.state.table][changedColumnName][changedRowPkStr]["primaryKey"] = changedRowPk;
                         currentChanges[this.state.table][changedColumnName][changedRowPkStr]["rowIndex"] = changedRowIndex;
 
+                        console.log(JSON.stringify(currentChanges));
+
                         this.setState({
                             data: data,
                             editFeatureChangesMade: currentChanges
@@ -326,7 +328,32 @@ class DataTable extends Component {
             rowsStrikedOut.push(key);
         }
 
-        this.setState({ rowsStrikedOut });
+        // Toggle Selection in editDbFeatureChanges state ...
+        // Create a PK {} and STRING
+        let changedRowPk = {};
+        let changedRowPkStr = key.join("");
+        for (let i = 0; i < this.state.tablePrimaryKeys.length; i++) {
+            changedRowPk[this.state.tablePrimaryKeys[i]] = key[i];
+        }
+
+        let currentChanges = this.state.editFeatureChangesMade;
+        // Create the JSON objects if they do not exist
+        if (!currentChanges[this.state.table]) { currentChanges[this.state.table] = {} }
+        if (!currentChanges[this.state.table]["id"]) { currentChanges[this.state.table]["id"] = {} }
+        if (!currentChanges[this.state.table]["id"][changedRowPkStr]) { currentChanges[this.state.table]["id"][changedRowPkStr] = {} }
+
+
+        currentChanges[this.state.table]["id"][changedRowPkStr]["primaryKey"] = changedRowPk;
+        // Mark it to delete, or unmark it
+        console.log("Current = " + String(currentChanges[this.state.table]["id"][changedRowPkStr]["delete"]));
+        currentChanges[this.state.table]["id"][changedRowPkStr]["delete"] = !currentChanges[this.state.table]["id"][changedRowPkStr]["delete"];
+
+        console.log("New = " + String(currentChanges[this.state.table]["id"][changedRowPkStr]["delete"]));
+
+        this.setState({
+            rowsStrikedOut,
+            editFeatureChangesMade: currentChanges
+        });
     };
 
     isSelected = key => {
