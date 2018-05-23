@@ -308,26 +308,16 @@ class DataTable extends Component {
 
     toggleAll = () => {
         // Intentioanlly removed the functionality to select all, can only unselect all
-        let rowsStrikedOut = [];
-        this.setState({ rowsStrikedOut });
+        let keysChanged = Object.keys(this.state.editFeatureChangesMade[this.state.table]["id"]);
+        let changeCount = keysChanged.length;
+
+        // Iterate over all keys (all changes individually)
+        for (let i = 0; i < changeCount; i++) {
+            this.deleteChange("id", keysChanged[i], true);
+        }
     };
 
     toggleSelection = (key, shift, row) => {
-        // start off with the existing state
-        let rowsStrikedOut = [...this.state.rowsStrikedOut];
-        let keyIndex = rowsStrikedOut.indexOf(key);
-        // check to see if the key exists
-        if (keyIndex >= 0) {
-            // it does exist so we will remove it using destructing
-            rowsStrikedOut = [
-                ...rowsStrikedOut.slice(0, keyIndex),
-                ...rowsStrikedOut.slice(keyIndex + 1)
-            ];
-        } else {
-            // it does not exist so add it
-            rowsStrikedOut.push(key);
-        }
-
         // Toggle Selection in editDbFeatureChanges state ...
         // Create a PK {} and STRING
         let changedRowPk = {};
@@ -343,26 +333,29 @@ class DataTable extends Component {
         if (!currentChanges[this.state.table]["id"][changedRowPkStr]) { currentChanges[this.state.table]["id"][changedRowPkStr] = {} }
 
 
-        currentChanges[this.state.table]["id"][changedRowPkStr]["primaryKey"] = changedRowPk;
-        // Mark it to delete, or unmark it
-        console.log("Current = " + String(currentChanges[this.state.table]["id"][changedRowPkStr]["delete"]));
-        currentChanges[this.state.table]["id"][changedRowPkStr]["delete"] = !currentChanges[this.state.table]["id"][changedRowPkStr]["delete"];
-
-        console.log("New = " + String(currentChanges[this.state.table]["id"][changedRowPkStr]["delete"]));
-
+        if (currentChanges[this.state.table]["id"][changedRowPkStr]["delete"]) {
+            this.deleteChange("id", changedRowPkStr, true);
+        } else {
+            currentChanges[this.state.table]["id"][changedRowPkStr]["primaryKey"] = changedRowPk;
+            currentChanges[this.state.table]["id"][changedRowPkStr]["delete"] = !currentChanges[this.state.table]["id"][changedRowPkStr]["delete"];
+        }
         this.setState({
-            rowsStrikedOut,
             editFeatureChangesMade: currentChanges
         });
     };
 
     isSelected = key => {
-        return this.state.rowsStrikedOut.includes(key);
+        if (this.state.editFeatureChangesMade === {} ||
+            this.state.editFeatureChangesMade[this.state.table] === undefined ||
+            this.state.editFeatureChangesMade[this.state.table]["id"] === undefined) {
+            return false;
+        }
+        return Object.keys(this.state.editFeatureChangesMade[this.state.table]["id"]).includes(key.join(""));
     };
 
-    logSelection = () => {
-        console.log("rowsStrikedOut:", JSON.stringify(this.state.rowsStrikedOut));
-    };
+    // logSelection = () => {
+    //     console.log("rowsStrikedOut:", JSON.stringify(this.state.rowsStrikedOut));
+    // };
 
     render() {
         //let classes = this.props.classes;

@@ -158,7 +158,7 @@ class EditCard extends Component {
                 let primaryKey = change[Object.keys(change)[ii]]['primaryKey'];
                 let error = change[Object.keys(change)[ii]]['error'];
 
-                if (1 === 1 || markForDeletion === true || (oldValue && newValue)) {
+                if (markForDeletion === true || (oldValue && newValue)) {
                     listItems.push(
                         <ListItem key={String(i) + String(ii)}>
                             <ListItemAvatar>
