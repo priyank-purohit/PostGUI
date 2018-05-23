@@ -399,7 +399,7 @@ class DataTable extends Component {
         // render()
         return (
             <div>
-                <CheckboxTable
+                {this.state.editFeatureEnabled ? (<CheckboxTable
                     data={data}
                     columns={parsedColumns}
                     defaultPageSize={10} className="-striped -highlight"
@@ -407,7 +407,7 @@ class DataTable extends Component {
                     previousText="Previous Page"
                     nextText="Next Page"
                     noDataText={this.props.noDataText}
-                    {...checkboxProps} />
+                    {...checkboxProps} />) : (<div></div>)}
 
                 <button onClick={logSelection}>Get Selected Rows' PKs</button>
 
