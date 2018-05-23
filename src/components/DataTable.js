@@ -399,15 +399,24 @@ class DataTable extends Component {
         // render()
         return (
             <div>
-                {this.state.editFeatureEnabled ? (<CheckboxTable
-                    data={data}
-                    columns={parsedColumns}
-                    defaultPageSize={10} className="-striped -highlight"
-                    pageSizeOptions={[10, 50, 100, 200, 500, 1000]}
-                    previousText="Previous Page"
-                    nextText="Next Page"
-                    noDataText={this.props.noDataText}
-                    {...checkboxProps} />) : (<div></div>)}
+                {this.state.editFeatureEnabled ? (
+                    <CheckboxTable
+                        data={data}
+                        columns={parsedColumns}
+                        defaultPageSize={10} className="-striped -highlight"
+                        pageSizeOptions={[10, 50, 100, 200, 500, 1000]}
+                        previousText="Previous Page"
+                        nextText="Next Page"
+                        noDataText={this.props.noDataText}
+                        {...checkboxProps} />) : (
+                        <ReactTable
+                            data={data}
+                            columns={parsedColumns}
+                            defaultPageSize={10} className="-striped -highlight"
+                            pageSizeOptions={[10, 50, 100, 200, 500, 1000]}
+                            previousText="Previous Page"
+                            nextText="Next Page"
+                            noDataText={this.props.noDataText} />)}
 
                 <button onClick={logSelection}>Get Selected Rows' PKs</button>
 
