@@ -118,11 +118,13 @@ class DataTable extends Component {
         if (noRestore === false) {
             // Restore original value in state.data
             let originalValue = tempChanges[this.state.table][column][key]["oldValue"];
-            let data = this.state.data;
-            data[tempChanges[this.state.table][column][key]["rowIndex"]][column] = originalValue;
-            this.setState({
-                data: data
-            });
+            if (originalValue) {
+                let data = this.state.data;
+                data[tempChanges[this.state.table][column][key]["rowIndex"]][column] = originalValue;
+                this.setState({
+                    data: data
+                });
+            }
         }
 
         // Delete the change from list of changes
