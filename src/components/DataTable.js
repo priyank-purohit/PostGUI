@@ -358,10 +358,6 @@ class DataTable extends Component {
         return Object.keys(this.state.editFeatureChangesMade[this.state.table]["id"]).includes(key.join(""));
     };
 
-    // logSelection = () => {
-    //     console.log("rowsStrikedOut:", JSON.stringify(this.state.rowsStrikedOut));
-    // };
-
     render() {
         //let classes = this.props.classes;
         let { columns, data } = this.state;
@@ -394,7 +390,7 @@ class DataTable extends Component {
             });
         }
 
-        let { toggleSelection, isSelected, logSelection, toggleAll } = this;
+        let { toggleSelection, isSelected, toggleAll } = this;
 
         let checkboxProps = {
             isSelected,
