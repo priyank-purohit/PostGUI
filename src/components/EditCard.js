@@ -158,30 +158,28 @@ class EditCard extends Component {
                 let primaryKey = change[Object.keys(change)[ii]]['primaryKey'];
                 let error = change[Object.keys(change)[ii]]['error'];
 
-                if (markForDeletion === true || (oldValue && newValue)) {
-                    listItems.push(
-                        <ListItem key={String(i) + String(ii)}>
-                            <ListItemAvatar>
-                                {error ? (<Avatar className={this.props.classes.errorAvatar}><CloseIcon /></Avatar>) : (<Avatar> <CreateIcon /> </Avatar>)}
-                            </ListItemAvatar>
-                            {
-                                markForDeletion ? (
+                listItems.push(
+                    <ListItem key={String(i) + String(ii)}>
+                        <ListItemAvatar>
+                            {error ? (<Avatar className={this.props.classes.errorAvatar}><CloseIcon /></Avatar>) : (<Avatar> <CreateIcon /> </Avatar>)}
+                        </ListItemAvatar>
+                        {
+                            markForDeletion ? (
+                                <ListItemText
+                                    primary={"Delete row"}
+                                    secondary={"Where " + this.primaryKeyStringify(primaryKey)} />
+                            ) : (
                                     <ListItemText
-                                        primary={"Delete row"}
-                                        secondary={"Where " + this.primaryKeyStringify(primaryKey)} />
-                                ) : (
-                                        <ListItemText
-                                            primary={column + " column changed"}
-                                            secondary={"From '" + oldValue + "' to '" + newValue + "' where " + this.primaryKeyStringify(primaryKey)} />
-                                    )
-                            }
-                            <ListItemSecondaryAction onClick={this.props.deleteChange.bind(this, column, Object.keys(change)[ii], false)}>
-                                <IconButton aria-label="Delete">
-                                    <DeleteIcon />
-                                </IconButton>
-                            </ListItemSecondaryAction>
-                        </ListItem>);
-                }
+                                        primary={column + " column changed"}
+                                        secondary={"From '" + oldValue + "' to '" + newValue + "' where " + this.primaryKeyStringify(primaryKey)} />
+                                )
+                        }
+                        <ListItemSecondaryAction onClick={this.props.deleteChange.bind(this, column, Object.keys(change)[ii], false)}>
+                            <IconButton aria-label="Delete">
+                                <DeleteIcon />
+                            </IconButton>
+                        </ListItemSecondaryAction>
+                    </ListItem>);
             }
         }
         return listItems;
