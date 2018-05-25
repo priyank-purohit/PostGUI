@@ -198,7 +198,7 @@ class DataTable extends Component {
                 let newValue = change["newValue"];
                 let deleteRow = change["delete"];
 
-                if (deleteRow === false && String(oldValue) !== String(newValue)) { // There is an actual change, so submit it
+                if (deleteRow === false && String(oldValue) !== String(newValue)) { // UPDATE SINGLE CELL VALUE
                     // Create the URL, add in the new value as URL param
                     let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table + "?and=(" + this.primaryKeyAsUrlParam(primaryKey) + ")";
 
@@ -233,7 +233,7 @@ class DataTable extends Component {
                                 }, 5000);
                             });
                         });
-                } else if (deleteRow) {
+                } else if (deleteRow) { // DELETE ROW FEATURE
                     console.log("\n\n\nDeleting a row");
                     // Create the URL, add in the new value as URL param
                     let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table + "?and=(" + this.primaryKeyAsUrlParam(primaryKey) + ")";
