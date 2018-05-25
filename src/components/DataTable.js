@@ -224,7 +224,7 @@ class DataTable extends Component {
                 let newValue = change["newValue"];
                 let deleteRow = change["delete"];
 
-                if (deleteRow === false && String(oldValue) !== String(newValue)) { // UPDATE SINGLE CELL VALUE
+                if (deleteRow !== true && String(oldValue) !== String(newValue)) { // UPDATE SINGLE CELL VALUE
                     // Create the URL, add in the new value as URL param
                     let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table + "?and=(" + this.primaryKeyAsUrlParam(primaryKey) + ")";
 
