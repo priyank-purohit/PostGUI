@@ -291,7 +291,10 @@ class DataTable extends Component {
                         currentChanges[this.state.table][changedColumnName][changedRowPkStr]["primaryKey"] = changedRowPk;
                         currentChanges[this.state.table][changedColumnName][changedRowPkStr]["rowIndex"] = changedRowIndex;
 
-                        console.log(JSON.stringify(currentChanges));
+                        // If the newly made change causes the old and new values to be the same, then this change is useless and should be deleted
+                        if (String(currentChanges[this.state.table][changedColumnName][changedRowPkStr]["oldValue"]) === String(newCellValue)) {
+                            this.deleteChange(changedColumnName, changedRowPkStr, true);
+                        }
 
                         this.setState({
                             data: data,
