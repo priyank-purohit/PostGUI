@@ -307,13 +307,15 @@ class DataTable extends Component {
     }
 
     toggleAll = () => {
-        // Intentioanlly removed the functionality to select all, can only unselect all
-        let keysChanged = Object.keys(this.state.editFeatureChangesMade[this.state.table]["id"]);
-        let changeCount = keysChanged.length;
+        if (this.state.editFeatureChangesMade && this.state.editFeatureChangesMade[this.state.table] && this.state.editFeatureChangesMade[this.state.table]["id"]) {
+            // Intentioanlly removed the functionality to select all, can only unselect all
+            let keysChanged = Object.keys(this.state.editFeatureChangesMade[this.state.table]["id"]);
+            let changeCount = keysChanged.length;
 
-        // Iterate over all keys (all changes individually)
-        for (let i = 0; i < changeCount; i++) {
-            this.deleteChange("id", keysChanged[i], true);
+            // Iterate over all keys (all changes individually)
+            for (let i = 0; i < changeCount; i++) {
+                this.deleteChange("id", keysChanged[i], true);
+            }
         }
     };
 
