@@ -313,6 +313,7 @@ class DataTable extends Component {
         );
     }
 
+    // Unchecks all rows, never sets all to be checked
     toggleAll = () => {
         if (this.state.editFeatureChangesMade && this.state.editFeatureChangesMade[this.state.table] && this.state.editFeatureChangesMade[this.state.table]["id"]) {
             // Intentioanlly removed the functionality to select all, can only unselect all
@@ -326,13 +327,13 @@ class DataTable extends Component {
         }
     };
 
-    toggleSelection = (key, shift, row) => {
-        // Toggle Selection in editDbFeatureChanges state ...
+    // Toggles single rows' status from checked to unchecked (delete the change)
+    toggleSelection = (primaryKey, shift, row) => {
         // Create a PK {} and STRING
         let changedRowPk = {};
-        let changedRowPkStr = key.join("");
+        let changedRowPkStr = primaryKey.join("");
         for (let i = 0; i < this.state.tablePrimaryKeys.length; i++) {
-            changedRowPk[this.state.tablePrimaryKeys[i]] = key[i];
+            changedRowPk[this.state.tablePrimaryKeys[i]] = primaryKey[i];
         }
 
         let currentChanges = this.state.editFeatureChangesMade;
@@ -341,19 +342,24 @@ class DataTable extends Component {
         currentChanges[this.state.table]["id"] = currentChanges[this.state.table]["id"] || {};
         currentChanges[this.state.table]["id"][changedRowPkStr] = currentChanges[this.state.table]["id"][changedRowPkStr] || {};
 
-
+        // Mark the row for deletion (set delete property true), or delete the change from editFeatureChangesMade state object
         if (currentChanges[this.state.table]["id"][changedRowPkStr]["delete"]) {
+            // the row was marked for deletion, and user unchecked the row
             this.deleteChange("id", changedRowPkStr, true);
         } else {
+            // the row was not marked for deletion, but user wants to mark it for deletion
             currentChanges[this.state.table]["id"][changedRowPkStr]["primaryKey"] = changedRowPk;
             currentChanges[this.state.table]["id"][changedRowPkStr]["delete"] = !currentChanges[this.state.table]["id"][changedRowPkStr]["delete"];
         }
+
         this.setState({
             editFeatureChangesMade: currentChanges
         });
     };
 
+    // Returns true iff row identified by KEY is marked for deletion in editFeatureChangesMade
     isSelected = key => {
+        // Change doesn't even exist, so return false
         if (this.state.editFeatureChangesMade === {} ||
             this.state.editFeatureChangesMade[this.state.table] === undefined ||
             this.state.editFeatureChangesMade[this.state.table]["id"] === undefined) {
@@ -394,8 +400,8 @@ class DataTable extends Component {
             });
         }
 
+        // Prepare for CheckboxTable
         let { toggleSelection, isSelected, toggleAll } = this;
-
         let checkboxProps = {
             isSelected,
             toggleSelection,
@@ -421,7 +427,7 @@ class DataTable extends Component {
             }
         };
 
-        // render()
+        // render() return
         return (
             <div>
                 {this.state.editFeatureEnabled ? (
