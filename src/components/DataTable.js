@@ -415,13 +415,11 @@ class DataTable extends Component {
                     selected = this.isSelected(r.original._id);
                 } catch (error) {
                     selected = false;
-                    //console.log("error:" + String(error));
                 }
                 return {
                     style: {
                         backgroundColor: selected ? "lightpink" : "inherit",
                         textDecoration: selected ? "line-through" : "none"
-                        // color: selected ? 'white' : 'inherit',
                     }
                 };
             }
