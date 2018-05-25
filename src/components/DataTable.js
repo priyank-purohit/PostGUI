@@ -14,24 +14,6 @@ let CheckboxTable = checkboxHOC(ReactTable);
 
 let lib = require('../utils/library.js');
 
-// Adds a PK column to each row for the selection part
-function addPkAsId(originalData) {
-    if (!originalData) {
-        return [];
-    }
-
-    let data = originalData.map(item => {
-        // using chancejs to generate guid
-        // shortid is probably better but seems to have performance issues
-        // on codesandbox.io
-        let _id = [item.playerid, item.seasonid];
-        return {
-            _id,
-            ...item
-        };
-    });
-    return data;
-}
 
 class DataTable extends Component {
     constructor(props) {
@@ -57,7 +39,7 @@ class DataTable extends Component {
             table: newProps.table,
             columns: newProps.columns,
             url: newProps.url,
-            data: addPkAsId(newProps.data),
+            data: this.addPkAsId(newProps.data),
             editFeatureEnabled: this.state.table !== newProps.table ? false : this.state.editFeatureEnabled
         });
 
@@ -71,6 +53,25 @@ class DataTable extends Component {
                 }
             }
         }
+    }
+
+    // Adds a PK column to each row for the selection part 
+    addPkAsId(originalData) {
+        if (!originalData) {
+            return [];
+        }
+
+        let data = originalData.map(item => {
+            // using chancejs to generate guid
+            // shortid is probably better but seems to have performance issues
+            // on codesandbox.io
+            let _id = [item.playerid, item.seasonid];
+            return {
+                _id,
+                ...item
+            };
+        });
+        return data;
     }
 
     // Allows EditCard.js to change the state here
