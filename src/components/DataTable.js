@@ -116,7 +116,7 @@ class DataTable extends Component {
 
     // Given a COLUMN and KEY, deletes the change from the state's changesMade value (for individual deletion of changes)
     // If noRestore is true, it does not try to restore the original value
-    deleteChange(column, key, noRestore = false) {
+    deleteChange(column, key, noRestore) {
         let tempChanges = this.state.editFeatureChangesMade;
 
         if (noRestore === false) {
@@ -129,6 +129,32 @@ class DataTable extends Component {
                     data: data
                 });
             }
+        }
+
+        if (column === "id" && key && noRestore === "delete") {
+            // Delete the row from state.data
+            // Restore original value in state.data if it is available
+
+            let dataLength = this.state.data.length;
+            let rowToDeleteIndex = null;
+            console.log("dataLength", dataLength);
+
+            for (let i = 0; i < dataLength; i++) {
+                console.log("id", this.state.data[i]["_id"], this.state.data[i]["_id"].join(""), key, this.state.data[i]["_id"].join("") === key);
+                if (this.state.data[i]["_id"].join("") === key) {
+                    console.log("Row match", i);
+                    rowToDeleteIndex = i;
+                    break;
+                }
+            }
+
+            console.log("Need to delete row #", rowToDeleteIndex);
+
+            let data = this.state.data;
+            data.splice(rowToDeleteIndex, 1);
+            this.setState({
+                data: data
+            });
         }
 
         // Delete the change from list of changes
@@ -243,7 +269,7 @@ class DataTable extends Component {
                     axios.delete(url, {}, { headers: { Prefer: 'return=representation' } })
                         .then((response) => {
                             console.log("DELETE RESPONSE = ", JSON.stringify(response));
-                            this.deleteChange("id", keyChanged, true);
+                            this.deleteChange("id", keyChanged, "delete");
                         })
                         .catch((error) => {
                             console.log("ERROR RESP: " + String(error));
