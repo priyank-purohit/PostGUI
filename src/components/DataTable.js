@@ -220,7 +220,7 @@ class DataTable extends Component {
                         .catch((error) => {
                             console.log("PATCH ERROR RESP:" + String(error));
                             this.setChangeError(columnChanged, keyChanged, true);
-                            // Show error in top-right Snack-Bar
+                            // Show error in Snack-Bar
                             this.setState({
                                 snackBarVisibility: true,
                                 snackBarMessage: "Database update failed."
@@ -248,7 +248,7 @@ class DataTable extends Component {
                         .catch((error) => {
                             console.log("ERROR RESP: " + String(error));
                             this.setChangeError("id", keyChanged, true);
-                            // Show error in top-right Snack-Bar
+                            // Show error in Snack-Bar
                             this.setState({
                                 snackBarVisibility: true,
                                 snackBarMessage: "Row delete request failed."
@@ -265,6 +265,18 @@ class DataTable extends Component {
                 } else {
                     // Tell user that the change was not actually detected... and that they should submit a bug
                     console.log("Tell user that the change was not actually detected... and that they should submit a bug");
+                    // Show error in Snack-Bar
+                    this.setState({
+                        snackBarVisibility: true,
+                        snackBarMessage: "Change was not detected."
+                    }, () => {
+                        this.timer = setTimeout(() => {
+                            this.setState({
+                                snackBarVisibility: false,
+                                snackBarMessage: "Unknown error"
+                            });
+                        }, 2500);
+                    });
                 }
             }
         }
