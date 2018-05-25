@@ -88,7 +88,7 @@ class DataTable extends Component {
         });
     }
 
-    // Deletes all changes in the current table
+    // Deletes all changes in the current table (for Remove All button functionality)
     deleteTableChanges() {
         let tempChanges = this.state.editFeatureChangesMade[this.state.table];
         let columnsChanged = Object.keys(tempChanges);
@@ -110,8 +110,8 @@ class DataTable extends Component {
         }
     }
 
-    // Given a COLUMN and KEY, deletes the change from the state's changesMade value
-    // If noRestore is true, it does not restore the original value (used for successfully submitted changes)
+    // Given a COLUMN and KEY, deletes the change from the state's changesMade value (for individual deletion of changes)
+    // If noRestore is true, it does not try to restore the original value
     deleteChange(column, key, noRestore = false) {
         let tempChanges = this.state.editFeatureChangesMade;
 
@@ -143,7 +143,7 @@ class DataTable extends Component {
         });
     }
 
-    // Given a COLUMN and KEY, toggles the error code for a change
+    // Given a COLUMN and KEY, toggles the error code for a change (when server responds with error)
     setChangeError(column, key, error) {
         let tempChanges = this.state.editFeatureChangesMade;
 
@@ -155,9 +155,8 @@ class DataTable extends Component {
         });
     }
 
-
-    // Converts the JSON object for PK into a string into part of a PostgREST compliant URL
-    primaryKeyParams(primaryKey) {
+    // Converts the JSON object for PK into a string and into part of a PostgREST compliant URL
+    primaryKeyAsUrlParam(primaryKey) {
         let keys = Object.keys(primaryKey);
         let stringified = "";
 
@@ -168,19 +167,22 @@ class DataTable extends Component {
         return stringified;
     }
 
-    // Makes PATCH calls to submit current table's changes + deletes them as the reqs are successful. Keeps track of all changes in the updates table.
-    // Marks any changes that are not successful.
+    // Makes PATCH requests to submit current table's changes + 
+    // deletes them from local list of changes as the reqs are successful.
+    // TODO: Keeps track of all changes in the updates table.
+    // Also marks any changes that are not successful.
     submitChanges() {
         //
         let currentChanges = this.state.editFeatureChangesMade[this.state.table];
 
+        // Nothing to submit
         if (currentChanges === null || currentChanges === undefined) {
             return;
         }
 
-        for (let i = 0; i < Object.keys(currentChanges).length; i++) {
+        for (let i = 0; i < Object.keys(currentChanges).length; i++) { // For all columns changed
             let currentColumnChanges = currentChanges[Object.keys(currentChanges)[i]];
-            for (let ii = 0; ii < Object.keys(currentColumnChanges).length; ii++) {
+            for (let ii = 0; ii < Object.keys(currentColumnChanges).length; ii++) { // For all rows of a column changed
                 let change = currentChanges[Object.keys(currentChanges)[i]][Object.keys(currentColumnChanges)[ii]];
 
                 let primaryKey = change["primaryKey"];
@@ -189,24 +191,11 @@ class DataTable extends Component {
                 let oldValue = change["oldValue"];
                 let newValue = change["newValue"];
 
-                if (String(oldValue) !== String(newValue)) { // There is a change...
+                if (String(oldValue) !== String(newValue)) { // There is an actual change, so submit it
                     // Create the URL, add in the new value as URL param
-                    let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table + "?and=(" + this.primaryKeyParams(primaryKey) + ")";
+                    let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table + "?and=(" + this.primaryKeyAsUrlParam(primaryKey) + ")";
 
-                    // Data type assignment for newValue based on the data type of oldValue
-                    if (String(newValue) === "") {
-                        newValue = null;
-                    } else {
-                        if (typeof oldValue === 'string') {
-                            newValue = String(newValue);
-                        } else if (typeof oldValue === 'number') {
-                            newValue = Number(newValue);
-                        } else if (typeof oldValue === 'boolean') {
-                            newValue = Boolean(newValue);
-                        }
-                    }
-
-                    // Patch body
+                    // Patch HTTP request
                     let patchReqBody = {};
                     patchReqBody[columnChanged] = newValue;
 
@@ -261,6 +250,20 @@ class DataTable extends Component {
                     let oldCellValue = data[changedRowIndex][changedColumnName];
                     let newCellValue = e.target.innerHTML;
 
+                    // Data type assignment for newValue based on the data type of oldValue
+                    // TODO: this should be done when a change is detected?
+                    if (String(newCellValue) === "") {
+                        newCellValue = null;
+                    } else {
+                        if (typeof oldCellValue === 'string') {
+                            newCellValue = String(newCellValue);
+                        } else if (typeof oldCellValue === 'number') {
+                            newCellValue = Number(newCellValue);
+                        } else if (typeof oldCellValue === 'boolean') {
+                            newCellValue = Boolean(newCellValue);
+                        }
+                    }
+
                     // ToDo: when original value is NULL, and you don't change it, it sets it to "" from NULL... prevent it
                     if (String(oldCellValue) !== String(newCellValue) && !(String(oldCellValue) === "null" && String(newCellValue) === "") && String(newCellValue).indexOf("<br>") < 0 && String(newCellValue).indexOf("<div>") < 0) {
                         let changedRowPk = {};
@@ -279,20 +282,20 @@ class DataTable extends Component {
                         let currentChanges = this.state.editFeatureChangesMade;
 
                         // Create the JSON objects if they do not exist
-                        if (!currentChanges[this.state.table]) { currentChanges[this.state.table] = {} }
-                        if (!currentChanges[this.state.table][changedColumnName]) { currentChanges[this.state.table][changedColumnName] = {} }
-                        if (!currentChanges[this.state.table][changedColumnName][changedRowPkStr]) { currentChanges[this.state.table][changedColumnName][changedRowPkStr] = {} }
+                        currentChanges[this.state.table] = currentChanges[this.state.table] || {};
+                        currentChanges[this.state.table][changedColumnName] = currentChanges[this.state.table][changedColumnName] || {};
+                        currentChanges[this.state.table][changedColumnName][changedRowPkStr] = currentChanges[this.state.table][changedColumnName][changedRowPkStr] || {};
 
                         // Keep track of the original* value.
                         // * Original means the value in the db on server
-                        if (!currentChanges[this.state.table][changedColumnName][changedRowPkStr]["oldValue"]) { currentChanges[this.state.table][changedColumnName][changedRowPkStr]["oldValue"] = oldCellValue; }
+                        currentChanges[this.state.table][changedColumnName][changedRowPkStr]["oldValue"] = currentChanges[this.state.table][changedColumnName][changedRowPkStr]["oldValue"] || oldCellValue;
 
                         // Insert the updates + keep track of the PK
                         currentChanges[this.state.table][changedColumnName][changedRowPkStr]["newValue"] = newCellValue;
                         currentChanges[this.state.table][changedColumnName][changedRowPkStr]["primaryKey"] = changedRowPk;
                         currentChanges[this.state.table][changedColumnName][changedRowPkStr]["rowIndex"] = changedRowIndex;
 
-                        // If the newly made change causes the old and new values to be the same, then this change is useless and should be deleted
+                        // If the newly made change causes the old and new values to be the same, then this change should be deleted altogether
                         if (String(currentChanges[this.state.table][changedColumnName][changedRowPkStr]["oldValue"]) === String(newCellValue)) {
                             this.deleteChange(changedColumnName, changedRowPkStr, true);
                         }
@@ -334,9 +337,9 @@ class DataTable extends Component {
 
         let currentChanges = this.state.editFeatureChangesMade;
         // Create the JSON objects if they do not exist
-        if (!currentChanges[this.state.table]) { currentChanges[this.state.table] = {} }
-        if (!currentChanges[this.state.table]["id"]) { currentChanges[this.state.table]["id"] = {} }
-        if (!currentChanges[this.state.table]["id"][changedRowPkStr]) { currentChanges[this.state.table]["id"][changedRowPkStr] = {} }
+        currentChanges[this.state.table] = currentChanges[this.state.table] || {};
+        currentChanges[this.state.table]["id"] = currentChanges[this.state.table]["id"] || {};
+        currentChanges[this.state.table]["id"][changedRowPkStr] = currentChanges[this.state.table]["id"][changedRowPkStr] || {};
 
 
         if (currentChanges[this.state.table]["id"][changedRowPkStr]["delete"]) {
