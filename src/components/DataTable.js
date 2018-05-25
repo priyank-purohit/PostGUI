@@ -116,7 +116,7 @@ class DataTable extends Component {
         let tempChanges = this.state.editFeatureChangesMade;
 
         if (noRestore === false) {
-            // Restore original value in state.data
+            // Restore original value in state.data if it is available
             let originalValue = tempChanges[this.state.table][column][key]["oldValue"];
             if (originalValue) {
                 let data = this.state.data;
