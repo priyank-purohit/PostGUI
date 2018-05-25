@@ -3,6 +3,10 @@ import ReactTable from 'react-table';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 
+import Snackbar from 'material-ui/Snackbar';
+import IconButton from 'material-ui/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+
 import Downloads from './Downloads.js';
 import EditCard from './EditCard.js';
 
@@ -192,8 +196,9 @@ class DataTable extends Component {
                 let keyChanged = Object.keys(currentColumnChanges)[ii];
                 let oldValue = change["oldValue"];
                 let newValue = change["newValue"];
+                let deleteRow = change["delete"];
 
-                if (String(oldValue) !== String(newValue)) { // There is an actual change, so submit it
+                if (deleteRow === false && String(oldValue) !== String(newValue)) { // There is an actual change, so submit it
                     // Create the URL, add in the new value as URL param
                     let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table + "?and=(" + this.primaryKeyAsUrlParam(primaryKey) + ")";
 
@@ -201,7 +206,7 @@ class DataTable extends Component {
                     let patchReqBody = {};
                     patchReqBody[columnChanged] = newValue;
 
-                    console.log("Submitting change: PATCH: " + url);
+                    console.log("\n\n\nSubmitting change: PATCH: " + url);
                     console.log("Change=" + JSON.stringify(change));
                     console.log("PATCH req BODY=" + JSON.stringify({ [columnChanged]: newValue }));
 
@@ -228,6 +233,35 @@ class DataTable extends Component {
                                 }, 5000);
                             });
                         });
+                } else if (deleteRow) {
+                    console.log("\n\n\nDeleting a row");
+                    // Create the URL, add in the new value as URL param
+                    let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table + "?and=(" + this.primaryKeyAsUrlParam(primaryKey) + ")";
+                    console.log("DELETE url = " + url);
+
+                    // Send the DELETE request and check response
+                    axios.delete(url, {}, { headers: { Prefer: 'return=representation' } })
+                        .then((response) => {
+                            console.log("DELETE RESPONSE = ", JSON.stringify(response));
+                            this.deleteChange("id", keyChanged, true);
+                        })
+                        .catch((error) => {
+                            console.log("ERROR RESP: " + String(error));
+                            this.setChangeError("id", keyChanged, true);
+                            // Show error in top-right Snack-Bar
+                            this.setState({
+                                snackBarVisibility: true,
+                                snackBarMessage: "Row delete request failed."
+                            }, () => {
+                                this.timer = setTimeout(() => {
+                                    this.setState({
+                                        snackBarVisibility: false,
+                                        snackBarMessage: "Unknown error"
+                                    });
+                                }, 5000);
+                            });
+                        });
+
                 } else {
                     // Tell user that the change was not actually detected... and that they should submit a bug
                     console.log("Tell user that the change was not actually detected... and that they should submit a bug");
@@ -370,8 +404,13 @@ class DataTable extends Component {
         return Object.keys(this.state.editFeatureChangesMade[this.state.table]["id"]).includes(key.join(""));
     };
 
+    // For the Snackbar close button
+    handleRequestClose = () => {
+        this.setState({ snackBarVisibility: false });
+    };
+
     render() {
-        //let classes = this.props.classes;
+        let classes = this.props.classes;
         let { columns, data } = this.state;
         let parsedColumns = [];
 
@@ -430,6 +469,15 @@ class DataTable extends Component {
         // render() return
         return (
             <div>
+
+                <Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                    open={this.state.snackBarVisibility}
+                    onClose={this.handleRequestClose}
+                    SnackbarContentProps={{ 'aria-describedby': 'message-id', }}
+                    message={<span id="message-id">{this.state.snackBarMessage}</span>}
+                    action={[<IconButton key="close" aria-label="Close" color="secondary" className={classes.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton>]} />
+
+
                 {this.state.editFeatureEnabled ? (
                     <CheckboxTable
                         data={data}
