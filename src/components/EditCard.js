@@ -174,7 +174,7 @@ class EditCard extends Component {
                                         secondary={"From '" + oldValue + "' to '" + newValue + "' where " + this.primaryKeyStringify(primaryKey)} />
                                 )
                         }
-                        <ListItemSecondaryAction onClick={this.props.deleteChange.bind(this, column, Object.keys(change)[ii], false)}>
+                        <ListItemSecondaryAction onClick={this.props.deleteChange.bind(this, column, Object.keys(change)[ii], markForDeletion || false)}>
                             <IconButton aria-label="Delete">
                                 <DeleteIcon />
                             </IconButton>
