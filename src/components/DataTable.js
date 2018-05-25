@@ -131,25 +131,19 @@ class DataTable extends Component {
             }
         }
 
+        // Delete the row from state.data
         if (column === "id" && key && noRestore === "delete") {
-            // Delete the row from state.data
-            // Restore original value in state.data if it is available
-
+            // Find the index of row to be deleted
             let dataLength = this.state.data.length;
             let rowToDeleteIndex = null;
-            console.log("dataLength", dataLength);
-
             for (let i = 0; i < dataLength; i++) {
-                console.log("id", this.state.data[i]["_id"], this.state.data[i]["_id"].join(""), key, this.state.data[i]["_id"].join("") === key);
                 if (this.state.data[i]["_id"].join("") === key) {
-                    console.log("Row match", i);
                     rowToDeleteIndex = i;
                     break;
                 }
             }
 
-            console.log("Need to delete row #", rowToDeleteIndex);
-
+            // Delete the found row...
             let data = this.state.data;
             data.splice(rowToDeleteIndex, 1);
             this.setState({
@@ -232,15 +226,15 @@ class DataTable extends Component {
                     let patchReqBody = {};
                     patchReqBody[columnChanged] = newValue;
 
-                    console.log("\n\n\nSubmitting change: PATCH: " + url);
-                    console.log("Change=" + JSON.stringify(change));
-                    console.log("PATCH req BODY=" + JSON.stringify({ [columnChanged]: newValue }));
+                    //console.log("\n\n\nSubmitting change: PATCH: " + url);
+                    //console.log("Change=" + JSON.stringify(change));
+                    //console.log("PATCH req BODY=" + JSON.stringify({ [columnChanged]: newValue }));
 
                     // Send the Request and check its response:
                     // PATCH the request
                     axios.patch(url, { [columnChanged]: newValue }, { headers: { Prefer: 'return=representation' } })
                         .then((response) => {
-                            console.log("PATCH RESPONSE:", JSON.stringify(response.data));
+                            //console.log("PATCH RESPONSE:", JSON.stringify(response.data));
                             this.deleteChange(columnChanged, keyChanged, true); // true => do not restore original value when deleting change
                         })
                         .catch((error) => {
@@ -260,15 +254,15 @@ class DataTable extends Component {
                             });
                         });
                 } else if (deleteRow) { // DELETE ROW FEATURE
-                    console.log("\n\n\nDeleting a row");
+                    //console.log("\n\n\nDeleting a row");
                     // Create the URL, add in the new value as URL param
                     let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table + "?and=(" + this.primaryKeyAsUrlParam(primaryKey) + ")";
-                    console.log("DELETE url = " + url);
+                    //console.log("DELETE url = " + url);
 
                     // Send the DELETE request and check response
                     axios.delete(url, {}, { headers: { Prefer: 'return=representation' } })
                         .then((response) => {
-                            console.log("DELETE RESPONSE = ", JSON.stringify(response));
+                            //console.log("DELETE RESPONSE = ", JSON.stringify(response));
                             this.deleteChange("id", keyChanged, "delete");
                         })
                         .catch((error) => {
