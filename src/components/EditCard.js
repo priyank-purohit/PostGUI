@@ -1,30 +1,35 @@
 import React, { Component } from 'react';
 //import axios from 'axios';
-import { withStyles } from 'material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 
-import Button from 'material-ui/Button';
-import Paper from 'material-ui/Paper';
-import Typography from 'material-ui/Typography';
-//import TextField from 'material-ui/TextField';
-import Divider from 'material-ui/Divider';
-import { FormGroup, FormControlLabel } from 'material-ui/Form';
-//import List, { ListItem, ListItemText } from 'material-ui/List';
-import Switch from 'material-ui/Switch';
-import Snackbar from 'material-ui/Snackbar';
-import IconButton from 'material-ui/IconButton';
+import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+//import TextField from '@material-ui/core/TextField';
+import Divider from '@material-ui/core/Divider';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 
-import List, { ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText, } from 'material-ui/List';
-import Avatar from 'material-ui/Avatar';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
+
+import Avatar from '@material-ui/core/Avatar';
 import CreateIcon from '@material-ui/icons/Create';
 import SearchIcon from '@material-ui/icons/Search';
 import ErrorIcon from '@material-ui/icons/Error';
 import WarningIcon from '@material-ui/icons/Warning';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-import pink from 'material-ui/colors/pink';
-import red from 'material-ui/colors/red';
-import amber from 'material-ui/colors/amber';
+import pink from '@material-ui/core/colors/pink';
+import red from '@material-ui/core/colors/red';
+import amber from '@material-ui/core/colors/amber';
 
 //const timeout = 2000;
 

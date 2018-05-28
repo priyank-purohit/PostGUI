@@ -1,13 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 
-import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
-import Snackbar from 'material-ui/Snackbar';
-import Chip from 'material-ui/Chip';
+import indigo from '@material-ui/core/colors/indigo';
 
-import IconButton from 'material-ui/IconButton';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+
+import Snackbar from '@material-ui/core/Snackbar';
+import Chip from '@material-ui/core/Chip';
+
+import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import FolderIcon from '@material-ui/icons/Folder';
 import FolderIconOpen from '@material-ui/icons/FolderOpen';
@@ -15,8 +21,6 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import ClearIcon from '@material-ui/icons/Clear';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';;
-
-import { indigo } from 'material-ui/colors';
 
 let _ = require('lodash');
 let lib = require("../utils/library.js");
