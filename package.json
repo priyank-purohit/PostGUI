@@ -3,6 +3,7 @@
   "version": "1.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^1.1.0",
     "@material-ui/icons": "^1.0.0-beta.43",
     "axios": "^0.18.0",
     "axios-cancel": "^0.2.2",
@@ -11,11 +12,11 @@
     "js2xmlparser": "^3.0.0",
     "json2csv": "^4.1.3",
     "lodash": "^4.17.5",
-    "material-ui": "^1.0.0-beta.43",
     "npm": "^5.8.0",
-    "react": "^15.6.2",
+    "react": "^16.4.0",
     "react-copy-to-clipboard": "^5.0.0",
-    "react-dom": "^15.6.2",
+    "react-dom": "^16.4.0",
+    "react-scripts": "^1.1.4",
     "react-table": "^6.8.2",
     "typeface-roboto": "0.0.54"
   },
