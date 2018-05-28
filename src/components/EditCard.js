@@ -96,6 +96,7 @@ class EditCard extends Component {
                 });
             }, 4000);
         } else {
+            clearTimeout(this.timer);
             this.setState({
                 removeButtonLabel: "Remove All"
             });
@@ -116,6 +117,7 @@ class EditCard extends Component {
                 });
             }, 4000);
         } else {
+            clearTimeout(this.timer);
             this.setState({
                 submitButtonLabel: "Submit"
             });
