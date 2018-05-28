@@ -95,21 +95,23 @@ class DataTable extends Component {
     // Deletes all changes in the current table (for Remove All button functionality)
     deleteTableChanges() {
         let tempChanges = this.state.editFeatureChangesMade[this.state.table];
-        let columnsChanged = Object.keys(tempChanges);
-        let columnsChangeCount = columnsChanged.length;
+        if (tempChanges) {
+            let columnsChanged = Object.keys(tempChanges);
+            let columnsChangeCount = columnsChanged.length;
 
-        // Iterate over all keys (list of column specific changes)
-        for (let i = 0; i < columnsChangeCount; i++) {
-            let column = columnsChanged[i];
-            let keysChanged = Object.keys(tempChanges[column]);
-            let changeCount = keysChanged.length;
+            // Iterate over all keys (list of column specific changes)
+            for (let i = 0; i < columnsChangeCount; i++) {
+                let column = columnsChanged[i];
+                let keysChanged = Object.keys(tempChanges[column]);
+                let changeCount = keysChanged.length;
 
-            // Iterate over all keys (all changes individually)
-            for (let ii = 0; ii < changeCount; ii++) {
-                let key = keysChanged[ii];
+                // Iterate over all keys (all changes individually)
+                for (let ii = 0; ii < changeCount; ii++) {
+                    let key = keysChanged[ii];
 
-                // delete using column + key
-                this.deleteChange(column, key, false);
+                    // delete using column + key
+                    this.deleteChange(column, key, false);
+                }
             }
         }
     }
