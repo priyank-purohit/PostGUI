@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 
-import { indigo } from 'material-ui/colors';
+import { indigo } from '@material-ui/core/colors';
 
-import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
-import Snackbar from 'material-ui/Snackbar';
-import Chip from 'material-ui/Chip';
+import List, { ListItem, ListItemIcon, ListItemText } from '@material-ui/core/List';
+import Snackbar from '@material-ui/core/Snackbar';
+import Chip from '@material-ui/core/Chip';
 
-import IconButton from 'material-ui/IconButton';
+import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import FolderIcon from '@material-ui/icons/Folder';
 import FolderIconOpen from '@material-ui/icons/FolderOpen';

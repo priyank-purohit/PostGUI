@@ -239,7 +239,6 @@ export default class Layout extends React.Component {
 						addToHistory={this.addToHistory.bind(this)}
 						rowLimit={this.state.rowLimit}
 						exactCount={this.state.exactCount} />
-
 				</div>
 			</div>
 		);

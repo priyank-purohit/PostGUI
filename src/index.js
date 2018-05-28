@@ -11,4 +11,4 @@ export default class Layout extends React.Component {
 }
 
 const app = document.getElementById('root');
-ReactDOM.render(<Layout/>, app);
+ReactDOM.render(<Layout />, app);
