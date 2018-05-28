@@ -26,6 +26,8 @@ let _ = require('lodash');
 let lib = require("../utils/library.js");
 
 class DbSchema extends Component {
+	// Set true in DidMount, and false in WillUnmount
+	// Used to ensure that getDbSchema does not setState when component is unmounted
 	mounted = false;
 
 	constructor(props) {
