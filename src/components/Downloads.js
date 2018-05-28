@@ -684,24 +684,29 @@ class Downloads extends Component {
                         {this.state.fileFormat === 'fasta' && <Typography className={classes.inlineTextField}>Note: FASTA header is composed from visible columns</Typography>}
 
                         <FormControlLabel label="Copy single column values" value="delimitedColumn" control={<Radio />} />
-                        <span className={this.state.fileFormat !== 'delimitedColumn' ? classes.hidden : classes.inlineTextField}>
-                            <List>
-                                <ListItem button onClick={this.handleClickListItem} aria-haspopup="true" aria-controls="columnMenu" aria-label="Choose column" >
-                                    <ListItemText primary="Choose a column" secondary={this.state.columns[this.state.columnChosen]} />
-                                </ListItem>
-                            </List>
-                            <Menu open={this.state.open} onClose={this.handleRequestClose} id="columnMenu" anchorEl={this.state.anchorEl} >
-                                {
-                                    this.state.columns.map((option, index) =>
-                                        <MenuItem selected={index === this.state.columnChosen} onClick={event => this.handleMenuItemClick(event, index)} key={option} >
-                                            {option}
-                                        </MenuItem>
-                                    )
-                                }
-                            </Menu>
-                        </span>
+                        {/* The options are loaded below in the <span>. This was needed because RadioGroup/FormControl does not work with a Span child element...*/}
+
                     </RadioGroup>
                 </FormControl>
+                {
+                    this.state.fileFormat === 'delimitedColumn' &&
+                    (<span>
+                        <List className={classes.inlineTextFieldSpan}>
+                            <ListItem button onClick={this.handleClickListItem} aria-haspopup="true" aria-controls="columnMenu" aria-label="Choose column" >
+                                <ListItemText primary="Choose a column" secondary={this.state.columns[this.state.columnChosen]} />
+                            </ListItem>
+                        </List>
+                        <Menu open={this.state.open} onClose={this.handleRequestClose} id="columnMenu" anchorEl={this.state.anchorEl} >
+                            {
+                                this.state.columns.map((option, index) =>
+                                    <MenuItem selected={index === this.state.columnChosen} onClick={event => this.handleMenuItemClick(event, index)} key={option} >
+                                        {option}
+                                    </MenuItem>
+                                )
+                            }
+                        </Menu>
+                    </span>)
+                }
 
                 {/* ADDITIONAL DOWNLOADS OPTIONS */}
                 <Typography variant="body1" className={classes.cardcardMarginLeftTop}>Options</Typography>
@@ -829,6 +834,10 @@ const styleSheet = {
     cardcardMarginLeftTop: { // For a new section
         marginLeft: 16,
         paddingTop: 16
+    },
+    inlineTextFieldSpan: {
+        marginLeft: 48,
+        width: 275 + "px"
     },
     cardcardMarginBottomRight: { // For a new section
         marginRight: 16,
