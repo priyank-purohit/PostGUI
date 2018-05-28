@@ -53,6 +53,7 @@ class EditCard extends Component {
             snackBarVisibility: false,
             snackBarMessage: "Unknown error occured",
 
+            submitButtonLabel: "Submit",
             removeButtonLabel: "Remove All"
         };
     }
@@ -104,7 +105,23 @@ class EditCard extends Component {
 
     handleSubmitClick() {
         console.clear();
-        this.props.submitChanges();
+
+        if (this.state.submitButtonLabel === "Submit") {
+            this.setState({
+                submitButtonLabel: "Are you sure?"
+            });
+            this.timer = setTimeout(() => {
+                this.setState({
+                    submitButtonLabel: "Submit"
+                });
+            }, 4000);
+        } else {
+            this.setState({
+                submitButtonLabel: "Submit"
+            });
+            this.props.submitChanges();
+        }
+
     }
 
     // Toggle the switch
@@ -230,7 +247,7 @@ class EditCard extends Component {
                 </div>) : (<div></div>)}
                 <Divider />
 
-                <Button onClick={this.handleSubmitClick.bind(this)} disabled={!(this.state.featureEnabled && this.state.primaryKeysAvailable)} color="primary" className={classes.button}>Submit</Button>
+                <Button onClick={this.handleSubmitClick.bind(this)} disabled={!(this.state.featureEnabled && this.state.primaryKeysAvailable)} color="primary" className={classes.button} value={this.state.submitButtonLabel} >{this.state.submitButtonLabel}</Button>
                 <Button onClick={this.handleRemoveAllClick.bind(this)} disabled={!(this.state.featureEnabled && this.state.primaryKeysAvailable)} className={classes.button && classes.floatRight} value={this.state.removeButtonLabel}>{this.state.removeButtonLabel}</Button>
             </Paper>
 
