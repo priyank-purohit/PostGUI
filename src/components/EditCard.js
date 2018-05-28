@@ -26,6 +26,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import ErrorIcon from '@material-ui/icons/Error';
 import WarningIcon from '@material-ui/icons/Warning';
 import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteOutlineIcon from '@material-ui/icons/DeleteSweep';
 
 import pink from '@material-ui/core/colors/pink';
 import red from '@material-ui/core/colors/red';
@@ -185,7 +186,7 @@ class EditCard extends Component {
                 listItems.push(
                     <ListItem key={String(i) + String(ii)}>
                         <ListItemAvatar>
-                            {error ? (<Avatar className={this.props.classes.errorAvatar}><CloseIcon /></Avatar>) : (<Avatar> <CreateIcon /> </Avatar>)}
+                            {error ? (<Avatar className={this.props.classes.errorAvatar}><CloseIcon /></Avatar>) : markForDeletion ? (<Avatar> <DeleteOutlineIcon /> </Avatar>) : (<Avatar> <CreateIcon /> </Avatar>)}
                         </ListItemAvatar>
                         {
                             markForDeletion ? (
