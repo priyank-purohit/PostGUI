@@ -26,6 +26,8 @@ let _ = require('lodash');
 let lib = require("../utils/library.js");
 
 class DbSchema extends Component {
+	mounted = false;
+
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -43,11 +45,17 @@ class DbSchema extends Component {
 	}
 
 	componentDidMount() {
+		this.mounted = true;
 		// Save the database schema to state for future access
 		let url = lib.getDbConfig(this.state.dbIndex, "url");
 		if (url) {
 			this.getDbSchema(url);
 		}
+	}
+
+	componentWillUnmount() {
+		axios.cancelAll();
+		this.mounted = false;
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -328,40 +336,20 @@ class DbSchema extends Component {
 		axios.get(url + "/", { params: {} })
 			.then((response) => {
 				// Save the raw resp + parse tables and columns...
-				this.setState({
-					dbSchema: response.data
-				}, () => {
-					this.parseDbSchema(response.data);
-				});
+				if (this.mounted) {
+					this.setState({
+						dbSchema: response.data
+					}, () => {
+						this.parseDbSchema(response.data);
+					});
+				}
 			})
 			.catch((error) => {
 				// Show error in top-right Snack-Bar
-				this.setState({
-					snackBarVisibility: true,
-					snackBarMessage: "Database does not exist."
-				}, () => {
-					this.timer = setTimeout(() => {
-						this.setState({
-							snackBarVisibility: false,
-							snackBarMessage: "Unknown error"
-						});
-					}, 5000);
-				});
-			});
-		// Get FK info IFF enabled in config explicitly
-		if (lib.getDbConfig(this.state.dbIndex, "foreignKeySearch") === true) {
-			axios.post(url + "/rpc/foreign_keys", {})
-				.then((response) => {
-					// Save the raw resp + parse tables and columns...
-					this.setState({
-						dbFkSchema: response.data
-					});
-				})
-				.catch((error) => {
-					// Show error in top-right Snack-Bar
+				if (this.mounted) {
 					this.setState({
 						snackBarVisibility: true,
-						snackBarMessage: "Foreign keys function does not exist in database."
+						snackBarMessage: "Database does not exist."
 					}, () => {
 						this.timer = setTimeout(() => {
 							this.setState({
@@ -370,6 +358,34 @@ class DbSchema extends Component {
 							});
 						}, 5000);
 					});
+				}
+			});
+		// Get FK info IFF enabled in config explicitly
+		if (lib.getDbConfig(this.state.dbIndex, "foreignKeySearch") === true) {
+			axios.post(url + "/rpc/foreign_keys", {})
+				.then((response) => {
+					// Save the raw resp + parse tables and columns...
+					if (this.mounted) {
+						this.setState({
+							dbFkSchema: response.data
+						});
+					}
+				})
+				.catch((error) => {
+					// Show error in top-right Snack-Bar
+					if (this.mounted) {
+						this.setState({
+							snackBarVisibility: true,
+							snackBarMessage: "Foreign keys function does not exist in database."
+						}, () => {
+							this.timer = setTimeout(() => {
+								this.setState({
+									snackBarVisibility: false,
+									snackBarMessage: "Unknown error"
+								});
+							}, 5000);
+						});
+					}
 				});
 		}
 
@@ -377,31 +393,35 @@ class DbSchema extends Component {
 		if (lib.getDbConfig(this.state.dbIndex, "primaryKeyFunction") === true) {
 			axios.post(url + "/rpc/primary_keys", {})
 				.then((response) => {
-					let pkAvailable = JSON.stringify(response.data[0]["primary_keys"]) !== "[]";
-					// Save the raw resp + parse tables and columns...
-					this.setState({
-						dbPkInfo: response.data[0]["primary_keys"],
-						primaryKeysAvailable: pkAvailable
-					}, () => {
-						if (pkAvailable) {
-							this.props.changeDbPkInfo(response.data);
-						}
-					});
-					//console.log(JSON.stringify(response.data[0]["primary_keys"]), pkAvailable);
+					if (this.mounted) {
+						let pkAvailable = JSON.stringify(response.data[0]["primary_keys"]) !== "[]";
+						// Save the raw resp + parse tables and columns...
+						this.setState({
+							dbPkInfo: response.data[0]["primary_keys"],
+							primaryKeysAvailable: pkAvailable
+						}, () => {
+							if (pkAvailable) {
+								this.props.changeDbPkInfo(response.data);
+							}
+						});
+						//console.log(JSON.stringify(response.data[0]["primary_keys"]), pkAvailable);
+					}
 				})
 				.catch((error) => {
-					// Show error in top-right Snack-Bar
-					this.setState({
-						snackBarVisibility: true,
-						snackBarMessage: "Primary keys function does not exist in database."
-					}, () => {
-						this.timer = setTimeout(() => {
-							this.setState({
-								snackBarVisibility: false,
-								snackBarMessage: "Unknown error"
-							});
-						}, 5000);
-					});
+					if (this.mounted) {
+						// Show error in top-right Snack-Bar
+						this.setState({
+							snackBarVisibility: true,
+							snackBarMessage: "Primary keys function does not exist in database."
+						}, () => {
+							this.timer = setTimeout(() => {
+								this.setState({
+									snackBarVisibility: false,
+									snackBarMessage: "Unknown error"
+								});
+							}, 5000);
+						});
+					}
 				});
 		}
 	}
