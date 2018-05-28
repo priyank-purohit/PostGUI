@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import axios from 'axios';
 
+import { indigo } from 'material-ui/colors';
+
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Snackbar from 'material-ui/Snackbar';
 import Chip from 'material-ui/Chip';
@@ -15,8 +17,6 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import ClearIcon from '@material-ui/icons/Clear';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';;
-
-import { indigo } from 'material-ui/colors';
 
 let _ = require('lodash');
 let lib = require("../utils/library.js");
