@@ -12,6 +12,7 @@ import SubmitButton from './SubmitButton.js';
 import Typography from '@material-ui/core/Typography';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
@@ -469,18 +470,21 @@ class RightPane extends Component {
 							success={this.state.submitSuccess}
 							error={this.state.submitError} />
 					</div>
+					<Tooltip id="tooltip-bottom" title={"See more rows of the query result in the DataTable. Max limit is 250,000 rows."} placement="bottom">
+						<TextField
+							required
+							id="rowLimit"
+							type="number"
+							label="Row-limit"
+							value={this.state.rowLimit.toString()}
+							className={classes.textField && classes.cardMarginLeft}
+							margin="normal"
+							onChange={this.handleRowLimitChange.bind(this)} />
+					</Tooltip>
 
-					<TextField
-						required
-						id="rowLimit"
-						type="number"
-						label="Row-limit"
-						value={this.state.rowLimit.toString()}
-						className={classes.textField && classes.cardMarginLeft}
-						margin="normal"
-						onChange={this.handleRowLimitChange.bind(this)} />
-
-					<FormControlLabel control={<Checkbox onChange={this.handleGetExactRowCountToggle.bind(this)} value="getExactRowCount" />} checked={this.state.exactRowCount} label={"Get exact row count (slow)"} className={classes.marginLeft} />
+					<Tooltip id="tooltip-bottom" title={"Get exact count of rows in the query result."} placement="bottom">
+						<FormControlLabel control={<Checkbox onChange={this.handleGetExactRowCountToggle.bind(this)} value="getExactRowCount" />} checked={this.state.exactRowCount} label={"Get exact row count (slow)"} className={classes.marginLeft} />
+					</Tooltip>
 
 					<Typography type="subheading" className={classes.cardMarginLeftTop}>Query Results</Typography>
 					<RightPaneChips rows={this.state.rows} totalRows={this.state.totalRows} rowLimit={this.state.rowLimit} maxRows={maxRowsInOutput} />
