@@ -661,9 +661,9 @@ class Downloads extends Component {
                 <Typography variant="body1" className={classes.cardcardMarginLeftTop}>File Format</Typography>
                 <FormControl component="fieldset" required>
                     <RadioGroup onChange={this.handleFileFormatChange} value={this.state.fileFormat} className={classes.cardcardMarginLeftTop} >
-                        <FormControlLabel label="Delimited file" value="delimited" control={<Radio />} />
+                        <FormControlLabel label="CSV file (spreadsheet)" value="delimited" control={<Radio />} />
                         {
-                            this.state.fileFormat === 'delimited' && (
+                            this.state.fileFormat === 'delimited_removeToEnable' && (
                                 <TextField
                                     required
                                     onChange={this.handleDelimiterChange.bind(this)}
