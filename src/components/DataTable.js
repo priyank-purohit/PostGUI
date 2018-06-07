@@ -66,10 +66,11 @@ class DataTable extends Component {
         }
 
         let data = originalData.map(item => {
-            // using chancejs to generate guid
-            // shortid is probably better but seems to have performance issues
-            // on codesandbox.io
-            let _id = [item.playerid, item.seasonid];
+            let pkValues = [];
+            for (let i = 0; i < this.state.tablePrimaryKeys.length; i++) {
+                pkValues.push(item[this.state.tablePrimaryKeys[i]]);
+            }
+            let _id = pkValues;
             return {
                 _id,
                 ...item
@@ -304,7 +305,10 @@ class DataTable extends Component {
                         .then((response) => {
                             // Add an entry to the database's change log
                             let oldRow = null;
-                            var needle = [primaryKey.playerid, primaryKey.seasonid];
+                            let needle = [];
+                            for (let i = 0; i < this.state.tablePrimaryKeys.length; i++) {
+                                needle.push(primaryKey[this.state.tablePrimaryKeys[i]]);
+                            }
                             //console.log("Needle", needle);
 
                             // iterate over each element in the array
