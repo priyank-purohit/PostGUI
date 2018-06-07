@@ -195,12 +195,47 @@ class DataTable extends Component {
         return stringified;
     }
 
+    postReqToChangeLog(dbIndex, changeTimeStamp, tableChanged, primaryKey, columnChanged, oldValue, newValue, notes, userName) {
+        let changeLogURL = lib.getDbConfig(this.state.dbIndex, "url") + "/change_log";
+        let changeLogPostReqBody = {};
+
+        changeLogPostReqBody["change_timestamp"] = changeTimeStamp;
+        changeLogPostReqBody["table_changed"] = tableChanged;
+        changeLogPostReqBody["primary_key_of_changed_row"] = JSON.stringify(primaryKey);
+        changeLogPostReqBody["column_changed"] = columnChanged;
+        changeLogPostReqBody["old_value"] = oldValue;
+        changeLogPostReqBody["new_value"] = newValue;
+        changeLogPostReqBody["notes"] = notes;
+        changeLogPostReqBody["user_name"] = userName; // TODO: This will change after LOGIN SYSTEM is developed.
+
+        //console.log("Changes Log URL:" + changeLogURL);
+        //console.log("Changes Log POST Body:" + JSON.stringify(changeLogPostReqBody));
+
+        axios.post(changeLogURL, changeLogPostReqBody, { headers: { Prefer: 'return=representation' } })
+            .then((response) => {
+                //console.log("Change Log POST Successful:" + JSON.stringify(response));
+            })
+            .catch((error) => {
+                // Show error in Snack-Bar
+                this.setState({
+                    snackBarVisibility: true,
+                    snackBarMessage: "Error committing CHANGE LOG!"
+                }, () => {
+                    this.timer = setTimeout(() => {
+                        this.setState({
+                            snackBarVisibility: false,
+                            snackBarMessage: "Unknown error"
+                        });
+                    }, 5000);
+                });
+            });
+    }
+
     // Makes PATCH requests to submit current table's changes + 
     // deletes them from local list of changes as the reqs are successful.
     // TODO: Keeps track of all changes in the updates table.
     // Also marks any changes that are not successful.
     submitChanges() {
-        //
         let currentChanges = this.state.editFeatureChangesMade[this.state.table];
 
         // Nothing to submit
@@ -238,6 +273,9 @@ class DataTable extends Component {
                         .then((response) => {
                             //console.log("PATCH RESPONSE:", JSON.stringify(response.data));
                             this.deleteChange(columnChanged, keyChanged, true); // true => do not restore original value when deleting change
+
+                            // Add an entry to the database's change log
+                            this.postReqToChangeLog(this.state.dbIndex, new Date(Date.now()).toISOString(), this.state.table, primaryKey, columnChanged, oldValue, newValue, "", "public");
                         })
                         .catch((error) => {
                             console.log("PATCH ERROR RESP:" + String(error));
@@ -264,6 +302,23 @@ class DataTable extends Component {
                     // Send the DELETE request and check response
                     axios.delete(url, {}, { headers: { Prefer: 'return=representation' } })
                         .then((response) => {
+                            // Add an entry to the database's change log
+                            let oldRow = null;
+                            var needle = [primaryKey.playerid, primaryKey.seasonid];
+                            //console.log("Needle", needle);
+
+                            // iterate over each element in the array
+                            for (var i = 0; i < this.state.data.length; i++) {
+                                //console.log(this.state.data.length, i, String(this.state.data[i]._id), String(needle), String(this.state.data[i]._id) === String(needle));
+                                // look for the entry with a matching `code` value
+                                if (String(this.state.data[i]._id) === String(needle)) {
+                                    //console.log("............ Found at i = " + i);
+                                    oldRow = JSON.stringify(this.state.data[i]);
+                                }
+                            }
+
+                            this.postReqToChangeLog(this.state.dbIndex, new Date(Date.now()).toISOString(), this.state.table, primaryKey, "ROW_DELETE", oldRow || "Error finding old row...", "{}", "ROW DELETED.", "public");
+
                             //console.log("DELETE RESPONSE = ", JSON.stringify(response));
                             this.deleteChange("id", keyChanged, "delete");
                         })
