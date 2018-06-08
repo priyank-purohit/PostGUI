@@ -183,6 +183,10 @@ class RightPane extends Component {
 		const rules = newRules ? newRules : defaultRules;
 		const filters = lib.getQBFilters(dbIndex, table, columns, dbSchemaDefinitions);
 
+		this.setState({
+			qbFilters: filters
+		});
+
 		if (newRules !== null && newRules !== undefined && this.checkIfRulesColumnsAreInStateTableColumns(rules)) {
 			window.$(element).queryBuilder({ filters, rules, plugins: ['not-group'] });
 
@@ -496,6 +500,7 @@ class RightPane extends Component {
 							columns={this.state.visibleColumns ? this.state.visibleColumns : this.state.columns}
 							allColumns={this.state.columns}
 							data={this.state.rawData}
+							qbFilters={this.state.qbFilters}
 							url={this.state.url}
 							totalRows={this.state.totalRows}
 							dbPkInfo={this.props.dbPkInfo}

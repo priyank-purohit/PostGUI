@@ -1,12 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
+import TextField from '@material-ui/core/TextField';
+import { withStyles } from '@material-ui/core';
 
 let lib = require('../utils/library.js');
 
@@ -20,6 +23,7 @@ class ResponsiveDialog extends React.Component {
             columns: props.columns,
             allColumns: props.allColumns,
             dbPkInfo: props.dbPkInfo || [],
+            qbFilters: props.qbFilters || [],
             url: props.url
         }
     }
@@ -32,6 +36,7 @@ class ResponsiveDialog extends React.Component {
             columns: newProps.columns,
             allColumns: newProps.allColumns,
             dbPkInfo: newProps.dbPkInfo || [],
+            qbFilters: newProps.qbFilters || [],
             url: newProps.url
         });
     }
@@ -50,7 +55,8 @@ class ResponsiveDialog extends React.Component {
     };
 
     render() {
-        const { fullScreen } = this.props;
+        const classes = this.props.classes;
+        let { fullScreen } = this.props;
         let tableRename = lib.getTableConfig(this.state.dbIndex, this.state.table, "rename");
         let tableDisplayName = tableRename ? tableRename : this.state.table;
 
@@ -64,11 +70,24 @@ class ResponsiveDialog extends React.Component {
                     <DialogTitle id="responsive-dialog-title">{"Insert new row to '" + tableDisplayName + "' table:"}</DialogTitle>
                     <DialogContent>
                         <DialogContentText>Fill in a value for each column, be sure to ensure data type is correct. Often, new rows are rejected because the database schema does not allow blank values for certain columns. Make sure any columns marked as NOT NULL are not left blank.</DialogContentText>
-                        {this.state.allColumns.map((column) => {
-                            return (
-                                <DialogContentText key={column}>{column}</DialogContentText>
-                            )
-                        })}
+
+                        <Typography type="subheading" className={classes.cardMarginTopBottom}>New Row</Typography>
+                        <div className={classes.cardMarginLeft}>
+                            {
+                                this.state.qbFilters.map((f) => {
+                                    return (
+                                        <TextField
+                                            key={f.id}
+                                            label={f.label ? f.label : f.id}
+                                            placeholder={f.type}
+                                            value={f.default_value || undefined}
+                                            className={classes.textField}
+                                            margin="normal"
+                                        />
+                                    )
+                                })
+                            }
+                        </div>
                     </DialogContent>
                     <DialogContent>
                         {JSON.stringify(this.state.dbPkInfo)}
@@ -84,8 +103,22 @@ class ResponsiveDialog extends React.Component {
     }
 }
 
+const styleSheet = {
+    cardMarginTopBottom: { // For items within the same section
+        marginBottom: 8,
+        marginTop: 16
+    },
+    cardMarginLeft: {
+        marginLeft: 16
+    },
+    textField: {
+        width: 60 + '%',
+    }
+};
+
+
 ResponsiveDialog.propTypes = {
     fullScreen: PropTypes.bool.isRequired,
 };
 
-export default withMobileDialog()(ResponsiveDialog);
+export default withStyles(styleSheet)(withMobileDialog()(ResponsiveDialog));

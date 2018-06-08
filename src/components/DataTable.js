@@ -596,6 +596,7 @@ class DataTable extends Component {
                         allColumns={this.props.allColumns}
                         dbPkInfo={this.props.dbPkInfo}
                         url={this.state.url}
+                        qbFilters={this.props.qbFilters}
                         featureEnabled={this.state.editFeatureEnabled}
                         changesMade={this.state.editFeatureChangesMade}
                         rowsStrikedOut={this.state.rowsStrikedOut}
