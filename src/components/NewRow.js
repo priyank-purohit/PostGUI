@@ -19,7 +19,7 @@ class ResponsiveDialog extends React.Component {
             table: props.table,
             columns: props.columns,
             allColumns: props.allColumns,
-            dbPkInfo: props.dbPkInfo,
+            dbPkInfo: props.dbPkInfo || [],
             url: props.url
         }
     }
@@ -31,17 +31,22 @@ class ResponsiveDialog extends React.Component {
             table: newProps.table,
             columns: newProps.columns,
             allColumns: newProps.allColumns,
-            dbPkInfo: newProps.dbPkInfo,
+            dbPkInfo: newProps.dbPkInfo || [],
             url: newProps.url
         });
     }
 
-    handleClickOpen = () => {
+    handleClose = () => {
         this.props.handleNewRowClick();
     };
 
-    handleClose = () => {
-        this.props.handleNewRowClick();
+    handleReset = () => {
+        // Reset all input fields
+    };
+
+    handleSubmit = () => {
+        // Submit HTTP Request
+        // If successful, close it; else show the error as it is...
     };
 
     render() {
@@ -58,15 +63,20 @@ class ResponsiveDialog extends React.Component {
                     aria-labelledby="responsive-dialog-title">
                     <DialogTitle id="responsive-dialog-title">{"Insert new row to '" + tableDisplayName + "' table:"}</DialogTitle>
                     <DialogContent>
-                        {this.props.allColumns.map((column) => {
+                        <DialogContentText>Fill in a value for each column, be sure to ensure data type is correct. Often, new rows are rejected because the database schema does not allow blank values for certain columns. Make sure any columns marked as NOT NULL are not left blank.</DialogContentText>
+                        {this.state.allColumns.map((column) => {
                             return (
                                 <DialogContentText key={column}>{column}</DialogContentText>
                             )
                         })}
                     </DialogContent>
+                    <DialogContent>
+                        {JSON.stringify(this.state.dbPkInfo)}
+                    </DialogContent>
                     <DialogActions>
-                        <Button onClick={this.handleClose} color="primary">Disagree</Button>
-                        <Button onClick={this.handleClose} color="primary" autoFocus>Agree</Button>
+                        <Button onClick={this.handleClose} >Cancel</Button>
+                        <Button onClick={this.handleReset} >Reset</Button>
+                        <Button onClick={this.handleSubmit} color="secondary" autoFocus>Submit</Button>
                     </DialogActions>
                 </Dialog>
             </div>
