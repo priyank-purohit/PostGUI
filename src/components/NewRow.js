@@ -17,7 +17,7 @@ class ResponsiveDialog extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            open: true,
+            open: false,
             dbIndex: props.dbIndex,
             table: props.table,
             columns: props.columns,
@@ -30,7 +30,7 @@ class ResponsiveDialog extends React.Component {
 
     componentWillReceiveProps(newProps) {
         this.setState({
-            open: newProps.open || true,
+            open: newProps.open,
             dbIndex: newProps.dbIndex,
             table: newProps.table,
             columns: newProps.columns,
@@ -42,7 +42,7 @@ class ResponsiveDialog extends React.Component {
     }
 
     handleClose = () => {
-        this.props.handleNewRowClick();
+        this.props.handleNewRowClick(false);
     };
 
     handleReset = () => {

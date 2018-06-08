@@ -110,10 +110,16 @@ class EditCard extends Component {
     }
 
     // Opens a dialog to allow user to insert a new row to the table
-    handleNewRowClick() {
-        this.setState({
-            newRowDialogOpen: !this.state.newRowDialogOpen
-        });
+    handleNewRowClick(newState) {
+        if (newState === false || newState === true) {
+            this.setState({
+                newRowDialogOpen: newState
+            });
+        } else {
+            this.setState({
+                newRowDialogOpen: !this.state.newRowDialogOpen
+            });
+        }
     }
 
     handleSubmitClick() {
