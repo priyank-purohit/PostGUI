@@ -593,6 +593,7 @@ class DataTable extends Component {
                         dbIndex={this.state.dbIndex}
                         table={this.state.table}
                         columns={this.state.columns}
+                        allColumns={this.props.allColumns}
                         dbPkInfo={this.props.dbPkInfo}
                         url={this.state.url}
                         featureEnabled={this.state.editFeatureEnabled}

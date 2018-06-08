@@ -494,6 +494,7 @@ class RightPane extends Component {
 							dbIndex={this.state.dbIndex}
 							table={this.state.table}
 							columns={this.state.visibleColumns ? this.state.visibleColumns : this.state.columns}
+							allColumns={this.state.columns}
 							data={this.state.rawData}
 							url={this.state.url}
 							totalRows={this.state.totalRows}

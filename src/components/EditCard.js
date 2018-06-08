@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 //import axios from 'axios';
 import { withStyles } from '@material-ui/core/styles';
 
+import NewRow from './NewRow.js';
+
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -55,7 +57,9 @@ class EditCard extends Component {
             snackBarMessage: "Unknown error occured",
 
             submitButtonLabel: "Submit",
-            removeButtonLabel: "Remove All"
+            removeButtonLabel: "Remove All",
+
+            newRowDialogOpen: false,
         };
     }
 
@@ -103,6 +107,13 @@ class EditCard extends Component {
             });
             this.props.deleteTableChanges();
         }
+    }
+
+    // Opens a dialog to allow user to insert a new row to the table
+    handleNewRowClick() {
+        this.setState({
+            newRowDialogOpen: !this.state.newRowDialogOpen
+        });
     }
 
     handleSubmitClick() {
@@ -251,8 +262,20 @@ class EditCard extends Component {
                 <Divider />
 
                 <Button onClick={this.handleSubmitClick.bind(this)} disabled={!(this.state.featureEnabled && this.state.primaryKeysAvailable)} color="primary" className={classes.button} value={this.state.submitButtonLabel} >{this.state.submitButtonLabel}</Button>
+                <Button onClick={this.handleNewRowClick.bind(this)} disabled={false && !(this.state.featureEnabled && this.state.primaryKeysAvailable)} color="primary" className={classes.button} value={"New Row"} >{"New Row"}</Button>
                 <Button onClick={this.handleRemoveAllClick.bind(this)} disabled={!(this.state.featureEnabled && this.state.primaryKeysAvailable)} className={classes.button && classes.floatRight} value={this.state.removeButtonLabel}>{this.state.removeButtonLabel}</Button>
             </Paper>
+
+
+            <NewRow
+                open={this.state.newRowDialogOpen}
+
+                dbIndex={this.props.dbIndex}
+                table={this.props.table}
+                columns={this.props.columns}
+                allColumns={this.props.allColumns}
+                dbPkInfo={this.props.dbPkInfo}
+                url={this.props.url} />
 
             <Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
                 open={this.state.snackBarVisibility}
