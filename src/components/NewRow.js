@@ -9,7 +9,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
 import TextField from '@material-ui/core/TextField';
-import { withStyles } from '@material-ui/core';
+import { withStyles, Divider } from '@material-ui/core';
 
 let lib = require('../utils/library.js');
 
@@ -79,7 +79,7 @@ class ResponsiveDialog extends React.Component {
                                         <TextField
                                             key={column.id}
                                             label={column.label ? column.label : column.id}
-                                            required={this.state.primaryKeys.indexOf(column.id) >= 0}
+                                            required={(this.state.primaryKeys).indexOf(column.id) >= 0}
                                             placeholder={column.type}
                                             value={column.default_value || undefined}
                                             className={classes.textField}
@@ -89,16 +89,14 @@ class ResponsiveDialog extends React.Component {
                             }
                         </div>
                     </DialogContent>
-                    <DialogContent>
-                        {JSON.stringify(this.state.primaryKeys)}
-                    </DialogContent>
+                    <Divider />
                     <DialogActions>
                         <Button onClick={this.handleClose} >Cancel</Button>
                         <Button onClick={this.handleReset} >Reset</Button>
                         <Button onClick={this.handleSubmit} color="secondary" autoFocus>Submit</Button>
                     </DialogActions>
                 </Dialog>
-            </div>
+            </div >
         );
     }
 }
