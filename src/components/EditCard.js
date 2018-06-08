@@ -275,7 +275,8 @@ class EditCard extends Component {
                 columns={this.props.columns}
                 allColumns={this.props.allColumns}
                 dbPkInfo={this.props.dbPkInfo}
-                url={this.props.url} />
+                url={this.props.url}
+                handleNewRowClick={this.handleNewRowClick.bind(this)} />
 
             <Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
                 open={this.state.snackBarVisibility}

@@ -11,22 +11,37 @@ import withMobileDialog from '@material-ui/core/withMobileDialog';
 let lib = require('../utils/library.js');
 
 class ResponsiveDialog extends React.Component {
-    state = {
-        open: false,
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            open: true,
+            dbIndex: props.dbIndex,
+            table: props.table,
+            columns: props.columns,
+            allColumns: props.allColumns,
+            dbPkInfo: props.dbPkInfo,
+            url: props.url
+        }
+    }
 
     componentWillReceiveProps(newProps) {
         this.setState({
-            open: newProps.open,
+            open: newProps.open || true,
+            dbIndex: newProps.dbIndex,
+            table: newProps.table,
+            columns: newProps.columns,
+            allColumns: newProps.allColumns,
+            dbPkInfo: newProps.dbPkInfo,
+            url: newProps.url
         });
     }
 
     handleClickOpen = () => {
-        this.setState({ open: true });
+        this.props.handleNewRowClick();
     };
 
     handleClose = () => {
-        this.setState({ open: false });
+        this.props.handleNewRowClick();
     };
 
     render() {
