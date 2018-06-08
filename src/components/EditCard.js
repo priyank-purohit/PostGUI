@@ -274,7 +274,7 @@ class EditCard extends Component {
                 table={this.props.table}
                 columns={this.props.columns}
                 allColumns={this.props.allColumns}
-                dbPkInfo={this.props.dbPkInfo}
+                primaryKeys={this.state.primaryKeys}
                 qbFilters={this.props.qbFilters}
                 url={this.props.url}
                 handleNewRowClick={this.handleNewRowClick.bind(this)} />

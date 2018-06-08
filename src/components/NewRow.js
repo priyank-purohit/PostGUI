@@ -22,7 +22,7 @@ class ResponsiveDialog extends React.Component {
             table: props.table,
             columns: props.columns,
             allColumns: props.allColumns,
-            dbPkInfo: props.dbPkInfo || [],
+            primaryKeys: props.primaryKeys || [],
             qbFilters: props.qbFilters || [],
             url: props.url
         }
@@ -35,7 +35,7 @@ class ResponsiveDialog extends React.Component {
             table: newProps.table,
             columns: newProps.columns,
             allColumns: newProps.allColumns,
-            dbPkInfo: newProps.dbPkInfo || [],
+            primaryKeys: newProps.primaryKeys || [],
             qbFilters: newProps.qbFilters || [],
             url: newProps.url
         });
@@ -74,23 +74,23 @@ class ResponsiveDialog extends React.Component {
                         <Typography type="subheading" className={classes.cardMarginTopBottom}>New Row</Typography>
                         <div className={classes.cardMarginLeft}>
                             {
-                                this.state.qbFilters.map((f) => {
+                                this.state.qbFilters.map((column) => {
                                     return (
                                         <TextField
-                                            key={f.id}
-                                            label={f.label ? f.label : f.id}
-                                            placeholder={f.type}
-                                            value={f.default_value || undefined}
+                                            key={column.id}
+                                            label={column.label ? column.label : column.id}
+                                            required={this.state.primaryKeys.indexOf(column.id) >= 0}
+                                            placeholder={column.type}
+                                            value={column.default_value || undefined}
                                             className={classes.textField}
-                                            margin="normal"
-                                        />
+                                            margin="normal" />
                                     )
                                 })
                             }
                         </div>
                     </DialogContent>
                     <DialogContent>
-                        {JSON.stringify(this.state.dbPkInfo)}
+                        {JSON.stringify(this.state.primaryKeys)}
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleClose} >Cancel</Button>
