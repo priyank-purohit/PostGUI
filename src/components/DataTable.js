@@ -542,8 +542,6 @@ class DataTable extends Component {
             toggleAll,
             selectType: "checkbox",
             getTrProps: (s, r) => {
-                // someone asked for an example of a background color change
-                // here it is...
                 let selected = false;
                 try {
                     selected = this.isSelected(r.original._id);
