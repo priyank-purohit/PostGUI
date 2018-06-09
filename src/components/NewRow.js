@@ -9,7 +9,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
 import TextField from '@material-ui/core/TextField';
-import { withStyles, Divider, InputLabel } from '@material-ui/core';
+import { withStyles, Divider } from '@material-ui/core';
 
 let lib = require('../utils/library.js');
 
