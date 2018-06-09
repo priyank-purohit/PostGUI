@@ -64,6 +64,7 @@ export default class FeatureDiscoveryPrompt extends Component {
                     description={description}
                     element={this}
                     onClose={onClose}
+                    subtractFromTopPos={this.props.subtractFromTopPos}
                     ref={(ref) => { this.circles = ref }}
                     title={title}
                 />

@@ -17,7 +17,7 @@ export default class Circles extends Component {
 
         injectStyle(`
     @keyframes outerPulse {
-      0%      { transform: scale(1.0); opacity: 0.9 }    
+      0%      { transform: scale(1.0); opacity: 0.95 }    
       100%    { transform: scale(2.0); opacity: 0.0 }
     }`)
         this.state = {
@@ -66,7 +66,7 @@ export default class Circles extends Component {
             },
             circles: {
                 position: 'absolute',
-                top: pos.top - 20,
+                top: pos.top - (this.props.subtractFromTopPos || 20),
                 left: pos.left - 20,
                 opacity: open ? 1 : 0,
                 pointerEvents: open ? 'inherit' : 'none'
@@ -103,7 +103,7 @@ export default class Circles extends Component {
                 width: `${outerCircleSize}px`,
                 borderRadius: '50%',
                 backgroundColor,
-                opacity: open ? 0.9 : 0
+                opacity: open ? 0.95 : 0
             },
             textBox: {
                 fontFamily: 'Roboto',
