@@ -42,7 +42,8 @@ class ResponsiveDialog extends React.Component {
             primaryKeys: newProps.primaryKeys || [],
             qbFilters: newProps.qbFilters || [],
             url: newProps.url,
-            inputVals: {}
+            inputVals: {},
+            error: ""
         });
     }
 
@@ -54,11 +55,12 @@ class ResponsiveDialog extends React.Component {
     handleReset = () => {
         let qbFiltersTemp = this.state.qbFilters;
         this.setState({
-            qbFilters: []
+            qbFilters: [],
+            inputVals: {},
+            error: ""
         }, () => {
             this.setState({
-                qbFilters: qbFiltersTemp,
-                inputVals: {}
+                qbFilters: qbFiltersTemp
             })
         });
     };
@@ -82,7 +84,7 @@ class ResponsiveDialog extends React.Component {
         });
     }
 
-    sanitizeInput() {
+    handleSubmit = () => {
         let input = this.state.inputVals;
         let keys = Object.keys(this.state.inputVals);
 
@@ -129,12 +131,6 @@ class ResponsiveDialog extends React.Component {
 
     }
 
-    handleSubmit = () => {
-        // Submit HTTP Request
-        // If successful, close it; else show the error as it is...
-        this.sanitizeInput();
-    };
-
     render() {
         const classes = this.props.classes;
         let { fullScreen } = this.props;
@@ -150,13 +146,13 @@ class ResponsiveDialog extends React.Component {
                     aria-labelledby="responsive-dialog-title">
                     <DialogTitle id="responsive-dialog-title">{"Insert new row to " + tableDisplayName}</DialogTitle>
                     <DialogContent>
-                        <Paper id="errorPaper" className={classes.paperError} elevation={4}>
+                        {this.state.error !== "" && (<Paper id="errorPaper" className={classes.paperError} elevation={4}>
                             <Typography variant="subheading" className={classes.paperMarginTopLeft}>Request Denied</Typography>
                             <DialogContentText className={classes.paperMarginLeft}>{"Code: " + (this.state.error && this.state.error.data ? this.state.error.data.code : "")}</DialogContentText>
                             <DialogContentText className={classes.paperMarginLeft}>{"Hint: " + (this.state.error && this.state.error.data ? this.state.error.data.hint : "")}</DialogContentText>
                             <DialogContentText className={classes.paperMarginLeft}>{"Message: " + (this.state.error && this.state.error.data ? this.state.error.data.message : "")}</DialogContentText>
                             <DialogContentText className={classes.paperMarginLeft}>{"Details: " + (this.state.error && this.state.error.data ? this.state.error.data.details : "")}</DialogContentText>
-                        </Paper>
+                        </Paper>)}
 
                         <Typography type="subheading" className={classes.cardMarginTopBottom}>New Row</Typography>
                         <div className={classes.cardMarginLeft}>
