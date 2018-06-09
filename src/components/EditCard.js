@@ -59,7 +59,7 @@ class EditCard extends Component {
             submitButtonLabel: "Submit",
             removeButtonLabel: "Remove All",
 
-            newRowDialogOpen: false,
+            newRowDialogOpen: true,
         };
     }
 
@@ -275,6 +275,8 @@ class EditCard extends Component {
 
             <NewRow
                 open={this.state.newRowDialogOpen}
+
+                insertNewRow={this.props.insertNewRow}
 
                 dbIndex={this.props.dbIndex}
                 table={this.props.table}

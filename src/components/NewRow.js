@@ -41,7 +41,8 @@ class ResponsiveDialog extends React.Component {
             allColumns: newProps.allColumns,
             primaryKeys: newProps.primaryKeys || [],
             qbFilters: newProps.qbFilters || [],
-            url: newProps.url
+            url: newProps.url,
+            inputVals: {}
         });
     }
 
@@ -107,16 +108,22 @@ class ResponsiveDialog extends React.Component {
             postReqBody[column] = value;
         }
 
-        console.log("Changes Log URL:" + newRowURL);
-        console.log("Changes Log POST Body:" + JSON.stringify(postReqBody));
+        //console.log("Changes Log URL:" + newRowURL);
+        //console.log("Changes Log POST Body:" + JSON.stringify(postReqBody));
 
         axios.post(newRowURL, postReqBody, { headers: { Prefer: 'return=representation' } })
             .then((response) => {
-                //console.log("Change Log POST Successful:" + JSON.stringify(response));
+                console.log("New row inserted successfully:" + JSON.stringify(response.data));
+                this.props.insertNewRow(response.data);
+                this.handleReset();
+                this.props.handleNewRowClick(false);
             })
             .catch((error) => {
                 this.setState({
                     error: error.response
+                }, () => {
+                    let element = document.getElementById("errorPaper");
+                    element.scrollIntoView();
                 });
             });
 
@@ -143,12 +150,12 @@ class ResponsiveDialog extends React.Component {
                     aria-labelledby="responsive-dialog-title">
                     <DialogTitle id="responsive-dialog-title">{"Insert new row to " + tableDisplayName}</DialogTitle>
                     <DialogContent>
-                        <Paper className={classes.paperError} elevation={4}>
-                            <Typography variant="subheading" className={classes.cardMarginTopBottom}>Request Denied</Typography>
-                            <DialogContentText>{"Code: " + (this.state.error && this.state.error.data ? this.state.error.data.code : "")}</DialogContentText>
-                            <DialogContentText>{"Hint: " + (this.state.error && this.state.error.data ? this.state.error.data.hint : "")}</DialogContentText>
-                            <DialogContentText>{"Message: " + (this.state.error && this.state.error.data ? this.state.error.data.message : "")}</DialogContentText>
-                            <DialogContentText>{"Details: " + (this.state.error && this.state.error.data ? this.state.error.data.details : "")}</DialogContentText>
+                        <Paper id="errorPaper" className={classes.paperError} elevation={4}>
+                            <Typography variant="subheading" className={classes.paperMarginTopLeft}>Request Denied</Typography>
+                            <DialogContentText className={classes.paperMarginLeft}>{"Code: " + (this.state.error && this.state.error.data ? this.state.error.data.code : "")}</DialogContentText>
+                            <DialogContentText className={classes.paperMarginLeft}>{"Hint: " + (this.state.error && this.state.error.data ? this.state.error.data.hint : "")}</DialogContentText>
+                            <DialogContentText className={classes.paperMarginLeft}>{"Message: " + (this.state.error && this.state.error.data ? this.state.error.data.message : "")}</DialogContentText>
+                            <DialogContentText className={classes.paperMarginLeft}>{"Details: " + (this.state.error && this.state.error.data ? this.state.error.data.details : "")}</DialogContentText>
                         </Paper>
 
                         <Typography type="subheading" className={classes.cardMarginTopBottom}>New Row</Typography>
@@ -183,6 +190,16 @@ class ResponsiveDialog extends React.Component {
 }
 
 const styleSheet = {
+    paperMarginTopLeft: {
+        paddingLeft: 16,
+        paddingTop: 16,
+        paddingBottom: 8
+    },
+    paperMarginLeft: {
+        paddingLeft: 16,
+        paddingBottom: 8,
+        paddingRight: 8
+    },
     cardMarginTopBottom: { // For items within the same section
         marginBottom: 8,
         marginTop: 16
@@ -194,8 +211,7 @@ const styleSheet = {
         width: 60 + '%',
     },
     paperError: {
-        background: "pink",
-        color: "white"
+        backgroundColor: "pink"
     }
 };
 

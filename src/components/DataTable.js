@@ -503,6 +503,15 @@ class DataTable extends Component {
         this.setState({ snackBarVisibility: false });
     };
 
+    // Allows NewRow.js to insert a new row to state.data
+    insertNewRow = (row) => {
+        let data = this.state.data;
+        data.splice(0, 0, row[0]);
+        this.setState({
+            data: data
+        });
+    }
+
     render() {
         let classes = this.props.classes;
         let { columns, data } = this.state;
@@ -595,6 +604,7 @@ class DataTable extends Component {
                         table={this.state.table}
                         columns={this.state.columns}
                         allColumns={this.props.allColumns}
+                        insertNewRow={this.insertNewRow}
                         dbPkInfo={this.props.dbPkInfo}
                         url={this.state.url}
                         qbFilters={this.props.qbFilters}
