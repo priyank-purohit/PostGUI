@@ -115,19 +115,8 @@ class ResponsiveDialog extends React.Component {
                 //console.log("Change Log POST Successful:" + JSON.stringify(response));
             })
             .catch((error) => {
-                console.log(JSON.stringify(error.response));
-                // Show error in Snack-Bar
                 this.setState({
-                    error: error.response,
-                    snackBarVisibility: true,
-                    snackBarMessage: "Error committing CHANGE LOG!"
-                }, () => {
-                    this.timer = setTimeout(() => {
-                        this.setState({
-                            snackBarVisibility: false,
-                            snackBarMessage: "Unknown error"
-                        });
-                    }, 5000);
+                    error: error.response
                 });
             });
 
