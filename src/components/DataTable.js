@@ -508,7 +508,7 @@ class DataTable extends Component {
         let data = this.state.data;
         data.splice(0, 0, row[0]);
         this.setState({
-            data: data
+            data: this.addPkAsId(data)
         });
     }
 
