@@ -28,7 +28,8 @@ class ResponsiveDialog extends React.Component {
             qbFilters: props.qbFilters || [],
             url: props.url,
             inputVals: {},
-            error: ""
+            error: "",
+            submitButtonLabel: "Submit"
         }
     }
 
@@ -53,6 +54,7 @@ class ResponsiveDialog extends React.Component {
 
     // Reset all input fields
     handleReset = () => {
+        clearTimeout(this.timer);
         let qbFiltersTemp = this.state.qbFilters;
         this.setState({
             qbFilters: [],
@@ -94,51 +96,65 @@ class ResponsiveDialog extends React.Component {
     }
 
     handleSubmit = () => {
-        let input = this.state.inputVals;
-        let keys = Object.keys(this.state.inputVals);
-
-        let newRowURL = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
-        let postReqBody = {};
-
-        for (let i = 0; i < keys.length; i++) {
-            let column = keys[i];
-            let rawValue = input[keys[i]]["value"];
-            let dataType = input[keys[i]]["dataType"];
-            let value = rawValue;
-
-            if (dataType === "string") {
-                value = String(rawValue);
-            }
-            else if (dataType === "integer" || dataType === "double") {
-                value = Number(rawValue);
-            }
-            else if (dataType === "boolean") {
-                value = Boolean(rawValue);
-            }
-
-            postReqBody[column] = value;
-        }
-
-        //console.log("Changes Log URL:" + newRowURL);
-        //console.log("Changes Log POST Body:" + JSON.stringify(postReqBody));
-
-        axios.post(newRowURL, postReqBody, { headers: { Prefer: 'return=representation' } })
-            .then((response) => {
-                //console.log("New row inserted successfully:" + JSON.stringify(response.data));
-                this.commitToChangeLog(response.data);
-                this.props.insertNewRow(response.data);
-                this.handleReset();
-                this.props.handleNewRowClick(false);
-            })
-            .catch((error) => {
-                this.setState({
-                    error: error.response
-                }, () => {
-                    let element = document.getElementById("errorPaper");
-                    element.scrollIntoView();
-                });
+        if (this.state.submitButtonLabel === "Submit") {
+            this.setState({
+                submitButtonLabel: "Are you sure?"
             });
+            this.timer = setTimeout(() => {
+                this.setState({
+                    submitButtonLabel: "Submit"
+                });
+            }, 4000);
+        } else {
+            clearTimeout(this.timer);
+            this.setState({
+                submitButtonLabel: "Submit"
+            });
+            let input = this.state.inputVals;
+            let keys = Object.keys(this.state.inputVals);
 
+            let newRowURL = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
+            let postReqBody = {};
+
+            for (let i = 0; i < keys.length; i++) {
+                let column = keys[i];
+                let rawValue = input[keys[i]]["value"];
+                let dataType = input[keys[i]]["dataType"];
+                let value = rawValue;
+
+                if (dataType === "string") {
+                    value = String(rawValue);
+                }
+                else if (dataType === "integer" || dataType === "double") {
+                    value = Number(rawValue);
+                }
+                else if (dataType === "boolean") {
+                    value = Boolean(rawValue);
+                }
+
+                postReqBody[column] = value;
+            }
+
+            //console.log("Changes Log URL:" + newRowURL);
+            //console.log("Changes Log POST Body:" + JSON.stringify(postReqBody));
+
+            axios.post(newRowURL, postReqBody, { headers: { Prefer: 'return=representation' } })
+                .then((response) => {
+                    //console.log("New row inserted successfully:" + JSON.stringify(response.data));
+                    this.commitToChangeLog(response.data);
+                    this.props.insertNewRow(response.data);
+                    this.handleReset();
+                    this.props.handleNewRowClick(false);
+                })
+                .catch((error) => {
+                    this.setState({
+                        error: error.response
+                    }, () => {
+                        let element = document.getElementById("errorPaper");
+                        element.scrollIntoView();
+                    });
+                });
+        }
     }
 
     render() {
@@ -193,7 +209,7 @@ class ResponsiveDialog extends React.Component {
                     <DialogActions>
                         <Button onClick={this.handleClose} >Cancel</Button>
                         <Button onClick={this.handleReset} >Reset</Button>
-                        <Button onClick={this.handleSubmit} color="secondary" autoFocus>Submit</Button>
+                        <Button onClick={this.handleSubmit} color="secondary" autoFocus>{this.state.submitButtonLabel}</Button>
                     </DialogActions>
                 </Dialog>
             </div >
