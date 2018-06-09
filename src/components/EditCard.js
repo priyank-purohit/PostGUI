@@ -268,7 +268,7 @@ class EditCard extends Component {
                 <Divider />
 
                 <Button onClick={this.handleSubmitClick.bind(this)} disabled={!(this.state.featureEnabled && this.state.primaryKeysAvailable)} color="primary" className={classes.button} value={this.state.submitButtonLabel} >{this.state.submitButtonLabel}</Button>
-                <Button onClick={this.handleNewRowClick.bind(this)} disabled={false && !(this.state.featureEnabled && this.state.primaryKeysAvailable)} color="primary" className={classes.button} value={"New Row"} >{"New Row"}</Button>
+                <Button onClick={this.handleNewRowClick.bind(this)} disabled={!(this.state.featureEnabled && this.state.primaryKeysAvailable)} color="primary" className={classes.button} value={"New Row"} >{"New Row"}</Button>
                 <Button onClick={this.handleRemoveAllClick.bind(this)} disabled={!(this.state.featureEnabled && this.state.primaryKeysAvailable)} className={classes.button && classes.floatRight} value={this.state.removeButtonLabel}>{this.state.removeButtonLabel}</Button>
             </Paper>
 
