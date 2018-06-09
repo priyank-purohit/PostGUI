@@ -24,7 +24,8 @@ class ResponsiveDialog extends React.Component {
             allColumns: props.allColumns,
             primaryKeys: props.primaryKeys || [],
             qbFilters: props.qbFilters || [],
-            url: props.url
+            url: props.url,
+            inputVals: {}
         }
     }
 
@@ -52,10 +53,48 @@ class ResponsiveDialog extends React.Component {
             qbFilters: []
         }, () => {
             this.setState({
-                qbFilters: qbFiltersTemp
+                qbFilters: qbFiltersTemp,
+                inputVals: {}
             })
         });
     };
+
+    handleInput = (event, column, dataType) => {
+        let value = event.target.value; // New value from user
+        let inputValues = this.state.inputVals || {};
+
+        // Assign one of three data types to VALUE
+        if (dataType === "string" && (String(value) !== "")) {
+            value = String(value);
+            inputValues[column] = value;
+        }
+        else if (dataType === "string" && (String(value) === "")) {
+            delete inputValues[column];
+        }
+        else if ((dataType === "integer" || dataType === "double") && (String(value) !== "")) {
+            value = Number(value);
+            inputValues[column] = value;
+        }
+        else if ((dataType === "integer" || dataType === "double") && (String(value) === "")) {
+            delete inputValues[column];
+        }
+        else if (dataType === "boolean" && (String(value) !== "")) {
+            value = Boolean(value);
+            inputValues[column] = value;
+        }
+        else if (dataType === "boolean" && (String(value) === "")) {
+            delete inputValues[column];
+        }
+        else {
+            inputValues[column] = value;
+        }
+
+        this.setState({
+            inputVals: inputValues
+        }, () => {
+            console.log(JSON.stringify(this.state.inputVals));
+        });
+    }
 
     handleSubmit = () => {
         // Submit HTTP Request
@@ -85,11 +124,12 @@ class ResponsiveDialog extends React.Component {
                                 this.state.qbFilters.map((column) => {
                                     return (
                                         <TextField
+                                            onChange={(e) => this.handleInput(e, column.id, column.type)}
                                             key={column.id}
                                             label={column.label ? column.label : column.id}
                                             required={(this.state.primaryKeys).indexOf(column.id) >= 0}
                                             placeholder={column.type}
-                                            value={column.default_value || undefined}
+                                            value={(column.default_value || this.state.inputVals[column.id]) || ""}
                                             className={classes.textField}
                                             margin="normal" />
                                     )
