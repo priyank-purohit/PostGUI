@@ -90,7 +90,7 @@ class ResponsiveDialog extends React.Component {
             primaryKey[this.state.primaryKeys[i]] = newRow[0][this.state.primaryKeys[i]];
         }
         //console.log(this.state.dbIndex, new Date(Date.now()).toISOString(), this.state.table, primaryKey, "ROW_INSERT", "{}", newRow[0], "ROW INSERTED.", "public")
-        this.props.postReqToChangeLog(this.state.dbIndex, new Date(Date.now()).toISOString(), this.state.table, primaryKey, "ROW_INSERT", "{}", newRow[0], "ROW INSERTED.", "public")
+        this.props.postReqToChangeLog(this.state.dbIndex, new Date(Date.now()).toISOString(), this.state.table, primaryKey, "ROW_INSERT", "{}", newRow[0], "ROW INSERTED.", "public");
     }
 
     handleSubmit = () => {
