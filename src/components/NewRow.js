@@ -45,8 +45,16 @@ class ResponsiveDialog extends React.Component {
         this.props.handleNewRowClick(false);
     };
 
+    // Reset all input fields
     handleReset = () => {
-        // Reset all input fields
+        let qbFiltersTemp = this.state.qbFilters;
+        this.setState({
+            qbFilters: []
+        }, () => {
+            this.setState({
+                qbFilters: qbFiltersTemp
+            })
+        });
     };
 
     handleSubmit = () => {
