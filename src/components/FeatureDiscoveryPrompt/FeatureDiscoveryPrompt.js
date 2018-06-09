@@ -77,7 +77,7 @@ export default class FeatureDiscoveryPrompt extends Component {
             style: {
                 ...child.props.style,
                 position: child.props.style != null && child.props.style.position != null && child.props.style.position !== 'static' ? child.props.style.position : 'relative',
-                zIndex: 2
+                zIndex: this.props.open ? 2 : 1
             }
         })
     }
