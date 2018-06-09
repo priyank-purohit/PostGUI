@@ -96,7 +96,7 @@ class ResponsiveDialog extends React.Component {
     }
 
     handleSubmit = () => {
-        if (this.state.submitButtonLabel === "Submit") {
+        if (this.state.submitButtonLabel === "Submit") { // Give user 4 seconds to confirm
             this.setState({
                 submitButtonLabel: "Are you sure?"
             });
@@ -105,7 +105,7 @@ class ResponsiveDialog extends React.Component {
                     submitButtonLabel: "Submit"
                 });
             }, 4000);
-        } else {
+        } else { // User wants to submit for sure, so do it
             clearTimeout(this.timer);
             this.setState({
                 submitButtonLabel: "Submit"
