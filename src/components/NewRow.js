@@ -115,7 +115,7 @@ class ResponsiveDialog extends React.Component {
 
         axios.post(newRowURL, postReqBody, { headers: { Prefer: 'return=representation' } })
             .then((response) => {
-                console.log("New row inserted successfully:" + JSON.stringify(response.data));
+                //console.log("New row inserted successfully:" + JSON.stringify(response.data));
                 this.props.insertNewRow(response.data);
                 this.handleReset();
                 this.props.handleNewRowClick(false);
