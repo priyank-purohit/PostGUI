@@ -93,7 +93,7 @@ class EditCard extends Component {
     handleRemoveAllClick(e) {
         if (this.state.removeButtonLabel === "Remove All") {
             this.setState({
-                removeButtonLabel: "Confirm Remove All?"
+                removeButtonLabel: "Are You Sure?"
             });
             this.timer = setTimeout(() => {
                 this.setState({
