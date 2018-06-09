@@ -277,6 +277,7 @@ class EditCard extends Component {
                 open={this.state.newRowDialogOpen}
 
                 insertNewRow={this.props.insertNewRow}
+                postReqToChangeLog={this.props.postReqToChangeLog}
 
                 dbIndex={this.props.dbIndex}
                 table={this.props.table}

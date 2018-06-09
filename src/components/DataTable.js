@@ -614,6 +614,7 @@ class DataTable extends Component {
                         submitChanges={this.submitChanges.bind(this)}
                         deleteChange={this.deleteChange.bind(this)}
                         deleteTableChanges={this.deleteTableChanges.bind(this)}
+                        postReqToChangeLog={this.postReqToChangeLog.bind(this)}
                         changeEditFeatureEnabled={this.changeEditFeatureEnabled.bind(this)} />
 
                     <Downloads

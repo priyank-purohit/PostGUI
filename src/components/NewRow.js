@@ -84,6 +84,15 @@ class ResponsiveDialog extends React.Component {
         });
     }
 
+    commitToChangeLog(newRow) {
+        let primaryKey = {};
+        for (let i = 0; i < this.state.primaryKeys.length; i++) {
+            primaryKey[this.state.primaryKeys[i]] = newRow[0][this.state.primaryKeys[i]];
+        }
+        //console.log(this.state.dbIndex, new Date(Date.now()).toISOString(), this.state.table, primaryKey, "ROW_INSERT", "{}", newRow[0], "ROW INSERTED.", "public")
+        this.props.postReqToChangeLog(this.state.dbIndex, new Date(Date.now()).toISOString(), this.state.table, primaryKey, "ROW_INSERT", "{}", newRow[0], "ROW INSERTED.", "public")
+    }
+
     handleSubmit = () => {
         let input = this.state.inputVals;
         let keys = Object.keys(this.state.inputVals);
@@ -116,6 +125,7 @@ class ResponsiveDialog extends React.Component {
         axios.post(newRowURL, postReqBody, { headers: { Prefer: 'return=representation' } })
             .then((response) => {
                 //console.log("New row inserted successfully:" + JSON.stringify(response.data));
+                this.commitToChangeLog(response.data);
                 this.props.insertNewRow(response.data);
                 this.handleReset();
                 this.props.handleNewRowClick(false);
