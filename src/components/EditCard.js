@@ -59,7 +59,7 @@ class EditCard extends Component {
             submitButtonLabel: "Submit",
             removeButtonLabel: "Remove All",
 
-            newRowDialogOpen: true,
+            newRowDialogOpen: false,
         };
     }
 
