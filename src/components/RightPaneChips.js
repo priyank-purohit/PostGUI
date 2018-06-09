@@ -59,7 +59,7 @@ class RightPaneChips extends Component {
 								this.setState({
 									isTip1FdpOpen: true
 								});
-							}, 400);
+							}, 250);
 						}}
 						onMouseLeave={() => {
 							this.setState({ isTip1FdpOpen: false });
