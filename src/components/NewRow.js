@@ -59,7 +59,8 @@ class ResponsiveDialog extends React.Component {
         this.setState({
             qbFilters: [],
             inputVals: {},
-            error: ""
+            error: "",
+            submitButtonLabel: "Submit"
         }, () => {
             this.setState({
                 qbFilters: qbFiltersTemp
@@ -180,7 +181,7 @@ class ResponsiveDialog extends React.Component {
                             <DialogContentText className={classes.paperMarginLeft}>{"Details: " + (this.state.error && this.state.error.data ? this.state.error.data.details : "")}</DialogContentText>
                         </Paper>)}
 
-                        <DialogContentText className={[classes.paperMarginLeft, classes.paperMarginTop]}>
+                        <DialogContentText className={classes.paperMarginTop}>
                             {"Unique values for the table's primary key (" +
                                 this.state.primaryKeys.join(", ") +
                                 ") are mandatory (*). Other constraints may be imposed by the database schema, follow instructions in the error details."}
@@ -224,6 +225,7 @@ const styleSheet = {
         paddingBottom: 8
     },
     paperMarginTop: {
+        paddingLeft: 16,
         paddingTop: 16
     },
     paperMarginLeft: {
