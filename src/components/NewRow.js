@@ -91,8 +91,6 @@ class ResponsiveDialog extends React.Component {
 
         this.setState({
             inputVals: inputValues
-        }, () => {
-            console.log(JSON.stringify(this.state.inputVals));
         });
     }
 
