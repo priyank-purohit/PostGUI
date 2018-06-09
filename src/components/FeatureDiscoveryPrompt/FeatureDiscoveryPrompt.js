@@ -70,6 +70,7 @@ export default class FeatureDiscoveryPrompt extends Component {
                     element={this}
                     onClose={onClose}
                     subtractFromTopPos={this.props.subtractFromTopPos}
+                    opacity={this.props.opacity}
                     ref={(ref) => { this.circles = ref }}
                     title={title}
                 />

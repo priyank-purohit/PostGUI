@@ -17,7 +17,7 @@ export default class Circles extends Component {
 
         injectStyle(`
     @keyframes outerPulse {
-      0%      { transform: scale(1.0); opacity: 0.95 }    
+      0%      { transform: scale(1.0); opacity: 0.9 }    
       100%    { transform: scale(2.0); opacity: 0.0 }
     }`)
         this.state = {
@@ -103,7 +103,7 @@ export default class Circles extends Component {
                 width: `${outerCircleSize}px`,
                 borderRadius: '50%',
                 backgroundColor,
-                opacity: open ? 0.95 : 0
+                opacity: open ? this.props.opacity : 0
             },
             textBox: {
                 fontFamily: 'Roboto',

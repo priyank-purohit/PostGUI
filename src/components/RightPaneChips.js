@@ -49,10 +49,24 @@ class RightPaneChips extends Component {
 					open={this.state.isTip1FdpOpen}
 					backgroundColor={grey[600]}
 					title="Rows in Data Table"
-					zIndex={3}
 					subtractFromTopPos={60}
+					opacity={0.95}
 					description="Keep track of the rows displayed to ensure full query result is displayed. Increase 'Row-limit' and check off 'Get exact row count' to keep track of row count.">
-					<Chip label={rowCountChipLabel} onClick={() => this.setState({ isTip1FdpOpen: !this.state.isTip1FdpOpen })} key={1} className={classes.chip} />
+					<Chip
+						label={rowCountChipLabel}
+						onMouseEnter={() => {
+							this.timer = setTimeout(() => {
+								this.setState({
+									isTip1FdpOpen: true
+								});
+							}, 400);
+						}}
+						onMouseLeave={() => {
+							this.setState({ isTip1FdpOpen: false });
+							clearTimeout(this.timer);
+						}}
+						key={1}
+						className={classes.chip} />
 				</FeatureDiscoveryPrompt>
 
 				{this.state.rows === this.state.rowLimit && this.state.rows !== this.state.maxRows ? <Chip label={this.state.tip2} title={this.state.title2} key={3} className={classes.chip} /> : <div></div>}
