@@ -9,7 +9,9 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
 import TextField from '@material-ui/core/TextField';
-import { withStyles, Divider } from '@material-ui/core';
+import { withStyles, Divider, Paper } from '@material-ui/core';
+
+import axios from 'axios';
 
 let lib = require('../utils/library.js');
 
@@ -25,7 +27,8 @@ class ResponsiveDialog extends React.Component {
             primaryKeys: props.primaryKeys || [],
             qbFilters: props.qbFilters || [],
             url: props.url,
-            inputVals: {}
+            inputVals: {},
+            error: ""
         }
     }
 
@@ -80,8 +83,54 @@ class ResponsiveDialog extends React.Component {
 
     sanitizeInput() {
         let input = this.state.inputVals;
+        let keys = Object.keys(this.state.inputVals);
 
-        console.log(JSON.stringify(input));
+        let newRowURL = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
+        let postReqBody = {};
+
+        for (let i = 0; i < keys.length; i++) {
+            let column = keys[i];
+            let rawValue = input[keys[i]]["value"];
+            let dataType = input[keys[i]]["dataType"];
+            let value = rawValue;
+
+            if (dataType === "string") {
+                value = String(rawValue);
+            }
+            else if (dataType === "integer" || dataType === "double") {
+                value = Number(rawValue);
+            }
+            else if (dataType === "boolean") {
+                value = Boolean(rawValue);
+            }
+
+            postReqBody[column] = value;
+        }
+
+        console.log("Changes Log URL:" + newRowURL);
+        console.log("Changes Log POST Body:" + JSON.stringify(postReqBody));
+
+        axios.post(newRowURL, postReqBody, { headers: { Prefer: 'return=representation' } })
+            .then((response) => {
+                //console.log("Change Log POST Successful:" + JSON.stringify(response));
+            })
+            .catch((error) => {
+                console.log(JSON.stringify(error.response));
+                // Show error in Snack-Bar
+                this.setState({
+                    error: error.response,
+                    snackBarVisibility: true,
+                    snackBarMessage: "Error committing CHANGE LOG!"
+                }, () => {
+                    this.timer = setTimeout(() => {
+                        this.setState({
+                            snackBarVisibility: false,
+                            snackBarMessage: "Unknown error"
+                        });
+                    }, 5000);
+                });
+            });
+
     }
 
     handleSubmit = () => {
@@ -105,7 +154,13 @@ class ResponsiveDialog extends React.Component {
                     aria-labelledby="responsive-dialog-title">
                     <DialogTitle id="responsive-dialog-title">{"Insert new row to " + tableDisplayName}</DialogTitle>
                     <DialogContent>
-                        <DialogContentText>Fill in a value for each column, be sure to ensure data type is correct. Often, new rows are rejected because the database schema does not allow blank values for certain columns. Make sure any columns marked as NOT NULL are not left blank.</DialogContentText>
+                        <Paper className={classes.paperError} elevation={4}>
+                            <Typography variant="subheading" className={classes.cardMarginTopBottom}>Request Denied</Typography>
+                            <DialogContentText>{"Code: " + (this.state.error && this.state.error.data ? this.state.error.data.code : "")}</DialogContentText>
+                            <DialogContentText>{"Hint: " + (this.state.error && this.state.error.data ? this.state.error.data.hint : "")}</DialogContentText>
+                            <DialogContentText>{"Message: " + (this.state.error && this.state.error.data ? this.state.error.data.message : "")}</DialogContentText>
+                            <DialogContentText>{"Details: " + (this.state.error && this.state.error.data ? this.state.error.data.details : "")}</DialogContentText>
+                        </Paper>
 
                         <Typography type="subheading" className={classes.cardMarginTopBottom}>New Row</Typography>
                         <div className={classes.cardMarginLeft}>
@@ -148,6 +203,10 @@ const styleSheet = {
     },
     textField: {
         width: 60 + '%',
+    },
+    paperError: {
+        background: "pink",
+        color: "white"
     }
 };
 

@@ -200,6 +200,7 @@ class DataTable extends Component {
         let changeLogURL = lib.getDbConfig(this.state.dbIndex, "url") + "/change_log";
         let changeLogPostReqBody = {};
 
+        // These columns are hardcoded ... the db schema for the change-log table is provided separately
         changeLogPostReqBody["change_timestamp"] = changeTimeStamp;
         changeLogPostReqBody["table_changed"] = tableChanged;
         changeLogPostReqBody["primary_key_of_changed_row"] = JSON.stringify(primaryKey);
