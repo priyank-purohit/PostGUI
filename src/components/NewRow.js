@@ -63,34 +63,16 @@ class ResponsiveDialog extends React.Component {
         let value = event.target.value; // New value from user
         let inputValues = this.state.inputVals || {};
 
-        // Assign one of three data types to VALUE
-        if (dataType === "string" && (String(value) !== "")) {
-            value = String(value);
-            inputValues[column] = value;
-        }
-        else if (dataType === "string" && (String(value) === "")) {
+        if (value === "") {
             delete inputValues[column];
-        }
-        else if ((dataType === "integer" || dataType === "double") && (String(value) !== "")) {
-            value = Number(value);
-            inputValues[column] = value;
-        }
-        else if ((dataType === "integer" || dataType === "double") && (String(value) === "")) {
-            delete inputValues[column];
-        }
-        else if (dataType === "boolean" && (String(value) !== "")) {
-            value = Boolean(value);
-            inputValues[column] = value;
-        }
-        else if (dataType === "boolean" && (String(value) === "")) {
-            delete inputValues[column];
-        }
-        else {
+        } else {
             inputValues[column] = value;
         }
 
         this.setState({
             inputVals: inputValues
+        }, () => {
+            //console.log(JSON.stringify(this.state.inputVals));
         });
     }
 
