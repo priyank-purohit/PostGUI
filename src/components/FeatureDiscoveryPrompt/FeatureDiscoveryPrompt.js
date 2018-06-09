@@ -4,6 +4,11 @@ import { render, unmountComponentAtNode } from 'react-dom'
 import Circles from './Circles'
 
 /**
+ * Adapted from https://github.com/TeamWertarbyte/material-ui-feature-discovery-prompt.
+ * Modifications made to allow for multiple FDP components in a single page application.
+ */
+
+/**
  * Material design feature discovery prompt
  * @see [Feature discovery](https://material.io/guidelines/growth-communications/feature-discovery.html#feature-discovery-design)
  */
