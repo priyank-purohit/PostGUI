@@ -51,7 +51,7 @@ class RightPaneChips extends Component {
 					title="Rows in Data Table"
 					subtractFromTopPos={60}
 					opacity={0.95}
-					description="Keep track of the rows displayed to ensure full query result is displayed. Increase 'Row-limit' and check off 'Get exact row count' to keep track of row count.">
+					description="Keep track of the rows displayed to ensure full query result is displayed. Increase 'Row-limit' and enable 'Get exact row count' option to keep track of row count.">
 					<Chip
 						label={rowCountChipLabel}
 						onMouseEnter={() => {
