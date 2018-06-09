@@ -9,7 +9,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
 import TextField from '@material-ui/core/TextField';
-import { withStyles, Divider } from '@material-ui/core';
+import { withStyles, Divider, InputLabel } from '@material-ui/core';
 
 let lib = require('../utils/library.js');
 
@@ -66,7 +66,9 @@ class ResponsiveDialog extends React.Component {
         if (value === "") {
             delete inputValues[column];
         } else {
-            inputValues[column] = value;
+            inputValues[column] = inputValues[column] || {};
+            inputValues[column]["value"] = value;
+            inputValues[column]["dataType"] = dataType;
         }
 
         this.setState({
@@ -76,9 +78,16 @@ class ResponsiveDialog extends React.Component {
         });
     }
 
+    sanitizeInput() {
+        let input = this.state.inputVals;
+
+        console.log(JSON.stringify(input));
+    }
+
     handleSubmit = () => {
         // Submit HTTP Request
         // If successful, close it; else show the error as it is...
+        this.sanitizeInput();
     };
 
     render() {
@@ -109,7 +118,7 @@ class ResponsiveDialog extends React.Component {
                                             label={column.label ? column.label : column.id}
                                             required={(this.state.primaryKeys).indexOf(column.id) >= 0}
                                             placeholder={column.type}
-                                            value={(column.default_value || this.state.inputVals[column.id]) || ""}
+                                            value={(column.default_value || (this.state.inputVals[column.id] ? this.state.inputVals[column.id]["value"] : "")) || ""}
                                             className={classes.textField}
                                             margin="normal" />
                                     )
