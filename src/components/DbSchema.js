@@ -8,6 +8,8 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import Collapse from '@material-ui/core/Collapse';
+
 
 import Snackbar from '@material-ui/core/Snackbar';
 import Chip from '@material-ui/core/Chip';
@@ -578,7 +580,7 @@ class DbSchema extends Component {
 
 		// First push the table itself
 		tableColumnElements.push(
-			<ListItem button key={this.state.dbIndex + tableName} id={tableName} className={classNames || (this.state.table === tableName ? this.props.classes.primaryBackground : null)}
+			<ListItem button key={this.state.dbIndex + tableName} id={tableName} className={classNames || (this.state.table === tableName ? this.props.classes.primaryBackgroundFill : null)}
 				title={displayName} onClick={(event) => this.handleTableClick(tableName)} >
 				<ListItemIcon >
 					{this.state.table === tableName ? <FolderIconOpen className={this.props.classes.primaryColoured} /> : <FolderIcon />}
@@ -592,10 +594,18 @@ class DbSchema extends Component {
 
 		// Now push each column as hidden until state.table equals table tableName...
 		if (tableName !== "phylogenetic_tree") {
+			let currentTableColumns = [];
 			for (let i in this.state[tableName]) {
 				let columnName = this.state[tableName][i];
-				tableColumnElements.push(this.createColumnElement(columnName, tableName));
+				currentTableColumns.push(this.createColumnElement(columnName, tableName));
 			}
+			tableColumnElements.push(
+				<Collapse in={this.state.table === tableName || this.state.hoverTable === tableName} timeout="auto" key={this.state.dbIndex + tableName + "collspsibleCols"}>
+					<List component="div" key={this.state.dbIndex + tableName + "cols"}>
+						{currentTableColumns}
+					</List>
+				</Collapse>
+			);
 		} else {
 			tableColumnElements.push(
 				<ListItem button title={"Administrator has hidden the columns ... can work with them in query builder"} key={"hiddenColsOf" + tableName + this.state.dbIndex} className={this.state.table !== tableName && this.state.hoverTable !== tableName ? this.props.classes.column + " " + this.props.classes.hide : this.props.classes.column} >
@@ -617,10 +627,6 @@ class DbSchema extends Component {
 
 		// If TABLE is equal to STATE.TABLE (displayed table), show the column element
 		let classNames = this.props.classes.column;
-		if (this.state.table !== table && this.state.hoverTable !== table) {
-			classNames = this.props.classes.column + " " + this.props.classes.hide;
-			return null;
-		}
 
 		// Specifically hide columns if they do not belong to current search results
 		if (this.state.searchTerm !== "" && this.state.searchResults && (this.state.searchResults[table] === undefined || this.state.searchResults[table] === null)) {
@@ -736,7 +742,7 @@ DbSchema.propTypes = {
 
 const styleSheet = {
 	column: {
-		marginLeft: 27
+		marginLeft: 20
 	},
 	hide: {
 		display: 'none'
@@ -748,7 +754,7 @@ const styleSheet = {
 	primaryColoured: {
 		fill: indigo[400]
 	},
-	primaryBackground: {
+	primaryBackgroundFill: {
 		background: indigo[100],
 		marginLeft: 1 + '%',
 		borderRadius: 5
