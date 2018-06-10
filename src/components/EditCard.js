@@ -242,7 +242,7 @@ class EditCard extends Component {
     render() {
         const classes = this.props.classes;
 
-        return (<div className={classes.limitWidth} >
+        return (<div>
             <Paper elevation={2} className={classes.topMargin}>
                 <Typography variant="subheading" className={classes.cardcardMarginLeftTop}>Edit Table Contents</Typography>
 
@@ -315,12 +315,8 @@ const styleSheet = {
     button: {
         marginBottom: 4
     },
-    limitWidth: {
-        width: '50%'
-    },
     topMargin: {
-        marginTop: 16,
-        marginLeft: 16
+        marginTop: 16
     },
     cardMarginLeft: { // For items within the same section
         marginLeft: 32

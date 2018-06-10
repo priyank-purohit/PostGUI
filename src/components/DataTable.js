@@ -593,8 +593,8 @@ class DataTable extends Component {
                             noDataText={this.props.noDataText} />)}
 
                 <div className={this.props.classes.cardGroups} >
-                    <Grid container spacing={24}>
-                        <Grid item xs={12} sm={6}>
+                    <Grid container spacing={12}>
+                        <Grid item sm={12} md={6}>
                             <EditCard
                                 dbIndex={this.state.dbIndex}
                                 table={this.state.table}
@@ -613,7 +613,7 @@ class DataTable extends Component {
                                 postReqToChangeLog={this.postReqToChangeLog.bind(this)}
                                 changeEditFeatureEnabled={this.changeEditFeatureEnabled.bind(this)} />
                         </Grid>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item sm={12} md={6}>
                             <Downloads
                                 dbIndex={this.state.dbIndex}
                                 table={this.state.table}
