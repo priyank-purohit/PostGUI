@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Chip from '@material-ui/core/Chip';
 
+import FeatureDiscoveryPrompt from './FeatureDiscoveryPrompt/FeatureDiscoveryPrompt';
+import grey from '@material-ui/core/colors/grey';
 
 class RightPaneChips extends Component {
 	constructor(props) {
@@ -19,9 +21,9 @@ class RightPaneChips extends Component {
 			maxRows: props.maxRows ? props.maxRows : 100000,
 			tip: "Tip: Hold shift and click to multi-sort!",
 			tip2: "Increase row-limit for full result.",
-			title2: "Resubmit query with higher row-limit to get all rows in the result.",
-			tip3: "Download option allows for 2.5M row-limit.",
-			title3: "To get access to an even bigger output, check help section!"
+			title2: "",
+			tip3: "Use Batch Download option.",
+			isTip1FdpOpen: false
 		}
 	}
 
@@ -41,9 +43,81 @@ class RightPaneChips extends Component {
 		}
 		return (
 			<div className={classes.row}>
-				<Chip label={rowCountChipLabel} key={1} className={classes.chip} />
-				{this.state.rows === this.state.rowLimit && this.state.rows !== this.state.maxRows ? <Chip label={this.state.tip2} title={this.state.title2} key={3} className={classes.chip} /> : <div></div>}
-				{this.state.rows === this.state.maxRows ? <Chip label={this.state.tip3} title={this.state.title3} key={2} className={classes.chip} /> : <div></div>}
+				<FeatureDiscoveryPrompt
+					onClose={() => this.setState({ isTip1FdpOpen: false })}
+					open={this.state.isTip1FdpOpen}
+					backgroundColor={grey[600]}
+					title="Rows in Data Table"
+					subtractFromTopPos={60}
+					opacity={0.95}
+					description="Keep track of the rows displayed to ensure full query result is displayed. Increase 'Row-limit' and enable 'Get exact row count' option to keep track of row count.">
+					<Chip
+						label={rowCountChipLabel}
+						onMouseEnter={() => {
+							this.timer = setTimeout(() => {
+								this.setState({
+									isTip1FdpOpen: true
+								});
+							}, 250);
+						}}
+						onMouseLeave={() => {
+							this.setState({ isTip1FdpOpen: false });
+							clearTimeout(this.timer);
+						}}
+						key={1}
+						className={classes.chip} />
+				</FeatureDiscoveryPrompt>
+
+				{this.state.rows === this.state.rowLimit && this.state.rows !== this.state.maxRows ?
+					<FeatureDiscoveryPrompt
+						onClose={() => this.setState({ isTip2FdpOpen: false })}
+						open={this.state.isTip2FdpOpen}
+						backgroundColor={grey[600]}
+						title="Increase Row-limit"
+						subtractFromTopPos={75}
+						opacity={0.95}
+						description="A higher row-limit can show all rows in the query result.">
+						<Chip
+							label={this.state.tip2}
+							key={3}
+							className={classes.chip}
+							onMouseEnter={() => {
+								this.timer = setTimeout(() => {
+									this.setState({
+										isTip2FdpOpen: true
+									});
+								}, 250);
+							}}
+							onMouseLeave={() => {
+								this.setState({ isTip2FdpOpen: false });
+								clearTimeout(this.timer);
+							}} />
+					</FeatureDiscoveryPrompt> : <div></div>}
+				{this.state.rows === this.state.maxRows ?
+					<FeatureDiscoveryPrompt
+						onClose={() => this.setState({ isTip3FdpOpen: false })}
+						open={this.state.isTip3FdpOpen}
+						backgroundColor={grey[600]}
+						title="Batch Download Option"
+						subtractFromTopPos={75}
+						opacity={0.95}
+						description="Can download data in batches when the full query result contains more than 2.5 million rows.">
+						<Chip
+							label={this.state.tip3}
+							key={2}
+							className={classes.chip}
+							onMouseEnter={() => {
+								this.timer = setTimeout(() => {
+									this.setState({
+										isTip3FdpOpen: true
+									});
+								}, 250);
+							}}
+							onMouseLeave={() => {
+								this.setState({ isTip3FdpOpen: false });
+								clearTimeout(this.timer);
+							}} />
+					</FeatureDiscoveryPrompt> : <div></div>}
 				<Chip label={this.state.tip} key={4} className={classes.chip} />
 			</div>
 		);

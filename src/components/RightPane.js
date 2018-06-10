@@ -183,6 +183,10 @@ class RightPane extends Component {
 		const rules = newRules ? newRules : defaultRules;
 		const filters = lib.getQBFilters(dbIndex, table, columns, dbSchemaDefinitions);
 
+		this.setState({
+			qbFilters: filters
+		});
+
 		if (newRules !== null && newRules !== undefined && this.checkIfRulesColumnsAreInStateTableColumns(rules)) {
 			window.$(element).queryBuilder({ filters, rules, plugins: ['not-group'] });
 
@@ -470,7 +474,7 @@ class RightPane extends Component {
 							success={this.state.submitSuccess}
 							error={this.state.submitError} />
 					</div>
-					<Tooltip id="tooltip-bottom" title={"See more rows of the query result in the DataTable. Max limit is 250,000 rows."} placement="bottom">
+					<Tooltip id="tooltip-bottom" title={"Max limit is 250,000 rows. Use Batch Download option for more."} placement="bottom">
 						<TextField
 							required
 							id="rowLimit"
@@ -482,9 +486,7 @@ class RightPane extends Component {
 							onChange={this.handleRowLimitChange.bind(this)} />
 					</Tooltip>
 
-					<Tooltip id="tooltip-bottom" title={"Get exact count of rows in the query result."} placement="bottom">
-						<FormControlLabel control={<Checkbox onChange={this.handleGetExactRowCountToggle.bind(this)} value="getExactRowCount" />} checked={this.state.exactRowCount} label={"Get exact row count (slow)"} className={classes.marginLeft} />
-					</Tooltip>
+					<FormControlLabel control={<Checkbox onChange={this.handleGetExactRowCountToggle.bind(this)} value="getExactRowCount" />} checked={this.state.exactRowCount} label={"Get exact row count (slow)"} className={classes.marginLeft} />
 
 					<Typography type="subheading" className={classes.cardMarginLeftTop}>Query Results</Typography>
 					<RightPaneChips rows={this.state.rows} totalRows={this.state.totalRows} rowLimit={this.state.rowLimit} maxRows={maxRowsInOutput} />
@@ -494,7 +496,9 @@ class RightPane extends Component {
 							dbIndex={this.state.dbIndex}
 							table={this.state.table}
 							columns={this.state.visibleColumns ? this.state.visibleColumns : this.state.columns}
+							allColumns={this.state.columns}
 							data={this.state.rawData}
+							qbFilters={this.state.qbFilters}
 							url={this.state.url}
 							totalRows={this.state.totalRows}
 							dbPkInfo={this.props.dbPkInfo}

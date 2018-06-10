@@ -200,6 +200,7 @@ class DataTable extends Component {
         let changeLogURL = lib.getDbConfig(this.state.dbIndex, "url") + "/change_log";
         let changeLogPostReqBody = {};
 
+        // These columns are hardcoded ... the db schema for the change-log table is provided separately
         changeLogPostReqBody["change_timestamp"] = changeTimeStamp;
         changeLogPostReqBody["table_changed"] = tableChanged;
         changeLogPostReqBody["primary_key_of_changed_row"] = JSON.stringify(primaryKey);
@@ -502,6 +503,15 @@ class DataTable extends Component {
         this.setState({ snackBarVisibility: false });
     };
 
+    // Allows NewRow.js to insert a new row to state.data
+    insertNewRow = (row) => {
+        let data = this.state.data;
+        data.splice(0, 0, row[0]);
+        this.setState({
+            data: this.addPkAsId(data)
+        });
+    }
+
     render() {
         let classes = this.props.classes;
         let { columns, data } = this.state;
@@ -542,8 +552,6 @@ class DataTable extends Component {
             toggleAll,
             selectType: "checkbox",
             getTrProps: (s, r) => {
-                // someone asked for an example of a background color change
-                // here it is...
                 let selected = false;
                 try {
                     selected = this.isSelected(r.original._id);
@@ -595,14 +603,18 @@ class DataTable extends Component {
                         dbIndex={this.state.dbIndex}
                         table={this.state.table}
                         columns={this.state.columns}
+                        allColumns={this.props.allColumns}
+                        insertNewRow={this.insertNewRow}
                         dbPkInfo={this.props.dbPkInfo}
                         url={this.state.url}
+                        qbFilters={this.props.qbFilters}
                         featureEnabled={this.state.editFeatureEnabled}
                         changesMade={this.state.editFeatureChangesMade}
                         rowsStrikedOut={this.state.rowsStrikedOut}
                         submitChanges={this.submitChanges.bind(this)}
                         deleteChange={this.deleteChange.bind(this)}
                         deleteTableChanges={this.deleteTableChanges.bind(this)}
+                        postReqToChangeLog={this.postReqToChangeLog.bind(this)}
                         changeEditFeatureEnabled={this.changeEditFeatureEnabled.bind(this)} />
 
                     <Downloads
