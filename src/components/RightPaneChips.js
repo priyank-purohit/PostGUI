@@ -23,7 +23,9 @@ class RightPaneChips extends Component {
 			tip2: "Increase row-limit for full result.",
 			title2: "",
 			tip3: "Use Batch Download option.",
-			isTip1FdpOpen: false
+			isTip1FdpOpen: false,
+			isTip2FdpOpen: false,
+			isTip3FdpOpen: false
 		}
 	}
 

@@ -380,6 +380,16 @@ class RightPane extends Component {
 	}
 
 
+	// Allows NewRow.js to insert a new row to state.rawData
+	insertNewRow = (row) => {
+		let data = this.state.rawData;
+		data.splice(0, 0, row[0]);
+		this.setState({
+			rawData: data
+		});
+	}
+
+
 	handleSubmitButtonClick() {
 		// Get rid of the timer
 		clearTimeout(this.timer);
@@ -502,6 +512,7 @@ class RightPane extends Component {
 							url={this.state.url}
 							totalRows={this.state.totalRows}
 							dbPkInfo={this.props.dbPkInfo}
+							insertNewRow={this.insertNewRow}
 							noDataText={this.state.submitLoading ? "Loading ..." : (this.state.submitError ? "Query error" : (this.state.submitSuccess ? "Success!" : "No rows found"))} />
 					</div>
 				</Paper>
