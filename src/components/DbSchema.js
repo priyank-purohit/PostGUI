@@ -722,7 +722,7 @@ class DbSchema extends Component {
 					ContentProps={{ 'aria-describedby': 'message-id', }}
 					message={<span id="message-id">{this.state.snackBarMessage}</span>}
 					action={[<IconButton key="close" aria-label="Close" color="secondary" className={classes.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton>]} />
-				<List subheader={<ListSubheader component="div">Tables and Columns</ListSubheader>}>
+				<List subheader={<ListSubheader component="div" className={classes.subheaderBackground}>Tables and Columns</ListSubheader>}>
 					{this.state.tables.map((table) => {
 						// For each table, push TABLE + COLUMN elements
 						return (
@@ -763,6 +763,9 @@ const styleSheet = {
 		margin: 5,
 		marginTop: 10,
 		marginBottom: 0
+	},
+	subheaderBackground: {
+		background: 'white'
 	}
 };
 
