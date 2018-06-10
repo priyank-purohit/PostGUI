@@ -9,7 +9,7 @@ import DbSchema from './DbSchema.js'
 class LeftPane extends Component {
 	render() {
 		const classes = this.props.classes;
-		let rootClasses = this.props.leftPaneVisibility === true ? classes.root : classes.rootHide;
+		let rootClasses = this.props.leftPaneVisibility === true ? classes.root : classes.root + " " + classes.rootHide;
 		return (
 			<div className={rootClasses}>
 				<DbPicker
@@ -40,12 +40,16 @@ const styleSheet = {
 		width: '29%',
 		height: '100%',
 		float: 'left',
+		opacity: 1,
+		visibility: 'visible',
+		transition: 'width 0.25s, visibility 0.2s, opacity 0.2s'
 	},
 	rootHide: {
 		width: '0%',
 		height: '100%',
 		float: 'left',
-		display: 'none'
+		opacity: 0,
+		visibility: 'hidden',
 	},
 	column: {
 		marginLeft: 27

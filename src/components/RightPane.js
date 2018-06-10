@@ -453,7 +453,7 @@ class RightPane extends Component {
 		let tableDescription = lib.getTableConfig(this.props.dbIndex, this.props.table, "description") ? lib.getTableConfig(this.props.dbIndex, this.props.table, "description") : "";
 
 		let hideClass = this.state.table ? "" : classes.hide;
-		let leftMarginClass = this.state.leftPaneVisibility === true ? classes.root : classes.rootInvisibleLeft;
+		let leftMarginClass = this.state.leftPaneVisibility === true ? classes.root : classes.root + " " + classes.rootInvisibleLeft;
 		let paperClasses = hideClass + " " + leftMarginClass;
 
 		return (
@@ -529,7 +529,8 @@ const styleSheet = {
 	root: {
 		paddingBottom: 50,
 		marginLeft: '30%',
-		marginBottom: '2%'
+		marginBottom: '2%',
+		transition: 'all 0.25s'
 	},
 	rootInvisibleLeft: {
 		paddingBottom: 50,
