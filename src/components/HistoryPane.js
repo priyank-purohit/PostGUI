@@ -9,7 +9,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
-
+import Tooltip from '@material-ui/core/Tooltip';
 import Snackbar from '@material-ui/core/Snackbar';
 
 import IconButton from '@material-ui/core/IconButton';
@@ -277,9 +277,11 @@ class HistoryPane extends Component {
 									return (
 										<ListItem button key={index} onMouseEnter={this.changeDisplayIndex.bind(this, index)} onClick={this.handleHistoryItemClick.bind(this, index)}>
 											{/* Clicking on this edit button should load the history item in the Query Builder */}
-											<ListItemIcon className={classes.noStyleButton} onClick={this.handleLinkIconClick.bind(this, index)}>
-												<LinkIcon />
-											</ListItemIcon>
+											<Tooltip id="tooltip-bottom" title={"Copy shareable link"} placement="bottom">
+												<ListItemIcon className={classes.noStyleButton} onClick={this.handleLinkIconClick.bind(this, index)}>
+													<LinkIcon />
+												</ListItemIcon>
+											</Tooltip>
 
 											{/* Nicely formatted history item */}
 											<div>
