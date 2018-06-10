@@ -328,9 +328,11 @@ class HistoryPane extends Component {
 									return (
 										<ListItem button key={index} onMouseEnter={this.changeDisplayIndex.bind(this, index)} onClick={this.handleHistoryItemClick.bind(this, index)}>
 
-											<ListItemIcon className={classes.noStyleButton} onClick={this.handleLinkIconClick.bind(this, index)}>
-												<LinkIcon />
-											</ListItemIcon>
+											<Tooltip id="tooltip-bottom" title={"Copy shareable link"} placement="bottom">
+												<ListItemIcon className={classes.noStyleButton} onClick={this.handleLinkIconClick.bind(this, index)}>
+													<LinkIcon />
+												</ListItemIcon>
+											</Tooltip>
 
 											<div>
 												<ListItemText primary={tableName} />
