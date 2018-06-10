@@ -17,6 +17,7 @@ import Button from '@material-ui/core/Button';
 import LinkIcon from '@material-ui/icons/Link';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CloseIcon from '@material-ui/icons/Close';
+import { Divider } from '@material-ui/core';
 
 let _ = require('lodash');
 let lib = require("../utils/library.js");
@@ -247,6 +248,8 @@ class HistoryPane extends Component {
 						<Button onClick={this.deleteHistory.bind(this)} variant="raised" style={{ margin: "5px" }}>Yes</Button>
 						<Button onClick={this.showDeleteHistoryDialog.bind(this)} variant="raised" color="primary" style={{ margin: "5px" }}>No</Button>
 					</div>
+
+					<Divider />
 
 					{/* History Items List */}
 					{
