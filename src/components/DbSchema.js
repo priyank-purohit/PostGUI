@@ -6,6 +6,7 @@ import axios from 'axios';
 import indigo from '@material-ui/core/colors/indigo';
 
 import List from '@material-ui/core/List';
+import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -577,7 +578,7 @@ class DbSchema extends Component {
 
 		// First push the table itself
 		tableColumnElements.push(
-			<ListItem button key={this.state.dbIndex + tableName} id={tableName} className={classNames}
+			<ListItem button key={this.state.dbIndex + tableName} id={tableName} className={classNames || (this.state.table === tableName ? this.props.classes.primaryBackground : null)}
 				title={displayName} onClick={(event) => this.handleTableClick(tableName)} >
 				<ListItemIcon >
 					{this.state.table === tableName ? <FolderIconOpen className={this.props.classes.primaryColoured} /> : <FolderIcon />}
@@ -715,7 +716,7 @@ class DbSchema extends Component {
 					SnackbarContentProps={{ 'aria-describedby': 'message-id', }}
 					message={<span id="message-id">{this.state.snackBarMessage}</span>}
 					action={[<IconButton key="close" aria-label="Close" color="secondary" className={classes.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton>]} />
-				<List>
+				<List subheader={<ListSubheader component="div">Tables and Columns</ListSubheader>}>
 					{this.state.tables.map((table) => {
 						// For each table, push TABLE + COLUMN elements
 						return (
@@ -746,6 +747,11 @@ const styleSheet = {
 	},
 	primaryColoured: {
 		fill: indigo[400]
+	},
+	primaryBackground: {
+		background: indigo[100],
+		marginLeft: 1 + '%',
+		borderRadius: 5
 	},
 	chipClasses: {
 		margin: 5,

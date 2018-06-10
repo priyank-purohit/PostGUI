@@ -17,7 +17,6 @@ class LeftPane extends Component {
 					dbIndex={this.props.dbIndex}
 					changeDbIndex={this.props.changeDbIndex} />
 				<Divider />
-				<CardHeader subheader="Tables and Columns" className={classes.lowBottomPadding} />
 				<DbSchema
 					dbIndex={this.props.dbIndex}
 					table={this.props.table}
