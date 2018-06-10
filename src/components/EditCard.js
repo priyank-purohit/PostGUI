@@ -291,7 +291,7 @@ class EditCard extends Component {
             <Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
                 open={this.state.snackBarVisibility}
                 onClose={this.handleRequestClose}
-                SnackbarContentProps={{ 'aria-describedby': 'message-id', }}
+                ContentProps={{ 'aria-describedby': 'message-id', }}
                 message={<span id="message-id">{this.state.snackBarMessage}</span>}
                 action={[<IconButton key="close" aria-label="Close" color="secondary" className={classes.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton>]} />
 
