@@ -496,7 +496,7 @@ class RightPane extends Component {
 							onChange={this.handleRowLimitChange.bind(this)} />
 					</Tooltip>
 
-					<FormControlLabel control={<Checkbox onChange={this.handleGetExactRowCountToggle.bind(this)} value="getExactRowCount" />} checked={this.state.exactRowCount} label={"Get exact row count (slow)"} className={classes.marginLeft} />
+					<FormControlLabel control={<Checkbox color="primary" onChange={this.handleGetExactRowCountToggle.bind(this)} value="getExactRowCount" />} checked={this.state.exactRowCount} label={"Get exact row count (slow)"} className={classes.marginLeft} />
 
 					<Typography type="subheading" className={classes.cardMarginLeftTop}>Query Results</Typography>
 					<RightPaneChips rows={this.state.rows} totalRows={this.state.totalRows} rowLimit={this.state.rowLimit} maxRows={maxRowsInOutput} />
