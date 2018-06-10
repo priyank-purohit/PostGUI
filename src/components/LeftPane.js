@@ -42,7 +42,7 @@ const styleSheet = {
 		float: 'left',
 		opacity: 1,
 		visibility: 'visible',
-		transition: 'width 0.25s, visibility 0.2s, opacity 0.2s'
+		transition: 'width 0.25s, visibility 0.2s, opacity 0.12s'
 	},
 	rootHide: {
 		width: '0%',
