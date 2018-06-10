@@ -199,29 +199,41 @@ class EditCard extends Component {
                 let markForDeletion = change[Object.keys(change)[ii]]['delete'];
                 let primaryKey = change[Object.keys(change)[ii]]['primaryKey'];
                 let error = change[Object.keys(change)[ii]]['error'];
+                let errorResp = change[Object.keys(change)[ii]]['errorResp'];
 
                 listItems.push(
-                    <ListItem key={String(i) + String(ii)}>
-                        <ListItemAvatar>
-                            {error ? (<Avatar className={this.props.classes.errorAvatar}><CloseIcon /></Avatar>) : markForDeletion ? (<Avatar> <DeleteOutlineIcon /> </Avatar>) : (<Avatar> <CreateIcon /> </Avatar>)}
-                        </ListItemAvatar>
-                        {
-                            markForDeletion ? (
-                                <ListItemText
-                                    primary={"Delete row"}
-                                    secondary={"Where " + this.primaryKeyStringify(primaryKey)} />
-                            ) : (
+                    <span key={String(i) + String(ii) + "span"}>
+                        <ListItem key={String(i) + String(ii)} title={error ? errorResp : ""}>
+                            <ListItemAvatar>
+                                {error ? (<Avatar className={this.props.classes.errorAvatar}><CloseIcon /></Avatar>) : markForDeletion ? (<Avatar> <DeleteOutlineIcon /> </Avatar>) : (<Avatar> <CreateIcon /> </Avatar>)}
+                            </ListItemAvatar>
+                            {
+                                markForDeletion ? (
                                     <ListItemText
-                                        primary={column + " column changed"}
-                                        secondary={"From '" + oldValue + "' to '" + newValue + "' where " + this.primaryKeyStringify(primaryKey)} />
-                                )
+                                        primary={"Delete row"}
+                                        secondary={"Where " + this.primaryKeyStringify(primaryKey)} />
+                                ) : (
+                                        <ListItemText
+                                            primary={column + " column changed"}
+                                            secondary={"From '" + oldValue + "' to '" + newValue + "' where " + this.primaryKeyStringify(primaryKey)} />
+                                    )
+                            }
+
+                            <ListItemSecondaryAction onClick={this.props.deleteChange.bind(this, column, Object.keys(change)[ii], markForDeletion || false)}>
+                                <IconButton aria-label="Delete">
+                                    <DeleteIcon />
+                                </IconButton>
+                            </ListItemSecondaryAction>
+                        </ListItem>
+
+                        {error && errorResp && errorResp.code && errorResp.message &&
+                            (<ListItem key={String(i) + String(ii) + "err"}>
+                                <ListItemText
+                                    primary={"PostgreSQL Error Code: " + errorResp.code}
+                                    secondary={"Error: " + errorResp.message} />
+                            </ListItem>)
                         }
-                        <ListItemSecondaryAction onClick={this.props.deleteChange.bind(this, column, Object.keys(change)[ii], markForDeletion || false)}>
-                            <IconButton aria-label="Delete">
-                                <DeleteIcon />
-                            </IconButton>
-                        </ListItemSecondaryAction>
-                    </ListItem>);
+                    </span>);
             }
         }
         return listItems;

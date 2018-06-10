@@ -176,7 +176,6 @@ class ResponsiveDialog extends React.Component {
                         {this.state.error !== "" && (<Paper id="errorPaper" className={classes.paperError} elevation={4}>
                             <Typography variant="subheading" className={classes.paperMarginTopLeft}>Request Denied</Typography>
                             <DialogContentText className={classes.paperMarginLeft}>{"Code: " + (this.state.error && this.state.error.data ? this.state.error.data.code : "")}</DialogContentText>
-                            <DialogContentText className={classes.paperMarginLeft}>{"Hint: " + (this.state.error && this.state.error.data ? this.state.error.data.hint : "")}</DialogContentText>
                             <DialogContentText className={classes.paperMarginLeft}>{"Message: " + (this.state.error && this.state.error.data ? this.state.error.data.message : "")}</DialogContentText>
                             <DialogContentText className={classes.paperMarginLeft}>{"Details: " + (this.state.error && this.state.error.data ? this.state.error.data.details : "")}</DialogContentText>
                         </Paper>)}
