@@ -256,7 +256,7 @@ class EditCard extends Component {
                             <ListItemAvatar>
                                 <Avatar className={classes.secondaryAvatar}><ErrorIcon /></Avatar>
                             </ListItemAvatar>
-                            <ListItemText primary="This table cannot be edited because it does not have any Primary Key defined in the PostgreSQL database." />
+                            <ListItemText primary="This table cannot be edited because its primary keys were not found." />
                         </ListItem>
                     </List>
                 </div>)}
