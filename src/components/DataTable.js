@@ -10,6 +10,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import Downloads from './Downloads.js';
 import EditCard from './EditCard.js';
 
+import Grid from '@material-ui/core/Grid';
+
 import axios from 'axios';
 import "react-table/react-table.css";
 
@@ -591,31 +593,36 @@ class DataTable extends Component {
                             noDataText={this.props.noDataText} />)}
 
                 <div className={this.props.classes.cardGroups} >
-                    <EditCard
-                        dbIndex={this.state.dbIndex}
-                        table={this.state.table}
-                        columns={this.state.columns}
-                        allColumns={this.props.allColumns}
-                        insertNewRow={this.props.insertNewRow}
-                        dbPkInfo={this.props.dbPkInfo}
-                        url={this.state.url}
-                        qbFilters={this.props.qbFilters}
-                        featureEnabled={this.state.editFeatureEnabled}
-                        changesMade={this.state.editFeatureChangesMade}
-                        rowsStrikedOut={this.state.rowsStrikedOut}
-                        submitChanges={this.submitChanges.bind(this)}
-                        deleteChange={this.deleteChange.bind(this)}
-                        deleteTableChanges={this.deleteTableChanges.bind(this)}
-                        postReqToChangeLog={this.postReqToChangeLog.bind(this)}
-                        changeEditFeatureEnabled={this.changeEditFeatureEnabled.bind(this)} />
-
-                    <Downloads
-                        dbIndex={this.state.dbIndex}
-                        table={this.state.table}
-                        columns={this.state.columns}
-                        data={this.state.data}
-                        url={this.state.url}
-                        totalRows={this.props.totalRows} />
+                    <Grid container spacing={24}>
+                        <Grid item xs={12} sm={6}>
+                            <EditCard
+                                dbIndex={this.state.dbIndex}
+                                table={this.state.table}
+                                columns={this.state.columns}
+                                allColumns={this.props.allColumns}
+                                insertNewRow={this.props.insertNewRow}
+                                dbPkInfo={this.props.dbPkInfo}
+                                url={this.state.url}
+                                qbFilters={this.props.qbFilters}
+                                featureEnabled={this.state.editFeatureEnabled}
+                                changesMade={this.state.editFeatureChangesMade}
+                                rowsStrikedOut={this.state.rowsStrikedOut}
+                                submitChanges={this.submitChanges.bind(this)}
+                                deleteChange={this.deleteChange.bind(this)}
+                                deleteTableChanges={this.deleteTableChanges.bind(this)}
+                                postReqToChangeLog={this.postReqToChangeLog.bind(this)}
+                                changeEditFeatureEnabled={this.changeEditFeatureEnabled.bind(this)} />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <Downloads
+                                dbIndex={this.state.dbIndex}
+                                table={this.state.table}
+                                columns={this.state.columns}
+                                data={this.state.data}
+                                url={this.state.url}
+                                totalRows={this.props.totalRows} />
+                        </Grid>
+                    </Grid>
                 </div>
             </div>);
     }
@@ -643,8 +650,7 @@ const styleSheet = {
         marginTop: (5) * 5
     },
     cardGroups: {
-        display: 'flex',
-        flexDirection: 'row'
+        flexGrow: 1
     }
 };
 export default withStyles(styleSheet)(DataTable);
