@@ -150,7 +150,7 @@ class Downloads extends Component {
             try {
                 // Parse out the delimiter
                 let delimiter = this.state.delimiterChoice.replace(/\\t/g, '\t'); // for tabs
-                let result = json2csv({ data: this.state.data, fields: this.state.columns, del: delimiter, hasCSVColumnTitle: this.state.tableHeader });
+                let result = json2csv.parse(this.state.data, { fields: this.state.columns, delimiter: delimiter, header: this.state.tableHeader });
                 let fileName = this.createFileName();
 
                 this.downloadFile(result, fileName, "text/plain");
@@ -162,7 +162,7 @@ class Downloads extends Component {
                 try {
                     // Parse out the delimiter
                     let delimiter = this.state.delimiterChoice.replace(/\\t/g, '\t'); // for tabs
-                    let result = json2csv({ data: this.state.dataFull, fields: this.state.columns, del: delimiter, hasCSVColumnTitle: this.state.tableHeader });
+                    let result = json2csv.parse(this.state.data, { fields: this.state.columns, delimiter: delimiter, header: this.state.tableHeader });
                     let fileName = this.createFileName(true);
 
                     this.downloadFile(result, fileName, "text/plain");
@@ -661,13 +661,13 @@ class Downloads extends Component {
                 <Typography variant="body1" className={classes.cardcardMarginLeftTop}>File Format</Typography>
                 <FormControl component="fieldset" required>
                     <RadioGroup onChange={this.handleFileFormatChange} value={this.state.fileFormat} className={classes.cardcardMarginLeftTop} >
-                        <FormControlLabel label="CSV file (spreadsheet)" value="delimited" control={<Radio />} />
+                        <FormControlLabel label="Delimited file (spreadsheet)" value="delimited" control={<Radio />} />
                         {
-                            this.state.fileFormat === 'delimited_removeToEnable' && (
+                            this.state.fileFormat === 'delimited' && (
                                 <TextField
                                     required
                                     onChange={this.handleDelimiterChange.bind(this)}
-                                    label={"Enter delimiter (\\t or , for Excel)"}
+                                    label={"Use , or \\t delimiter for sheet"}
                                     value={this.state.delimiterChoice}
                                     disabled={this.state.fileFormat !== 'delimited' ? true : false}
                                     className={classes.textField && classes.cardMarginLeft && classes.inlineTextField}
