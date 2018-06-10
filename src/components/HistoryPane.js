@@ -19,6 +19,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import CloseIcon from '@material-ui/icons/Close';
 import { Divider } from '@material-ui/core';
 
+import indigo from '@material-ui/core/colors/indigo';
+
 let _ = require('lodash');
 let lib = require("../utils/library.js");
 let displayLengthCutoff = 50;
@@ -387,7 +389,7 @@ const styleSheet = {
 	},
 	noStyleButton: {
 		border: "none",
-		backgroundColor: "transparent"
+		fill: indigo[500]
 	},
 	hide: {
 		display: 'none'
