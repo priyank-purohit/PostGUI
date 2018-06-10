@@ -52,7 +52,7 @@ class RightPaneChips extends Component {
 					title="Rows in Data Table"
 					subtractFromTopPos={60}
 					opacity={0.95}
-					description="Keep track of the rows displayed to ensure full query result is displayed. Increase 'Row-limit' and enable 'Get exact row count' option to keep track of row count.">
+					description="Keep track of rows count to ensure full query result is displayed. Increase 'Row-limit' and enable 'Get exact row count' option to ensure full result.">
 					<Chip
 						label={rowCountChipLabel}
 						onMouseEnter={() => {
@@ -78,7 +78,7 @@ class RightPaneChips extends Component {
 						title="Increase Row-limit"
 						subtractFromTopPos={75}
 						opacity={0.95}
-						description="A higher row-limit can show all rows in the query result.">
+						description="A higher row-limit can show more rows of the query result.">
 						<Chip
 							label={this.state.tip2}
 							key={3}
