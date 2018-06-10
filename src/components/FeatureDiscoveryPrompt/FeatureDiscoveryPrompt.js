@@ -93,6 +93,10 @@ export default class FeatureDiscoveryPrompt extends Component {
 FeatureDiscoveryPrompt.propTypes = {
     /** Defines if the prompt is visible. */
     open: PropTypes.bool.isRequired,
+    /** Defines opacity of the circle. */
+    opacity: PropTypes.number,
+    /** Defines offset of the central circle in the y-direction. */
+    subtractFromTopPos: PropTypes.number,
     /** Fired when the the prompt is visible and clicked. */
     onClose: PropTypes.func.isRequired,
     /** The node which will be featured. */
