@@ -109,7 +109,7 @@ export default class Circles extends Component {
                 fontFamily: 'Roboto',
                 position: 'relative',
                 zIndex: 25000,
-                paddingLeft: textBoxPaddingAtCircle,
+                paddingLeft: textBoxPaddingAtCircle * (this.props.customPaddingLeft || 1),
                 paddingRight: textBoxPadding,
                 width: textBoxWidth ? textBoxWidth : 0,
                 height: textBoxHeight,

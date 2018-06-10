@@ -70,6 +70,7 @@ export default class FeatureDiscoveryPrompt extends Component {
                     element={this}
                     onClose={onClose}
                     subtractFromTopPos={this.props.subtractFromTopPos}
+                    customPaddingLeft={this.props.customPaddingLeft || 1}
                     opacity={this.props.opacity}
                     ref={(ref) => { this.circles = ref }}
                     title={title}
@@ -97,6 +98,8 @@ FeatureDiscoveryPrompt.propTypes = {
     opacity: PropTypes.number,
     /** Defines offset of the central circle in the y-direction. */
     subtractFromTopPos: PropTypes.number,
+    /** Defines left padding for the textbox. */
+    customPaddingLeft: PropTypes.number,
     /** Fired when the the prompt is visible and clicked. */
     onClose: PropTypes.func.isRequired,
     /** The node which will be featured. */

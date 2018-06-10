@@ -10,6 +10,10 @@ import MenuIcon from '@material-ui/icons/Menu';
 import HistoryIcon from '@material-ui/icons/History';
 import Tooltip from '@material-ui/core/Tooltip';
 
+
+import FeatureDiscoveryPrompt from './FeatureDiscoveryPrompt/FeatureDiscoveryPrompt';
+import indigo from '@material-ui/core/colors/indigo';
+
 let _ = require('lodash');
 let lib = require('../utils/library.js');
 
@@ -19,7 +23,15 @@ class Navigation extends Component {
 
 	constructor(props) {
 		super(props);
-		this.changeSearchTermDebounce = _.debounce(value => this.props.changeSearchTerm(value), 350);
+		this.state = {
+			isTip1FdpOpen: false
+		}
+		this.changeSearchTermDebounce = _.debounce(value => {
+			this.props.changeSearchTerm(value);
+			this.setState({
+				isTip1FdpOpen: true
+			})
+		}, 350);
 	}
 
 	changeSearchTerm(e) {
@@ -47,9 +59,17 @@ class Navigation extends Component {
 							{dbTitle}
 						</Typography>
 						<div className={classes.searchBarFlex}>
-							<Tooltip id="tooltip-bottom" title={"Tag terms with [table] or [column] to search table or column names only. E.g. people[table] firstname[column]"} placement="bottom">
+							<FeatureDiscoveryPrompt
+								onClose={() => this.setState({ isTip1FdpOpen: false })}
+								open={this.state.isTip1FdpOpen}
+								backgroundColor={indigo[500]}
+								title="Search Tables and Columns"
+								customPaddingLeft={2}
+								subtractFromTopPos={200}
+								opacity={0.95}
+								description="Tag each term with '[table]' or '[column]'. For example, people[table] firstname[column].">
 								<TextField id="search" placeholder="Search tables and columns" onKeyPress={this.changeSearchTerm.bind(this)} onChange={this.changeSearchTerm.bind(this)} onFocus={this.changeSearchTerm.bind(this)} type="search" className={classes.searchBar} autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck="false" />
-							</Tooltip>
+							</FeatureDiscoveryPrompt>
 						</div>
 						<IconButton className={classes.rightIconsFlex} color="inherit" aria-label="Menu" onClick={this.props.toggleHistoryPane.bind(this)}>
 							<HistoryIcon className={classes.floatRight} />
