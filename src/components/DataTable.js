@@ -173,11 +173,12 @@ class DataTable extends Component {
     }
 
     // Given a COLUMN and KEY, toggles the error code for a change (when server responds with error)
-    setChangeError(column, key, error) {
+    setChangeError(column, key, error, errorResp) {
         let tempChanges = this.state.editFeatureChangesMade;
 
         // Toggle the change...
-        tempChanges[this.state.table][column][key]["error"] = error | true;
+        tempChanges[this.state.table][column][key]["error"] = error || true;
+        tempChanges[this.state.table][column][key]["errorResp"] = errorResp;
 
         this.setState({
             editFeatureChangesMade: tempChanges,
@@ -281,7 +282,7 @@ class DataTable extends Component {
                         })
                         .catch((error) => {
                             console.log("PATCH ERROR RESP:" + String(error));
-                            this.setChangeError(columnChanged, keyChanged, true);
+                            this.setChangeError(columnChanged, keyChanged, true, error.response.data);
                             // Show error in Snack-Bar
                             this.setState({
                                 snackBarVisibility: true,
@@ -329,7 +330,7 @@ class DataTable extends Component {
                         })
                         .catch((error) => {
                             console.log("ERROR RESP: " + String(error));
-                            this.setChangeError("id", keyChanged, true);
+                            this.setChangeError("id", keyChanged, true, error.response.data);
                             // Show error in Snack-Bar
                             this.setState({
                                 snackBarVisibility: true,
