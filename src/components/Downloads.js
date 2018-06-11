@@ -792,11 +792,6 @@ Downloads.propTypes = {
 
 
 const styleSheet = {
-    root: {
-        paddingBottom: 50,
-        marginLeft: '30%',
-        marginBottom: '2%'
-    },
     linearProgressClass: {
         height: 2
     },
