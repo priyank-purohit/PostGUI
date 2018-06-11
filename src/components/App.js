@@ -201,6 +201,8 @@ export default class Layout extends React.Component {
 			<div>
 				<Navigation
 					dbIndex={this.state.dbIndex}
+					table={this.state.table}
+					leftPaneVisibility={this.state.leftPaneVisibility}
 					changeSearchTerm={this.changeSearchTerm.bind(this)}
 					toggleLeftPane={this.toggleLeftPane.bind(this)}
 					toggleHistoryPane={this.toggleHistoryPane.bind(this)} />

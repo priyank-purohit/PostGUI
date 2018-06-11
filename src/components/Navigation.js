@@ -11,6 +11,7 @@ import HistoryIcon from '@material-ui/icons/History';
 
 import FeatureDiscoveryPrompt from './FeatureDiscoveryPrompt/FeatureDiscoveryPrompt';
 import indigo from '@material-ui/core/colors/indigo';
+import pink from '@material-ui/core/colors/pink';
 
 let _ = require('lodash');
 let lib = require('../utils/library.js');
@@ -22,12 +23,12 @@ class Navigation extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			isTip1FdpOpen: false
+			isSearchBarFdpOpen: false
 		}
 		this.changeSearchTermDebounce = _.debounce(value => {
 			this.props.changeSearchTerm(value);
 			this.setState({
-				isTip1FdpOpen: true
+				isSearchBarFdpOpen: true
 			})
 		}, 350);
 	}
@@ -50,16 +51,26 @@ class Navigation extends Component {
 			<div className={classes.root}>
 				<AppBar position="absolute">
 					<Toolbar>
-						<IconButton color="inherit" aria-label="Menu" onClick={this.props.toggleLeftPane.bind(this)}>
-							<MenuIcon />
-						</IconButton>
+						<FeatureDiscoveryPrompt
+							onClose={() => this.setState({ isSearchBarFdpOpen: false })}
+							open={!this.props.leftPaneVisibility && this.props.table === "" && !this.state.isSearchBarFdpOpen}
+							backgroundColor={pink[500]}
+							title="Welcome to PostGUI!"
+							customPaddingLeft={8.5}
+							subtractFromTopPos={0}
+							opacity={0.95}
+							description="Choose a table to query from the database schema.">
+							<IconButton color="inherit" aria-label="Menu" onClick={this.props.toggleLeftPane.bind(this)}>
+								<MenuIcon />
+							</IconButton>
+						</FeatureDiscoveryPrompt>
 						<Typography variant="title" color="inherit" className={classes.dbTitleFlex}>
 							{dbTitle}
 						</Typography>
 						<div className={classes.searchBarFlex}>
 							<FeatureDiscoveryPrompt
-								onClose={() => this.setState({ isTip1FdpOpen: false })}
-								open={this.state.isTip1FdpOpen}
+								onClose={() => this.setState({ isSearchBarFdpOpen: false })}
+								open={this.state.isSearchBarFdpOpen}
 								backgroundColor={indigo[500]}
 								title="Search Tables and Columns"
 								customPaddingLeft={2}
