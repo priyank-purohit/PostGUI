@@ -817,8 +817,7 @@ const styleSheet = {
         marginBottom: 4
     },
     topMargin: {
-        marginTop: 16,
-        marginLeft: 16
+        marginTop: 16
     },
     cardMarginLeft: { // For items within the same section
         marginLeft: 32

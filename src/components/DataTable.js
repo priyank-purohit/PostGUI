@@ -593,7 +593,7 @@ class DataTable extends Component {
                             noDataText={this.props.noDataText} />)}
 
                 <div className={this.props.classes.cardGroups} >
-                    <Grid container spacing={12}>
+                    <Grid container spacing={16}>
                         <Grid item sm={12} md={6}>
                             <EditCard
                                 dbIndex={this.state.dbIndex}
