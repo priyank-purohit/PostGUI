@@ -5,9 +5,12 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import HistoryIcon from '@material-ui/icons/History';
+import HelpIcon from '@material-ui/icons/HelpOutline';
+import PowerIcon from '@material-ui/icons/PowerSettingsNew';
 
 import FeatureDiscoveryPrompt from './FeatureDiscoveryPrompt/FeatureDiscoveryPrompt';
 import indigo from '@material-ui/core/colors/indigo';
@@ -82,9 +85,16 @@ class Navigation extends Component {
 								<TextField id="search" placeholder="Search tables and columns" onKeyPress={this.changeSearchTerm.bind(this)} onChange={this.changeSearchTerm.bind(this)} onFocus={this.changeSearchTerm.bind(this)} type="search" className={classes.searchBar} autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck="false" />
 							</FeatureDiscoveryPrompt>
 						</div>
-						<IconButton className={classes.rightIconsFlex} color="inherit" aria-label="Menu" onClick={this.props.toggleHistoryPane.bind(this)}>
+						<IconButton className={classes.rightIconsFlex} color="inherit" aria-label="History" onClick={this.props.toggleHistoryPane.bind(this)}>
 							<HistoryIcon className={classes.floatRight} />
 						</IconButton>
+						<IconButton className={classes.rightIconsFlex} color="inherit" aria-label="Help">
+							<HelpIcon className={classes.floatRight} />
+						</IconButton>
+						<Button color="inherit" aria-label="Logout" className={classes.button}>
+							<PowerIcon className={classes.floatRightPadded} />
+							Logout
+						</Button>
 					</Toolbar>
 				</AppBar>
 			</div>
@@ -96,7 +106,7 @@ Navigation.propTypes = {
 	classes: PropTypes.object.isRequired,
 };
 
-const styleSheet = {
+const styleSheet = theme => ({
 	root: {
 		width: '100%'
 	},
@@ -122,12 +132,19 @@ const styleSheet = {
 		float: 'right'
 	},
 	rightIconsFlex: {
-		flex: 0.1,
+		flex: 0.05,
 		display: 'block'
 	},
 	floatRight: {
 		float: 'right'
-	}
-};
+	},
+	floatRightPadded: {
+		float: 'right',
+		marginRight: 5
+	},
+	button: {
+		margin: theme.spacing.unit,
+	},
+});
 
 export default withStyles(styleSheet)(Navigation);
