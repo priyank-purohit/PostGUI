@@ -583,7 +583,8 @@ const styleSheet = {
 	},
 	hide: {
 		opacity: 0.0,
-		marginTop: 75
+		marginTop: 75,
+		visibility: 'hidden'
 	}
 };
 
