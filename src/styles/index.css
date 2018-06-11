@@ -8,6 +8,7 @@ body {
 	width: 100%;
 	max-width: 2500px;
 	margin: auto;
+	overflow-x: hidden;
 }
 
 .hide {
