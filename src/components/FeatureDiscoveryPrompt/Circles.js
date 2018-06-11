@@ -52,7 +52,8 @@ export default class Circles extends Component {
 
     getStyles() {
         const { backgroundColor } = this.props
-        const { pos, open, drawTextAboveCenter, drawTextLeftOfCenter, minimalDistanceToViewport } = this.state
+        const { pos, open, drawTextAboveCenter, minimalDistanceToViewport } = this.state
+        //const { pos, open, drawTextAboveCenter, drawTextLeftOfCenter, minimalDistanceToViewport } = this.state
         const circleSize = pos.width + 40
         const outerCircleSize = Math.min(window.innerWidth, 900)
         const textBoxHeight = 100
