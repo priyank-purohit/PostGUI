@@ -111,7 +111,7 @@ const styleSheet = {
 		marginTop: 0,
 	},
 	searchBar: {
-		width: 40 + '%',
+		width: 325 + 'px',
 		marginLeft: 5,
 		marginRight: 5,
 		background: 'white',
