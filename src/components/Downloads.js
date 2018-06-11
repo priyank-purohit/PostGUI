@@ -653,7 +653,7 @@ class Downloads extends Component {
     render() {
         const classes = this.props.classes;
 
-        return (<div className={classes.limitWidth} >
+        return (<div>
             <Paper elevation={2} className={classes.topMargin}>
                 <Typography variant="subheading" className={classes.cardcardMarginLeftTop}>Download Query Results</Typography>
 
@@ -815,9 +815,6 @@ const styleSheet = {
     },
     button: {
         marginBottom: 4
-    },
-    limitWidth: {
-        width: '50%'
     },
     topMargin: {
         marginTop: 16,
