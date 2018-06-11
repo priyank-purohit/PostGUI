@@ -55,7 +55,7 @@ class Navigation extends Component {
 							onClose={() => this.setState({ isSearchBarFdpOpen: false })}
 							open={!this.props.leftPaneVisibility && this.props.table === "" && !this.state.isSearchBarFdpOpen}
 							backgroundColor={pink[500]}
-							title="Welcome to PostGUI!"
+							title="Welcome to PostGUI"
 							customPaddingLeft={8.5}
 							subtractFromTopPos={0}
 							opacity={0.95}
@@ -64,9 +64,11 @@ class Navigation extends Component {
 								<MenuIcon />
 							</IconButton>
 						</FeatureDiscoveryPrompt>
+
 						<Typography variant="title" color="inherit" className={classes.dbTitleFlex}>
 							{dbTitle}
 						</Typography>
+
 						<div className={classes.searchBarFlex}>
 							<FeatureDiscoveryPrompt
 								onClose={() => this.setState({ isSearchBarFdpOpen: false })}
@@ -109,7 +111,7 @@ const styleSheet = {
 		marginTop: 0,
 	},
 	searchBar: {
-		width: 300,
+		width: 40 + '%',
 		marginLeft: 5,
 		marginRight: 5,
 		background: 'white',
