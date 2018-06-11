@@ -586,7 +586,6 @@ class DataTable extends Component {
 
                 <div className={this.props.classes.cardGroups} >
                     <Grid container spacing={16} direction={this.state.tablePrimaryKeys.join(",") === "" ? 'row-reverse' : 'row'}>
-                        {console.log(this.state.tablePrimaryKeys, this.state.tablePrimaryKeys !== [])}
                         {this.state.tablePrimaryKeys.join(",") !== "" &&
                             (<Grid item sm={12} md={6}>
                                 <EditCard
