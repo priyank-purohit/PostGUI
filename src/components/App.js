@@ -106,27 +106,15 @@ export default class Layout extends React.Component {
 	}
 
 	toggleLeftPane() {
-		if (this.state.leftPaneVisibility) {
-			this.setState({
-				leftPaneVisibility: false
-			});
-		} else {
-			this.setState({
-				leftPaneVisibility: true
-			});
-		}
+		this.setState({
+			leftPaneVisibility: !this.state.leftPaneVisibility
+		});
 	}
 
 	toggleHistoryPane() {
-		if (this.state.historyPaneVisibility) {
-			this.setState({
-				historyPaneVisibility: false
-			});
-		} else {
-			this.setState({
-				historyPaneVisibility: true
-			});
-		}
+		this.setState({
+			historyPaneVisibility: !this.state.historyPaneVisibility
+		});
 	}
 
 	closeHistoryPane() {
@@ -220,13 +208,6 @@ export default class Layout extends React.Component {
 						changeDbSchemaDefinitions={this.changeDbSchemaDefinitions.bind(this)}
 						changeDbPkInfo={this.changeDbPkInfo.bind(this)}
 						changeVisibleColumns={this.changeVisibleColumns.bind(this)} />
-					<HistoryPane
-						newHistoryItem={this.state.newHistoryItem}
-						dbIndex={this.state.dbIndex}
-						historyPaneVisibility={this.state.historyPaneVisibility}
-						closeHistoryPane={this.closeHistoryPane.bind(this)}
-						changeTable={this.changeTable.bind(this)}
-						changeRules={this.changeRules.bind(this)} />
 					<RightPane
 						dbIndex={this.state.dbIndex}
 						table={this.state.table}
@@ -240,6 +221,13 @@ export default class Layout extends React.Component {
 						addToHistory={this.addToHistory.bind(this)}
 						rowLimit={this.state.rowLimit}
 						exactCount={this.state.exactCount} />
+					<HistoryPane
+						newHistoryItem={this.state.newHistoryItem}
+						dbIndex={this.state.dbIndex}
+						historyPaneVisibility={this.state.historyPaneVisibility}
+						closeHistoryPane={this.closeHistoryPane.bind(this)}
+						changeTable={this.changeTable.bind(this)}
+						changeRules={this.changeRules.bind(this)} />
 				</div>
 			</div>
 		);
