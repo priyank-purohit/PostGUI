@@ -73,10 +73,7 @@ CircularFab.propTypes = {
 
 const styleSheet = {
 	wrapper: {
-		position: 'relative',
-		float: 'right',
-		marginTop: -8,
-		marginRight: '7%'
+		marginRight: '5%'
 	},
 	successButton: {
 		backgroundColor: green[500],

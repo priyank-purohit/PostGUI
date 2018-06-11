@@ -13,6 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Tooltip from '@material-ui/core/Tooltip';
+import Grid from '@material-ui/core/Grid';
 
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
@@ -458,14 +459,6 @@ class RightPane extends Component {
 
 		return (
 			<div className={classes.middlePaperSection}>
-
-				<Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-					open={this.state.snackBarVisibility}
-					onClose={this.handleRequestClose}
-					ContentProps={{ 'aria-describedby': 'message-id', }}
-					message={<span id="message-id">{this.state.snackBarMessage}</span>}
-					action={[<IconButton key="close" aria-label="Close" color="secondary" className={classes.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton>]} />
-
 				<Paper className={paperClasses} elevation={5}>
 					<CardHeader title={tableDisplayName} subheader={tableDescription} />
 
@@ -474,31 +467,54 @@ class RightPane extends Component {
 
 					<Typography type="body1" className={classes.cardMarginLeftTop}>Options</Typography>
 
-					<div title="Run Query" onClick={this.handleSubmitButtonClickCancelQuery.bind(this)}>
-						<SubmitButton
-							dbIndex={this.state.dbIndex}
-							table={this.state.table}
-							leftPaneVisibility={this.state.leftPaneVisibility}
-							getRules={this.handleSubmitButtonClick.bind(this)}
-							loading={this.state.submitLoading}
-							success={this.state.submitSuccess}
-							error={this.state.submitError} />
-					</div>
-					<Tooltip id="tooltip-bottom" title={"Max limit is 250,000 rows. Use Batch Download option for more."} placement="bottom">
-						<TextField
-							required
-							id="rowLimit"
-							type="number"
-							label="Row-limit"
-							value={this.state.rowLimit.toString()}
-							className={classes.textField && classes.cardMarginLeft}
-							margin="normal"
-							onChange={this.handleRowLimitChange.bind(this)} />
-					</Tooltip>
 
-					<FormControlLabel control={<Checkbox color="primary" onChange={this.handleGetExactRowCountToggle.bind(this)} value="getExactRowCount" />} checked={this.state.exactRowCount} label={"Get exact row count (slow)"} className={classes.marginLeft} />
+					<Grid container spacing={40} alignItems={'center'}>
+						<Grid item sm={10} md={5}>
+							{/* ROW LIMIT INPUT BOX */}
+							<Tooltip id="tooltip-bottom" title={"Max limit is 250,000 rows. Use Batch Download option for more."} placement="bottom">
+								<TextField
+									required
+									id="rowLimit"
+									type="number"
+									label="Row-limit"
+									value={this.state.rowLimit.toString()}
+									className={classes.rowLimitTextField}
+									margin="normal"
+									onChange={this.handleRowLimitChange.bind(this)} />
+							</Tooltip>
+						</Grid>
+
+						<Grid item sm={10} md={5}>
+							{/* EXACT COUNT CHECK BOX */}
+							<FormControlLabel
+								className={classes.cardMarginLeft}
+								control={
+									<Checkbox
+										color="primary"
+										onChange={this.handleGetExactRowCountToggle.bind(this)}
+										value="getExactRowCount" />
+								}
+								checked={this.state.exactRowCount}
+								label={"Get exact row count (slow)"} />
+						</Grid>
+
+						<Grid item sm={2} md={2}>
+							{/* SUBMIT FLOATING ACTION BUTTON (FAB) */}
+							<div title="Run Query" onClick={this.handleSubmitButtonClickCancelQuery.bind(this)}>
+								<SubmitButton
+									dbIndex={this.state.dbIndex}
+									table={this.state.table}
+									leftPaneVisibility={this.state.leftPaneVisibility}
+									getRules={this.handleSubmitButtonClick.bind(this)}
+									loading={this.state.submitLoading}
+									success={this.state.submitSuccess}
+									error={this.state.submitError} />
+							</div>
+						</Grid>
+					</Grid>
 
 					<Typography type="subheading" className={classes.cardMarginLeftTop}>Query Results</Typography>
+
 					<RightPaneChips rows={this.state.rows} totalRows={this.state.totalRows} rowLimit={this.state.rowLimit} maxRows={maxRowsInOutput} />
 
 					<div className={classes.cardMarginLeftRightTop} >
@@ -516,7 +532,14 @@ class RightPane extends Component {
 							noDataText={this.state.submitLoading ? "Loading ..." : (this.state.submitError ? "Query error" : (this.state.submitSuccess ? "Success!" : "No rows found"))} />
 					</div>
 				</Paper>
-			</div>
+
+				<Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+					open={this.state.snackBarVisibility}
+					onClose={this.handleRequestClose}
+					ContentProps={{ 'aria-describedby': 'message-id', }}
+					message={<span id="message-id">{this.state.snackBarMessage}</span>}
+					action={[<IconButton key="close" aria-label="Close" color="secondary" className={classes.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton>]} />
+			</div >
 		);
 	}
 }
@@ -553,17 +576,14 @@ const styleSheet = {
 		marginLeft: 16,
 		marginTop: 32 // want a bit more space at top to clearly indicate new section...
 	},
-	textField: {
-		marginLeft: 5,
+	rowLimitTextField: {
+		marginLeft: 32,
 		marginRight: 5,
 		width: 300
 	},
 	hide: {
 		opacity: 0.0,
 		marginTop: 75
-	},
-	marginLeft: {
-		marginLeft: 200
 	}
 };
 
