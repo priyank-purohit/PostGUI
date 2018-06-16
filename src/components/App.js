@@ -34,6 +34,18 @@ export default class Layout extends React.Component {
 			dbSchemaDefinitions: null,
 			dbPkInfo: null
 		};
+		this.toggleLeftPane = this.toggleLeftPane.bind(this);
+		this.toggleHistoryPane = this.toggleHistoryPane.bind(this);
+		this.changeSearchTerm = this.changeSearchTerm.bind(this);
+		this.changeDbIndex = this.changeDbIndex.bind(this);
+		this.changeColumns = this.changeColumns.bind(this);
+		this.changeDbSchemaDefinitions = this.changeDbSchemaDefinitions.bind(this);
+		this.changeDbPkInfo = this.changeDbPkInfo.bind(this);
+		this.changeVisibleColumns = this.changeVisibleColumns.bind(this);
+		this.addToHistory = this.addToHistory.bind(this);
+		this.closeHistoryPane = this.closeHistoryPane.bind(this);
+		this.changeTable = this.changeTable.bind(this);
+		this.changeRules = this.changeRules.bind(this);
 	}
 
 	// This should be called once, when app loads, to load a shared query via URL
@@ -191,43 +203,43 @@ export default class Layout extends React.Component {
 					dbIndex={this.state.dbIndex}
 					table={this.state.table}
 					leftPaneVisibility={this.state.leftPaneVisibility}
-					changeSearchTerm={this.changeSearchTerm.bind(this)}
-					toggleLeftPane={this.toggleLeftPane.bind(this)}
-					toggleHistoryPane={this.toggleHistoryPane.bind(this)} />
+					changeSearchTerm={this.changeSearchTerm}
+					toggleLeftPane={this.toggleLeftPane}
+					toggleHistoryPane={this.toggleHistoryPane} />
 
 				<div className="bodyDiv">
 					<LeftPane
 						dbIndex={this.state.dbIndex}
 						table={this.state.table}
 						searchTerm={this.state.searchTerm}
-						changeSearchTerm={this.changeSearchTerm.bind(this)}
+						changeSearchTerm={this.changeSearchTerm}
 						leftPaneVisibility={this.state.leftPaneVisibility}
-						changeDbIndex={this.changeDbIndex.bind(this)}
-						changeTable={this.changeTable.bind(this)}
-						changeColumns={this.changeColumns.bind(this)}
-						changeDbSchemaDefinitions={this.changeDbSchemaDefinitions.bind(this)}
-						changeDbPkInfo={this.changeDbPkInfo.bind(this)}
-						changeVisibleColumns={this.changeVisibleColumns.bind(this)} />
+						changeDbIndex={this.changeDbIndex}
+						changeTable={this.changeTable}
+						changeColumns={this.changeColumns}
+						changeDbSchemaDefinitions={this.changeDbSchemaDefinitions}
+						changeDbPkInfo={this.changeDbPkInfo}
+						changeVisibleColumns={this.changeVisibleColumns} />
 					<RightPane
 						dbIndex={this.state.dbIndex}
 						table={this.state.table}
 						rulesFromHistoryPane={this.state.rulesFromHistoryPane}
-						changeRules={this.changeRules.bind(this)}
+						changeRules={this.changeRules}
 						columns={this.state.columns}
 						dbSchemaDefinitions={this.state.dbSchemaDefinitions}
 						dbPkInfo={this.state.dbPkInfo}
 						visibleColumns={this.state.visibleColumns}
 						leftPaneVisibility={this.state.leftPaneVisibility}
-						addToHistory={this.addToHistory.bind(this)}
+						addToHistory={this.addToHistory}
 						rowLimit={this.state.rowLimit}
 						exactCount={this.state.exactCount} />
 					<HistoryPane
 						newHistoryItem={this.state.newHistoryItem}
 						dbIndex={this.state.dbIndex}
 						historyPaneVisibility={this.state.historyPaneVisibility}
-						closeHistoryPane={this.closeHistoryPane.bind(this)}
-						changeTable={this.changeTable.bind(this)}
-						changeRules={this.changeRules.bind(this)} />
+						closeHistoryPane={this.closeHistoryPane}
+						changeTable={this.changeTable}
+						changeRules={this.changeRules} />
 				</div>
 			</div>
 		);
