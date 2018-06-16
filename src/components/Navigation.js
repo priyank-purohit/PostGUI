@@ -87,13 +87,14 @@ class Navigation extends Component {
 								description="Tag each term with '[table]' or '[column]'. For example, people[table] firstname[column].">
 								<TextField
 									id="search"
-									style={this.state.isSearchBarFdpOpen ? { backgroundColor: 'white', border: '1px solid grey' } : { backgroundColor: 'rgba(0, 0, 0, 0.1)', border: 'none', width: 525 + 'px' }}
 									placeholder="Search"
 									onKeyPress={this.changeSearchTerm.bind(this)}
 									onChange={this.changeSearchTerm.bind(this)}
 									onFocus={this.changeSearchTerm.bind(this)}
 									type="search"
 									className={classes.searchBar}
+									style={this.state.isSearchBarFdpOpen ? { backgroundColor: 'white', border: '1px solid grey', width: 325 + 'px', minWidth: 'inherit' } :
+										{ backgroundColor: 'rgba(0, 0, 0, 0.1)', border: 'none', width: 45 + '%', maxWidth: 525 + 'px', minWidth: 325 + 'px' }}
 									InputProps={{
 										startAdornment: (
 											<InputAdornment position="start">
@@ -140,14 +141,14 @@ const styleSheet = theme => ({
 		marginTop: 0,
 	},
 	searchBar: {
-		width: 325 + 'px',
 		marginLeft: 5,
 		marginRight: 5,
 		background: 'white',
 		padding: 10,
 		paddingBottom: 5,
 		borderRadius: 3,
-		float: 'right'
+		float: 'right',
+		transition: 'all 0.2s'
 	},
 	rightIconsFlex: {
 		flex: 0.05,
