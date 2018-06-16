@@ -5,7 +5,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 
@@ -13,7 +12,6 @@ import SearchIcon from '@material-ui/icons/Search';
 import MenuIcon from '@material-ui/icons/Menu';
 import HistoryIcon from '@material-ui/icons/History';
 import HelpIcon from '@material-ui/icons/HelpOutline';
-import PowerIcon from '@material-ui/icons/PowerSettingsNew';
 
 import FeatureDiscoveryPrompt from './FeatureDiscoveryPrompt/FeatureDiscoveryPrompt';
 import indigo from '@material-ui/core/colors/indigo';
@@ -37,7 +35,6 @@ class Navigation extends Component {
 				isSearchBarFdpOpen: true
 			})
 		}, 350);
-		this.changeSearchTerm.bind(this);
 	}
 
 	changeSearchTerm(e) {
@@ -89,9 +86,9 @@ class Navigation extends Component {
 								<TextField
 									id="search"
 									placeholder="Search"
-									onKeyPress={this.changeSearchTerm}
-									onChange={this.changeSearchTerm}
-									onFocus={this.changeSearchTerm}
+									onKeyPress={this.changeSearchTerm.bind(this)}
+									onChange={this.changeSearchTerm.bind(this)}
+									onFocus={this.changeSearchTerm.bind(this)}
 									type="search"
 									className={classes.searchBar}
 									style={this.state.isSearchBarFdpOpen ? { backgroundColor: 'white', border: '1px solid grey', width: 325 + 'px', minWidth: 'inherit' } :
