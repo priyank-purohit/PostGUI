@@ -111,10 +111,6 @@ class Navigation extends Component {
 						<IconButton className={classes.rightIconsFlex} color="inherit" aria-label="Help">
 							<HelpIcon className={classes.floatRight} />
 						</IconButton>
-						<Button color="inherit" aria-label="Logout" className={classes.button}>
-							<PowerIcon className={classes.floatRightPadded} />
-							Logout
-						</Button>
 					</Toolbar>
 				</AppBar>
 			</div>
