@@ -36,7 +36,13 @@ class DataTable extends Component {
             editFeatureChangesMade: {},
             rowsStrikedOut: []
         };
+
         this.renderEditableCell = this.renderEditableCell.bind(this);
+        this.submitChanges = this.submitChanges.bind(this);
+        this.deleteChange = this.deleteChange.bind(this);
+        this.deleteTableChanges = this.deleteTableChanges.bind(this);
+        this.postReqToChangeLog = this.postReqToChangeLog.bind(this);
+        this.changeEditFeatureEnabled = this.changeEditFeatureEnabled.bind(this);
     }
 
     componentWillReceiveProps(newProps) {
@@ -600,11 +606,11 @@ class DataTable extends Component {
                                     featureEnabled={this.state.editFeatureEnabled}
                                     changesMade={this.state.editFeatureChangesMade}
                                     rowsStrikedOut={this.state.rowsStrikedOut}
-                                    submitChanges={this.submitChanges.bind(this)}
-                                    deleteChange={this.deleteChange.bind(this)}
-                                    deleteTableChanges={this.deleteTableChanges.bind(this)}
-                                    postReqToChangeLog={this.postReqToChangeLog.bind(this)}
-                                    changeEditFeatureEnabled={this.changeEditFeatureEnabled.bind(this)} />
+                                    submitChanges={this.submitChanges}
+                                    deleteChange={this.deleteChange}
+                                    deleteTableChanges={this.deleteTableChanges}
+                                    postReqToChangeLog={this.postReqToChangeLog}
+                                    changeEditFeatureEnabled={this.changeEditFeatureEnabled} />
                             </Grid>)
                         }
                         <Grid item sm={12} md={6}>
