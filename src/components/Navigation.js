@@ -37,6 +37,7 @@ class Navigation extends Component {
 				isSearchBarFdpOpen: true
 			})
 		}, 350);
+		this.changeSearchTerm.bind(this);
 	}
 
 	changeSearchTerm(e) {
@@ -88,9 +89,9 @@ class Navigation extends Component {
 								<TextField
 									id="search"
 									placeholder="Search"
-									onKeyPress={this.changeSearchTerm.bind(this)}
-									onChange={this.changeSearchTerm.bind(this)}
-									onFocus={this.changeSearchTerm.bind(this)}
+									onKeyPress={this.changeSearchTerm}
+									onChange={this.changeSearchTerm}
+									onFocus={this.changeSearchTerm}
 									type="search"
 									className={classes.searchBar}
 									style={this.state.isSearchBarFdpOpen ? { backgroundColor: 'white', border: '1px solid grey', width: 325 + 'px', minWidth: 'inherit' } :
