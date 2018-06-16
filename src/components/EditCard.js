@@ -61,6 +61,11 @@ class EditCard extends Component {
 
             newRowDialogOpen: false,
         };
+
+        this.handleFeatureEnabledSwitch = this.handleFeatureEnabledSwitch.bind(this);
+        this.handleSubmitClick = this.handleSubmitClick.bind(this);
+        this.handleNewRowClick = this.handleNewRowClick.bind(this);
+        this.handleRemoveAllClick = this.handleRemoveAllClick.bind(this);
     }
 
     componentWillReceiveProps(newProps) {
@@ -248,7 +253,7 @@ class EditCard extends Component {
 
                 {this.state.primaryKeysAvailable ? (<FormGroup className={classes.cardMarginLeft}>
                     <FormControlLabel
-                        control={<Switch checked={this.state.featureEnabled} onChange={this.handleFeatureEnabledSwitch.bind(this)} value="featureStatus" />}
+                        control={<Switch checked={this.state.featureEnabled} onChange={this.handleFeatureEnabledSwitch} value="featureStatus" />}
                         label="Enable table edit feature" />
                 </FormGroup>) : (<div>
                     <List dense={false}>
@@ -279,9 +284,9 @@ class EditCard extends Component {
                 </div>) : (<div></div>)}
                 <Divider />
 
-                <Button onClick={this.handleSubmitClick.bind(this)} disabled={!(this.state.featureEnabled && this.state.primaryKeysAvailable)} color="primary" className={classes.button} value={this.state.submitButtonLabel} >{this.state.submitButtonLabel}</Button>
-                <Button onClick={this.handleNewRowClick.bind(this)} disabled={!(this.state.featureEnabled && this.state.primaryKeysAvailable)} color="primary" className={classes.button} value={"New Row"} >{"New Row"}</Button>
-                <Button onClick={this.handleRemoveAllClick.bind(this)} disabled={!(this.state.featureEnabled && this.state.primaryKeysAvailable)} className={classes.button && classes.floatRight} value={this.state.removeButtonLabel}>{this.state.removeButtonLabel}</Button>
+                <Button onClick={this.handleSubmitClick} disabled={!(this.state.featureEnabled && this.state.primaryKeysAvailable)} color="primary" className={classes.button} value={this.state.submitButtonLabel} >{this.state.submitButtonLabel}</Button>
+                <Button onClick={this.handleNewRowClick} disabled={!(this.state.featureEnabled && this.state.primaryKeysAvailable)} color="primary" className={classes.button} value={"New Row"} >{"New Row"}</Button>
+                <Button onClick={this.handleRemoveAllClick} disabled={!(this.state.featureEnabled && this.state.primaryKeysAvailable)} className={classes.button && classes.floatRight} value={this.state.removeButtonLabel}>{this.state.removeButtonLabel}</Button>
             </Paper>
 
 
@@ -298,7 +303,7 @@ class EditCard extends Component {
                 primaryKeys={this.state.primaryKeys}
                 qbFilters={this.props.qbFilters}
                 url={this.props.url}
-                handleNewRowClick={this.handleNewRowClick.bind(this)} />
+                handleNewRowClick={this.handleNewRowClick} />
 
             <Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
                 open={this.state.snackBarVisibility}
