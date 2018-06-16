@@ -44,6 +44,10 @@ class HistoryPane extends Component {
 			snackBarMessage: "Unknown error occured",
 		};
 		this.changeDisplayIndexDebounce = _.debounce(value => this.setState({ displayIndex: value }), 300);
+
+		this.closeDrawer = this.closeDrawer.bind(this);
+		this.showDeleteHistoryDialog = this.showDeleteHistoryDialog.bind(this);
+		this.deleteHistory = this.deleteHistory.bind(this);
 	}
 
 	// Keeps track of the incoming queries in an array
@@ -234,12 +238,12 @@ class HistoryPane extends Component {
 					subheader={<ListSubheader>Query History
 								<IconButton style={{ float: "right" }}
 							aria-label="Close"
-							onClick={this.closeDrawer.bind(this)}>
+							onClick={this.closeDrawer}>
 							<CloseIcon />
 						</IconButton>
 						<IconButton style={{ float: "right" }}
 							aria-label="Delete"
-							onClick={this.showDeleteHistoryDialog.bind(this)}>
+							onClick={this.showDeleteHistoryDialog}>
 							<DeleteIcon />
 						</IconButton>
 					</ListSubheader>}>
@@ -247,8 +251,8 @@ class HistoryPane extends Component {
 					{/* Delete History Button and Dialog */}
 					<div style={{ height: "100px", width: "100%", marginLeft: "130px" }} className={this.state.deleteHistoryDialogVisibility}>
 						<ListSubheader style={{ marginLeft: "10px" }}>Delete history?</ListSubheader>
-						<Button onClick={this.deleteHistory.bind(this)} variant="raised" style={{ margin: "5px" }}>Yes</Button>
-						<Button onClick={this.showDeleteHistoryDialog.bind(this)} variant="raised" color="primary" style={{ margin: "5px" }}>No</Button>
+						<Button onClick={this.deleteHistory} variant="raised" style={{ margin: "5px" }}>Yes</Button>
+						<Button onClick={this.showDeleteHistoryDialog} variant="raised" color="primary" style={{ margin: "5px" }}>No</Button>
 					</div>
 
 					<Divider />
@@ -362,7 +366,7 @@ class HistoryPane extends Component {
 		);
 
 		return (
-			<Drawer anchor="right" open={this.state.historyPaneVisibility} onClose={this.closeDrawer.bind(this)}>
+			<Drawer anchor="right" open={this.state.historyPaneVisibility} onClose={this.closeDrawer}>
 				<div tabIndex={0} role="button">
 					{historyPanelItemsList}
 				</div>
