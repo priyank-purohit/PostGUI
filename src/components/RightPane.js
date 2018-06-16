@@ -54,7 +54,12 @@ class RightPane extends Component {
 			snackBarMessage: "Unknown error occured",
 			rowLimit: Math.min(this.props.rowLimit, maxRowsInOutput) || 25000,
 			url: ""
-		}
+		};
+
+		this.handleRowLimitChange = this.handleRowLimitChange.bind(this);
+		this.handleGetExactRowCountToggle = this.handleGetExactRowCountToggle.bind(this);
+		this.handleSubmitButtonClickCancelQuery = this.handleSubmitButtonClickCancelQuery.bind(this);
+		this.handleSubmitButtonClick = this.handleSubmitButtonClick.bind(this);
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -480,7 +485,7 @@ class RightPane extends Component {
 									value={this.state.rowLimit.toString()}
 									className={classes.rowLimitTextField}
 									margin="normal"
-									onChange={this.handleRowLimitChange.bind(this)} />
+									onChange={this.handleRowLimitChange} />
 							</Tooltip>
 						</Grid>
 
@@ -491,7 +496,7 @@ class RightPane extends Component {
 								control={
 									<Checkbox
 										color="primary"
-										onChange={this.handleGetExactRowCountToggle.bind(this)}
+										onChange={this.handleGetExactRowCountToggle}
 										value="getExactRowCount" />
 								}
 								checked={this.state.exactRowCount}
@@ -500,12 +505,12 @@ class RightPane extends Component {
 
 						<Grid item sm={2} md={2}>
 							{/* SUBMIT FLOATING ACTION BUTTON (FAB) */}
-							<div title="Run Query" onClick={this.handleSubmitButtonClickCancelQuery.bind(this)}>
+							<div title="Run Query" onClick={this.handleSubmitButtonClickCancelQuery}>
 								<SubmitButton
 									dbIndex={this.state.dbIndex}
 									table={this.state.table}
 									leftPaneVisibility={this.state.leftPaneVisibility}
-									getRules={this.handleSubmitButtonClick.bind(this)}
+									getRules={this.handleSubmitButtonClick}
 									loading={this.state.submitLoading}
 									success={this.state.submitSuccess}
 									error={this.state.submitError} />
