@@ -69,9 +69,7 @@ export default class FeatureDiscoveryPrompt extends Component {
                     description={description}
                     element={this}
                     onClose={onClose}
-                    subtractFromTopPos={this.props.subtractFromTopPos}
-                    customPaddingLeft={this.props.customPaddingLeft || 1}
-                    opacity={this.props.opacity}
+                    {...this.props}
                     ref={(ref) => { this.circles = ref }}
                     title={title}
                 />

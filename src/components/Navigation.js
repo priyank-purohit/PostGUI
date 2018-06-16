@@ -6,6 +6,9 @@ import Toolbar from '@material-ui/core/Toolbar';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
+import InputAdornment from '@material-ui/core/InputAdornment';
+
+import SearchIcon from '@material-ui/icons/Search';
 import MenuIcon from '@material-ui/icons/Menu';
 import HistoryIcon from '@material-ui/icons/History';
 
@@ -79,7 +82,23 @@ class Navigation extends Component {
 								subtractFromTopPos={200}
 								opacity={0.95}
 								description="Tag each term with '[table]' or '[column]'. For example, people[table] firstname[column].">
-								<TextField id="search" placeholder="Search tables and columns" onKeyPress={this.changeSearchTerm.bind(this)} onChange={this.changeSearchTerm.bind(this)} onFocus={this.changeSearchTerm.bind(this)} type="search" className={classes.searchBar} autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck="false" />
+								<TextField
+									id="search"
+									style={this.state.isSearchBarFdpOpen ? { backgroundColor: 'white', border: '1px solid grey' } : { backgroundColor: 'rgba(0, 0, 0, 0.1)', border: 'none', width: 525 + 'px' }}
+									placeholder="Search"
+									onKeyPress={this.changeSearchTerm.bind(this)}
+									onChange={this.changeSearchTerm.bind(this)}
+									onFocus={this.changeSearchTerm.bind(this)}
+									type="search"
+									className={classes.searchBar}
+									InputProps={{
+										startAdornment: (
+											<InputAdornment position="start">
+												<SearchIcon style={{ fill: "rgba(0,0,0,0.5)" }} />
+											</InputAdornment>
+										),
+									}}
+									autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck="false" />
 							</FeatureDiscoveryPrompt>
 						</div>
 						<IconButton className={classes.rightIconsFlex} color="inherit" aria-label="Menu" onClick={this.props.toggleHistoryPane.bind(this)}>
@@ -117,7 +136,6 @@ const styleSheet = {
 		background: 'white',
 		padding: 10,
 		paddingBottom: 5,
-		border: '1px solid grey',
 		borderRadius: 3,
 		float: 'right'
 	},
