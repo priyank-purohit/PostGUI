@@ -46,6 +46,7 @@ class DataTable extends Component {
             columns: newProps.columns,
             url: newProps.url,
             data: this.addPkAsId(newProps.data),
+            tablePrimaryKeys: [],
             editFeatureEnabled: this.state.table !== newProps.table ? false : this.state.editFeatureEnabled
         });
 
@@ -564,15 +565,6 @@ class DataTable extends Component {
         // render() return
         return (
             <div>
-
-                <Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-                    open={this.state.snackBarVisibility}
-                    onClose={this.handleRequestClose}
-                    ContentProps={{ 'aria-describedby': 'message-id', }}
-                    message={<span id="message-id">{this.state.snackBarMessage}</span>}
-                    action={[<IconButton key="close" aria-label="Close" color="secondary" className={classes.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton>]} />
-
-
                 {this.state.editFeatureEnabled ? (
                     <CheckboxTable
                         data={data}
@@ -593,26 +585,28 @@ class DataTable extends Component {
                             noDataText={this.props.noDataText} />)}
 
                 <div className={this.props.classes.cardGroups} >
-                    <Grid container spacing={16}>
-                        <Grid item sm={12} md={6}>
-                            <EditCard
-                                dbIndex={this.state.dbIndex}
-                                table={this.state.table}
-                                columns={this.state.columns}
-                                allColumns={this.props.allColumns}
-                                insertNewRow={this.props.insertNewRow}
-                                dbPkInfo={this.props.dbPkInfo}
-                                url={this.state.url}
-                                qbFilters={this.props.qbFilters}
-                                featureEnabled={this.state.editFeatureEnabled}
-                                changesMade={this.state.editFeatureChangesMade}
-                                rowsStrikedOut={this.state.rowsStrikedOut}
-                                submitChanges={this.submitChanges.bind(this)}
-                                deleteChange={this.deleteChange.bind(this)}
-                                deleteTableChanges={this.deleteTableChanges.bind(this)}
-                                postReqToChangeLog={this.postReqToChangeLog.bind(this)}
-                                changeEditFeatureEnabled={this.changeEditFeatureEnabled.bind(this)} />
-                        </Grid>
+                    <Grid container spacing={16} direction={this.state.tablePrimaryKeys.join(",") === "" ? 'row-reverse' : 'row'}>
+                        {this.state.tablePrimaryKeys.join(",") !== "" &&
+                            (<Grid item sm={12} md={6}>
+                                <EditCard
+                                    dbIndex={this.state.dbIndex}
+                                    table={this.state.table}
+                                    columns={this.state.columns}
+                                    allColumns={this.props.allColumns}
+                                    insertNewRow={this.props.insertNewRow}
+                                    dbPkInfo={this.props.dbPkInfo}
+                                    url={this.state.url}
+                                    qbFilters={this.props.qbFilters}
+                                    featureEnabled={this.state.editFeatureEnabled}
+                                    changesMade={this.state.editFeatureChangesMade}
+                                    rowsStrikedOut={this.state.rowsStrikedOut}
+                                    submitChanges={this.submitChanges.bind(this)}
+                                    deleteChange={this.deleteChange.bind(this)}
+                                    deleteTableChanges={this.deleteTableChanges.bind(this)}
+                                    postReqToChangeLog={this.postReqToChangeLog.bind(this)}
+                                    changeEditFeatureEnabled={this.changeEditFeatureEnabled.bind(this)} />
+                            </Grid>)
+                        }
                         <Grid item sm={12} md={6}>
                             <Downloads
                                 dbIndex={this.state.dbIndex}
@@ -624,6 +618,14 @@ class DataTable extends Component {
                         </Grid>
                     </Grid>
                 </div>
+
+                <Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                    open={this.state.snackBarVisibility}
+                    onClose={this.handleRequestClose}
+                    ContentProps={{ 'aria-describedby': 'message-id', }}
+                    message={<span id="message-id">{this.state.snackBarMessage}</span>}
+                    action={[<IconButton key="close" aria-label="Close" color="secondary" className={classes.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton>]} />
+
             </div>);
     }
 }

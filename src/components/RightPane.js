@@ -468,7 +468,7 @@ class RightPane extends Component {
 					<Typography type="body1" className={classes.cardMarginLeftTop}>Options</Typography>
 
 
-					<Grid container spacing={40} alignItems={'center'}>
+					<Grid container spacing={24} alignItems={'center'}>
 						<Grid item sm={10} md={5}>
 							{/* ROW LIMIT INPUT BOX */}
 							<Tooltip id="tooltip-bottom" title={"Max limit is 250,000 rows. Use Batch Download option for more."} placement="bottom">
