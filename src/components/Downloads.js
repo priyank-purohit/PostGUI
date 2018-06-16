@@ -64,6 +64,17 @@ class Downloads extends Component {
             snackBarVisibility: false,
             snackBarMessage: "Unknown error occured",
         };
+
+        this.handleDelimiterChange = this.handleDelimiterChange.bind(this);
+        this.handlebatchDownloadCheckBox = this.handlebatchDownloadCheckBox.bind(this);
+        this.handleLeftButtonClickRangeDownload = this.handleLeftButtonClickRangeDownload.bind(this);
+        this.handleRightButtonClickRangeDownload = this.handleRightButtonClickRangeDownload.bind(this);
+        this.handleTableHeaderToggle = this.handleTableHeaderToggle.bind(this);
+        this.handleFileNameChange = this.handleFileNameChange.bind(this);
+        this.handleCopyOutputClick = this.handleCopyOutputClick.bind(this);
+        this.handleDownloadClick = this.handleDownloadClick.bind(this);
+        this.handleCopyClick = this.handleCopyClick.bind(this);
+        this.handleResetClick = this.handleResetClick.bind(this);
     }
 
     componentWillReceiveProps(newProps) {
@@ -666,7 +677,7 @@ class Downloads extends Component {
                             this.state.fileFormat === 'delimited' && (
                                 <TextField
                                     required
-                                    onChange={this.handleDelimiterChange.bind(this)}
+                                    onChange={this.handleDelimiterChange}
                                     label={"Use , or \\t delimiter for sheet"}
                                     value={this.state.delimiterChoice}
                                     disabled={this.state.fileFormat !== 'delimited' ? true : false}
@@ -711,7 +722,7 @@ class Downloads extends Component {
                 {/* ADDITIONAL DOWNLOADS OPTIONS */}
                 <Typography variant="body1" className={classes.cardcardMarginLeftTop}>Options</Typography>
                 <FormGroup className={classes.cardcardMarginLeftTop}>
-                    <FormControlLabel label={"Batch download"} control={<Checkbox onChange={this.handlebatchDownloadCheckBox.bind(this)} value="batchDownloadCheckBox" />} disabled={this.state.fileFormat === 'delimitedColumn' ? true : false} checked={this.state.batchDownloadCheckBox} />
+                    <FormControlLabel label={"Batch download"} control={<Checkbox onChange={this.handlebatchDownloadCheckBox} value="batchDownloadCheckBox" />} disabled={this.state.fileFormat === 'delimitedColumn' ? true : false} checked={this.state.batchDownloadCheckBox} />
                     <span className={this.state.batchDownloadCheckBox !== true || this.state.fileFormat === 'delimitedColumn' ? classes.hidden : classes.inlineTextField1}>
                         <div className={isNaN(this.props.totalRows) === false && this.props.totalRows >= 0 ? classes.hidden : null} >
                             <Typography variant="body2" className={classes.inlineTextField1}>Re-run query with "Get exact row count" option selected</Typography>
@@ -726,16 +737,16 @@ class Downloads extends Component {
                             <Typography variant="body1" className={classes.inlineTextField}>{String(this.state.batchDownloadLowerNum).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} to {String(this.state.batchDownloadUpperNum).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} of {String(this.props.totalRows).replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace("NaN", "unknown")} rows</Typography>
                         </div>
                         <div className={classes.inlineTextField3}>
-                            <IconButton onClick={this.handleLeftButtonClickRangeDownload.bind(this)} color="primary" className={classes.button} aria-label="COPY">
+                            <IconButton onClick={this.handleLeftButtonClickRangeDownload} color="primary" className={classes.button} aria-label="COPY">
                                 <NavigateBeforeIcon />
                             </IconButton>
-                            <IconButton onClick={this.handleRightButtonClickRangeDownload.bind(this)} color="primary" className={classes.button} aria-label="COPY">
+                            <IconButton onClick={this.handleRightButtonClickRangeDownload} color="primary" className={classes.button} aria-label="COPY">
                                 <NavigateNextIcon />
                             </IconButton>
                         </div>
                     </span>
 
-                    <FormControlLabel label={"Include table headers"} control={<Checkbox onChange={this.handleTableHeaderToggle.bind(this)} disabled={this.state.fileFormat !== 'delimited' ? true : false} value="tableHeader" />} checked={this.state.tableHeader} />
+                    <FormControlLabel label={"Include table headers"} control={<Checkbox onChange={this.handleTableHeaderToggle} disabled={this.state.fileFormat !== 'delimited' ? true : false} value="tableHeader" />} checked={this.state.tableHeader} />
                 </FormGroup>
 
                 {/* FILE NAME INPUT */}
@@ -746,7 +757,7 @@ class Downloads extends Component {
                         id="delimiterInput"
                         type="text"
                         label="File name"
-                        onChange={this.handleFileNameChange.bind(this)}
+                        onChange={this.handleFileNameChange}
                         value={this.state.fileNameCustom === '' ? this.state.fileNameAuto : this.state.fileNameCustom}
                         className={classes.textField && classes.cardMarginLeft}
                         margin="normal" />
@@ -759,7 +770,7 @@ class Downloads extends Component {
                         type="text"
                         label="Ctrl A and Ctrl C to copy"
                         value={this.state.copyResult}
-                        onChange={this.handleCopyOutputClick.bind(this)}
+                        onChange={this.handleCopyOutputClick}
                         className={this.state.copyResult === "" ? classes.hidden : classes.textFieldCopyOutput}
                         margin="normal" />
                     <IconButton onClick={this.insertToClipboard.bind(this, this.state.copyResult)} className={this.state.copyResult === "" ? classes.hidden : classes.button} aria-label="Copy">
@@ -769,9 +780,9 @@ class Downloads extends Component {
 
                 {this.state.copyLoading === true ? <img src={require('../resources/progress.gif')} width="100%" alt="Progress indicator" /> : <Divider />}
 
-                <Button color="primary" className={classes.button} onClick={this.handleDownloadClick.bind(this)} disabled={this.state.fileFormat === 'delimitedColumn'} >Download</Button>
-                <Button color="primary" disabled={this.state.fileFormat !== 'delimitedColumn' && this.state.fileFormat !== 'json' && this.state.fileFormat !== 'xml'} className={classes.button} onClick={this.handleCopyClick.bind(this)} >Copy</Button>
-                <Button className={classes.button && classes.floatRight} onClick={this.handleResetClick.bind(this)} >Reset</Button>
+                <Button color="primary" className={classes.button} onClick={this.handleDownloadClick} disabled={this.state.fileFormat === 'delimitedColumn'} >Download</Button>
+                <Button color="primary" disabled={this.state.fileFormat !== 'delimitedColumn' && this.state.fileFormat !== 'json' && this.state.fileFormat !== 'xml'} className={classes.button} onClick={this.handleCopyClick} >Copy</Button>
+                <Button className={classes.button && classes.floatRight} onClick={this.handleResetClick} >Reset</Button>
                 {/* <Button className={classes.button}>Help</Button> */}
             </Paper>
 
