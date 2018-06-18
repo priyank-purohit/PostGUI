@@ -62,7 +62,7 @@ class CircularFab extends Component {
 					color="secondary"
 					className={buttonClass}
 					onClick={this.handleButtonClick}>{success ? (error ? <CloseIcon /> : <CheckIcon />) : <ArrowForwardIcon />}</Button>
-				{loading && <CircularProgress size={60} className={classes.progress} />}
+				{loading && <CircularProgress size={68} className={classes.progress} />}
 			</div>
 		);
 	}
@@ -74,7 +74,8 @@ CircularFab.propTypes = {
 
 const styleSheet = {
 	wrapper: {
-		marginRight: '5%'
+		marginRight: '5%',
+		position: 'relative'
 	},
 	successButton: {
 		backgroundColor: green[500],
@@ -91,8 +92,9 @@ const styleSheet = {
 	progress: {
 		color: green[500],
 		position: 'absolute',
-		top: -2,
-		left: -2,
+		top: -6,
+		left: -6,
+		zIndex: 5
 	},
 };
 
