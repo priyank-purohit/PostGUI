@@ -38,7 +38,12 @@ class CircularFab extends Component {
 		clearTimeout(this.timer);
 	}
 
-	handleButtonClick() {
+	handleButtonClick(event) {
+		// let ctrlKeyPressed = false;
+		// if (event && event.ctrlKey) {
+		// 	ctrlKeyPressed = true;
+		// }
+
 		this.props.getRules();
 	};
 
