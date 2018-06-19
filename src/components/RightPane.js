@@ -322,7 +322,7 @@ class RightPane extends Component {
 		}
 
 		// Send updated URL to the HistoryPane
-		this.props.addToHistory(url, rules);
+		this.props.addToHistory(url.replace(/\?limit=\d*/g, ""), rules);
 
 		return url;
 	}
