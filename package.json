@@ -2,7 +2,6 @@
   "name": "postgui",
   "version": "1.2.0",
   "private": true,
-  "homepage": "http://hopper.csb.utoronto.ca:8771",
   "dependencies": {
     "@material-ui/core": "^1.2.1",
     "@material-ui/icons": "^1.1.0",
@@ -27,6 +26,7 @@
     "start": "PORT=8771 react-scripts start",
     "windows-start": "set PORT=8771 && react-scripts start",
     "build": "react-scripts build",
+    "build-and-serve": "react-scripts build && serve -s build -p 8771",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   }
