@@ -177,7 +177,7 @@ export default class Layout extends React.Component {
 
 	addToHistory(newUrl, newRules) {
 		this.setState({
-			newHistoryItem: [newUrl, newRules]
+			newHistoryItem: [newUrl.replace(/\?limit=\d*/g, ""), newRules]
 		});
 	}
 
