@@ -205,7 +205,8 @@ export default class Layout extends React.Component {
 					leftPaneVisibility={this.state.leftPaneVisibility}
 					changeSearchTerm={this.changeSearchTerm}
 					toggleLeftPane={this.toggleLeftPane}
-					toggleHistoryPane={this.toggleHistoryPane} />
+					toggleHistoryPane={this.toggleHistoryPane}
+					loggedIn={true} />
 
 				<div className="bodyDiv">
 					<LeftPane

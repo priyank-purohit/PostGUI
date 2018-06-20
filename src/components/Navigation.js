@@ -12,10 +12,19 @@ import SearchIcon from '@material-ui/icons/Search';
 import MenuIcon from '@material-ui/icons/Menu';
 import HistoryIcon from '@material-ui/icons/History';
 import HelpIcon from '@material-ui/icons/HelpOutline';
+import PowerIcon from '@material-ui/icons/PowerSettingsNew';
 
 import FeatureDiscoveryPrompt from './FeatureDiscoveryPrompt/FeatureDiscoveryPrompt';
 import indigo from '@material-ui/core/colors/indigo';
 import pink from '@material-ui/core/colors/pink';
+
+import Button from '@material-ui/core/Button';
+
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 let _ = require('lodash');
 let lib = require('../utils/library.js');
@@ -27,7 +36,9 @@ class Navigation extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			isSearchBarFdpOpen: false
+			isSearchBarFdpOpen: false,
+			isLoginFdpOpen: false,
+			open: false
 		}
 		this.changeSearchTermDebounce = _.debounce(value => {
 			this.props.changeSearchTerm(value);
@@ -44,6 +55,18 @@ class Navigation extends Component {
 		this.changeSearchTermDebounce(e.target.value);
 	}
 
+	handleClick = () => {
+		this.setState({
+			open: !this.state.open
+		});
+	}
+
+	handleClose = () => {
+		this.setState({
+			open: false
+		});
+	}
+
 	render() {
 		const classes = this.props.classes;
 		let dbTitle = lib.getDbConfig(this.props.dbIndex, "title") || "Untitled database";
@@ -55,7 +78,7 @@ class Navigation extends Component {
 			<div className={classes.root}>
 				<AppBar position="absolute">
 					<Toolbar>
-						<FeatureDiscoveryPrompt
+						{this.props.loggedIn && (<FeatureDiscoveryPrompt
 							onClose={() => this.setState({ isSearchBarFdpOpen: false })}
 							open={!this.props.leftPaneVisibility && this.props.table === "" && !this.state.isSearchBarFdpOpen}
 							backgroundColor={pink[500]}
@@ -67,7 +90,7 @@ class Navigation extends Component {
 							<IconButton color="inherit" aria-label="Menu" onClick={this.props.toggleLeftPane.bind(this)}>
 								<MenuIcon />
 							</IconButton>
-						</FeatureDiscoveryPrompt>
+						</FeatureDiscoveryPrompt>)}
 
 						<Typography variant="title" color="inherit" className={classes.dbTitleFlex}>
 							{dbTitle}
@@ -106,11 +129,47 @@ class Navigation extends Component {
 						<IconButton className={classes.rightIconsFlex} color="inherit" aria-label="History" onClick={this.props.toggleHistoryPane.bind(this)}>
 							<HistoryIcon className={classes.floatRight} />
 						</IconButton>
-						<IconButton className={classes.rightIconsFlex} color="inherit" aria-label="Help">
+						<IconButton className={classes.rightIconsFlex} color="inherit" aria-label="Help" onClick={() => { this.setState({ isLoginFdpOpen: !this.state.isLoginFdpOpen }) }}>
 							<HelpIcon className={classes.floatRight} />
 						</IconButton>
+						<FeatureDiscoveryPrompt
+							onClose={() => this.setState({ isLoginFdpOpen: false })}
+							open={this.state.isLoginFdpOpen}
+							backgroundColor={pink[500]}
+							title="LOGIN SYSTEM"
+							subtractFromTopPos={50}
+							opacity={0.95}
+							description="Provide your credentials for full access.">
+							<Button onClick={() => { this.handleClick() }} color="default" variant="contained" className={classes.rightIconsFlex}>Login</Button>
+						</FeatureDiscoveryPrompt>
 					</Toolbar>
 				</AppBar>
+				<Dialog
+					open={this.state.open}
+					onClose={this.handleClose}
+					aria-labelledby="form-dialog-title">
+					<DialogTitle id="form-dialog-title">Login to PostGUI</DialogTitle>
+					<DialogContent>
+						<DialogContentText>Provide your credentials for this database, it may allow you more privileges.</DialogContentText>
+						<TextField
+							autoFocus
+							margin="dense"
+							id="name"
+							label="Email Address"
+							type="email"
+							fullWidth />
+						<TextField
+							margin="dense"
+							id="password"
+							label="Password"
+							type="password"
+							fullWidth />
+					</DialogContent>
+					<DialogActions>
+						<Button onClick={this.handleClose} color="primary">Cancel</Button>
+						<Button onClick={this.handleClose} color="primary">Subscribe</Button>
+					</DialogActions>
+				</Dialog>
 			</div>
 		);
 	}
