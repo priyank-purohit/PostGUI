@@ -82,7 +82,7 @@ class Navigation extends Component {
 								customPaddingLeft={2}
 								subtractFromTopPos={200}
 								opacity={0.95}
-								description="Tag each term with '[table]' or '[column]'. For example, people[table] firstname[column].">
+								description="Can also tag each term with '[table]' or '[column]'. For example, people[table] firstname[column].">
 								<TextField
 									id="search"
 									placeholder="Search"
