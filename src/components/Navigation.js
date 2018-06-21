@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+
+import LoginDialog from './LoginDialog.js';
+
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import TextField from '@material-ui/core/TextField';
@@ -12,7 +15,6 @@ import SearchIcon from '@material-ui/icons/Search';
 import MenuIcon from '@material-ui/icons/Menu';
 import HistoryIcon from '@material-ui/icons/History';
 import HelpIcon from '@material-ui/icons/HelpOutline';
-import PowerIcon from '@material-ui/icons/PowerSettingsNew';
 
 import FeatureDiscoveryPrompt from './FeatureDiscoveryPrompt/FeatureDiscoveryPrompt';
 import indigo from '@material-ui/core/colors/indigo';
@@ -20,11 +22,6 @@ import pink from '@material-ui/core/colors/pink';
 
 import Button from '@material-ui/core/Button';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 
 let _ = require('lodash');
 let lib = require('../utils/library.js');
@@ -38,7 +35,7 @@ class Navigation extends Component {
 		this.state = {
 			isSearchBarFdpOpen: false,
 			isLoginFdpOpen: false,
-			open: false
+			loginDialogOpen: false
 		}
 		this.changeSearchTermDebounce = _.debounce(value => {
 			this.props.changeSearchTerm(value);
@@ -57,13 +54,13 @@ class Navigation extends Component {
 
 	handleClick = () => {
 		this.setState({
-			open: !this.state.open
+			loginDialogOpen: !this.state.loginDialogOpen
 		});
 	}
 
 	handleClose = () => {
 		this.setState({
-			open: false
+			loginDialogOpen: false
 		});
 	}
 
@@ -143,33 +140,11 @@ class Navigation extends Component {
 							<Button onClick={() => { this.handleClick() }} color="default" variant="contained" className={classes.rightIconsFlex}>Login</Button>
 						</FeatureDiscoveryPrompt>
 					</Toolbar>
+					<LoginDialog
+						open={this.state.loginDialogOpen}
+						handleClick={this.handleClick}
+						handleClose={this.handleClose} />
 				</AppBar>
-				<Dialog
-					open={this.state.open}
-					onClose={this.handleClose}
-					aria-labelledby="form-dialog-title">
-					<DialogTitle id="form-dialog-title">Login to PostGUI</DialogTitle>
-					<DialogContent>
-						<DialogContentText>Provide your credentials for this database, it may allow you more privileges.</DialogContentText>
-						<TextField
-							autoFocus
-							margin="dense"
-							id="name"
-							label="Email Address"
-							type="email"
-							fullWidth />
-						<TextField
-							margin="dense"
-							id="password"
-							label="Password"
-							type="password"
-							fullWidth />
-					</DialogContent>
-					<DialogActions>
-						<Button onClick={this.handleClose} color="primary">Cancel</Button>
-						<Button onClick={this.handleClose} color="primary">Subscribe</Button>
-					</DialogActions>
-				</Dialog>
 			</div>
 		);
 	}

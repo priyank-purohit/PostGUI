@@ -754,7 +754,7 @@ class Downloads extends Component {
                     <TextField
                         required
                         disabled={this.state.fileFormat === 'delimitedColumn'}
-                        id="delimiterInput"
+                        id="fileNameInput"
                         type="text"
                         label="File name"
                         onChange={this.handleFileNameChange}
