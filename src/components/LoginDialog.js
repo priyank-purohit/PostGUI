@@ -5,16 +5,13 @@ import { withStyles } from '@material-ui/core/styles';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import { Divider } from '@material-ui/core';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
-import FeatureDiscoveryPrompt from './FeatureDiscoveryPrompt/FeatureDiscoveryPrompt';
-import indigo from '@material-ui/core/colors/indigo';
-import pink from '@material-ui/core/colors/pink';
 
 class LoginDialog extends Component {
     render() {
@@ -40,9 +37,10 @@ class LoginDialog extends Component {
                         type="password"
                         fullWidth />
                 </DialogContent>
+                <Divider />
                 <DialogActions>
-                    <Button onClick={this.props.handleClose} color="primary">Cancel</Button>
-                    <Button onClick={this.props.handleClose} color="primary">Subscribe</Button>
+                    <Button onClick={this.props.handleClose} color="default">Cancel</Button>
+                    <Button onClick={this.props.handleClose} color="secondary">Login</Button>
                 </DialogActions>
             </Dialog>
         );
