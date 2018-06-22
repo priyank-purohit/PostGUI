@@ -18,9 +18,9 @@ class LoginDialog extends Component {
         return (
             <Dialog
                 open={this.props.open || false}
-                onClose={this.props.handleClose}
+                onClose={this.props.handleLoginDialogCloseClick}
                 aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Login to PostGUI</DialogTitle>
+                <DialogTitle id="form-dialog-title">PostGUI Login{this.props.dbName ? " - " + this.props.dbName : ''}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>Provide your credentials for this database, it may allow you more privileges.</DialogContentText>
                     <TextField
@@ -39,8 +39,8 @@ class LoginDialog extends Component {
                 </DialogContent>
                 <Divider />
                 <DialogActions>
-                    <Button onClick={this.props.handleClose} color="default">Cancel</Button>
-                    <Button onClick={this.props.handleClose} color="secondary">Login</Button>
+                    <Button onClick={this.props.handleLoginDialogCloseClick} color="default">Cancel</Button>
+                    <Button onClick={this.props.handleLoginDialogCloseClick} color="secondary">Login</Button>
                 </DialogActions>
             </Dialog>
         );

@@ -45,6 +45,14 @@ class Navigation extends Component {
 		}, 350);
 	}
 
+	componentWillReceiveProps(newProps) {
+		if (newProps.publicDBStatus === "private") {
+			this.setState({
+				isLoginFdpOpen: true
+			});
+		}
+	}
+
 	changeSearchTerm(e) {
 		/*if (e && ((e.key && e.key === 'Enter') || !e.target.value)) {
 			this.props.changeSearchTerm(e.target.value);
@@ -52,13 +60,13 @@ class Navigation extends Component {
 		this.changeSearchTermDebounce(e.target.value);
 	}
 
-	handleClick = () => {
+	handleLoginButtonClick = () => {
 		this.setState({
 			loginDialogOpen: !this.state.loginDialogOpen
 		});
 	}
 
-	handleClose = () => {
+	handleLoginDialogCloseClick = () => {
 		this.setState({
 			loginDialogOpen: false
 		});
@@ -131,19 +139,20 @@ class Navigation extends Component {
 						</IconButton>
 						<FeatureDiscoveryPrompt
 							onClose={() => this.setState({ isLoginFdpOpen: false })}
-							open={this.state.isLoginFdpOpen}
+							open={this.state.isLoginFdpOpen && !this.state.isSearchBarFdpOpen}
 							backgroundColor={pink[500]}
 							title="LOGIN SYSTEM"
 							subtractFromTopPos={50}
 							opacity={0.95}
 							description="Provide your credentials for full access.">
-							<Button onClick={() => { this.handleClick() }} color="default" variant="contained" className={classes.rightIconsFlex}>Login</Button>
+							<Button onClick={() => { this.handleLoginButtonClick() }} color="default" variant="contained" className={classes.rightIconsFlex}>Login</Button>
 						</FeatureDiscoveryPrompt>
 					</Toolbar>
 					<LoginDialog
+						dbName={dbTitle.replace("Database", "db").replace("database", "db")}
 						open={this.state.loginDialogOpen}
-						handleClick={this.handleClick}
-						handleClose={this.handleClose} />
+						handleLoginButtonClick={this.handleLoginButtonClick}
+						handleLoginDialogCloseClick={this.handleLoginDialogCloseClick} />
 				</AppBar>
 			</div>
 		);

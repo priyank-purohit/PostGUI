@@ -197,6 +197,7 @@ export default class Layout extends React.Component {
 	}
 
 	render() {
+		let publicDBStatus = lib.getDbConfig(this.state.dbIndex, "publicDbAcessType") || "read";
 		return (
 			<div>
 				<Navigation
@@ -206,7 +207,8 @@ export default class Layout extends React.Component {
 					changeSearchTerm={this.changeSearchTerm}
 					toggleLeftPane={this.toggleLeftPane}
 					toggleHistoryPane={this.toggleHistoryPane}
-					loggedIn={true} />
+					publicDBStatus={publicDBStatus}
+					loggedIn={this.state.loggedIn} />
 
 				<div className="bodyDiv">
 					<LeftPane
