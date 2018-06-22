@@ -201,22 +201,16 @@ export default class Layout extends React.Component {
 		return (
 			<div>
 				<Navigation
-					dbIndex={this.state.dbIndex}
-					table={this.state.table}
-					leftPaneVisibility={this.state.leftPaneVisibility}
+					{...this.state}
 					changeSearchTerm={this.changeSearchTerm}
 					toggleLeftPane={this.toggleLeftPane}
 					toggleHistoryPane={this.toggleHistoryPane}
-					publicDBStatus={publicDBStatus}
-					loggedIn={this.state.loggedIn} />
+					publicDBStatus={publicDBStatus} />
 
 				<div className="bodyDiv">
 					<LeftPane
-						dbIndex={this.state.dbIndex}
-						table={this.state.table}
-						searchTerm={this.state.searchTerm}
+						{...this.state}
 						changeSearchTerm={this.changeSearchTerm}
-						leftPaneVisibility={this.state.leftPaneVisibility}
 						changeDbIndex={this.changeDbIndex}
 						changeTable={this.changeTable}
 						changeColumns={this.changeColumns}
@@ -224,22 +218,11 @@ export default class Layout extends React.Component {
 						changeDbPkInfo={this.changeDbPkInfo}
 						changeVisibleColumns={this.changeVisibleColumns} />
 					<RightPane
-						dbIndex={this.state.dbIndex}
-						table={this.state.table}
-						rulesFromHistoryPane={this.state.rulesFromHistoryPane}
+						{...this.state}
 						changeRules={this.changeRules}
-						columns={this.state.columns}
-						dbSchemaDefinitions={this.state.dbSchemaDefinitions}
-						dbPkInfo={this.state.dbPkInfo}
-						visibleColumns={this.state.visibleColumns}
-						leftPaneVisibility={this.state.leftPaneVisibility}
-						addToHistory={this.addToHistory}
-						rowLimit={this.state.rowLimit}
-						exactCount={this.state.exactCount} />
+						addToHistory={this.addToHistory} />
 					<HistoryPane
-						newHistoryItem={this.state.newHistoryItem}
-						dbIndex={this.state.dbIndex}
-						historyPaneVisibility={this.state.historyPaneVisibility}
+						{...this.state}
 						closeHistoryPane={this.closeHistoryPane}
 						changeTable={this.changeTable}
 						changeRules={this.changeRules} />

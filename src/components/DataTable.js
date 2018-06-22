@@ -25,7 +25,6 @@ class DataTable extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dbIndex: props.dbIndex,
             table: props.table,
             columns: props.columns,
             data: [],
@@ -47,7 +46,6 @@ class DataTable extends Component {
 
     componentWillReceiveProps(newProps) {
         this.setState({
-            dbIndex: newProps.dbIndex,
             table: newProps.table,
             columns: newProps.columns,
             url: newProps.url,
@@ -207,7 +205,7 @@ class DataTable extends Component {
     }
 
     postReqToChangeLog(dbIndex, changeTimeStamp, tableChanged, primaryKey, columnChanged, oldValue, newValue, notes, userName) {
-        let changeLogURL = lib.getDbConfig(this.state.dbIndex, "url") + "/change_log";
+        let changeLogURL = lib.getDbConfig(dbIndex, "url") + "/change_log";
         let changeLogPostReqBody = {};
 
         // These columns are hardcoded ... the db schema for the change-log table is provided separately
@@ -269,7 +267,7 @@ class DataTable extends Component {
 
                 if (deleteRow !== true && String(oldValue) !== String(newValue)) { // UPDATE SINGLE CELL VALUE
                     // Create the URL, add in the new value as URL param
-                    let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table + "?and=(" + this.primaryKeyAsUrlParam(primaryKey) + ")";
+                    let url = lib.getDbConfig(this.props.dbIndex, "url") + "/" + this.state.table + "?and=(" + this.primaryKeyAsUrlParam(primaryKey) + ")";
 
                     // Patch HTTP request
                     let patchReqBody = {};
@@ -287,7 +285,7 @@ class DataTable extends Component {
                             this.deleteChange(columnChanged, keyChanged, true); // true => do not restore original value when deleting change
 
                             // Add an entry to the database's change log
-                            this.postReqToChangeLog(this.state.dbIndex, new Date(Date.now()).toISOString(), this.state.table, primaryKey, columnChanged, oldValue, newValue, "", "public");
+                            this.postReqToChangeLog(this.props.dbIndex, new Date(Date.now()).toISOString(), this.state.table, primaryKey, columnChanged, oldValue, newValue, "", "public");
                         })
                         .catch((error) => {
                             console.log("PATCH ERROR RESP:" + String(error));
@@ -308,7 +306,7 @@ class DataTable extends Component {
                 } else if (deleteRow) { // DELETE ROW FEATURE
                     //console.log("\n\n\nDeleting a row");
                     // Create the URL, add in the new value as URL param
-                    let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table + "?and=(" + this.primaryKeyAsUrlParam(primaryKey) + ")";
+                    let url = lib.getDbConfig(this.props.dbIndex, "url") + "/" + this.state.table + "?and=(" + this.primaryKeyAsUrlParam(primaryKey) + ")";
                     //console.log("DELETE url = " + url);
 
                     // Send the DELETE request and check response
@@ -332,7 +330,7 @@ class DataTable extends Component {
                                 }
                             }
 
-                            this.postReqToChangeLog(this.state.dbIndex, new Date(Date.now()).toISOString(), this.state.table, primaryKey, "ROW_DELETE", oldRow || "Error finding old row...", "{}", "ROW DELETED.", "public");
+                            this.postReqToChangeLog(this.props.dbIndex, new Date(Date.now()).toISOString(), this.state.table, primaryKey, "ROW_DELETE", oldRow || "Error finding old row...", "{}", "ROW DELETED.", "public");
 
                             //console.log("DELETE RESPONSE = ", JSON.stringify(response));
                             this.deleteChange("id", keyChanged, "delete");
@@ -521,15 +519,15 @@ class DataTable extends Component {
         // Create columns with expected column properties
         if (columns) {
             parsedColumns = columns.map((columnName) => {
-                let columnRename = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "rename");
-                let columnVisibility = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "visible");
-                let columnEditability = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "editable");
+                let columnRename = lib.getColumnConfig(this.props.dbIndex, this.state.table, columnName, "rename");
+                let columnVisibility = lib.getColumnConfig(this.props.dbIndex, this.state.table, columnName, "visible");
+                let columnEditability = lib.getColumnConfig(this.props.dbIndex, this.state.table, columnName, "editable");
 
-                let columnWidthDefault = lib.getTableConfig(this.state.dbIndex, this.state.table, "defaultWidthPx");
-                let columnWidth = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "widthPx");
+                let columnWidthDefault = lib.getTableConfig(this.props.dbIndex, this.state.table, "defaultWidthPx");
+                let columnWidth = lib.getColumnConfig(this.props.dbIndex, this.state.table, columnName, "widthPx");
 
-                let columnMinWidth = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "minWidthPx");
-                let columnMaxWidth = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "maxWidthPx");
+                let columnMinWidth = lib.getColumnConfig(this.props.dbIndex, this.state.table, columnName, "minWidthPx");
+                let columnMaxWidth = lib.getColumnConfig(this.props.dbIndex, this.state.table, columnName, "maxWidthPx");
 
                 return ({
                     id: columnName,
@@ -595,7 +593,7 @@ class DataTable extends Component {
                         {this.state.tablePrimaryKeys.join(",") !== "" &&
                             (<Grid item sm={12} md={6}>
                                 <EditCard
-                                    dbIndex={this.state.dbIndex}
+                                    dbIndex={this.props.dbIndex}
                                     table={this.state.table}
                                     columns={this.state.columns}
                                     allColumns={this.props.allColumns}
@@ -615,7 +613,7 @@ class DataTable extends Component {
                         }
                         <Grid item sm={12} md={6}>
                             <Downloads
-                                dbIndex={this.state.dbIndex}
+                                dbIndex={this.props.dbIndex}
                                 table={this.state.table}
                                 columns={this.state.columns}
                                 data={this.state.data}

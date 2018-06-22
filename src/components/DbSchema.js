@@ -36,7 +36,6 @@ class DbSchema extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			dbIndex: props.dbIndex,
 			table: props.table,
 			dbSchema: null,
 			dbFkSchema: null,
@@ -52,7 +51,7 @@ class DbSchema extends Component {
 	componentDidMount() {
 		this.mounted = true;
 		// Save the database schema to state for future access
-		let url = lib.getDbConfig(this.state.dbIndex, "url");
+		let url = lib.getDbConfig(this.props.dbIndex, "url");
 		if (url) {
 			this.getDbSchema(url);
 		}
@@ -65,9 +64,8 @@ class DbSchema extends Component {
 
 	componentWillReceiveProps(newProps) {
 		// If the database was changed, re do the whole view and update parent components too
-		if (this.state.dbIndex !== newProps.dbIndex) {
+		if (this.props.dbIndex !== newProps.dbIndex) {
 			this.setState({
-				dbIndex: newProps.dbIndex,
 				table: "",
 				dbSchema: null,
 				dbFkSchema: null,
@@ -214,7 +212,7 @@ class DbSchema extends Component {
 		}
 
 		// Search foreign keys IFF enabled in config explicitly
-		if (lib.getDbConfig(this.state.dbIndex, "foreignKeySearch") === true && this.state.dbFkSchema !== undefined && this.state.dbFkSchema !== null) {
+		if (lib.getDbConfig(this.props.dbIndex, "foreignKeySearch") === true && this.state.dbFkSchema !== undefined && this.state.dbFkSchema !== null) {
 			return this.addForeignKeyResults(dict);
 		} else {
 			return dict;
@@ -237,7 +235,7 @@ class DbSchema extends Component {
 
 				// Next search the config file renames
 				let splitTermResultsWithRename = (this.state.tables).filter(table => {
-					let tableRename = lib.getTableConfig(this.state.dbIndex, table, "rename");
+					let tableRename = lib.getTableConfig(this.props.dbIndex, table, "rename");
 					let displayName = tableRename ? tableRename : table;
 					return displayName.toLowerCase().indexOf(splitTerm) > -1;
 				});
@@ -268,7 +266,7 @@ class DbSchema extends Component {
 
 					// Next search the column renames from config.json
 					let splitTermResultsWithRename = _.compact(currentTableColumns.filter(column => {
-						let columnRename = lib.getColumnConfig(this.state.dbIndex, table, column, "rename");
+						let columnRename = lib.getColumnConfig(this.props.dbIndex, table, column, "rename");
 						let displayName = columnRename ? columnRename : column;
 						return displayName.toLowerCase().indexOf(splitTerm) > -1;
 					}));
@@ -337,7 +335,7 @@ class DbSchema extends Component {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Returns a list of tables from URL
-	getDbSchema(url = lib.getDbConfig(this.state.dbIndex, "url")) {
+	getDbSchema(url = lib.getDbConfig(this.props.dbIndex, "url")) {
 		axios.get(url + "/", { params: {} })
 			.then((response) => {
 				// Save the raw resp + parse tables and columns...
@@ -366,7 +364,7 @@ class DbSchema extends Component {
 				}
 			});
 		// Get FK info IFF enabled in config explicitly
-		if (lib.getDbConfig(this.state.dbIndex, "foreignKeySearch") === true) {
+		if (lib.getDbConfig(this.props.dbIndex, "foreignKeySearch") === true) {
 			axios.post(url + "/rpc/foreign_keys", {})
 				.then((response) => {
 					// Save the raw resp + parse tables and columns...
@@ -395,7 +393,7 @@ class DbSchema extends Component {
 		}
 
 		// Get PK info IFF enabled in config explicitly by the primaryKeyFunction boolean value
-		if (lib.getDbConfig(this.state.dbIndex, "primaryKeyFunction") === true) {
+		if (lib.getDbConfig(this.props.dbIndex, "primaryKeyFunction") === true) {
 			axios.post(url + "/rpc/primary_keys", {})
 				.then((response) => {
 					if (this.mounted) {
@@ -442,7 +440,7 @@ class DbSchema extends Component {
 
 		let dbTables = [];
 		for (let i in data.definitions) {
-			if (lib.getTableConfig(this.state.dbIndex, i, "visible") !== false) {
+			if (lib.getTableConfig(this.props.dbIndex, i, "visible") !== false) {
 				dbTables.push(i);
 				this.parseTableColumns(data.definitions[i].properties, i);
 			}
@@ -469,11 +467,11 @@ class DbSchema extends Component {
 		let columns = [];
 
 		for (let i in rawColProperties) { // I = COLUMN in TABLE
-			if (lib.getColumnConfig(this.state.dbIndex, table, i, "visible") !== false) {
+			if (lib.getColumnConfig(this.props.dbIndex, table, i, "visible") !== false) {
 				// list of columns for TABLE
 				columns.push(i);
 
-				let columnDefaultVisibility = lib.isColumnInDefaultView(this.state.dbIndex, table, i);
+				let columnDefaultVisibility = lib.isColumnInDefaultView(this.props.dbIndex, table, i);
 
 				// Each COLUMN's visibility stored in state
 				if (columnDefaultVisibility === false) {
@@ -569,7 +567,7 @@ class DbSchema extends Component {
 			height: 20
 		};
 
-		let tableRename = lib.getTableConfig(this.state.dbIndex, tableName, "rename");
+		let tableRename = lib.getTableConfig(this.props.dbIndex, tableName, "rename");
 		let displayName = tableRename ? tableRename : tableName;
 
 		let tableColumnElements = [];
@@ -584,7 +582,7 @@ class DbSchema extends Component {
 
 		// First push the table itself
 		tableColumnElements.push(
-			<ListItem button key={this.state.dbIndex + tableName} id={tableName} className={classNames || (this.state.table === tableName ? this.props.classes.primaryBackgroundFill : null)}
+			<ListItem button key={this.props.dbIndex + tableName} id={tableName} className={classNames || (this.state.table === tableName ? this.props.classes.primaryBackgroundFill : null)}
 				title={displayName} onClick={(event) => this.handleTableClick(tableName)} >
 				<ListItemIcon >
 					{this.state.table === tableName ? <FolderIconOpen className={this.props.classes.primaryColoured} /> : <FolderIcon />}
@@ -604,15 +602,15 @@ class DbSchema extends Component {
 				currentTableColumns.push(this.createColumnElement(columnName, tableName));
 			}
 			tableColumnElements.push(
-				<Collapse in={this.state.table === tableName || this.state.hoverTable === tableName} timeout="auto" key={this.state.dbIndex + tableName + "collspsibleCols"}>
-					<List component="div" key={this.state.dbIndex + tableName + "cols"}>
+				<Collapse in={this.state.table === tableName || this.state.hoverTable === tableName} timeout="auto" key={this.props.dbIndex + tableName + "collspsibleCols"}>
+					<List component="div" key={this.props.dbIndex + tableName + "cols"}>
 						{currentTableColumns}
 					</List>
 				</Collapse>
 			);
 		} else {
 			tableColumnElements.push(
-				<ListItem button title={"Administrator has hidden the columns ... can work with them in query builder"} key={"hiddenColsOf" + tableName + this.state.dbIndex} className={this.state.table !== tableName && this.state.hoverTable !== tableName ? this.props.classes.column + " " + this.props.classes.hide : this.props.classes.column} >
+				<ListItem button title={"Administrator has hidden the columns ... can work with them in query builder"} key={"hiddenColsOf" + tableName + this.props.dbIndex} className={this.state.table !== tableName && this.state.hoverTable !== tableName ? this.props.classes.column + " " + this.props.classes.hide : this.props.classes.column} >
 					<ListItemIcon>
 						<VisibilityOffIcon />
 					</ListItemIcon>
@@ -624,7 +622,7 @@ class DbSchema extends Component {
 	}
 
 	createColumnElement(columnName, table) {
-		let columnRename = lib.getColumnConfig(this.state.dbIndex, table, columnName, "rename");
+		let columnRename = lib.getColumnConfig(this.props.dbIndex, table, columnName, "rename");
 		let displayName = columnRename ? columnRename : columnName;
 
 		let visibility = this.state[table + columnName + "Visibility"] === "hide" ? false : true;
@@ -651,7 +649,7 @@ class DbSchema extends Component {
 		}
 
 		return (
-			<ListItem button key={columnName + table + this.state.dbIndex} id={columnName}
+			<ListItem button key={columnName + table + this.props.dbIndex} id={columnName}
 				title={displayName} className={classNames} onClick={(event) => this.handleColumnClick(columnName, table)}>
 				<ListItemIcon>
 					{visibility ? <VisibilityIcon className={this.props.classes.primaryColoured} /> : <VisibilityOffIcon />}

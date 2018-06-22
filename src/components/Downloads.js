@@ -40,7 +40,6 @@ class Downloads extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dbIndex: props.dbIndex,
             table: props.table,
             columns: props.columns,
             data: [],
@@ -79,7 +78,6 @@ class Downloads extends Component {
 
     componentWillReceiveProps(newProps) {
         this.setState({
-            dbIndex: newProps.dbIndex,
             table: newProps.table,
             columns: newProps.columns,
             url: newProps.url,
@@ -106,7 +104,7 @@ class Downloads extends Component {
 
         // Create a good file name for the file so user knows what the data in the file is all about
         /* EXPLANATIONS FOR THE REGEXES
-        let fileName = this.state.url.replace(lib.getDbConfig(this.state.dbIndex, "url") + "/", "") // Get rid of the URL
+        let fileName = this.state.url.replace(lib.getDbConfig(this.props.dbIndex, "url") + "/", "") // Get rid of the URL
             .replace("?", "-") /////// The params q-mark can be replaced with dash
             .replace(/&/g, '-') /////// All URL key-value separating ampersands can be replaced with dashes
             .replace(/=/g, '-') /////// Get rid of the = in favour of the -
@@ -115,7 +113,7 @@ class Downloads extends Component {
             .replace(/[.]([\w,"\s]{30,})[,]/g, "(in-vals)"); /////// Specifically targets the IN operator's comma separated vals .. replace if longer than 30 chars
         */
         let fileName = this.state.url
-            .replace(lib.getDbConfig(this.state.dbIndex, "url") + "/", "")
+            .replace(lib.getDbConfig(this.props.dbIndex, "url") + "/", "")
             .replace("?", "-")
             .replace(/&/g, '-')
             .replace(/=/g, '-')

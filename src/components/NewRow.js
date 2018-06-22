@@ -20,7 +20,6 @@ class ResponsiveDialog extends React.Component {
         super(props);
         this.state = {
             open: false,
-            dbIndex: props.dbIndex,
             table: props.table,
             columns: props.columns,
             allColumns: props.allColumns,
@@ -36,7 +35,6 @@ class ResponsiveDialog extends React.Component {
     componentWillReceiveProps(newProps) {
         this.setState({
             open: newProps.open,
-            dbIndex: newProps.dbIndex,
             table: newProps.table,
             columns: newProps.columns,
             allColumns: newProps.allColumns,
@@ -92,8 +90,8 @@ class ResponsiveDialog extends React.Component {
         for (let i = 0; i < this.state.primaryKeys.length; i++) {
             primaryKey[this.state.primaryKeys[i]] = newRow[0][this.state.primaryKeys[i]];
         }
-        //console.log(this.state.dbIndex, new Date(Date.now()).toISOString(), this.state.table, primaryKey, "ROW_INSERT", "{}", newRow[0], "ROW INSERTED.", "public")
-        this.props.postReqToChangeLog(this.state.dbIndex, new Date(Date.now()).toISOString(), this.state.table, primaryKey, "ROW_INSERT", "{}", newRow[0], "ROW INSERTED.", "public");
+        //console.log(this.props.dbIndex, new Date(Date.now()).toISOString(), this.state.table, primaryKey, "ROW_INSERT", "{}", newRow[0], "ROW INSERTED.", "public")
+        this.props.postReqToChangeLog(this.props.dbIndex, new Date(Date.now()).toISOString(), this.state.table, primaryKey, "ROW_INSERT", "{}", newRow[0], "ROW INSERTED.", "public");
     }
 
     handleSubmit = () => {
@@ -114,7 +112,7 @@ class ResponsiveDialog extends React.Component {
             let input = this.state.inputVals;
             let keys = Object.keys(this.state.inputVals);
 
-            let newRowURL = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
+            let newRowURL = lib.getDbConfig(this.props.dbIndex, "url") + "/" + this.state.table;
             let postReqBody = {};
 
             for (let i = 0; i < keys.length; i++) {
@@ -161,7 +159,7 @@ class ResponsiveDialog extends React.Component {
     render() {
         const classes = this.props.classes;
         let { fullScreen } = this.props;
-        let tableRename = lib.getTableConfig(this.state.dbIndex, this.state.table, "rename");
+        let tableRename = lib.getTableConfig(this.props.dbIndex, this.state.table, "rename");
         let tableDisplayName = tableRename ? tableRename : this.state.table;
 
         return (

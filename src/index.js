@@ -13,7 +13,6 @@ window.setState = (stateChange) => {
 
 /* eslint no-restricted-globals: 0*/
 let initialState = {
-	loggedIn: false,
 	urlLocation: location.pathname.replace(/^\/?|\/$/g, "")
 }
 

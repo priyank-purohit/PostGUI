@@ -38,7 +38,6 @@ class RightPane extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			dbIndex: props.dbIndex,
 			table: props.table,
 			columns: props.columns,
 			visibleColumns: props.visibleColumns,
@@ -69,7 +68,7 @@ class RightPane extends Component {
 
 		if (newProps.rulesFromHistoryPane !== null && newProps.rulesFromHistoryPane !== undefined) {
 			// There is something the user wants to load...
-			const filters = lib.getQBFilters(this.state.dbIndex, this.state.table, this.state.columns, this.state.dbSchemaDefinitions);
+			const filters = lib.getQBFilters(this.props.dbIndex, this.state.table, this.state.columns, this.state.dbSchemaDefinitions);
 			let rules = newProps.rulesFromHistoryPane;
 
 			this.setState({
@@ -97,7 +96,7 @@ class RightPane extends Component {
 		}
 
 		if (newProps.visibleColumns !== undefined &&
-			this.state.dbIndex === newProps.dbIndex &&
+			this.props.dbIndex === newProps.dbIndex &&
 			this.state.table === newProps.table &&
 			this.state.columns === newProps.columns &&
 			this.state.leftPaneVisibility === newProps.leftPaneVisibility) {
@@ -108,9 +107,8 @@ class RightPane extends Component {
 			this.setState({
 				leftPaneVisibility: newProps.leftPaneVisibility
 			});
-		} else if (this.state.dbIndex !== newProps.dbIndex) {
+		} else if (this.props.dbIndex !== newProps.dbIndex) {
 			this.setState({
-				dbIndex: newProps.dbIndex,
 				dbSchemaDefinitions: newProps.dbSchemaDefinitions,
 				table: "",
 				columns: [],
@@ -124,7 +122,7 @@ class RightPane extends Component {
 				rows: null
 			}, () => {
 				this.rebuildQueryBuilder(this.refs.queryBuilder, newProps.dbIndex, newProps.table, newProps.columns);
-				let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
+				let url = lib.getDbConfig(this.props.dbIndex, "url") + "/" + this.state.table;
 				this.setState({ url: url + "?limit=10" });
 				if (this.state.table !== "") {
 					this.fetchOutput(url + "?limit=10", true);
@@ -132,7 +130,6 @@ class RightPane extends Component {
 			});
 		} else {
 			this.setState({
-				dbIndex: newProps.dbIndex,
 				dbSchemaDefinitions: newProps.dbSchemaDefinitions,
 				table: newProps.table,
 				columns: newProps.columns,
@@ -146,7 +143,7 @@ class RightPane extends Component {
 				rows: null
 			}, () => {
 				this.rebuildQueryBuilder(this.refs.queryBuilder, newProps.dbIndex, newProps.table, newProps.columns, newProps.dbSchemaDefinitions);
-				let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
+				let url = lib.getDbConfig(this.props.dbIndex, "url") + "/" + this.state.table;
 				this.setState({ url: url + "?limit=10" });
 				if (this.state.table !== "") {
 					this.fetchOutput(url + "?limit=10", true);
@@ -172,7 +169,7 @@ class RightPane extends Component {
 			window.$(this.refs.queryBuilder).queryBuilder.constructor.DEFAULTS.operators = lib.getQBOperators();
 			window.$(this.refs.queryBuilder).queryBuilder.constructor.DEFAULTS.lang = lib.getQBLang();
 
-			const filters = lib.getQBFilters(this.state.dbIndex, this.state.table, this.state.columns, this.state.dbSchemaDefinitions);
+			const filters = lib.getQBFilters(this.props.dbIndex, this.state.table, this.state.columns, this.state.dbSchemaDefinitions);
 			const rules = newRules ? newRules : defaultRules;
 
 			window.$(element).queryBuilder({ filters, rules, plugins: ['not-group'] });
@@ -280,7 +277,7 @@ class RightPane extends Component {
 
 	// Based on the extracted rules, it builds a PostgREST compliant URL for API call
 	buildURLFromRules(rules) {
-		let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
+		let url = lib.getDbConfig(this.props.dbIndex, "url") + "/" + this.state.table;
 
 		// if it is valid, proceed
 		if (rules && rules['valid'] && rules['valid'] === true) {
@@ -453,7 +450,7 @@ class RightPane extends Component {
 	render() {
 		const classes = this.props.classes;
 
-		let tableRename = lib.getTableConfig(this.state.dbIndex, this.state.table, "rename");
+		let tableRename = lib.getTableConfig(this.props.dbIndex, this.state.table, "rename");
 		let tableDisplayName = tableRename ? tableRename : this.state.table;
 
 		let tableDescription = lib.getTableConfig(this.props.dbIndex, this.props.table, "description") ? lib.getTableConfig(this.props.dbIndex, this.props.table, "description") : "";
@@ -507,7 +504,7 @@ class RightPane extends Component {
 							{/* SUBMIT FLOATING ACTION BUTTON (FAB) */}
 							<div title="Run Query" onClick={this.handleSubmitButtonClickCancelQuery}>
 								<SubmitButton
-									dbIndex={this.state.dbIndex}
+									dbIndex={this.props.dbIndex}
 									table={this.state.table}
 									leftPaneVisibility={this.state.leftPaneVisibility}
 									getRules={this.handleSubmitButtonClick}
@@ -524,7 +521,7 @@ class RightPane extends Component {
 
 					<div className={classes.cardMarginLeftRightTop} >
 						<DataTable
-							dbIndex={this.state.dbIndex}
+							dbIndex={this.props.dbIndex}
 							table={this.state.table}
 							columns={this.state.visibleColumns ? this.state.visibleColumns : this.state.columns}
 							allColumns={this.state.columns}
