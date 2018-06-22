@@ -141,7 +141,7 @@ class Navigation extends Component {
 							onClose={() => this.setState({ isLoginFdpOpen: false })}
 							open={this.state.isLoginFdpOpen && !this.state.isSearchBarFdpOpen}
 							backgroundColor={pink[500]}
-							title="LOGIN SYSTEM"
+							title={this.props.publicDBStatus ? "Private Database" : "Login System"}
 							subtractFromTopPos={50}
 							opacity={0.95}
 							description="Provide your credentials for full access.">
