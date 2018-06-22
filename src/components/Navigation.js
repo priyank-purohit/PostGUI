@@ -92,11 +92,11 @@ class Navigation extends Component {
 									type="search"
 									className={classes.searchBar}
 									style={this.state.isSearchBarFdpOpen ? { backgroundColor: 'white', border: '1px solid grey', width: 325 + 'px', minWidth: 'inherit' } :
-										{ backgroundColor: 'rgba(0, 0, 0, 0.1)', border: 'none', width: 45 + '%', maxWidth: 525 + 'px', minWidth: 325 + 'px' }}
+										{ backgroundColor: 'rgba(255, 255, 255, 0.1)', border: 'none', width: 45 + '%', maxWidth: 525 + 'px', minWidth: 325 + 'px' }}
 									InputProps={{
 										startAdornment: (
 											<InputAdornment position="start">
-												<SearchIcon style={{ fill: "rgba(0,0,0,0.5)" }} />
+												<SearchIcon style={this.state.isSearchBarFdpOpen ? { fill: "rgba(0,0,0,0.5)" } : { fill: "rgba(255,255,255,0.75)" }} />
 											</InputAdornment>
 										),
 									}}
