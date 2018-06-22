@@ -83,7 +83,7 @@ class Navigation extends Component {
 			<div className={classes.root}>
 				<AppBar position="absolute">
 					<Toolbar>
-						{this.props.loggedIn && (<FeatureDiscoveryPrompt
+						<FeatureDiscoveryPrompt
 							onClose={() => this.setState({ isSearchBarFdpOpen: false })}
 							open={!this.props.leftPaneVisibility && this.props.table === "" && !this.state.isSearchBarFdpOpen}
 							backgroundColor={pink[500]}
@@ -95,7 +95,7 @@ class Navigation extends Component {
 							<IconButton color="inherit" aria-label="Menu" onClick={this.props.toggleLeftPane.bind(this)}>
 								<MenuIcon />
 							</IconButton>
-						</FeatureDiscoveryPrompt>)}
+						</FeatureDiscoveryPrompt>
 
 						<Typography variant="title" color="inherit" className={classes.dbTitleFlex}>
 							{dbTitle}
