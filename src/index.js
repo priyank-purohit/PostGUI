@@ -2,13 +2,19 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/App.js';
 
-export default class Layout extends React.Component {
-	render() {
-		return (
-			<App />
-		);
-	}
+const app = document.getElementById('root');
+let appState = {};
+
+window.setState = (stateChange) => {
+	appState = Object.assign({}, appState, stateChange);
+
+	ReactDOM.render(<App {...appState} />, app);
+};
+
+/* eslint no-restricted-globals: 0*/
+let initialState = {
+	loggedIn: false,
+	urlLocation: location.pathname.replace(/^\/?|\/$/g, "")
 }
 
-const app = document.getElementById('root');
-ReactDOM.render(<Layout />, app);
+window.setState(initialState);
