@@ -138,8 +138,8 @@ class Navigation extends Component {
 							<HelpIcon className={classes.floatRight} />
 						</IconButton>
 						<FeatureDiscoveryPrompt
-							onClose={() => this.setState({ isLoginFdpOpen: false })}
-							open={this.state.isLoginFdpOpen && !this.state.isSearchBarFdpOpen}
+							onClose={() => { this.setState({ isLoginFdpOpen: false }) }}
+							open={this.state.isLoginFdpOpen && !this.state.isSearchBarFdpOpen && !(!this.props.leftPaneVisibility && this.props.table === "" && !this.state.isSearchBarFdpOpen)}
 							backgroundColor={pink[500]}
 							title={this.props.publicDBStatus ? "Private Database" : "Login System"}
 							subtractFromTopPos={50}

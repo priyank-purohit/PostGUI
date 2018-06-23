@@ -216,16 +216,19 @@ export default class Layout extends React.Component {
 						changeColumns={this.changeColumns}
 						changeDbSchemaDefinitions={this.changeDbSchemaDefinitions}
 						changeDbPkInfo={this.changeDbPkInfo}
-						changeVisibleColumns={this.changeVisibleColumns} />
+						changeVisibleColumns={this.changeVisibleColumns}
+						publicDBStatus={publicDBStatus} />
 					<RightPane
 						{...this.state}
 						changeRules={this.changeRules}
-						addToHistory={this.addToHistory} />
+						addToHistory={this.addToHistory}
+						publicDBStatus={publicDBStatus} />
 					<HistoryPane
 						{...this.state}
 						closeHistoryPane={this.closeHistoryPane}
 						changeTable={this.changeTable}
-						changeRules={this.changeRules} />
+						changeRules={this.changeRules}
+						publicDBStatus={publicDBStatus} />
 				</div>
 			</div>
 		);

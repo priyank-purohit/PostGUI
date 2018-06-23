@@ -336,7 +336,7 @@ class DbSchema extends Component {
 
 	// Returns a list of tables from URL
 	getDbSchema(url = lib.getDbConfig(this.props.dbIndex, "url")) {
-		axios.get(url + "/", { params: {} })
+		axios.get(url + "/", { headers: { "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiZWRpdHVzZXIiLCJlbWFpbCI6ImFkbWluQGRzZ2xhYi5jb20iLCJleHAiOjE1Mjk3OTM4MDJ9.WQilJtYGfgS0KZynajDZ8k5tjAFHwUXO8Qp1jvJTE30" } })
 			.then((response) => {
 				// Save the raw resp + parse tables and columns...
 				if (this.mounted) {
@@ -365,7 +365,7 @@ class DbSchema extends Component {
 			});
 		// Get FK info IFF enabled in config explicitly
 		if (lib.getDbConfig(this.props.dbIndex, "foreignKeySearch") === true) {
-			axios.post(url + "/rpc/foreign_keys", {})
+			axios.get(url + "/rpc/foreign_keys", {})
 				.then((response) => {
 					// Save the raw resp + parse tables and columns...
 					if (this.mounted) {
@@ -394,7 +394,7 @@ class DbSchema extends Component {
 
 		// Get PK info IFF enabled in config explicitly by the primaryKeyFunction boolean value
 		if (lib.getDbConfig(this.props.dbIndex, "primaryKeyFunction") === true) {
-			axios.post(url + "/rpc/primary_keys", {})
+			axios.get(url + "/rpc/primary_keys", {})
 				.then((response) => {
 					if (this.mounted) {
 						let pkAvailable = JSON.stringify(response.data[0]["primary_keys"]) !== "[]";
