@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Auth from './Auth.js';
 import 'typeface-roboto';
 
 import Navigation from './Navigation.js';
@@ -10,6 +11,7 @@ import LeftPane from './LeftPane.js';
 import '../styles/index.css';
 
 let lib = require("../utils/library.js");
+let auth = new Auth();
 
 export default class Layout extends React.Component {
 	constructor() {
