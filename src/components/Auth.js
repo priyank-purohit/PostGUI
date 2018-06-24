@@ -26,6 +26,15 @@ export default class Auth {
         }
     }
 
+    setCredentials(newEmail, newPassword) {
+        this.userEmail = newEmail;
+        this.userPassword = newPassword;
+    }
+
+    logout() {
+        // Get rid of the user credentials
+    }
+
     isAuthenticated() {
         // Return true iff user is authenticated and jwt is still valid
         let emailRegEx = /^(([^<>()\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; // From http://emailregex.com/
@@ -37,22 +46,6 @@ export default class Auth {
 
     setDb(newDbIndex) {
         this.dbIndex = newDbIndex;
-    }
-
-    setCredentials(newEmail, newPassword) {
-        this.userEmail = newEmail;
-        this.userPassword = newPassword;
-    }
-
-    logout() {
-        // Get rid of the user credentials
-    }
-
-    _setStatusTokenExpiry(status, token, expiry) {
-        this.isLoggedIn = status;
-        this.jwtToken = token;
-        this.jwtTokenExpiry = expiry ? expiry : Date.now() + (60 * 60 * 1000);
-        console.log(this.isLoggedIn, this.jwtToken, this.jwtTokenExpiry);
     }
 
     async _loginPostRequest() {
@@ -69,5 +62,23 @@ export default class Auth {
             this._setStatusTokenExpiry(false, null, 0);
             console.log(e);
         }
+    }
+
+    // Used to set the relevant parts of this class
+    _setStatusTokenExpiry(status, token, expiry) {
+        this.isLoggedIn = status;
+        this.jwtToken = token;
+        this.jwtTokenExpiry = expiry ? expiry : Date.now() + (60 * 60 * 1000);
+    }
+
+    toString() {
+        return JSON.stringify({
+            name: this.name,
+            isLoggedIn: this.isLoggedIn,
+            userEmail: this.userEmail,
+            userPassword: this.userPassword,
+            jwtToken: this.jwtToken,
+            jwtTokenExpiry: this.jwtTokenExpiry
+        })
     }
 }

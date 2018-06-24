@@ -37,7 +37,8 @@ export default class Layout extends React.Component {
 			searchTerm: "",
 			dbSchemaDefinitions: null,
 			dbPkInfo: null,
-			jwtToken: null
+			token: null,
+			isLoggedIn: false,
 		};
 		this.setUserEmailPassword = this.setUserEmailPassword.bind(this);
 		this.toggleLeftPane = this.toggleLeftPane.bind(this);
@@ -196,7 +197,20 @@ export default class Layout extends React.Component {
 
 	setUserEmailPassword(email, password) {
 		auth.setCredentials(email, password);
-		auth.getUserDetails().then((resp) => { console.log("Huuuuu" + JSON.stringify(resp)) });
+		auth.getUserDetails().then((resp) => {
+			console.log(JSON.stringify(resp));
+			if (resp.isLoggedIn) {
+				this.setState({
+					token: resp.jwtToken,
+					isLoggedIn: true
+				})
+			} else {
+				this.setState({
+					isLoggedIn: false,
+					token: null
+				});
+			}
+		});
 	}
 
 	componentDidMount() {
