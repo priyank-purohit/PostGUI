@@ -51,6 +51,7 @@ export default class Auth {
     }
 
     setDb(newDbIndex) {
+        this.logout();
         this.dbIndex = newDbIndex;
     }
 
