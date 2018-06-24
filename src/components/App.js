@@ -234,11 +234,14 @@ export default class Layout extends React.Component {
 					token: null
 				});
 			}
+			if (this.state.rulesFromURL && lib.getDbConfig(this.state.dbIndex, "publicDbAcessType") === "private" && resp.isLoggedIn) {
+				this.changeRules(this.state.rulesFromURL);
+			}
 		});
 	}
 
 	componentDidMount() {
-		if (this.state.rulesFromURL) {
+		if (this.state.rulesFromURL && lib.getDbConfig(this.state.dbIndex, "publicDbAcessType") !== "private") {
 			this.changeRules(this.state.rulesFromURL);
 			// setTimeout( ()=> {
 			// 	history.pushState('Shared Query', 'Shared Query', 'http://localhost:3000/');
