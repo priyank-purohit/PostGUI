@@ -464,7 +464,9 @@ class DbSchema extends Component {
 		});
 
 		// Load first table if no table is selected AND if there is no info available about pre-selected table
-		if (dbTables[0] !== undefined && dbTables[0] !== null && dbTables[0] !== "" && this.state.table === "") {
+		if (dbTables.join() === "") {
+			this.props.changeTable("");
+		} else if (dbTables[0] !== undefined && dbTables[0] !== null && dbTables[0] !== "" && this.state.table === "") {
 			if (dbTables[0] === "change_log") {
 				this.handleTableClick(dbTables[1]);
 			} else {
