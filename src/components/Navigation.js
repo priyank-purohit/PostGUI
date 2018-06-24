@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import LoginDialog from './LoginDialog.js';
+import Help from './Help.js';
 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -33,7 +34,8 @@ export default class Navigation extends Component {
 		this.state = {
 			isSearchBarFdpOpen: false,
 			isLoginFdpOpen: false,
-			loginDialogOpen: false
+			loginDialogOpen: false,
+			isHelpOpen: false
 		}
 		this.changeSearchTermDebounce = _.debounce(value => {
 			this.props.changeSearchTerm(value);
@@ -72,6 +74,13 @@ export default class Navigation extends Component {
 	handleLoginDialogCloseClick = () => {
 		this.setState({
 			loginDialogOpen: false
+		});
+	}
+
+	handleHelpToggle = (e) => {
+		console.log(e.target.id);
+		this.setState({
+			isHelpOpen: !this.state.isHelpOpen
 		});
 	}
 
@@ -140,7 +149,7 @@ export default class Navigation extends Component {
 						<IconButton style={styleSheet.rightIconsFlex} color="inherit" aria-label="History" onClick={this.props.toggleHistoryPane.bind(this)}>
 							<HistoryIcon style={styleSheet.floatRight} />
 						</IconButton>
-						<IconButton style={styleSheet.rightIconsFlex} color="inherit" aria-label="Help" onClick={() => { this.setState({ isLoginFdpOpen: !this.state.isLoginFdpOpen }) }}>
+						<IconButton style={styleSheet.rightIconsFlex} color="inherit" aria-label="Help" onClick={this.handleHelpToggle}>
 							<HelpIcon style={styleSheet.floatRight} />
 						</IconButton>
 						<FeatureDiscoveryPrompt
@@ -159,6 +168,7 @@ export default class Navigation extends Component {
 						setUserEmailPassword={this.props.setUserEmailPassword}
 						open={this.state.loginDialogOpen}
 						handleLoginDialogCloseClick={this.handleLoginDialogCloseClick} />
+					<Help open={this.state.isHelpOpen} handleHelpToggle={this.handleHelpToggle} />
 				</AppBar>
 			</div>
 		);
