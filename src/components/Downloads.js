@@ -609,12 +609,18 @@ class Downloads extends Component {
     };
 
     fetchOutput(url) {
-        let headersList = {};
+        console.log("DOwnloading!");
+
+        let preparedHeaders = {};
         if (this.state.batchDownloadCheckBox === true) {
-            headersList = { 'Range': String(this.state.batchDownloadLowerNum) + '-' + String(this.state.batchDownloadUpperNum - 1), 'Accept': 'application/json', 'Prefer': 'count=exact' };
+            preparedHeaders = { 'Range': String(this.state.batchDownloadLowerNum) + '-' + String(this.state.batchDownloadUpperNum - 1), 'Accept': 'application/json', 'Prefer': 'count=exact' };
         }
 
-        axios.get(url, { headers: headersList, requestId: "qbAxiosReq" })
+        if (this.props.isLoggedIn && this.props.token) {
+            preparedHeaders['Authorization'] = "Bearer " + this.props.token;
+        }
+
+        axios.get(url, { headers: preparedHeaders, requestId: "qbAxiosReq" })
             .then((response) => {
                 this.setState({
                     dataFull: response.data,

@@ -608,6 +608,8 @@ class DataTable extends Component {
                         {this.state.tablePrimaryKeys.join(",") !== "" &&
                             (<Grid item sm={12} md={6}>
                                 <EditCard
+                                    token={this.props.token}
+                                    isLoggedIn={this.props.isLoggedIn}
                                     dbIndex={this.props.dbIndex}
                                     table={this.state.table}
                                     columns={this.state.columns}
@@ -628,6 +630,8 @@ class DataTable extends Component {
                         }
                         <Grid item sm={12} md={6}>
                             <Downloads
+                                token={this.props.token}
+                                isLoggedIn={this.props.isLoggedIn}
                                 dbIndex={this.props.dbIndex}
                                 table={this.state.table}
                                 columns={this.state.columns}

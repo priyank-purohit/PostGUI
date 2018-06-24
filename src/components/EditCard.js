@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-//import axios from 'axios';
 import { withStyles } from '@material-ui/core/styles';
 
 import NewRow from './NewRow.js';
@@ -293,6 +292,9 @@ class EditCard extends Component {
 
                 insertNewRow={this.props.insertNewRow}
                 postReqToChangeLog={this.props.postReqToChangeLog}
+
+                token={this.props.token}
+                isLoggedIn={this.props.isLoggedIn}
 
                 dbIndex={this.props.dbIndex}
                 table={this.props.table}

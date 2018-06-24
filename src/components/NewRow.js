@@ -137,7 +137,12 @@ class ResponsiveDialog extends React.Component {
             //console.log("Changes Log URL:" + newRowURL);
             //console.log("Changes Log POST Body:" + JSON.stringify(postReqBody));
 
-            axios.post(newRowURL, postReqBody, { headers: { Prefer: 'return=representation' } })
+            let preparedHeaders = { Prefer: 'return=representation' };
+            if (this.props.isLoggedIn && this.props.token) {
+                preparedHeaders['Authorization'] = "Bearer " + this.props.token;
+            }
+
+            axios.post(newRowURL, postReqBody, { headers: preparedHeaders })
                 .then((response) => {
                     //console.log("New row inserted successfully:" + JSON.stringify(response.data));
                     this.commitToChangeLog(response.data);
