@@ -12,6 +12,7 @@ export default class Auth {
 
     constructor(dbIndex) {
         this.dbIndex = dbIndex;
+        this._fromLocalStorage();
     }
 
     async getUserDetails() {
@@ -29,6 +30,8 @@ export default class Auth {
     setCredentials(newEmail, newPassword) {
         this.userEmail = newEmail;
         this.userPassword = newPassword;
+
+        this._toLocalStorage();
     }
 
     logout() {
@@ -36,6 +39,7 @@ export default class Auth {
         this.userEmail = null;
         this.userPassword = null;
         this.softLogout();
+        this._toLocalStorage();
     }
 
     // Does not delete the email + pass
@@ -82,11 +86,11 @@ export default class Auth {
     _setStatusTokenExpiry(status, token, expiry) {
         this.isLoggedIn = status;
         this.jwtToken = token;
-        this.jwtTokenExpiry = expiry ? expiry : Date.now() + (60 * 60 * 1000);
+        this.jwtTokenExpiry = expiry >= 0 ? expiry : Date.now() + (60 * 60 * 1000);
+        this._toLocalStorage();
     }
 
     _toLocalStorage() {
-        console.log("_toLocalStorage");
         localStorage.setItem("name", this.name);
         localStorage.setItem("isLoggedIn", this.isLoggedIn);
         localStorage.setItem("userEmail", this.userEmail);
@@ -96,7 +100,6 @@ export default class Auth {
     }
 
     _fromLocalStorage() {
-        console.log("_fromLocalStorage");
         this.name = localStorage.getItem("name");
         this.isLoggedIn = localStorage.getItem("isLoggedIn");
         this.userEmail = localStorage.getItem("userEmail");

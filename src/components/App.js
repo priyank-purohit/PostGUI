@@ -40,18 +40,6 @@ export default class Layout extends React.Component {
 		};
 
 		auth = new Auth(0);
-		// TRY TO GET a token usign existing credentials
-		auth.getUserDetails().then((resp) => {
-			console.log("Checking if user can be auto logged in", JSON.stringify(resp));
-			if (resp.isLoggedIn) {
-				this.state = {
-					...this.state, ...{
-						token: resp.jwtToken,
-						isLoggedIn: true
-					}
-				};
-			}
-		});
 
 		this.setUserEmailPassword = this.setUserEmailPassword.bind(this);
 		this.toggleLeftPane = this.toggleLeftPane.bind(this);
@@ -260,6 +248,16 @@ export default class Layout extends React.Component {
 			// 	history.pushState('Shared Query', 'Shared Query', 'http://localhost:3000/');
 			// }, 1000);
 		}
+
+		// TRY TO GET a token usign existing credentials
+		auth.getUserDetails().then((resp) => {
+			if (resp.isLoggedIn) {
+				this.setState({
+					token: resp.jwtToken,
+					isLoggedIn: true
+				})
+			};
+		});
 	}
 
 	render() {
