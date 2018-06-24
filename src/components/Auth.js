@@ -78,6 +78,13 @@ export default class Auth {
         }
     }
 
+    // Used to set the relevant parts of this class
+    _setStatusTokenExpiry(status, token, expiry) {
+        this.isLoggedIn = status;
+        this.jwtToken = token;
+        this.jwtTokenExpiry = expiry ? expiry : Date.now() + (60 * 60 * 1000);
+    }
+
     _toLocalStorage() {
         console.log("_toLocalStorage");
         localStorage.setItem("name", this.name);
@@ -96,13 +103,6 @@ export default class Auth {
         this.userPassword = localStorage.getItem("userPassword");
         this.jwtToken = localStorage.getItem("jwtToken");
         this.jwtTokenExpiry = localStorage.getItem("jwtTokenExpiry");
-    }
-
-    // Used to set the relevant parts of this class
-    _setStatusTokenExpiry(status, token, expiry) {
-        this.isLoggedIn = status;
-        this.jwtToken = token;
-        this.jwtTokenExpiry = expiry ? expiry : Date.now() + (60 * 60 * 1000);
     }
 
     toString() {
