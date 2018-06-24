@@ -609,8 +609,6 @@ class Downloads extends Component {
     };
 
     fetchOutput(url) {
-        console.log("DOwnloading!");
-
         let preparedHeaders = {};
         if (this.state.batchDownloadCheckBox === true) {
             preparedHeaders = { 'Range': String(this.state.batchDownloadLowerNum) + '-' + String(this.state.batchDownloadUpperNum - 1), 'Accept': 'application/json', 'Prefer': 'count=exact' };

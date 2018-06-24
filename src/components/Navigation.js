@@ -61,9 +61,14 @@ class Navigation extends Component {
 	}
 
 	handleLoginButtonClick = () => {
-		this.setState({
-			loginDialogOpen: !this.state.loginDialogOpen
-		});
+		if (this.props.isLoggedIn) {
+			// logout the user
+			this.props.handleLogoutClick();
+		} else {
+			this.setState({
+				loginDialogOpen: !this.state.loginDialogOpen
+			});
+		}
 	}
 
 	handleLoginDialogCloseClick = () => {
@@ -152,7 +157,6 @@ class Navigation extends Component {
 						dbName={dbTitle.replace("Database", "db").replace("database", "db")}
 						setUserEmailPassword={this.props.setUserEmailPassword}
 						open={this.state.loginDialogOpen}
-						handleLoginButtonClick={this.handleLoginButtonClick}
 						handleLoginDialogCloseClick={this.handleLoginDialogCloseClick} />
 				</AppBar>
 			</div>

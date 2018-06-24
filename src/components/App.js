@@ -197,6 +197,14 @@ export default class Layout extends React.Component {
 		});
 	}
 
+	handleLogoutClick = () => {
+		auth.logout();
+		this.setState({
+			token: null,
+			isLoggedIn: false
+		});
+	}
+
 	setUserEmailPassword(email, password) {
 		auth.setCredentials(email, password);
 		auth.getUserDetails().then((resp) => {
@@ -233,7 +241,8 @@ export default class Layout extends React.Component {
 					toggleLeftPane={this.toggleLeftPane}
 					toggleHistoryPane={this.toggleHistoryPane}
 					setUserEmailPassword={this.setUserEmailPassword}
-					publicDBStatus={publicDBStatus} />
+					publicDBStatus={publicDBStatus}
+					handleLogoutClick={this.handleLogoutClick} />
 
 				<div className="bodyDiv">
 					<LeftPane

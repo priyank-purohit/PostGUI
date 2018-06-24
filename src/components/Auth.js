@@ -33,6 +33,12 @@ export default class Auth {
 
     logout() {
         // Get rid of the user credentials
+        this.name = null;
+        this.isLoggedIn = false;
+        this.userEmail = null;
+        this.userPassword = null;
+        this.jwtToken = null;
+        this.jwtTokenExpiry = null;
     }
 
     isAuthenticated() {
