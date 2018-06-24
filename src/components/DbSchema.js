@@ -340,6 +340,10 @@ class DbSchema extends Component {
 
 	// Returns a list of tables from URL
 	getDbSchema(url = lib.getDbConfig(this.props.dbIndex, "url"), token = null) {
+		if (!url) {
+			url = lib.getDbConfig(this.props.dbIndex, "url");
+		}
+
 		let preparedHeaders = {};
 		if (token) {
 			preparedHeaders = { "Authorization": "Bearer " + token }

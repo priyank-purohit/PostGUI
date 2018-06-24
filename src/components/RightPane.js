@@ -328,10 +328,18 @@ class RightPane extends Component {
 		// Get rid of the timer
 		clearTimeout(this.timer);
 		this.timer = null;
+		let preparedHeaders = {};
+		if (this.state.exactRowCount === true && skipFullCount === false) {
+			preparedHeaders['Prefer'] = 'count=exact';
+		} else {
+			preparedHeaders['Prefer'] = 'count=estimated';
+		}
 
-		let exactCountHeader = { Prefer: 'count=exact' };
-		let inexactCountHeader = { Prefer: 'count=estimated' };
-		axios.get(url, { headers: this.state.exactRowCount === true && skipFullCount === false ? exactCountHeader : inexactCountHeader, requestId: "qbAxiosReq" })
+		if (this.props.isLoggedIn && this.props.token) {
+			preparedHeaders['Authorization'] = "Bearer " + this.props.token;
+		}
+
+		axios.get(url, { headers: preparedHeaders, requestId: "qbAxiosReq" })
 			.then((response) => {
 				let responseRows = null;
 				let totalRows = null;
