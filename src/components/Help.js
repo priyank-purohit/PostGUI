@@ -34,7 +34,7 @@ const styleSheet = {
     appBar: {
         position: 'relative',
         color: 'black',
-        background: amber[700]
+        background: amber[600]
     },
     flex: {
         flex: 1,
