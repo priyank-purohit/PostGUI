@@ -404,7 +404,7 @@ export default class DbSchema extends Component {
 		}
 
 		// Get PK info IFF enabled in config explicitly by the primaryKeyFunction boolean value
-		if (lib.getDbConfig(this.props.dbIndex, "primaryKeyFunction") === true) {
+		if (lib.getDbConfig(this.props.dbIndex, "primaryKeyFunction") === true && token !== null) {
 			axios.get(url + "/rpc/primary_keys", { headers: preparedHeaders })
 				.then((response) => {
 					if (this.mounted) {
