@@ -14,6 +14,30 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 class LoginDialog extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            email: null,
+            password: null
+        }
+
+        this.onChangeHandler = this.onChangeHandler.bind(this);
+        this.handleLoginClick = this.handleLoginClick.bind(this);
+    }
+
+    handleLoginClick() {
+        if (this.state.email && this.state.password) {
+            this.props.setUserEmailPassword(this.state.email, this.state.password);
+            this.props.handleLoginDialogCloseClick();
+        }
+    }
+
+    onChangeHandler(e) {
+        this.setState({
+            [e.target.id]: e.target.value
+        });
+    }
+
     render() {
         return (
             <Dialog
@@ -25,24 +49,28 @@ class LoginDialog extends Component {
                     <DialogContentText>Provide your credentials for this database, it may allow you more privileges.</DialogContentText>
                     <TextField
                         autoFocus
+                        required
                         margin="dense"
-                        id="name"
+                        id="email"
                         label="Email Address"
                         type="email"
+                        onChange={this.onChangeHandler}
                         fullWidth />
                     <TextField
+                        required
                         margin="dense"
                         id="password"
                         label="Password"
                         type="password"
+                        onChange={this.onChangeHandler}
                         fullWidth />
                 </DialogContent>
                 <Divider />
                 <DialogActions>
                     <Button onClick={this.props.handleLoginDialogCloseClick} color="default">Cancel</Button>
-                    <Button onClick={this.props.handleLoginDialogCloseClick} color="secondary">Login</Button>
+                    <Button onClick={this.handleLoginClick} color="secondary">Login</Button>
                 </DialogActions>
-            </Dialog>
+            </Dialog >
         );
     }
 }

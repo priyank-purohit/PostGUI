@@ -11,7 +11,7 @@ import LeftPane from './LeftPane.js';
 import '../styles/index.css';
 
 let lib = require("../utils/library.js");
-let auth = new Auth();
+let auth = null;
 
 export default class Layout extends React.Component {
 	constructor() {
@@ -19,6 +19,8 @@ export default class Layout extends React.Component {
 
 		// Parse URL
 		let parsedURL = this.parseURL();
+
+		auth = new Auth(0);
 
 		this.state = {
 			dbIndex: parsedURL['db'] || 0,
@@ -34,8 +36,10 @@ export default class Layout extends React.Component {
 			historyPaneVisibility: false,
 			searchTerm: "",
 			dbSchemaDefinitions: null,
-			dbPkInfo: null
+			dbPkInfo: null,
+			jwtToken: null
 		};
+		this.setUserEmailPassword = this.setUserEmailPassword.bind(this);
 		this.toggleLeftPane = this.toggleLeftPane.bind(this);
 		this.toggleHistoryPane = this.toggleHistoryPane.bind(this);
 		this.changeSearchTerm = this.changeSearchTerm.bind(this);
@@ -141,6 +145,7 @@ export default class Layout extends React.Component {
 		this.setState({
 			dbIndex: newIndex
 		});
+		auth.setDb(newIndex);
 	}
 
 	changeSearchTerm(newTerm) {
@@ -189,6 +194,11 @@ export default class Layout extends React.Component {
 		});
 	}
 
+	setUserEmailPassword(email, password) {
+		auth.setCredentials(email, password);
+		auth.getUserDetails().then((resp) => { console.log("Huuuuu" + JSON.stringify(resp)) });
+	}
+
 	componentDidMount() {
 		if (this.state.rulesFromURL) {
 			this.changeRules(this.state.rulesFromURL);
@@ -207,6 +217,7 @@ export default class Layout extends React.Component {
 					changeSearchTerm={this.changeSearchTerm}
 					toggleLeftPane={this.toggleLeftPane}
 					toggleHistoryPane={this.toggleHistoryPane}
+					setUserEmailPassword={this.setUserEmailPassword}
 					publicDBStatus={publicDBStatus} />
 
 				<div className="bodyDiv">

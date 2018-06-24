@@ -150,6 +150,7 @@ class Navigation extends Component {
 					</Toolbar>
 					<LoginDialog
 						dbName={dbTitle.replace("Database", "db").replace("database", "db")}
+						setUserEmailPassword={this.props.setUserEmailPassword}
 						open={this.state.loginDialogOpen}
 						handleLoginButtonClick={this.handleLoginButtonClick}
 						handleLoginDialogCloseClick={this.handleLoginDialogCloseClick} />
