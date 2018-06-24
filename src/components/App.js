@@ -20,8 +20,6 @@ export default class Layout extends React.Component {
 		// Parse URL
 		let parsedURL = this.parseURL();
 
-		auth = new Auth(0);
-
 		this.state = {
 			dbIndex: parsedURL['db'] || 0,
 			table: parsedURL['table'] || "",
@@ -40,6 +38,21 @@ export default class Layout extends React.Component {
 			token: null,
 			isLoggedIn: false,
 		};
+
+		auth = new Auth(0);
+		// TRY TO GET a token usign existing credentials
+		auth.getUserDetails().then((resp) => {
+			console.log("Checking if user can be auto logged in", JSON.stringify(resp));
+			if (resp.isLoggedIn) {
+				this.state = {
+					...this.state, ...{
+						token: resp.jwtToken,
+						isLoggedIn: true
+					}
+				};
+			}
+		});
+
 		this.setUserEmailPassword = this.setUserEmailPassword.bind(this);
 		this.toggleLeftPane = this.toggleLeftPane.bind(this);
 		this.toggleHistoryPane = this.toggleHistoryPane.bind(this);

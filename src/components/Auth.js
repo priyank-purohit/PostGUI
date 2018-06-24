@@ -61,19 +61,41 @@ export default class Auth {
     }
 
     async _loginPostRequest() {
-        let loginUrl = lib.getDbConfig(this.dbIndex, "url") + "/rpc/login";
+        if (this.userEmail && this.userPassword) {
+            let loginUrl = lib.getDbConfig(this.dbIndex, "url") + "/rpc/login";
 
-        // Makes the HTTP request to obtain JWT token + jwtTokenExpiry + user details
-        try {
-            let rawResp = await axios.post(loginUrl, { email: this.userEmail, pass: this.userPassword });
-            let data = rawResp.data[0];
-            this._setStatusTokenExpiry(true, data.token, data.tokenExpiry);
+            // Makes the HTTP request to obtain JWT token + jwtTokenExpiry + user details
+            try {
+                let rawResp = await axios.post(loginUrl, { email: this.userEmail, pass: this.userPassword });
+                let data = rawResp.data[0];
+                this._setStatusTokenExpiry(true, data.token, data.tokenExpiry);
 
-            return data;
-        } catch (e) {
-            this._setStatusTokenExpiry(false, null, 0);
-            console.log(e);
+                return data;
+            } catch (e) {
+                this._setStatusTokenExpiry(false, null, 0);
+                console.log(e);
+            }
         }
+    }
+
+    _toLocalStorage() {
+        console.log("_toLocalStorage");
+        localStorage.setItem("name", this.name);
+        localStorage.setItem("isLoggedIn", this.isLoggedIn);
+        localStorage.setItem("userEmail", this.userEmail);
+        localStorage.setItem("userPassword", this.userPassword);
+        localStorage.setItem("jwtToken", this.jwtToken);
+        localStorage.setItem("jwtTokenExpiry", this.jwtTokenExpiry);
+    }
+
+    _fromLocalStorage() {
+        console.log("_fromLocalStorage");
+        this.name = localStorage.getItem("name");
+        this.isLoggedIn = localStorage.getItem("isLoggedIn");
+        this.userEmail = localStorage.getItem("userEmail");
+        this.userPassword = localStorage.getItem("userPassword");
+        this.jwtToken = localStorage.getItem("jwtToken");
+        this.jwtTokenExpiry = localStorage.getItem("jwtTokenExpiry");
     }
 
     // Used to set the relevant parts of this class
