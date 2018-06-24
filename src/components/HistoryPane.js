@@ -17,7 +17,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import CloseIcon from '@material-ui/icons/Close';
 import { Divider } from '@material-ui/core';
 
-import indigo from '@material-ui/core/colors/indigo';
+import amber from '@material-ui/core/colors/amber';
 
 let _ = require('lodash');
 let lib = require("../utils/library.js");
@@ -231,24 +231,21 @@ export default class HistoryPane extends Component {
 			<div style={styleSheet.list}>
 				<List
 					dense
-					subheader={<ListSubheader>Query History
-								<IconButton style={{ float: "right" }}
-							aria-label="Close"
-							onClick={this.closeDrawer}>
-							<CloseIcon />
-						</IconButton>
-						<IconButton style={{ float: "right" }}
-							aria-label="Delete"
-							onClick={this.showDeleteHistoryDialog}>
-							<DeleteIcon />
-						</IconButton>
-					</ListSubheader>}>
+					subheader={
+						<ListSubheader style={styleSheet.subheaderBackgroundColour}>Query History
+								<IconButton onClick={this.closeDrawer} style={{ float: "right" }} aria-label="Close">
+								<CloseIcon />
+							</IconButton>
+							<IconButton onClick={this.showDeleteHistoryDialog} style={{ float: "right" }} aria-label="Delete">
+								<DeleteIcon />
+							</IconButton>
+						</ListSubheader>}>
 
 					{/* Delete History Button and Dialog */}
-					<div style={{ ...this.state.deleteHistoryDialogVisibility, ...{ height: "100px", width: "100%", marginLeft: "130px" } }}>
-						<ListSubheader style={{ marginLeft: "10px" }}>Delete history?</ListSubheader>
+					<div style={{ ...this.state.deleteHistoryDialogVisibility, ...{ height: "100px", float: "right" } }}>
+						<ListSubheader>Delete history?</ListSubheader>
 						<Button onClick={this.deleteHistory} variant="raised" style={{ margin: "5px" }}>Yes</Button>
-						<Button onClick={this.showDeleteHistoryDialog} variant="raised" color="primary" style={{ margin: "5px" }}>No</Button>
+						<Button onClick={this.showDeleteHistoryDialog} variant="raised" style={{ margin: "5px", background: amber[500] }}>No</Button>
 					</div>
 
 					<Divider />
@@ -385,7 +382,10 @@ const styleSheet = {
 	},
 	noStyleButton: {
 		border: "none",
-		fill: indigo[500]
+		fill: amber[700]
+	},
+	subheaderBackgroundColour: {
+		background: amber[500]
 	},
 	hide: {
 		display: 'none'
