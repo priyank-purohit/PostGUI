@@ -605,16 +605,10 @@ export default class DataTable extends Component {
                         {this.state.tablePrimaryKeys.join(",") !== "" &&
                             (<Grid item sm={12} md={6}>
                                 <EditCard
-                                    token={this.props.token}
-                                    isLoggedIn={this.props.isLoggedIn}
-                                    dbIndex={this.props.dbIndex}
+                                    {...this.props}
                                     table={this.state.table}
                                     columns={this.state.columns}
-                                    allColumns={this.props.allColumns}
-                                    insertNewRow={this.props.insertNewRow}
-                                    dbPkInfo={this.props.dbPkInfo}
                                     url={this.state.url}
-                                    qbFilters={this.props.qbFilters}
                                     featureEnabled={this.state.editFeatureEnabled}
                                     changesMade={this.state.editFeatureChangesMade}
                                     rowsStrikedOut={this.state.rowsStrikedOut}
@@ -627,14 +621,11 @@ export default class DataTable extends Component {
                         }
                         <Grid item sm={12} md={6}>
                             <Downloads
-                                token={this.props.token}
-                                isLoggedIn={this.props.isLoggedIn}
-                                dbIndex={this.props.dbIndex}
+                                {...this.props}
                                 table={this.state.table}
                                 columns={this.state.columns}
                                 data={this.state.data}
-                                url={this.state.url}
-                                totalRows={this.props.totalRows} />
+                                url={this.state.url} />
                         </Grid>
                     </Grid>
                 </div>

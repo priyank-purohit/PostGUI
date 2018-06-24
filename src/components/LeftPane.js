@@ -10,22 +10,10 @@ export default class LeftPane extends Component {
 		return (
 			<div style={{ ...rootClasses }}>
 				<DbPicker
-					dbIndex={this.props.dbIndex}
-					changeDbIndex={this.props.changeDbIndex} />
+					{...this.props} />
 				<Divider />
 				<DbSchema
-					isLoggedIn={this.props.isLoggedIn}
-					token={this.props.token}
-					dbIndex={this.props.dbIndex}
-					table={this.props.table}
-					publicDBStatus={this.props.publicDBStatus}
-					searchTerm={this.props.searchTerm}
-					changeSearchTerm={this.props.changeSearchTerm}
-					changeTable={this.props.changeTable}
-					changeColumns={this.props.changeColumns}
-					changeDbSchemaDefinitions={this.props.changeDbSchemaDefinitions}
-					changeDbPkInfo={this.props.changeDbPkInfo}
-					changeVisibleColumns={this.props.changeVisibleColumns} />
+					{...this.props} />
 			</div>
 		);
 	}

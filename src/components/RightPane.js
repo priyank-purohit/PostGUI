@@ -525,9 +525,7 @@ export default class RightPane extends Component {
 
 					<div style={styleSheet.cardMarginLeftRightTop} >
 						<DataTable
-							token={this.props.token}
-							isLoggedIn={this.props.isLoggedIn}
-							dbIndex={this.props.dbIndex}
+							{...this.props}
 							table={this.state.table}
 							columns={this.state.visibleColumns ? this.state.visibleColumns : this.state.columns}
 							allColumns={this.state.columns}
@@ -535,7 +533,6 @@ export default class RightPane extends Component {
 							qbFilters={this.state.qbFilters}
 							url={this.state.url}
 							totalRows={this.state.totalRows}
-							dbPkInfo={this.props.dbPkInfo}
 							insertNewRow={this.insertNewRow}
 							noDataText={this.state.submitLoading ? "Loading ..." : (this.state.submitError ? "Query error" : (this.state.submitSuccess ? "Success!" : "No rows found"))} />
 					</div>

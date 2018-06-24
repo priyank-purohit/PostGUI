@@ -285,21 +285,9 @@ export default class EditCard extends Component {
 
 
             <NewRow
+                {...this.props}
                 open={this.state.newRowDialogOpen}
-
-                insertNewRow={this.props.insertNewRow}
-                postReqToChangeLog={this.props.postReqToChangeLog}
-
-                token={this.props.token}
-                isLoggedIn={this.props.isLoggedIn}
-
-                dbIndex={this.props.dbIndex}
-                table={this.props.table}
-                columns={this.props.columns}
-                allColumns={this.props.allColumns}
                 primaryKeys={this.state.primaryKeys}
-                qbFilters={this.props.qbFilters}
-                url={this.props.url}
                 handleNewRowClick={this.handleNewRowClick} />
 
             <Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
