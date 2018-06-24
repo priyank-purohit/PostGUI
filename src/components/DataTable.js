@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import ReactTable from 'react-table';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -21,7 +19,7 @@ let CheckboxTable = checkboxHOC(ReactTable);
 let lib = require('../utils/library.js');
 
 
-class DataTable extends Component {
+export default class DataTable extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -527,7 +525,6 @@ class DataTable extends Component {
     };
 
     render() {
-        let classes = this.props.classes;
         let { columns, data } = this.state;
         let parsedColumns = [];
 
@@ -603,7 +600,7 @@ class DataTable extends Component {
                             nextText="Next Page"
                             noDataText={this.props.noDataText} />)}
 
-                <div className={this.props.classes.cardGroups} >
+                <div style={styleSheet.cardGroups} >
                     <Grid container spacing={16} direction={this.state.tablePrimaryKeys.join(",") === "" ? 'row-reverse' : 'row'}>
                         {this.state.tablePrimaryKeys.join(",") !== "" &&
                             (<Grid item sm={12} md={6}>
@@ -647,15 +644,11 @@ class DataTable extends Component {
                     onClose={this.handleRequestClose}
                     ContentProps={{ 'aria-describedby': 'message-id', }}
                     message={<span id="message-id">{this.state.snackBarMessage}</span>}
-                    action={[<IconButton key="close" aria-label="Close" color="secondary" className={classes.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton>]} />
+                    action={[<IconButton key="close" aria-label="Close" color="secondary" style={styleSheet.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton>]} />
 
             </div>);
     }
 }
-
-DataTable.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
 
 const styleSheet = {
     root: {
@@ -678,4 +671,3 @@ const styleSheet = {
         flexGrow: 1
     }
 };
-export default withStyles(styleSheet)(DataTable);

@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 
 import LoginDialog from './LoginDialog.js';
 
@@ -28,7 +26,7 @@ let lib = require('../utils/library.js');
 
 
 //join: predicted genes, protein seqs
-class Navigation extends Component {
+export default class Navigation extends Component {
 
 	constructor(props) {
 		super(props);
@@ -78,14 +76,19 @@ class Navigation extends Component {
 	}
 
 	render() {
-		const classes = this.props.classes;
 		let dbTitle = lib.getDbConfig(this.props.dbIndex, "title") || "Untitled database";
+		let searchBarFdpOpenStyles = null;
+		if (this.state.isSearchBarFdpOpen) {
+			searchBarFdpOpenStyles = { backgroundColor: 'white', border: '1px solid grey', width: 325 + 'px', minWidth: 'inherit' }
+		} else {
+			searchBarFdpOpenStyles = { backgroundColor: 'rgba(255, 255, 255, 0.1)', border: 'none', width: 45 + '%', maxWidth: 525 + 'px', minWidth: 325 + 'px' }
+		};
 
 		// Set a short window title
 		document.title = dbTitle.replace("Database", "db").replace("database", "db");
 
 		return (
-			<div className={classes.root}>
+			<div style={styleSheet.root}>
 				<AppBar position="absolute">
 					<Toolbar>
 						<FeatureDiscoveryPrompt
@@ -102,11 +105,11 @@ class Navigation extends Component {
 							</IconButton>
 						</FeatureDiscoveryPrompt>
 
-						<Typography variant="title" color="inherit" className={classes.dbTitleFlex}>
+						<Typography variant="title" color="inherit" style={styleSheet.dbTitleFlex}>
 							{dbTitle}
 						</Typography>
 
-						<div className={classes.searchBarFlex}>
+						<div style={styleSheet.searchBarFlex}>
 							<FeatureDiscoveryPrompt
 								onClose={() => this.setState({ isSearchBarFdpOpen: false })}
 								open={this.state.isSearchBarFdpOpen}
@@ -123,9 +126,7 @@ class Navigation extends Component {
 									onChange={this.changeSearchTerm.bind(this)}
 									onFocus={this.changeSearchTerm.bind(this)}
 									type="search"
-									className={classes.searchBar}
-									style={this.state.isSearchBarFdpOpen ? { backgroundColor: 'white', border: '1px solid grey', width: 325 + 'px', minWidth: 'inherit' } :
-										{ backgroundColor: 'rgba(255, 255, 255, 0.1)', border: 'none', width: 45 + '%', maxWidth: 525 + 'px', minWidth: 325 + 'px' }}
+									style={{ ...styleSheet.searchBar, ...searchBarFdpOpenStyles }}
 									InputProps={{
 										startAdornment: (
 											<InputAdornment position="start">
@@ -136,11 +137,11 @@ class Navigation extends Component {
 									autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck="false" />
 							</FeatureDiscoveryPrompt>
 						</div>
-						<IconButton className={classes.rightIconsFlex} color="inherit" aria-label="History" onClick={this.props.toggleHistoryPane.bind(this)}>
-							<HistoryIcon className={classes.floatRight} />
+						<IconButton style={styleSheet.rightIconsFlex} color="inherit" aria-label="History" onClick={this.props.toggleHistoryPane.bind(this)}>
+							<HistoryIcon style={styleSheet.floatRight} />
 						</IconButton>
-						<IconButton className={classes.rightIconsFlex} color="inherit" aria-label="Help" onClick={() => { this.setState({ isLoginFdpOpen: !this.state.isLoginFdpOpen }) }}>
-							<HelpIcon className={classes.floatRight} />
+						<IconButton style={styleSheet.rightIconsFlex} color="inherit" aria-label="Help" onClick={() => { this.setState({ isLoginFdpOpen: !this.state.isLoginFdpOpen }) }}>
+							<HelpIcon style={styleSheet.floatRight} />
 						</IconButton>
 						<FeatureDiscoveryPrompt
 							onClose={() => { this.setState({ isLoginFdpOpen: false }) }}
@@ -150,7 +151,7 @@ class Navigation extends Component {
 							subtractFromTopPos={50}
 							opacity={0.95}
 							description="Provide your credentials for full access.">
-							<Button onClick={() => { this.handleLoginButtonClick() }} color="default" variant="contained" className={classes.rightIconsFlex}>{this.props.isLoggedIn ? "Logout" : "Login"}</Button>
+							<Button onClick={() => { this.handleLoginButtonClick() }} color="default" variant="contained" style={styleSheet.rightIconsFlex}>{this.props.isLoggedIn ? "Logout" : "Login"}</Button>
 						</FeatureDiscoveryPrompt>
 					</Toolbar>
 					<LoginDialog
@@ -164,11 +165,7 @@ class Navigation extends Component {
 	}
 }
 
-Navigation.propTypes = {
-	classes: PropTypes.object.isRequired,
-};
-
-const styleSheet = theme => ({
+const styleSheet = {
 	root: {
 		width: '100%'
 	},
@@ -204,8 +201,6 @@ const styleSheet = theme => ({
 		marginRight: 5
 	},
 	button: {
-		margin: theme.spacing.unit,
+		margin: 15,
 	},
-});
-
-export default withStyles(styleSheet)(Navigation);
+};

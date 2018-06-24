@@ -9,7 +9,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
 import TextField from '@material-ui/core/TextField';
-import { withStyles, Divider, Paper } from '@material-ui/core';
+import { Divider, Paper } from '@material-ui/core';
 
 import axios from 'axios';
 
@@ -162,7 +162,6 @@ class ResponsiveDialog extends React.Component {
     }
 
     render() {
-        const classes = this.props.classes;
         let { fullScreen } = this.props;
         let tableRename = lib.getTableConfig(this.props.dbIndex, this.state.table, "rename");
         let tableDisplayName = tableRename ? tableRename : this.state.table;
@@ -176,21 +175,21 @@ class ResponsiveDialog extends React.Component {
                     aria-labelledby="responsive-dialog-title">
                     <DialogTitle id="responsive-dialog-title">{"Insert new row to " + tableDisplayName}</DialogTitle>
                     <DialogContent>
-                        {this.state.error !== "" && (<Paper id="errorPaper" className={classes.paperError} elevation={4}>
-                            <Typography variant="subheading" className={classes.paperMarginTopLeft}>Request Denied</Typography>
-                            <DialogContentText className={classes.paperMarginLeft}>{"Code: " + (this.state.error && this.state.error.data ? this.state.error.data.code : "")}</DialogContentText>
-                            <DialogContentText className={classes.paperMarginLeft}>{"Message: " + (this.state.error && this.state.error.data ? this.state.error.data.message : "")}</DialogContentText>
-                            <DialogContentText className={classes.paperMarginLeft}>{"Details: " + (this.state.error && this.state.error.data ? this.state.error.data.details : "")}</DialogContentText>
+                        {this.state.error !== "" && (<Paper id="errorPaper" style={styleSheet.paperError} elevation={4}>
+                            <Typography variant="subheading" style={styleSheet.paperMarginTopLeft}>Request Denied</Typography>
+                            <DialogContentText style={styleSheet.paperMarginLeft}>{"Code: " + (this.state.error && this.state.error.data ? this.state.error.data.code : "")}</DialogContentText>
+                            <DialogContentText style={styleSheet.paperMarginLeft}>{"Message: " + (this.state.error && this.state.error.data ? this.state.error.data.message : "")}</DialogContentText>
+                            <DialogContentText style={styleSheet.paperMarginLeft}>{"Details: " + (this.state.error && this.state.error.data ? this.state.error.data.details : "")}</DialogContentText>
                         </Paper>)}
 
-                        <DialogContentText className={classes.paperMarginTop}>
+                        <DialogContentText style={styleSheet.paperMarginTop}>
                             {"Unique values for the table's primary key (" +
                                 this.state.primaryKeys.join(", ") +
                                 ") are mandatory (*). Other constraints may be imposed by the database schema, follow instructions in the error details."}
                         </DialogContentText>
 
-                        <Typography type="subheading" className={classes.cardMarginTopBottom}>New Row</Typography>
-                        <div className={classes.cardMarginLeft}>
+                        <Typography type="subheading" style={styleSheet.cardMarginTopBottom}>New Row</Typography>
+                        <div style={styleSheet.cardMarginLeft}>
                             {
                                 this.state.qbFilters.map((column) => {
                                     return (
@@ -201,7 +200,7 @@ class ResponsiveDialog extends React.Component {
                                             required={(this.state.primaryKeys).indexOf(column.id) >= 0}
                                             placeholder={column.type}
                                             value={(column.default_value || (this.state.inputVals[column.id] ? this.state.inputVals[column.id]["value"] : "")) || ""}
-                                            className={classes.textField}
+                                            style={styleSheet.textField}
                                             margin="normal" />
                                     )
                                 })
@@ -255,4 +254,4 @@ ResponsiveDialog.propTypes = {
     fullScreen: PropTypes.bool.isRequired,
 };
 
-export default withStyles(styleSheet)(withMobileDialog()(ResponsiveDialog));
+export default withMobileDialog()(ResponsiveDialog);

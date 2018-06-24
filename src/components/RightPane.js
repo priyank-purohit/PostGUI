@@ -2,8 +2,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import axiosCancel from 'axios-cancel';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import CardHeader from '@material-ui/core/CardHeader';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -34,7 +32,7 @@ axiosCancel(axios, {
 });
 
 
-class RightPane extends Component {
+export default class RightPane extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -456,26 +454,24 @@ class RightPane extends Component {
 	}
 
 	render() {
-		const classes = this.props.classes;
-
 		let tableRename = lib.getTableConfig(this.props.dbIndex, this.state.table, "rename");
 		let tableDisplayName = tableRename ? tableRename : this.state.table;
 
 		let tableDescription = lib.getTableConfig(this.props.dbIndex, this.props.table, "description") ? lib.getTableConfig(this.props.dbIndex, this.props.table, "description") : "";
 
-		let hideClass = this.state.table ? "" : classes.hide;
-		let leftMarginClass = this.state.leftPaneVisibility === true ? classes.root : classes.root + " " + classes.rootInvisibleLeft;
-		let paperClasses = hideClass + " " + leftMarginClass;
+		let hideClass = this.state.table ? "" : styleSheet.hide;
+		let leftMarginClass = this.state.leftPaneVisibility === true ? styleSheet.root : { ...styleSheet.root, ...styleSheet.rootInvisibleLeft };
+		let paperClasses = { ...hideClass, ...leftMarginClass };
 
 		return (
-			<div className={classes.middlePaperSection}>
-				<Paper className={paperClasses} elevation={5}>
+			<div style={styleSheet.middlePaperSection}>
+				<Paper style={paperClasses} elevation={5}>
 					<CardHeader title={tableDisplayName} subheader={tableDescription} />
 
-					<Typography type="subheading" className={classes.cardMarginLeftTop} >Query Builder</Typography>
+					<Typography type="subheading" style={styleSheet.cardMarginLeftTop} >Query Builder</Typography>
 					<div id='query-builder' ref='queryBuilder' />
 
-					<Typography type="body1" className={classes.cardMarginLeftTop}>Options</Typography>
+					<Typography type="body1" style={styleSheet.cardMarginLeftTop}>Options</Typography>
 
 
 					<Grid container spacing={24} alignItems={'center'}>
@@ -488,7 +484,7 @@ class RightPane extends Component {
 									type="number"
 									label="Row-limit"
 									value={this.state.rowLimit.toString()}
-									className={classes.rowLimitTextField}
+									style={styleSheet.rowLimitTextField}
 									margin="normal"
 									onChange={this.handleRowLimitChange} />
 							</Tooltip>
@@ -497,7 +493,7 @@ class RightPane extends Component {
 						<Grid item sm={10} md={5}>
 							{/* EXACT COUNT CHECK BOX */}
 							<FormControlLabel
-								className={classes.cardMarginLeft}
+								style={styleSheet.cardMarginLeft}
 								control={
 									<Checkbox
 										color="primary"
@@ -523,11 +519,11 @@ class RightPane extends Component {
 						</Grid>
 					</Grid>
 
-					<Typography type="subheading" className={classes.cardMarginLeftTop}>Query Results</Typography>
+					<Typography type="subheading" style={styleSheet.cardMarginLeftTop}>Query Results</Typography>
 
 					<RightPaneChips rows={this.state.rows} totalRows={this.state.totalRows} rowLimit={this.state.rowLimit} maxRows={maxRowsInOutput} />
 
-					<div className={classes.cardMarginLeftRightTop} >
+					<div style={styleSheet.cardMarginLeftRightTop} >
 						<DataTable
 							token={this.props.token}
 							isLoggedIn={this.props.isLoggedIn}
@@ -550,17 +546,14 @@ class RightPane extends Component {
 					onClose={this.handleRequestClose}
 					ContentProps={{ 'aria-describedby': 'message-id', }}
 					message={<span id="message-id">{this.state.snackBarMessage}</span>}
-					action={[<IconButton key="close" aria-label="Close" color="secondary" className={classes.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton>]} />
+					action={[<IconButton key="close" aria-label="Close" color="secondary" style={styleSheet.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton>]} />
 			</div >
 		);
 	}
 }
 
-RightPane.propTypes = {
-	classes: PropTypes.object.isRequired,
-};
 
-const styleSheet = {
+let styleSheet = {
 	root: {
 		paddingBottom: 50,
 		marginLeft: '30%',
@@ -599,5 +592,3 @@ const styleSheet = {
 		visibility: 'hidden'
 	}
 };
-
-export default withStyles(styleSheet)(RightPane);

@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
 import DbPicker from './DbPicker.js'
 import DbSchema from './DbSchema.js'
 
 
-class LeftPane extends Component {
+export default class LeftPane extends Component {
 	render() {
-		const classes = this.props.classes;
-		let rootClasses = this.props.leftPaneVisibility === true ? classes.root : classes.rootHide;
+		let rootClasses = this.props.leftPaneVisibility === true ? styleSheet.root : styleSheet.rootHide;
 		return (
-			<div className={rootClasses}>
+			<div style={{ ...rootClasses }}>
 				<DbPicker
 					dbIndex={this.props.dbIndex}
 					changeDbIndex={this.props.changeDbIndex} />
@@ -33,10 +30,6 @@ class LeftPane extends Component {
 		);
 	}
 }
-
-LeftPane.propTypes = {
-	classes: PropTypes.object.isRequired,
-};
 
 const styleSheet = {
 	root: {
@@ -62,5 +55,3 @@ const styleSheet = {
 		paddingBottom: 0
 	}
 };
-
-export default withStyles(styleSheet)(LeftPane);

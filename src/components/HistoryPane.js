@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 
 import List from '@material-ui/core/List';
@@ -25,7 +23,7 @@ let _ = require('lodash');
 let lib = require("../utils/library.js");
 let displayLengthCutoff = 50;
 
-class HistoryPane extends Component {
+export default class HistoryPane extends Component {
 	constructor(props) {
 		super(props);
 
@@ -39,7 +37,7 @@ class HistoryPane extends Component {
 			newHistoryItem: this.props.newHistoryItem,
 			displayIndex: -1,
 			historyArray: localHistoryArray ? localHistoryArray : [],
-			deleteHistoryDialogVisibility: this.props.classes.hide,
+			deleteHistoryDialogVisibility: styleSheet.hide,
 			snackBarVisibility: false,
 			snackBarMessage: "Unknown error occured",
 		};
@@ -207,10 +205,9 @@ class HistoryPane extends Component {
 	}
 
 	showDeleteHistoryDialog() {
-		const classes = this.props.classes;
 		if (this.state.deleteHistoryDialogVisibility === null) {
 			this.setState({
-				deleteHistoryDialogVisibility: classes.hide
+				deleteHistoryDialogVisibility: styleSheet.hide
 			});
 		} else {
 			this.setState({
@@ -230,9 +227,8 @@ class HistoryPane extends Component {
 
 
 	render() {
-		const classes = this.props.classes;
 		const historyPanelItemsList = (
-			<div className={classes.list}>
+			<div style={styleSheet.list}>
 				<List
 					dense
 					subheader={<ListSubheader>Query History
@@ -249,7 +245,7 @@ class HistoryPane extends Component {
 					</ListSubheader>}>
 
 					{/* Delete History Button and Dialog */}
-					<div style={{ height: "100px", width: "100%", marginLeft: "130px" }} className={this.state.deleteHistoryDialogVisibility}>
+					<div style={{ ...this.state.deleteHistoryDialogVisibility, ...{ height: "100px", width: "100%", marginLeft: "130px" } }}>
 						<ListSubheader style={{ marginLeft: "10px" }}>Delete history?</ListSubheader>
 						<Button onClick={this.deleteHistory} variant="raised" style={{ margin: "5px" }}>Yes</Button>
 						<Button onClick={this.showDeleteHistoryDialog} variant="raised" color="primary" style={{ margin: "5px" }}>No</Button>
@@ -277,7 +273,7 @@ class HistoryPane extends Component {
 									let index = lib.elementPositionInArray(item, this.state.historyArray);
 
 									// When user hovers over a history item, show rest of the lines
-									let classNames = this.props.classes.hide;
+									let classNames = styleSheet.hide;
 									if (this.state.displayIndex === index) {
 										classNames = null;
 									}
@@ -287,7 +283,7 @@ class HistoryPane extends Component {
 										<ListItem button key={index} onMouseEnter={this.changeDisplayIndex.bind(this, index)} onClick={this.handleHistoryItemClick.bind(this, index)}>
 											{/* Clicking on this edit button should load the history item in the Query Builder */}
 											<Tooltip id="tooltip-bottom" title={"Copy shareable link"} placement="bottom">
-												<ListItemIcon className={classes.noStyleButton} onClick={this.handleLinkIconClick.bind(this, index)}>
+												<ListItemIcon style={styleSheet.noStyleButton} onClick={this.handleLinkIconClick.bind(this, index)}>
 													<LinkIcon />
 												</ListItemIcon>
 											</Tooltip>
@@ -325,7 +321,7 @@ class HistoryPane extends Component {
 															displayStr = displayStr.substring(0, displayLengthCutoff) + "...";
 														}
 
-														return <ListItemText secondary={displayStr} key={index + rule} className={currRuleIndexInRules > 3 ? classNames : null} />;
+														return <ListItemText secondary={displayStr} key={index + rule} style={currRuleIndexInRules > 3 ? classNames : null} />;
 													})
 												}
 											</div>
@@ -338,7 +334,7 @@ class HistoryPane extends Component {
 										<ListItem button key={index} onMouseEnter={this.changeDisplayIndex.bind(this, index)} onClick={this.handleHistoryItemClick.bind(this, index)}>
 
 											<Tooltip id="tooltip-bottom" title={"Copy shareable link"} placement="bottom">
-												<ListItemIcon className={classes.noStyleButton} onClick={this.handleLinkIconClick.bind(this, index)}>
+												<ListItemIcon style={styleSheet.noStyleButton} onClick={this.handleLinkIconClick.bind(this, index)}>
 													<LinkIcon />
 												</ListItemIcon>
 											</Tooltip>
@@ -361,7 +357,7 @@ class HistoryPane extends Component {
 					onClose={this.handleRequestClose}
 					ContentProps={{ 'aria-describedby': 'message-id', }}
 					message={<span id="message-id">{this.state.snackBarMessage}</span>}
-					action={[<IconButton key="close" aria-label="Close" color="secondary" className={classes.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton>]} />
+					action={[<IconButton key="close" aria-label="Close" color="secondary" style={styleSheet.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton>]} />
 			</div>
 		);
 
@@ -374,10 +370,6 @@ class HistoryPane extends Component {
 		);
 	}
 }
-
-HistoryPane.propTypes = {
-	classes: PropTypes.object.isRequired,
-};
 
 const styleSheet = {
 	root: {
@@ -399,5 +391,3 @@ const styleSheet = {
 		display: 'none'
 	}
 };
-
-export default withStyles(styleSheet)(HistoryPane);

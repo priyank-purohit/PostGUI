@@ -1,7 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -13,7 +10,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-class LoginDialog extends Component {
+export default class LoginDialog extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -74,50 +71,3 @@ class LoginDialog extends Component {
         );
     }
 }
-
-
-LoginDialog.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
-
-const styleSheet = theme => ({
-    root: {
-        width: '100%'
-    },
-    dbTitleFlex: {
-        flex: 0.3
-    },
-    searchBarFlex: {
-        flex: 0.6,
-        display: 'block',
-        marginLeft: 5,
-        marginRight: 5,
-        marginTop: 0,
-    },
-    searchBar: {
-        marginLeft: 5,
-        marginRight: 5,
-        background: 'white',
-        padding: 10,
-        paddingBottom: 5,
-        borderRadius: 3,
-        float: 'right',
-        transition: 'all 0.2s'
-    },
-    rightIconsFlex: {
-        flex: 0.05,
-        display: 'block'
-    },
-    floatRight: {
-        float: 'right'
-    },
-    floatRightPadded: {
-        float: 'right',
-        marginRight: 5
-    },
-    button: {
-        margin: theme.spacing.unit,
-    },
-});
-
-export default withStyles(styleSheet)(LoginDialog);
