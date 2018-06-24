@@ -52,8 +52,8 @@ class DbSchema extends Component {
 		this.mounted = true;
 		// Save the database schema to state for future access
 		let url = lib.getDbConfig(this.props.dbIndex, "url");
-		if (url) {
-			this.getDbSchema(url);
+		if (url && this.props.isLoggedIn) {
+			this.getDbSchema(url, this.props.token);
 		}
 	}
 
@@ -73,7 +73,7 @@ class DbSchema extends Component {
 			}, function () {
 				this.props.changeTable("");
 				this.props.changeColumns(this.state[""]);
-				this.getDbSchema();
+				this.getDbSchema(null, newProps.token);
 				this.updateVisibleColumns();
 				this.handleSearchClose();
 			});
@@ -91,6 +91,10 @@ class DbSchema extends Component {
 					searchResults: this.searchTablesColumnsFK()
 				});
 			});
+		}
+
+		if (this.props.token !== newProps.token) {
+			this.getDbSchema(lib.getDbConfig(this.props.dbIndex, "url"), newProps.token);
 		}
 	}
 
@@ -335,42 +339,16 @@ class DbSchema extends Component {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Returns a list of tables from URL
-	getDbSchema(url = lib.getDbConfig(this.props.dbIndex, "url")) {
-		axios.get(url + "/", { headers: { "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiZWRpdHVzZXIiLCJlbWFpbCI6ImFkbWluQGRzZ2xhYi5jb20iLCJleHAiOjE1Mjk3OTM4MDJ9.WQilJtYGfgS0KZynajDZ8k5tjAFHwUXO8Qp1jvJTE30" } })
-			.then((response) => {
-				// Save the raw resp + parse tables and columns...
-				if (this.mounted) {
-					this.setState({
-						dbSchema: response.data
-					}, () => {
-						this.parseDbSchema(response.data);
-					});
-				}
-			})
-			.catch((error) => {
-				// Show error in top-right Snack-Bar
-				if (this.mounted) {
-					this.setState({
-						snackBarVisibility: true,
-						snackBarMessage: "Database does not exist."
-					}, () => {
-						this.timer = setTimeout(() => {
-							this.setState({
-								snackBarVisibility: false,
-								snackBarMessage: "Unknown error"
-							});
-						}, 5000);
-					});
-				}
-			});
-		// Get FK info IFF enabled in config explicitly
-		if (lib.getDbConfig(this.props.dbIndex, "foreignKeySearch") === true) {
-			axios.get(url + "/rpc/foreign_keys", {})
+	getDbSchema(url = lib.getDbConfig(this.props.dbIndex, "url"), token) {
+		if (token) {
+			axios.get(url + "/", { headers: { "Authorization": "Bearer " + token } })
 				.then((response) => {
 					// Save the raw resp + parse tables and columns...
 					if (this.mounted) {
 						this.setState({
-							dbFkSchema: response.data
+							dbSchema: response.data
+						}, () => {
+							this.parseDbSchema(response.data);
 						});
 					}
 				})
@@ -379,7 +357,7 @@ class DbSchema extends Component {
 					if (this.mounted) {
 						this.setState({
 							snackBarVisibility: true,
-							snackBarMessage: "Foreign keys function does not exist in database."
+							snackBarMessage: "Database does not exist."
 						}, () => {
 							this.timer = setTimeout(() => {
 								this.setState({
@@ -390,42 +368,70 @@ class DbSchema extends Component {
 						});
 					}
 				});
-		}
-
-		// Get PK info IFF enabled in config explicitly by the primaryKeyFunction boolean value
-		if (lib.getDbConfig(this.props.dbIndex, "primaryKeyFunction") === true) {
-			axios.get(url + "/rpc/primary_keys", {})
-				.then((response) => {
-					if (this.mounted) {
-						let pkAvailable = JSON.stringify(response.data[0]["primary_keys"]) !== "[]";
+			// Get FK info IFF enabled in config explicitly
+			if (lib.getDbConfig(this.props.dbIndex, "foreignKeySearch") === true) {
+				axios.get(url + "/rpc/foreign_keys", { headers: { "Authorization": "Bearer " + token } })
+					.then((response) => {
 						// Save the raw resp + parse tables and columns...
-						this.setState({
-							dbPkInfo: response.data[0]["primary_keys"],
-							primaryKeysAvailable: pkAvailable
-						}, () => {
-							if (pkAvailable) {
-								this.props.changeDbPkInfo(response.data);
-							}
-						});
-						//console.log(JSON.stringify(response.data[0]["primary_keys"]), pkAvailable);
-					}
-				})
-				.catch((error) => {
-					if (this.mounted) {
+						if (this.mounted) {
+							this.setState({
+								dbFkSchema: response.data
+							});
+						}
+					})
+					.catch((error) => {
 						// Show error in top-right Snack-Bar
-						this.setState({
-							snackBarVisibility: true,
-							snackBarMessage: "Primary keys function does not exist in database."
-						}, () => {
-							this.timer = setTimeout(() => {
-								this.setState({
-									snackBarVisibility: false,
-									snackBarMessage: "Unknown error"
-								});
-							}, 5000);
-						});
-					}
-				});
+						if (this.mounted) {
+							this.setState({
+								snackBarVisibility: true,
+								snackBarMessage: "Foreign keys function does not exist in database."
+							}, () => {
+								this.timer = setTimeout(() => {
+									this.setState({
+										snackBarVisibility: false,
+										snackBarMessage: "Unknown error"
+									});
+								}, 5000);
+							});
+						}
+					});
+			}
+
+			// Get PK info IFF enabled in config explicitly by the primaryKeyFunction boolean value
+			if (lib.getDbConfig(this.props.dbIndex, "primaryKeyFunction") === true) {
+				axios.get(url + "/rpc/primary_keys", { headers: { "Authorization": "Bearer " + token } })
+					.then((response) => {
+						if (this.mounted) {
+							let pkAvailable = JSON.stringify(response.data[0]["primary_keys"]) !== "[]";
+							// Save the raw resp + parse tables and columns...
+							this.setState({
+								dbPkInfo: response.data[0]["primary_keys"],
+								primaryKeysAvailable: pkAvailable
+							}, () => {
+								if (pkAvailable) {
+									this.props.changeDbPkInfo(response.data);
+								}
+							});
+							//console.log(JSON.stringify(response.data[0]["primary_keys"]), pkAvailable);
+						}
+					})
+					.catch((error) => {
+						if (this.mounted) {
+							// Show error in top-right Snack-Bar
+							this.setState({
+								snackBarVisibility: true,
+								snackBarMessage: "Primary keys function does not exist in database."
+							}, () => {
+								this.timer = setTimeout(() => {
+									this.setState({
+										snackBarVisibility: false,
+										snackBarMessage: "Unknown error"
+									});
+								}, 5000);
+							});
+						}
+					});
+			}
 		}
 	}
 

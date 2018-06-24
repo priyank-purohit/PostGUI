@@ -17,6 +17,8 @@ class LeftPane extends Component {
 					changeDbIndex={this.props.changeDbIndex} />
 				<Divider />
 				<DbSchema
+					isLoggedIn={this.props.isLoggedIn}
+					token={this.props.token}
 					dbIndex={this.props.dbIndex}
 					table={this.props.table}
 					publicDBStatus={this.props.publicDBStatus}
