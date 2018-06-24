@@ -325,7 +325,7 @@ class DataTable extends Component {
                     }
 
                     // Send the DELETE request and check response
-                    axios.delete(url, {}, { headers: preparedHeaders })
+                    axios.delete(url, { headers: preparedHeaders })
                         .then((response) => {
                             // Add an entry to the database's change log
                             let oldRow = null;
