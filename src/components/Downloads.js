@@ -776,7 +776,7 @@ export default class Downloads extends Component {
                     </IconButton>
                 </div>*/}
 
-                {this.state.copyLoading === true ? <img src={require('../resources/progress.gif')} width="100%" alt="Progress indicator" /> : <Divider />}
+                {this.state.copyLoading || this.state.submitLoading ? <img src={require('../resources/progress.gif')} width="100%" alt="Progress indicator" /> : <Divider />}
 
                 <Button color="primary" style={styleSheet.button} onClick={this.handleDownloadClick} disabled={this.state.fileFormat === 'delimitedColumn'} >Download</Button>
                 <Button color="primary" disabled={this.state.fileFormat !== 'delimitedColumn' && this.state.fileFormat !== 'json' && this.state.fileFormat !== 'xml'} style={styleSheet.button} onClick={this.handleCopyClick} >Copy</Button>
