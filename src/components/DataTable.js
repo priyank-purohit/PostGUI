@@ -221,7 +221,12 @@ class DataTable extends Component {
         //console.log("Changes Log URL:" + changeLogURL);
         //console.log("Changes Log POST Body:" + JSON.stringify(changeLogPostReqBody));
 
-        axios.post(changeLogURL, changeLogPostReqBody, { headers: { Prefer: 'return=representation' } })
+        let preparedHeaders = { Prefer: 'return=representation' };
+        if (this.props.isLoggedIn && this.props.token) {
+            preparedHeaders['Authorization'] = "Bearer " + this.props.token;
+        }
+
+        axios.post(changeLogURL, changeLogPostReqBody, { headers: preparedHeaders })
             .then((response) => {
                 //console.log("Change Log POST Successful:" + JSON.stringify(response));
             })
@@ -277,9 +282,14 @@ class DataTable extends Component {
                     //console.log("Change=" + JSON.stringify(change));
                     //console.log("PATCH req BODY=" + JSON.stringify({ [columnChanged]: newValue }));
 
+                    let preparedHeaders = { Prefer: 'return=representation' };
+                    if (this.props.isLoggedIn && this.props.token) {
+                        preparedHeaders['Authorization'] = "Bearer " + this.props.token;
+                    }
+
                     // Send the Request and check its response:
                     // PATCH the request
-                    axios.patch(url, { [columnChanged]: newValue }, { headers: { Prefer: 'return=representation' } })
+                    axios.patch(url, { [columnChanged]: newValue }, { headers: preparedHeaders })
                         .then((response) => {
                             //console.log("PATCH RESPONSE:", JSON.stringify(response.data));
                             this.deleteChange(columnChanged, keyChanged, true); // true => do not restore original value when deleting change
@@ -309,8 +319,13 @@ class DataTable extends Component {
                     let url = lib.getDbConfig(this.props.dbIndex, "url") + "/" + this.state.table + "?and=(" + this.primaryKeyAsUrlParam(primaryKey) + ")";
                     //console.log("DELETE url = " + url);
 
+                    let preparedHeaders = { Prefer: 'return=representation' };
+                    if (this.props.isLoggedIn && this.props.token) {
+                        preparedHeaders['Authorization'] = "Bearer " + this.props.token;
+                    }
+
                     // Send the DELETE request and check response
-                    axios.delete(url, {}, { headers: { Prefer: 'return=representation' } })
+                    axios.delete(url, {}, { headers: preparedHeaders })
                         .then((response) => {
                             // Add an entry to the database's change log
                             let oldRow = null;

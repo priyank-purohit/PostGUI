@@ -529,6 +529,8 @@ class RightPane extends Component {
 
 					<div className={classes.cardMarginLeftRightTop} >
 						<DataTable
+							token={this.props.token}
+							isLoggedIn={this.props.isLoggedIn}
 							dbIndex={this.props.dbIndex}
 							table={this.state.table}
 							columns={this.state.visibleColumns ? this.state.visibleColumns : this.state.columns}
