@@ -33,10 +33,15 @@ export default class Auth {
 
     logout() {
         // Get rid of the user credentials
-        this.name = null;
-        this.isLoggedIn = false;
         this.userEmail = null;
         this.userPassword = null;
+        this.softLogout();
+    }
+
+    // Does not delete the email + pass
+    softLogout() {
+        this.name = null;
+        this.isLoggedIn = false;
         this.jwtToken = null;
         this.jwtTokenExpiry = null;
     }
@@ -51,7 +56,7 @@ export default class Auth {
     }
 
     setDb(newDbIndex) {
-        this.logout();
+        this.softLogout();
         this.dbIndex = newDbIndex;
     }
 
