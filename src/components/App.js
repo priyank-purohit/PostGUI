@@ -144,7 +144,9 @@ export default class Layout extends React.Component {
 
 	changeDbIndex(newIndex) {
 		this.setState({
-			dbIndex: newIndex
+			dbIndex: newIndex,
+			isLoggedIn: false,
+			token: null
 		});
 		auth.setDb(newIndex);
 	}
@@ -198,12 +200,11 @@ export default class Layout extends React.Component {
 	setUserEmailPassword(email, password) {
 		auth.setCredentials(email, password);
 		auth.getUserDetails().then((resp) => {
-			console.log(JSON.stringify(resp));
 			if (resp.isLoggedIn) {
 				this.setState({
 					token: resp.jwtToken,
 					isLoggedIn: true
-				})
+				});
 			} else {
 				this.setState({
 					isLoggedIn: false,
