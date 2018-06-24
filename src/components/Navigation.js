@@ -44,7 +44,7 @@ export default class Navigation extends Component {
 	}
 
 	componentWillReceiveProps(newProps) {
-		if (newProps.publicDBStatus === "private") {
+		if (newProps.publicDBStatus === "private" && !newProps.isLoggedIn) {
 			this.setState({
 				isLoginFdpOpen: true
 			});
