@@ -149,6 +149,21 @@ export default class Layout extends React.Component {
 			token: null
 		});
 		auth.setDb(newIndex);
+
+		// Get new token usign existing credentials. Otherwise log out the user
+		auth.getUserDetails().then((resp) => {
+			if (resp.isLoggedIn) {
+				this.setState({
+					token: resp.jwtToken,
+					isLoggedIn: true
+				});
+			} else {
+				this.setState({
+					isLoggedIn: false,
+					token: null
+				});
+			}
+		});
 	}
 
 	changeSearchTerm(newTerm) {
