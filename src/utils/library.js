@@ -368,7 +368,7 @@ exports.moveArrayElementFromTo = function (targetArray, indexFrom, indexTo) {
 }
 
 // Opens the specified URL in a different tab
-exports.visitPage = function (url = "http://www.google.ca") {
+exports.visitPage = function (url = "https://www.google.ca") {
 	window.open(url, "_blank");
 }
 

@@ -191,7 +191,7 @@ export default class Layout extends React.Component {
 		if (this.state.rulesFromURL) {
 			this.changeRules(this.state.rulesFromURL);
 			// setTimeout( ()=> {
-			// 	history.pushState('Shared Query', 'Shared Query', 'http://localhost:3000/');
+			// 	history.pushState('Shared Query', 'Shared Query', 'https://localhost:3000/');
 			// }, 1000);
 		}
 	}
