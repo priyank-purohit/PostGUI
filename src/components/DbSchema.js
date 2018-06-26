@@ -89,9 +89,7 @@ export default class DbSchema extends Component {
 					searchResults: this.searchTablesColumnsFK()
 				});
 			});
-		}
-
-		if (this.props.token !== newProps.token) {
+		} else if (this.props.token !== newProps.token) {
 			this.getDbSchema(lib.getDbConfig(this.props.dbIndex, "url"), newProps.token);
 		}
 	}
