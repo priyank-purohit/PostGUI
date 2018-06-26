@@ -46,7 +46,7 @@ export default class Navigation extends Component {
 	}
 
 	componentWillReceiveProps(newProps) {
-		if (newProps.publicDBStatus === "private" && !newProps.isLoggedIn) {
+		if ((newProps.publicDBStatus === "private" || newProps.publicDBStatus === "read") && !newProps.isLoggedIn) {
 			this.setState({
 				isLoginFdpOpen: true
 			});
@@ -156,7 +156,7 @@ export default class Navigation extends Component {
 							onClose={() => { this.setState({ isLoginFdpOpen: false }) }}
 							open={!this.props.isLoggedIn && this.state.isLoginFdpOpen && !this.state.isSearchBarFdpOpen && !(!this.props.leftPaneVisibility && this.props.table === "" && !this.state.isSearchBarFdpOpen)}
 							backgroundColor={pink[500]}
-							title={this.props.publicDBStatus ? "Private Database" : "Login System"}
+							title={this.props.publicDBStatus === "private" ? "Private Database" : "Login System"}
 							subtractFromTopPos={50}
 							opacity={0.95}
 							description="Provide your credentials for full access.">
