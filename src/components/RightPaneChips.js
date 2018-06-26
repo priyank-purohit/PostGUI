@@ -16,7 +16,7 @@ export default class RightPaneChips extends Component {
 			rows: props.rows ? props.rows : 0,
 			totalRows: props.totalRows ? props.totalRows : 0,
 			rowLimit: props.rowLimit ? props.rowLimit : 2500,
-			maxRows: props.maxRows ? props.maxRows : 100000,
+			maxRows: props.maxRows ? props.maxRows : 250000,
 			tip: "Tip: Hold shift and click to multi-sort!",
 			tip2: "Increase row-limit for full result.",
 			title2: "",
@@ -80,6 +80,7 @@ export default class RightPaneChips extends Component {
 							label={this.state.tip2}
 							key={3}
 							style={styleSheet.chip}
+							onClick={() => { this.props.increaseRowLimit(this.state.maxRows) }}
 							onMouseEnter={() => {
 								this.timer = setTimeout(() => {
 									this.setState({

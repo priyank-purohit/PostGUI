@@ -429,6 +429,12 @@ export default class RightPane extends Component {
 		});
 	}
 
+	increaseRowLimit = () => {
+		let pseudoEvent = {};
+		pseudoEvent['target'] = {};
+		pseudoEvent['target']['value'] = maxRowsInOutput;
+		this.handleRowLimitChange(pseudoEvent);
+	}
 
 	handleRequestClose = () => {
 		this.setState({ snackBarVisibility: false });
@@ -521,7 +527,7 @@ export default class RightPane extends Component {
 
 					<Typography type="subheading" style={styleSheet.cardMarginLeftTop}>Query Results</Typography>
 
-					<RightPaneChips rows={this.state.rows} totalRows={this.state.totalRows} rowLimit={this.state.rowLimit} maxRows={maxRowsInOutput} />
+					<RightPaneChips rows={this.state.rows} totalRows={this.state.totalRows} rowLimit={this.state.rowLimit} maxRows={maxRowsInOutput} increaseRowLimit={this.increaseRowLimit} />
 
 					<div style={styleSheet.cardMarginLeftRightTop} >
 						<DataTable
