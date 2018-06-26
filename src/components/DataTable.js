@@ -211,8 +211,8 @@ export default class DataTable extends Component {
         changeLogPostReqBody["table_changed"] = tableChanged;
         changeLogPostReqBody["primary_key_of_changed_row"] = JSON.stringify(primaryKey);
         changeLogPostReqBody["column_changed"] = columnChanged;
-        changeLogPostReqBody["old_value"] = oldValue;
-        changeLogPostReqBody["new_value"] = newValue;
+        changeLogPostReqBody["old_value"] = String(oldValue) || "error";
+        changeLogPostReqBody["new_value"] = String(newValue) || "error";
         changeLogPostReqBody["notes"] = notes;
         changeLogPostReqBody["user_name"] = userName; // TODO: This will change after LOGIN SYSTEM is developed.
 
@@ -293,7 +293,7 @@ export default class DataTable extends Component {
                             this.deleteChange(columnChanged, keyChanged, true); // true => do not restore original value when deleting change
 
                             // Add an entry to the database's change log
-                            this.postReqToChangeLog(this.props.dbIndex, new Date(Date.now()).toISOString(), this.state.table, primaryKey, columnChanged, oldValue, newValue, "", "public");
+                            this.postReqToChangeLog(this.props.dbIndex, new Date(Date.now()).toISOString(), this.state.table, primaryKey, columnChanged, oldValue, newValue, "", this.props.userName || "Unknown Username");
                         })
                         .catch((error) => {
                             console.log("PATCH ERROR RESP:" + String(error));
@@ -343,7 +343,7 @@ export default class DataTable extends Component {
                                 }
                             }
 
-                            this.postReqToChangeLog(this.props.dbIndex, new Date(Date.now()).toISOString(), this.state.table, primaryKey, "ROW_DELETE", oldRow || "Error finding old row...", "{}", "ROW DELETED.", "public");
+                            this.postReqToChangeLog(this.props.dbIndex, new Date(Date.now()).toISOString(), this.state.table, primaryKey, "ROW_DELETE", oldRow || "Error finding old row...", "{}", "ROW DELETED.", this.props.userName || "Unknown Username");
 
                             //console.log("DELETE RESPONSE = ", JSON.stringify(response));
                             this.deleteChange("id", keyChanged, "delete");

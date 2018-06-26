@@ -35,6 +35,7 @@ export default class Layout extends React.Component {
 			searchTerm: "",
 			dbSchemaDefinitions: null,
 			dbPkInfo: null,
+			userName: "Unknown username",
 			token: null,
 			isLoggedIn: false,
 		};
@@ -147,7 +148,8 @@ export default class Layout extends React.Component {
 		this.setState({
 			dbIndex: newIndex,
 			isLoggedIn: false,
-			token: null
+			token: null,
+			userName: "Unknown username"
 		});
 		auth.setDb(newIndex);
 
@@ -156,12 +158,14 @@ export default class Layout extends React.Component {
 			if (resp.isLoggedIn) {
 				this.setState({
 					token: resp.jwtToken,
+					userName: resp.name,
 					isLoggedIn: true
 				});
 			} else {
 				this.setState({
 					isLoggedIn: false,
-					token: null
+					token: null,
+					userName: "Unknown username"
 				});
 			}
 		});
@@ -217,6 +221,7 @@ export default class Layout extends React.Component {
 		auth.logout();
 		this.setState({
 			token: null,
+			userName: "Unknown username",
 			isLoggedIn: false
 		});
 	}
@@ -227,12 +232,14 @@ export default class Layout extends React.Component {
 			if (resp.isLoggedIn) {
 				this.setState({
 					token: resp.jwtToken,
+					userName: resp.name,
 					isLoggedIn: true
 				});
 			} else {
 				this.setState({
 					isLoggedIn: false,
-					token: null
+					token: null,
+					userName: "Unknown username"
 				});
 			}
 			if (this.state.rulesFromURL && lib.getDbConfig(this.state.dbIndex, "publicDbAcessType") === "private" && resp.isLoggedIn) {
@@ -254,6 +261,7 @@ export default class Layout extends React.Component {
 			if (resp.isLoggedIn) {
 				this.setState({
 					token: resp.jwtToken,
+					userName: resp.name,
 					isLoggedIn: true
 				})
 			};

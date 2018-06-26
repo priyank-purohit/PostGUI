@@ -23,7 +23,7 @@ export default class Auth {
         return {
             isLoggedIn: this.isLoggedIn,
             jwtToken: this.jwtToken,
-            name: this.name || "",
+            name: this.name || this.userEmail || "Unknown",
         }
     }
 
