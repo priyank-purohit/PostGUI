@@ -39,7 +39,7 @@ export default class Layout extends React.Component {
 			isLoggedIn: false,
 		};
 
-		auth = new Auth(0);
+		auth = new Auth(parsedURL['db'] || 0);
 
 		this.setUserEmailPassword = this.setUserEmailPassword.bind(this);
 		this.toggleLeftPane = this.toggleLeftPane.bind(this);
