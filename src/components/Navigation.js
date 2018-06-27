@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+
+import LoginDialog from './LoginDialog.js';
+import Help from './Help.js';
+
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import TextField from '@material-ui/core/TextField';
@@ -17,17 +19,23 @@ import FeatureDiscoveryPrompt from './FeatureDiscoveryPrompt/FeatureDiscoveryPro
 import indigo from '@material-ui/core/colors/indigo';
 import pink from '@material-ui/core/colors/pink';
 
+import Button from '@material-ui/core/Button';
+
+
 let _ = require('lodash');
 let lib = require('../utils/library.js');
 
 
 //join: predicted genes, protein seqs
-class Navigation extends Component {
+export default class Navigation extends Component {
 
 	constructor(props) {
 		super(props);
 		this.state = {
-			isSearchBarFdpOpen: false
+			isSearchBarFdpOpen: false,
+			isLoginFdpOpen: false,
+			loginDialogOpen: false,
+			isHelpOpen: false
 		}
 		this.changeSearchTermDebounce = _.debounce(value => {
 			this.props.changeSearchTerm(value);
@@ -37,6 +45,14 @@ class Navigation extends Component {
 		}, 350);
 	}
 
+	componentWillReceiveProps(newProps) {
+		if ((newProps.publicDBStatus === "private" || newProps.publicDBStatus === "read") && !newProps.isLoggedIn) {
+			this.setState({
+				isLoginFdpOpen: true
+			});
+		}
+	}
+
 	changeSearchTerm(e) {
 		/*if (e && ((e.key && e.key === 'Enter') || !e.target.value)) {
 			this.props.changeSearchTerm(e.target.value);
@@ -44,15 +60,44 @@ class Navigation extends Component {
 		this.changeSearchTermDebounce(e.target.value);
 	}
 
+	handleLoginButtonClick = () => {
+		if (this.props.isLoggedIn) {
+			// logout the user
+			this.props.handleLogoutClick();
+		} else {
+			this.setState({
+				loginDialogOpen: !this.state.loginDialogOpen
+			});
+		}
+	}
+
+	handleLoginDialogCloseClick = () => {
+		this.setState({
+			loginDialogOpen: false
+		});
+	}
+
+	handleHelpToggle = (e) => {
+		console.log(e.target.id);
+		this.setState({
+			isHelpOpen: !this.state.isHelpOpen
+		});
+	}
+
 	render() {
-		const classes = this.props.classes;
 		let dbTitle = lib.getDbConfig(this.props.dbIndex, "title") || "Untitled database";
+		let searchBarFdpOpenStyles = null;
+		if (this.state.isSearchBarFdpOpen) {
+			searchBarFdpOpenStyles = { backgroundColor: 'white', border: '1px solid grey', width: 325 + 'px', minWidth: 'inherit' }
+		} else {
+			searchBarFdpOpenStyles = { backgroundColor: 'rgba(255, 255, 255, 0.1)', border: 'none', width: 45 + '%', maxWidth: 525 + 'px', minWidth: 325 + 'px' }
+		};
 
 		// Set a short window title
 		document.title = dbTitle.replace("Database", "db").replace("database", "db");
 
 		return (
-			<div className={classes.root}>
+			<div style={styleSheet.root}>
 				<AppBar position="absolute">
 					<Toolbar>
 						<FeatureDiscoveryPrompt
@@ -69,11 +114,11 @@ class Navigation extends Component {
 							</IconButton>
 						</FeatureDiscoveryPrompt>
 
-						<Typography variant="title" color="inherit" className={classes.dbTitleFlex}>
+						<Typography variant="title" color="inherit" style={styleSheet.dbTitleFlex}>
 							{dbTitle}
 						</Typography>
 
-						<div className={classes.searchBarFlex}>
+						<div style={styleSheet.searchBarFlex}>
 							<FeatureDiscoveryPrompt
 								onClose={() => this.setState({ isSearchBarFdpOpen: false })}
 								open={this.state.isSearchBarFdpOpen}
@@ -90,9 +135,7 @@ class Navigation extends Component {
 									onChange={this.changeSearchTerm.bind(this)}
 									onFocus={this.changeSearchTerm.bind(this)}
 									type="search"
-									className={classes.searchBar}
-									style={this.state.isSearchBarFdpOpen ? { backgroundColor: 'white', border: '1px solid grey', width: 325 + 'px', minWidth: 'inherit' } :
-										{ backgroundColor: 'rgba(255, 255, 255, 0.1)', border: 'none', width: 45 + '%', maxWidth: 525 + 'px', minWidth: 325 + 'px' }}
+									style={{ ...styleSheet.searchBar, ...searchBarFdpOpenStyles }}
 									InputProps={{
 										startAdornment: (
 											<InputAdornment position="start">
@@ -103,24 +146,36 @@ class Navigation extends Component {
 									autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck="false" />
 							</FeatureDiscoveryPrompt>
 						</div>
-						<IconButton className={classes.rightIconsFlex} color="inherit" aria-label="History" onClick={this.props.toggleHistoryPane.bind(this)}>
-							<HistoryIcon className={classes.floatRight} />
+						<IconButton style={styleSheet.rightIconsFlex} color="inherit" aria-label="History" onClick={this.props.toggleHistoryPane.bind(this)}>
+							<HistoryIcon style={styleSheet.floatRight} />
 						</IconButton>
-						<IconButton className={classes.rightIconsFlex} color="inherit" aria-label="Help">
-							<HelpIcon className={classes.floatRight} />
+						<IconButton style={styleSheet.rightIconsFlex} color="inherit" aria-label="Help" onClick={this.handleHelpToggle}>
+							<HelpIcon style={styleSheet.floatRight} />
 						</IconButton>
+						<FeatureDiscoveryPrompt
+							onClose={() => { this.setState({ isLoginFdpOpen: false }) }}
+							open={!this.props.isLoggedIn && this.state.isLoginFdpOpen && !this.state.isSearchBarFdpOpen && !(!this.props.leftPaneVisibility && this.props.table === "" && !this.state.isSearchBarFdpOpen)}
+							backgroundColor={pink[500]}
+							title={"Private Database"}
+							subtractFromTopPos={50}
+							opacity={0.95}
+							description="Provide your credentials for full access.">
+							<Button onClick={() => { this.handleLoginButtonClick() }} color="default" variant="contained" style={styleSheet.rightIconsFlex}>{this.props.isLoggedIn ? "Logout" : "Login"}</Button>
+						</FeatureDiscoveryPrompt>
 					</Toolbar>
+					<LoginDialog
+						dbName={dbTitle.replace("Database", "db").replace("database", "db")}
+						setUserEmailPassword={this.props.setUserEmailPassword}
+						open={this.state.loginDialogOpen}
+						handleLoginDialogCloseClick={this.handleLoginDialogCloseClick} />
+					<Help open={this.state.isHelpOpen} handleHelpToggle={this.handleHelpToggle} />
 				</AppBar>
 			</div>
 		);
 	}
 }
 
-Navigation.propTypes = {
-	classes: PropTypes.object.isRequired,
-};
-
-const styleSheet = theme => ({
+const styleSheet = {
 	root: {
 		width: '100%'
 	},
@@ -156,8 +211,6 @@ const styleSheet = theme => ({
 		marginRight: 5
 	},
 	button: {
-		margin: theme.spacing.unit,
+		margin: 15,
 	},
-});
-
-export default withStyles(styleSheet)(Navigation);
+};

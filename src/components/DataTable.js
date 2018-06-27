@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import ReactTable from 'react-table';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -21,11 +19,10 @@ let CheckboxTable = checkboxHOC(ReactTable);
 let lib = require('../utils/library.js');
 
 
-class DataTable extends Component {
+export default class DataTable extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dbIndex: props.dbIndex,
             table: props.table,
             columns: props.columns,
             data: [],
@@ -47,7 +44,6 @@ class DataTable extends Component {
 
     componentWillReceiveProps(newProps) {
         this.setState({
-            dbIndex: newProps.dbIndex,
             table: newProps.table,
             columns: newProps.columns,
             url: newProps.url,
@@ -207,7 +203,7 @@ class DataTable extends Component {
     }
 
     postReqToChangeLog(dbIndex, changeTimeStamp, tableChanged, primaryKey, columnChanged, oldValue, newValue, notes, userName) {
-        let changeLogURL = lib.getDbConfig(this.state.dbIndex, "url") + "/change_log";
+        let changeLogURL = lib.getDbConfig(dbIndex, "url") + "/change_log";
         let changeLogPostReqBody = {};
 
         // These columns are hardcoded ... the db schema for the change-log table is provided separately
@@ -215,15 +211,20 @@ class DataTable extends Component {
         changeLogPostReqBody["table_changed"] = tableChanged;
         changeLogPostReqBody["primary_key_of_changed_row"] = JSON.stringify(primaryKey);
         changeLogPostReqBody["column_changed"] = columnChanged;
-        changeLogPostReqBody["old_value"] = oldValue;
-        changeLogPostReqBody["new_value"] = newValue;
+        changeLogPostReqBody["old_value"] = String(oldValue) || "error";
+        changeLogPostReqBody["new_value"] = String(newValue) || "error";
         changeLogPostReqBody["notes"] = notes;
         changeLogPostReqBody["user_name"] = userName; // TODO: This will change after LOGIN SYSTEM is developed.
 
         //console.log("Changes Log URL:" + changeLogURL);
         //console.log("Changes Log POST Body:" + JSON.stringify(changeLogPostReqBody));
 
-        axios.post(changeLogURL, changeLogPostReqBody, { headers: { Prefer: 'return=representation' } })
+        let preparedHeaders = { Prefer: 'return=representation' };
+        if (this.props.isLoggedIn && this.props.token) {
+            preparedHeaders['Authorization'] = "Bearer " + this.props.token;
+        }
+
+        axios.post(changeLogURL, changeLogPostReqBody, { headers: preparedHeaders })
             .then((response) => {
                 //console.log("Change Log POST Successful:" + JSON.stringify(response));
             })
@@ -269,7 +270,7 @@ class DataTable extends Component {
 
                 if (deleteRow !== true && String(oldValue) !== String(newValue)) { // UPDATE SINGLE CELL VALUE
                     // Create the URL, add in the new value as URL param
-                    let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table + "?and=(" + this.primaryKeyAsUrlParam(primaryKey) + ")";
+                    let url = lib.getDbConfig(this.props.dbIndex, "url") + "/" + this.state.table + "?and=(" + this.primaryKeyAsUrlParam(primaryKey) + ")";
 
                     // Patch HTTP request
                     let patchReqBody = {};
@@ -279,15 +280,20 @@ class DataTable extends Component {
                     //console.log("Change=" + JSON.stringify(change));
                     //console.log("PATCH req BODY=" + JSON.stringify({ [columnChanged]: newValue }));
 
+                    let preparedHeaders = { Prefer: 'return=representation' };
+                    if (this.props.isLoggedIn && this.props.token) {
+                        preparedHeaders['Authorization'] = "Bearer " + this.props.token;
+                    }
+
                     // Send the Request and check its response:
                     // PATCH the request
-                    axios.patch(url, { [columnChanged]: newValue }, { headers: { Prefer: 'return=representation' } })
+                    axios.patch(url, { [columnChanged]: newValue }, { headers: preparedHeaders })
                         .then((response) => {
                             //console.log("PATCH RESPONSE:", JSON.stringify(response.data));
                             this.deleteChange(columnChanged, keyChanged, true); // true => do not restore original value when deleting change
 
                             // Add an entry to the database's change log
-                            this.postReqToChangeLog(this.state.dbIndex, new Date(Date.now()).toISOString(), this.state.table, primaryKey, columnChanged, oldValue, newValue, "", "public");
+                            this.postReqToChangeLog(this.props.dbIndex, new Date(Date.now()).toISOString(), this.state.table, primaryKey, columnChanged, oldValue, newValue, "", this.props.userName || "Unknown Username");
                         })
                         .catch((error) => {
                             console.log("PATCH ERROR RESP:" + String(error));
@@ -308,11 +314,16 @@ class DataTable extends Component {
                 } else if (deleteRow) { // DELETE ROW FEATURE
                     //console.log("\n\n\nDeleting a row");
                     // Create the URL, add in the new value as URL param
-                    let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table + "?and=(" + this.primaryKeyAsUrlParam(primaryKey) + ")";
+                    let url = lib.getDbConfig(this.props.dbIndex, "url") + "/" + this.state.table + "?and=(" + this.primaryKeyAsUrlParam(primaryKey) + ")";
                     //console.log("DELETE url = " + url);
 
+                    let preparedHeaders = { Prefer: 'return=representation' };
+                    if (this.props.isLoggedIn && this.props.token) {
+                        preparedHeaders['Authorization'] = "Bearer " + this.props.token;
+                    }
+
                     // Send the DELETE request and check response
-                    axios.delete(url, {}, { headers: { Prefer: 'return=representation' } })
+                    axios.delete(url, { headers: preparedHeaders })
                         .then((response) => {
                             // Add an entry to the database's change log
                             let oldRow = null;
@@ -332,7 +343,7 @@ class DataTable extends Component {
                                 }
                             }
 
-                            this.postReqToChangeLog(this.state.dbIndex, new Date(Date.now()).toISOString(), this.state.table, primaryKey, "ROW_DELETE", oldRow || "Error finding old row...", "{}", "ROW DELETED.", "public");
+                            this.postReqToChangeLog(this.props.dbIndex, new Date(Date.now()).toISOString(), this.state.table, primaryKey, "ROW_DELETE", oldRow || "Error finding old row...", "{}", "ROW DELETED.", this.props.userName || "Unknown Username");
 
                             //console.log("DELETE RESPONSE = ", JSON.stringify(response));
                             this.deleteChange("id", keyChanged, "delete");
@@ -514,22 +525,21 @@ class DataTable extends Component {
     };
 
     render() {
-        let classes = this.props.classes;
         let { columns, data } = this.state;
         let parsedColumns = [];
 
         // Create columns with expected column properties
         if (columns) {
             parsedColumns = columns.map((columnName) => {
-                let columnRename = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "rename");
-                let columnVisibility = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "visible");
-                let columnEditability = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "editable");
+                let columnRename = lib.getColumnConfig(this.props.dbIndex, this.state.table, columnName, "rename");
+                let columnVisibility = lib.getColumnConfig(this.props.dbIndex, this.state.table, columnName, "visible");
+                let columnEditability = lib.getColumnConfig(this.props.dbIndex, this.state.table, columnName, "editable");
 
-                let columnWidthDefault = lib.getTableConfig(this.state.dbIndex, this.state.table, "defaultWidthPx");
-                let columnWidth = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "widthPx");
+                let columnWidthDefault = lib.getTableConfig(this.props.dbIndex, this.state.table, "defaultWidthPx");
+                let columnWidth = lib.getColumnConfig(this.props.dbIndex, this.state.table, columnName, "widthPx");
 
-                let columnMinWidth = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "minWidthPx");
-                let columnMaxWidth = lib.getColumnConfig(this.state.dbIndex, this.state.table, columnName, "maxWidthPx");
+                let columnMinWidth = lib.getColumnConfig(this.props.dbIndex, this.state.table, columnName, "minWidthPx");
+                let columnMaxWidth = lib.getColumnConfig(this.props.dbIndex, this.state.table, columnName, "maxWidthPx");
 
                 return ({
                     id: columnName,
@@ -590,19 +600,15 @@ class DataTable extends Component {
                             nextText="Next Page"
                             noDataText={this.props.noDataText} />)}
 
-                <div className={this.props.classes.cardGroups} >
+                <div style={styleSheet.cardGroups} >
                     <Grid container spacing={16} direction={this.state.tablePrimaryKeys.join(",") === "" ? 'row-reverse' : 'row'}>
                         {this.state.tablePrimaryKeys.join(",") !== "" &&
                             (<Grid item sm={12} md={6}>
                                 <EditCard
-                                    dbIndex={this.state.dbIndex}
+                                    {...this.props}
                                     table={this.state.table}
                                     columns={this.state.columns}
-                                    allColumns={this.props.allColumns}
-                                    insertNewRow={this.props.insertNewRow}
-                                    dbPkInfo={this.props.dbPkInfo}
                                     url={this.state.url}
-                                    qbFilters={this.props.qbFilters}
                                     featureEnabled={this.state.editFeatureEnabled}
                                     changesMade={this.state.editFeatureChangesMade}
                                     rowsStrikedOut={this.state.rowsStrikedOut}
@@ -615,12 +621,11 @@ class DataTable extends Component {
                         }
                         <Grid item sm={12} md={6}>
                             <Downloads
-                                dbIndex={this.state.dbIndex}
+                                {...this.props}
                                 table={this.state.table}
                                 columns={this.state.columns}
                                 data={this.state.data}
-                                url={this.state.url}
-                                totalRows={this.props.totalRows} />
+                                url={this.state.url} />
                         </Grid>
                     </Grid>
                 </div>
@@ -630,15 +635,11 @@ class DataTable extends Component {
                     onClose={this.handleRequestClose}
                     ContentProps={{ 'aria-describedby': 'message-id', }}
                     message={<span id="message-id">{this.state.snackBarMessage}</span>}
-                    action={[<IconButton key="close" aria-label="Close" color="secondary" className={classes.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton>]} />
+                    action={[<IconButton key="close" aria-label="Close" color="secondary" style={styleSheet.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton>]} />
 
             </div>);
     }
 }
-
-DataTable.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
 
 const styleSheet = {
     root: {
@@ -661,4 +662,3 @@ const styleSheet = {
         flexGrow: 1
     }
 };
-export default withStyles(styleSheet)(DataTable);

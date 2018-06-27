@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -10,11 +8,10 @@ import MenuItem from '@material-ui/core/MenuItem';
 let lib = require("../utils/library.js");
 
 
-class DbPicker extends Component {
+export default class DbPicker extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			dbIndex: props.dbIndex,
 			anchorEl: undefined,
 			open: false,
 			databases: []
@@ -28,7 +25,7 @@ class DbPicker extends Component {
 	};
 
 	handleMenuItemClick = (event, index) => {
-		this.setState({ dbIndex: index, open: false });
+		this.setState({ open: false });
 		this.props.changeDbIndex(index);
 	};
 
@@ -45,26 +42,18 @@ class DbPicker extends Component {
 		});
 	}
 
-	componentWillReceiveProps(newProps) {
-		this.setState({
-			dbIndex: newProps.dbIndex
-		});
-	}
-
 	render() {
-		const classes = this.props.classes;
-
 		return (
-			<div className={classes.root}>
+			<div style={styleSheet.root}>
 				<List>
 					<ListItem button aria-haspopup="true" aria-controls="lock-menu" aria-label="Database" onClick={this.handleClickListItem} >
-						<ListItemText primary="Database" secondary={this.state.databases[this.state.dbIndex]} />
+						<ListItemText primary="Database" secondary={this.state.databases[this.props.dbIndex]} />
 					</ListItem>
 				</List>
 				<Menu id="lock-menu" anchorEl={this.state.anchorEl} open={this.state.open} onClose={this.handleRequestClose} >
 					{
 						this.state.databases.map((option, index) =>
-							<MenuItem key={option} selected={index === this.state.dbIndex} onClick={event => this.handleMenuItemClick(event, index)} >
+							<MenuItem key={option} selected={index === this.props.dbIndex} onClick={event => this.handleMenuItemClick(event, index)} >
 								{option}
 							</MenuItem>
 						)
@@ -75,13 +64,8 @@ class DbPicker extends Component {
 	}
 }
 
-DbPicker.propTypes = {
-	classes: PropTypes.object.isRequired,
-};
-
 const styleSheet = {
 	root: {
 		width: '99%'
 	}
 };
-export default withStyles(styleSheet)(DbPicker);

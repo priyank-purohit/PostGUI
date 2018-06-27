@@ -1,7 +1,5 @@
 // @flow weak
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import green from '@material-ui/core/colors/green';
 import red from '@material-ui/core/colors/red';
@@ -11,13 +9,12 @@ import CloseIcon from '@material-ui/icons/Close';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 
 
-class CircularFab extends Component {
+export default class CircularFab extends Component {
 	timer = undefined;
 
 	constructor(props) {
 		super(props);
 		this.state = {
-			dbIndex: props.dbIndex,
 			table: props.table,
 			loading: props.loading,
 			success: props.success,
@@ -49,33 +46,28 @@ class CircularFab extends Component {
 
 	render() {
 		const { loading, success, error } = this.state;
-		const classes = this.props.classes;
-		let buttonClass = '';
+		let buttonClass = null;
 
 		if (success) {
-			buttonClass = classes.successButton;
+			buttonClass = { ...styleSheet.successButton };
 		}
 
 		if (success && error) {
-			buttonClass = classes.errorButton;
+			buttonClass = { ...styleSheet.errorButton };
 		}
 
 		return (
-			<div className={classes.wrapper}>
+			<div style={styleSheet.wrapper}>
 				<Button
 					variant="fab"
 					color="secondary"
-					className={buttonClass}
+					style={buttonClass}
 					onClick={this.handleButtonClick}>{success ? (error ? <CloseIcon /> : <CheckIcon />) : <ArrowForwardIcon />}</Button>
-				{loading && <CircularProgress size={68} className={classes.progress} />}
+				{loading && <CircularProgress size={68} style={styleSheet.progress} />}
 			</div>
 		);
 	}
 }
-
-CircularFab.propTypes = {
-	classes: PropTypes.object.isRequired,
-};
 
 const styleSheet = {
 	wrapper: {
@@ -102,5 +94,3 @@ const styleSheet = {
 		zIndex: 5
 	},
 };
-
-export default withStyles(styleSheet)(CircularFab);

@@ -9,7 +9,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
 import TextField from '@material-ui/core/TextField';
-import { withStyles, Divider, Paper } from '@material-ui/core';
+import { Divider, Paper } from '@material-ui/core';
 
 import axios from 'axios';
 
@@ -20,7 +20,6 @@ class ResponsiveDialog extends React.Component {
         super(props);
         this.state = {
             open: false,
-            dbIndex: props.dbIndex,
             table: props.table,
             columns: props.columns,
             allColumns: props.allColumns,
@@ -36,7 +35,6 @@ class ResponsiveDialog extends React.Component {
     componentWillReceiveProps(newProps) {
         this.setState({
             open: newProps.open,
-            dbIndex: newProps.dbIndex,
             table: newProps.table,
             columns: newProps.columns,
             allColumns: newProps.allColumns,
@@ -92,8 +90,8 @@ class ResponsiveDialog extends React.Component {
         for (let i = 0; i < this.state.primaryKeys.length; i++) {
             primaryKey[this.state.primaryKeys[i]] = newRow[0][this.state.primaryKeys[i]];
         }
-        //console.log(this.state.dbIndex, new Date(Date.now()).toISOString(), this.state.table, primaryKey, "ROW_INSERT", "{}", newRow[0], "ROW INSERTED.", "public")
-        this.props.postReqToChangeLog(this.state.dbIndex, new Date(Date.now()).toISOString(), this.state.table, primaryKey, "ROW_INSERT", "{}", newRow[0], "ROW INSERTED.", "public");
+        //console.log(this.props.dbIndex, new Date(Date.now()).toISOString(), this.state.table, primaryKey, "ROW_INSERT", "{}", newRow[0], "ROW INSERTED.", "public")
+        this.props.postReqToChangeLog(this.props.dbIndex, new Date(Date.now()).toISOString(), this.state.table, primaryKey, "ROW_INSERT", "{}", newRow[0], "ROW INSERTED.", "public");
     }
 
     handleSubmit = () => {
@@ -114,7 +112,7 @@ class ResponsiveDialog extends React.Component {
             let input = this.state.inputVals;
             let keys = Object.keys(this.state.inputVals);
 
-            let newRowURL = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
+            let newRowURL = lib.getDbConfig(this.props.dbIndex, "url") + "/" + this.state.table;
             let postReqBody = {};
 
             for (let i = 0; i < keys.length; i++) {
@@ -139,7 +137,12 @@ class ResponsiveDialog extends React.Component {
             //console.log("Changes Log URL:" + newRowURL);
             //console.log("Changes Log POST Body:" + JSON.stringify(postReqBody));
 
-            axios.post(newRowURL, postReqBody, { headers: { Prefer: 'return=representation' } })
+            let preparedHeaders = { Prefer: 'return=representation' };
+            if (this.props.isLoggedIn && this.props.token) {
+                preparedHeaders['Authorization'] = "Bearer " + this.props.token;
+            }
+
+            axios.post(newRowURL, postReqBody, { headers: preparedHeaders })
                 .then((response) => {
                     //console.log("New row inserted successfully:" + JSON.stringify(response.data));
                     this.commitToChangeLog(response.data);
@@ -159,9 +162,8 @@ class ResponsiveDialog extends React.Component {
     }
 
     render() {
-        const classes = this.props.classes;
         let { fullScreen } = this.props;
-        let tableRename = lib.getTableConfig(this.state.dbIndex, this.state.table, "rename");
+        let tableRename = lib.getTableConfig(this.props.dbIndex, this.state.table, "rename");
         let tableDisplayName = tableRename ? tableRename : this.state.table;
 
         return (
@@ -173,21 +175,21 @@ class ResponsiveDialog extends React.Component {
                     aria-labelledby="responsive-dialog-title">
                     <DialogTitle id="responsive-dialog-title">{"Insert new row to " + tableDisplayName}</DialogTitle>
                     <DialogContent>
-                        {this.state.error !== "" && (<Paper id="errorPaper" className={classes.paperError} elevation={4}>
-                            <Typography variant="subheading" className={classes.paperMarginTopLeft}>Request Denied</Typography>
-                            <DialogContentText className={classes.paperMarginLeft}>{"Code: " + (this.state.error && this.state.error.data ? this.state.error.data.code : "")}</DialogContentText>
-                            <DialogContentText className={classes.paperMarginLeft}>{"Message: " + (this.state.error && this.state.error.data ? this.state.error.data.message : "")}</DialogContentText>
-                            <DialogContentText className={classes.paperMarginLeft}>{"Details: " + (this.state.error && this.state.error.data ? this.state.error.data.details : "")}</DialogContentText>
+                        {this.state.error !== "" && (<Paper id="errorPaper" style={styleSheet.paperError} elevation={4}>
+                            <Typography variant="subheading" style={styleSheet.paperMarginTopLeft}>Request Denied</Typography>
+                            <DialogContentText style={styleSheet.paperMarginLeft}>{"Code: " + (this.state.error && this.state.error.data ? this.state.error.data.code : "")}</DialogContentText>
+                            <DialogContentText style={styleSheet.paperMarginLeft}>{"Message: " + (this.state.error && this.state.error.data ? this.state.error.data.message : "")}</DialogContentText>
+                            <DialogContentText style={styleSheet.paperMarginLeft}>{"Details: " + (this.state.error && this.state.error.data ? this.state.error.data.details : "")}</DialogContentText>
                         </Paper>)}
 
-                        <DialogContentText className={classes.paperMarginTop}>
+                        <DialogContentText style={styleSheet.paperMarginTop}>
                             {"Unique values for the table's primary key (" +
                                 this.state.primaryKeys.join(", ") +
                                 ") are mandatory (*). Other constraints may be imposed by the database schema, follow instructions in the error details."}
                         </DialogContentText>
 
-                        <Typography type="subheading" className={classes.cardMarginTopBottom}>New Row</Typography>
-                        <div className={classes.cardMarginLeft}>
+                        <Typography type="subheading" style={styleSheet.cardMarginTopBottom}>New Row</Typography>
+                        <div style={styleSheet.cardMarginLeft}>
                             {
                                 this.state.qbFilters.map((column) => {
                                     return (
@@ -198,7 +200,7 @@ class ResponsiveDialog extends React.Component {
                                             required={(this.state.primaryKeys).indexOf(column.id) >= 0}
                                             placeholder={column.type}
                                             value={(column.default_value || (this.state.inputVals[column.id] ? this.state.inputVals[column.id]["value"] : "")) || ""}
-                                            className={classes.textField}
+                                            style={styleSheet.textField}
                                             margin="normal" />
                                     )
                                 })
@@ -252,4 +254,4 @@ ResponsiveDialog.propTypes = {
     fullScreen: PropTypes.bool.isRequired,
 };
 
-export default withStyles(styleSheet)(withMobileDialog()(ResponsiveDialog));
+export default withMobileDialog()(ResponsiveDialog);

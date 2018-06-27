@@ -1,39 +1,23 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
 import DbPicker from './DbPicker.js'
 import DbSchema from './DbSchema.js'
 
 
-class LeftPane extends Component {
+export default class LeftPane extends Component {
 	render() {
-		const classes = this.props.classes;
-		let rootClasses = this.props.leftPaneVisibility === true ? classes.root : classes.root + " " + classes.rootHide;
+		let rootClasses = this.props.leftPaneVisibility === true ? styleSheet.root : styleSheet.rootHide;
 		return (
-			<div className={rootClasses}>
+			<div style={{ ...rootClasses }}>
 				<DbPicker
-					dbIndex={this.props.dbIndex}
-					changeDbIndex={this.props.changeDbIndex} />
+					{...this.props} />
 				<Divider />
 				<DbSchema
-					dbIndex={this.props.dbIndex}
-					table={this.props.table}
-					searchTerm={this.props.searchTerm}
-					changeSearchTerm={this.props.changeSearchTerm}
-					changeTable={this.props.changeTable}
-					changeColumns={this.props.changeColumns}
-					changeDbSchemaDefinitions={this.props.changeDbSchemaDefinitions}
-					changeDbPkInfo={this.props.changeDbPkInfo}
-					changeVisibleColumns={this.props.changeVisibleColumns} />
+					{...this.props} />
 			</div>
 		);
 	}
 }
-
-LeftPane.propTypes = {
-	classes: PropTypes.object.isRequired,
-};
 
 const styleSheet = {
 	root: {
@@ -50,6 +34,7 @@ const styleSheet = {
 		float: 'left',
 		opacity: 0,
 		visibility: 'hidden',
+		transition: 'width 0.25s, visibility 0.2s, opacity 0.12s'
 	},
 	column: {
 		marginLeft: 27
@@ -58,5 +43,3 @@ const styleSheet = {
 		paddingBottom: 0
 	}
 };
-
-export default withStyles(styleSheet)(LeftPane);

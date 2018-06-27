@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
@@ -36,11 +34,10 @@ let lib = require('../utils/library.js');
 let json2csv = require('json2csv');
 var js2xmlparser = require("js2xmlparser");
 
-class Downloads extends Component {
+export default class Downloads extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dbIndex: props.dbIndex,
             table: props.table,
             columns: props.columns,
             data: [],
@@ -79,7 +76,6 @@ class Downloads extends Component {
 
     componentWillReceiveProps(newProps) {
         this.setState({
-            dbIndex: newProps.dbIndex,
             table: newProps.table,
             columns: newProps.columns,
             url: newProps.url,
@@ -106,7 +102,7 @@ class Downloads extends Component {
 
         // Create a good file name for the file so user knows what the data in the file is all about
         /* EXPLANATIONS FOR THE REGEXES
-        let fileName = this.state.url.replace(lib.getDbConfig(this.state.dbIndex, "url") + "/", "") // Get rid of the URL
+        let fileName = this.state.url.replace(lib.getDbConfig(this.props.dbIndex, "url") + "/", "") // Get rid of the URL
             .replace("?", "-") /////// The params q-mark can be replaced with dash
             .replace(/&/g, '-') /////// All URL key-value separating ampersands can be replaced with dashes
             .replace(/=/g, '-') /////// Get rid of the = in favour of the -
@@ -115,7 +111,7 @@ class Downloads extends Component {
             .replace(/[.]([\w,"\s]{30,})[,]/g, "(in-vals)"); /////// Specifically targets the IN operator's comma separated vals .. replace if longer than 30 chars
         */
         let fileName = this.state.url
-            .replace(lib.getDbConfig(this.state.dbIndex, "url") + "/", "")
+            .replace(lib.getDbConfig(this.props.dbIndex, "url") + "/", "")
             .replace("?", "-")
             .replace(/&/g, '-')
             .replace(/=/g, '-')
@@ -611,12 +607,16 @@ class Downloads extends Component {
     };
 
     fetchOutput(url) {
-        let headersList = {};
+        let preparedHeaders = {};
         if (this.state.batchDownloadCheckBox === true) {
-            headersList = { 'Range': String(this.state.batchDownloadLowerNum) + '-' + String(this.state.batchDownloadUpperNum - 1), 'Accept': 'application/json', 'Prefer': 'count=exact' };
+            preparedHeaders = { 'Range': String(this.state.batchDownloadLowerNum) + '-' + String(this.state.batchDownloadUpperNum - 1), 'Accept': 'application/json', 'Prefer': 'count=exact' };
         }
 
-        axios.get(url, { headers: headersList, requestId: "qbAxiosReq" })
+        if (this.props.isLoggedIn && this.props.token) {
+            preparedHeaders['Authorization'] = "Bearer " + this.props.token;
+        }
+
+        axios.get(url, { headers: preparedHeaders, requestId: "qbAxiosReq" })
             .then((response) => {
                 this.setState({
                     dataFull: response.data,
@@ -662,16 +662,14 @@ class Downloads extends Component {
     }
 
     render() {
-        const classes = this.props.classes;
-
         return (<div>
-            <Paper elevation={2} className={classes.topMargin}>
-                <Typography variant="subheading" className={classes.cardcardMarginLeftTop}>Download Query Results</Typography>
+            <Paper elevation={2} style={styleSheet.topMargin}>
+                <Typography variant="subheading" style={styleSheet.cardcardMarginLeftTop}>Download Query Results</Typography>
 
                 {/* FILE FORMAT RADIO GROUP */}
-                <Typography variant="body1" className={classes.cardcardMarginLeftTop}>File Format</Typography>
+                <Typography variant="body1" style={styleSheet.cardcardMarginLeftTop}>File Format</Typography>
                 <FormControl component="fieldset" required>
-                    <RadioGroup onChange={this.handleFileFormatChange} value={this.state.fileFormat} className={classes.cardcardMarginLeftTop} >
+                    <RadioGroup onChange={this.handleFileFormatChange} value={this.state.fileFormat} style={styleSheet.cardcardMarginLeftTop} >
                         <FormControlLabel label="Delimited file (spreadsheet)" value="delimited" control={<Radio />} />
                         {
                             this.state.fileFormat === 'delimited' && (
@@ -681,7 +679,7 @@ class Downloads extends Component {
                                     label={"Use , or \\t delimiter for sheet"}
                                     value={this.state.delimiterChoice}
                                     disabled={this.state.fileFormat !== 'delimited' ? true : false}
-                                    className={classes.textField && classes.cardMarginLeft && classes.inlineTextField}
+                                    style={styleSheet.textField && styleSheet.cardMarginLeft && styleSheet.inlineTextField}
                                     id="delimiterInput"
                                     type="text"
                                     margin="none"
@@ -690,9 +688,9 @@ class Downloads extends Component {
                         }
                         <FormControlLabel label="JSON File" value="json" control={<Radio />} />
                         <FormControlLabel label="XML File" value="xml" control={<Radio />} />
-                        <FormControlLabel label="FASTA File" value="fasta" control={<Radio />} className={this.identifySeqColumnInStateColumns() === null ? classes.hidden : null} />
+                        <FormControlLabel label="FASTA File" value="fasta" control={<Radio />} style={this.identifySeqColumnInStateColumns() === null ? styleSheet.hidden : null} />
 
-                        {this.state.fileFormat === 'fasta' && <Typography className={classes.inlineTextField}>Note: FASTA header is composed from visible columns</Typography>}
+                        {this.state.fileFormat === 'fasta' && <Typography style={styleSheet.inlineTextField}>Note: FASTA header is composed from visible columns</Typography>}
 
                         <FormControlLabel label="Copy single column values" value="delimitedColumn" control={<Radio />} />
                         {/* The options are loaded below in the <span>. This was needed because RadioGroup/FormControl does not work with a Span child element...*/}
@@ -702,7 +700,7 @@ class Downloads extends Component {
                 {
                     this.state.fileFormat === 'delimitedColumn' &&
                     (<span>
-                        <List className={classes.inlineTextFieldSpan}>
+                        <List style={styleSheet.inlineTextFieldSpan}>
                             <ListItem button onClick={this.handleClickListItem} aria-haspopup="true" aria-controls="columnMenu" aria-label="Choose column" >
                                 <ListItemText primary="Choose a column" secondary={this.state.columns[this.state.columnChosen]} />
                             </ListItem>
@@ -720,27 +718,27 @@ class Downloads extends Component {
                 }
 
                 {/* ADDITIONAL DOWNLOADS OPTIONS */}
-                <Typography variant="body1" className={classes.cardcardMarginLeftTop}>Options</Typography>
-                <FormGroup className={classes.cardcardMarginLeftTop}>
+                <Typography variant="body1" style={styleSheet.cardcardMarginLeftTop}>Options</Typography>
+                <FormGroup style={styleSheet.cardcardMarginLeftTop}>
                     <FormControlLabel label={"Batch download"} control={<Checkbox onChange={this.handlebatchDownloadCheckBox} value="batchDownloadCheckBox" />} disabled={this.state.fileFormat === 'delimitedColumn' ? true : false} checked={this.state.batchDownloadCheckBox} />
-                    <span className={this.state.batchDownloadCheckBox !== true || this.state.fileFormat === 'delimitedColumn' ? classes.hidden : classes.inlineTextField1}>
-                        <div className={isNaN(this.props.totalRows) === false && this.props.totalRows >= 0 ? classes.hidden : null} >
-                            <Typography variant="body2" className={classes.inlineTextField1}>Re-run query with "Get exact row count" option selected</Typography>
+                    <span style={this.state.batchDownloadCheckBox !== true || this.state.fileFormat === 'delimitedColumn' ? styleSheet.hidden : styleSheet.inlineTextField1}>
+                        <div style={isNaN(this.props.totalRows) === false && this.props.totalRows >= 0 ? styleSheet.hidden : null} >
+                            <Typography variant="body2" style={styleSheet.inlineTextField1}>Re-run query with "Get exact row count" option selected</Typography>
                         </div>
                         <div>
-                            <Button onClick={this.handlebatchDownloadChange.bind(this, "10K")} color={this.state.batchSize === "10K" ? 'primary' : 'inherit'} className={classes.button} >10K</Button>
-                            <Button onClick={this.handlebatchDownloadChange.bind(this, "25K")} color={this.state.batchSize === "25K" ? 'primary' : 'inherit'} className={classes.button} >25K</Button>
-                            <Button onClick={this.handlebatchDownloadChange.bind(this, "100K")} color={this.state.batchSize === "100K" ? 'primary' : 'inherit'} className={classes.button} >100K</Button>
-                            <Button onClick={this.handlebatchDownloadChange.bind(this, "250K")} color={this.state.batchSize === "250K" ? 'primary' : 'inherit'} className={classes.button} >250K</Button>
+                            <Button onClick={this.handlebatchDownloadChange.bind(this, "10K")} color={this.state.batchSize === "10K" ? 'primary' : 'inherit'} style={styleSheet.button} >10K</Button>
+                            <Button onClick={this.handlebatchDownloadChange.bind(this, "25K")} color={this.state.batchSize === "25K" ? 'primary' : 'inherit'} style={styleSheet.button} >25K</Button>
+                            <Button onClick={this.handlebatchDownloadChange.bind(this, "100K")} color={this.state.batchSize === "100K" ? 'primary' : 'inherit'} style={styleSheet.button} >100K</Button>
+                            <Button onClick={this.handlebatchDownloadChange.bind(this, "250K")} color={this.state.batchSize === "250K" ? 'primary' : 'inherit'} style={styleSheet.button} >250K</Button>
                         </div>
-                        <div className={classes.inlineTextField}>
-                            <Typography variant="body1" className={classes.inlineTextField}>{String(this.state.batchDownloadLowerNum).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} to {String(this.state.batchDownloadUpperNum).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} of {String(this.props.totalRows).replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace("NaN", "unknown")} rows</Typography>
+                        <div style={styleSheet.inlineTextField}>
+                            <Typography variant="body1" style={styleSheet.inlineTextField}>{String(this.state.batchDownloadLowerNum).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} to {String(this.state.batchDownloadUpperNum).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} of {String(this.props.totalRows).replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace("NaN", "unknown")} rows</Typography>
                         </div>
-                        <div className={classes.inlineTextField3}>
-                            <IconButton onClick={this.handleLeftButtonClickRangeDownload} color="primary" className={classes.button} aria-label="COPY">
+                        <div style={styleSheet.inlineTextField3}>
+                            <IconButton onClick={this.handleLeftButtonClickRangeDownload} color="primary" style={styleSheet.button} aria-label="COPY">
                                 <NavigateBeforeIcon />
                             </IconButton>
-                            <IconButton onClick={this.handleRightButtonClickRangeDownload} color="primary" className={classes.button} aria-label="COPY">
+                            <IconButton onClick={this.handleRightButtonClickRangeDownload} color="primary" style={styleSheet.button} aria-label="COPY">
                                 <NavigateNextIcon />
                             </IconButton>
                         </div>
@@ -750,40 +748,40 @@ class Downloads extends Component {
                 </FormGroup>
 
                 {/* FILE NAME INPUT */}
-                <FormGroup className={classes.cardcardMarginLeftTop && classes.cardcardMarginBottomRight}>
+                <FormGroup style={styleSheet.cardcardMarginLeftTop && styleSheet.cardcardMarginBottomRight}>
                     <TextField
                         required
                         disabled={this.state.fileFormat === 'delimitedColumn'}
-                        id="delimiterInput"
+                        id="fileNameInput"
                         type="text"
                         label="File name"
                         onChange={this.handleFileNameChange}
                         value={this.state.fileNameCustom === '' ? this.state.fileNameAuto : this.state.fileNameCustom}
-                        className={classes.textField && classes.cardMarginLeft}
+                        style={styleSheet.textField && styleSheet.cardMarginLeft}
                         margin="normal" />
                 </FormGroup>
 
                 {/* COPY FEATURE OUTPUT BOX + 2ND BUTTON */}
-                {/*<div className={classes.cardcardMarginLeftTop && classes.cardcardMarginBottomRight}>
+                {/*<div style={styleSheet.cardcardMarginLeftTop && styleSheet.cardcardMarginBottomRight}>
                     <TextField
                         id="copyOutput"
                         type="text"
                         label="Ctrl A and Ctrl C to copy"
                         value={this.state.copyResult}
                         onChange={this.handleCopyOutputClick}
-                        className={this.state.copyResult === "" ? classes.hidden : classes.textFieldCopyOutput}
+                        style={this.state.copyResult === "" ? styleSheet.hidden : styleSheet.textFieldCopyOutput}
                         margin="normal" />
-                    <IconButton onClick={this.insertToClipboard.bind(this, this.state.copyResult)} className={this.state.copyResult === "" ? classes.hidden : classes.button} aria-label="Copy">
+                    <IconButton onClick={this.insertToClipboard.bind(this, this.state.copyResult)} style={this.state.copyResult === "" ? styleSheet.hidden : styleSheet.button} aria-label="Copy">
                         <CopyIcon />
                     </IconButton>
                 </div>*/}
 
-                {this.state.copyLoading === true ? <img src={require('../resources/progress.gif')} width="100%" alt="Progress indicator" /> : <Divider />}
+                {this.state.copyLoading || this.state.submitLoading ? <img src={require('../resources/progress.gif')} width="100%" alt="Progress indicator" /> : <Divider />}
 
-                <Button color="primary" className={classes.button} onClick={this.handleDownloadClick} disabled={this.state.fileFormat === 'delimitedColumn'} >Download</Button>
-                <Button color="primary" disabled={this.state.fileFormat !== 'delimitedColumn' && this.state.fileFormat !== 'json' && this.state.fileFormat !== 'xml'} className={classes.button} onClick={this.handleCopyClick} >Copy</Button>
-                <Button className={classes.button && classes.floatRight} onClick={this.handleResetClick} >Reset</Button>
-                {/* <Button className={classes.button}>Help</Button> */}
+                <Button color="primary" style={styleSheet.button} onClick={this.handleDownloadClick} disabled={this.state.fileFormat === 'delimitedColumn'} >Download</Button>
+                <Button color="primary" disabled={this.state.fileFormat !== 'delimitedColumn' && this.state.fileFormat !== 'json' && this.state.fileFormat !== 'xml'} style={styleSheet.button} onClick={this.handleCopyClick} >Copy</Button>
+                <Button style={styleSheet.button && styleSheet.floatRight} onClick={this.handleResetClick} >Reset</Button>
+                {/* <Button style={styleSheet.button}>Help</Button> */}
             </Paper>
 
             <Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
@@ -791,16 +789,11 @@ class Downloads extends Component {
                 onClose={this.handleRequestClose}
                 ContentProps={{ 'aria-describedby': 'message-id', }}
                 message={<span id="message-id">{this.state.snackBarMessage}</span>}
-                action={[<IconButton key="close" aria-label="Close" color="secondary" className={classes.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton>]} />
+                action={[<IconButton key="close" aria-label="Close" color="secondary" style={styleSheet.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton>]} />
 
         </div>);
     }
 }
-
-Downloads.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
-
 
 const styleSheet = {
     linearProgressClass: {
@@ -864,6 +857,3 @@ const styleSheet = {
         float: 'right'
     }
 };
-
-
-export default withStyles(styleSheet)(Downloads);

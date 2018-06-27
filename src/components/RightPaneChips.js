@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 import Chip from '@material-ui/core/Chip';
 
 import FeatureDiscoveryPrompt from './FeatureDiscoveryPrompt/FeatureDiscoveryPrompt';
 import grey from '@material-ui/core/colors/grey';
 
-class RightPaneChips extends Component {
+export default class RightPaneChips extends Component {
 	constructor(props) {
 		super(props);
 
@@ -18,7 +16,7 @@ class RightPaneChips extends Component {
 			rows: props.rows ? props.rows : 0,
 			totalRows: props.totalRows ? props.totalRows : 0,
 			rowLimit: props.rowLimit ? props.rowLimit : 2500,
-			maxRows: props.maxRows ? props.maxRows : 100000,
+			maxRows: props.maxRows ? props.maxRows : 250000,
 			tip: "Tip: Hold shift and click to multi-sort!",
 			tip2: "Increase row-limit for full result.",
 			title2: "",
@@ -38,13 +36,12 @@ class RightPaneChips extends Component {
 		});
 	}
 	render() {
-		const classes = this.props.classes;
 		let rowCountChipLabel = "Displaying " + String(this.props.rows).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " rows";
 		if (this.props.totalRows >= 0) {
 			rowCountChipLabel = "Displaying " + String(this.props.rows).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " of " + String(this.props.totalRows).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " rows";
 		}
 		return (
-			<div className={classes.row}>
+			<div style={styleSheet.row}>
 				<FeatureDiscoveryPrompt
 					onClose={() => this.setState({ isTip1FdpOpen: false })}
 					open={this.state.isTip1FdpOpen}
@@ -67,7 +64,7 @@ class RightPaneChips extends Component {
 							clearTimeout(this.timer);
 						}}
 						key={1}
-						className={classes.chip} />
+						style={styleSheet.chip} />
 				</FeatureDiscoveryPrompt>
 
 				{this.state.rows === this.state.rowLimit && this.state.rows !== this.state.maxRows ?
@@ -82,7 +79,8 @@ class RightPaneChips extends Component {
 						<Chip
 							label={this.state.tip2}
 							key={3}
-							className={classes.chip}
+							style={styleSheet.chip}
+							onClick={() => { this.props.increaseRowLimit(this.state.maxRows) }}
 							onMouseEnter={() => {
 								this.timer = setTimeout(() => {
 									this.setState({
@@ -107,7 +105,7 @@ class RightPaneChips extends Component {
 						<Chip
 							label={this.state.tip3}
 							key={2}
-							className={classes.chip}
+							style={styleSheet.chip}
 							onMouseEnter={() => {
 								this.timer = setTimeout(() => {
 									this.setState({
@@ -120,15 +118,11 @@ class RightPaneChips extends Component {
 								clearTimeout(this.timer);
 							}} />
 					</FeatureDiscoveryPrompt> : <div></div>}
-				<Chip label={this.state.tip} key={4} className={classes.chip} />
+				<Chip label={this.state.tip} key={4} style={styleSheet.chip} />
 			</div>
 		);
 	}
 }
-
-RightPaneChips.propTypes = {
-	classes: PropTypes.object.isRequired,
-};
 
 const styleSheet = {
 	chip: {
@@ -142,5 +136,3 @@ const styleSheet = {
 		marginRight: '1%'
 	},
 };
-
-export default withStyles(styleSheet)(RightPaneChips);

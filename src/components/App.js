@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Auth from './Auth.js';
 import 'typeface-roboto';
 
 import Navigation from './Navigation.js';
@@ -10,6 +11,7 @@ import LeftPane from './LeftPane.js';
 import '../styles/index.css';
 
 let lib = require("../utils/library.js");
+let auth = null;
 
 export default class Layout extends React.Component {
 	constructor() {
@@ -32,8 +34,15 @@ export default class Layout extends React.Component {
 			historyPaneVisibility: false,
 			searchTerm: "",
 			dbSchemaDefinitions: null,
-			dbPkInfo: null
+			dbPkInfo: null,
+			userName: "Unknown username",
+			token: null,
+			isLoggedIn: false,
 		};
+
+		auth = new Auth(parsedURL['db'] || 0);
+
+		this.setUserEmailPassword = this.setUserEmailPassword.bind(this);
 		this.toggleLeftPane = this.toggleLeftPane.bind(this);
 		this.toggleHistoryPane = this.toggleHistoryPane.bind(this);
 		this.changeSearchTerm = this.changeSearchTerm.bind(this);
@@ -137,7 +146,28 @@ export default class Layout extends React.Component {
 
 	changeDbIndex(newIndex) {
 		this.setState({
-			dbIndex: newIndex
+			dbIndex: newIndex,
+			isLoggedIn: false,
+			token: null,
+			userName: "Unknown username"
+		});
+		auth.setDb(newIndex);
+
+		// Get new token usign existing credentials. Otherwise log out the user
+		auth.getUserDetails().then((resp) => {
+			if (resp.isLoggedIn) {
+				this.setState({
+					token: resp.jwtToken,
+					userName: resp.name,
+					isLoggedIn: true
+				});
+			} else {
+				this.setState({
+					isLoggedIn: false,
+					token: null,
+					userName: "Unknown username"
+				});
+			}
 		});
 	}
 
@@ -187,59 +217,92 @@ export default class Layout extends React.Component {
 		});
 	}
 
+	handleLogoutClick = () => {
+		auth.logout();
+		this.setState({
+			token: null,
+			userName: "Unknown username",
+			isLoggedIn: false
+		});
+	}
+
+	setUserEmailPassword(email, password) {
+		auth.setCredentials(email, password);
+		auth.getUserDetails().then((resp) => {
+			if (resp.isLoggedIn) {
+				this.setState({
+					token: resp.jwtToken,
+					userName: resp.name,
+					isLoggedIn: true
+				});
+			} else {
+				this.setState({
+					isLoggedIn: false,
+					token: null,
+					userName: "Unknown username"
+				});
+			}
+			if (this.state.rulesFromURL && lib.getDbConfig(this.state.dbIndex, "publicDbAcessType") === "private" && resp.isLoggedIn) {
+				this.changeRules(this.state.rulesFromURL);
+			}
+		});
+	}
+
 	componentDidMount() {
-		if (this.state.rulesFromURL) {
+		if (this.state.rulesFromURL && lib.getDbConfig(this.state.dbIndex, "publicDbAcessType") !== "private") {
 			this.changeRules(this.state.rulesFromURL);
 			// setTimeout( ()=> {
 			// 	history.pushState('Shared Query', 'Shared Query', 'https://localhost:3000/');
 			// }, 1000);
 		}
+
+		// TRY TO GET a token usign existing credentials
+		auth.getUserDetails().then((resp) => {
+			if (resp.isLoggedIn) {
+				this.setState({
+					token: resp.jwtToken,
+					userName: resp.name,
+					isLoggedIn: true
+				})
+			};
+		});
 	}
 
 	render() {
+		let publicDBStatus = lib.getDbConfig(this.state.dbIndex, "publicDbAcessType") || "read";
 		return (
 			<div>
 				<Navigation
-					dbIndex={this.state.dbIndex}
-					table={this.state.table}
-					leftPaneVisibility={this.state.leftPaneVisibility}
+					{...this.state}
 					changeSearchTerm={this.changeSearchTerm}
 					toggleLeftPane={this.toggleLeftPane}
-					toggleHistoryPane={this.toggleHistoryPane} />
+					toggleHistoryPane={this.toggleHistoryPane}
+					setUserEmailPassword={this.setUserEmailPassword}
+					publicDBStatus={publicDBStatus}
+					handleLogoutClick={this.handleLogoutClick} />
 
 				<div className="bodyDiv">
 					<LeftPane
-						dbIndex={this.state.dbIndex}
-						table={this.state.table}
-						searchTerm={this.state.searchTerm}
+						{...this.state}
 						changeSearchTerm={this.changeSearchTerm}
-						leftPaneVisibility={this.state.leftPaneVisibility}
 						changeDbIndex={this.changeDbIndex}
 						changeTable={this.changeTable}
 						changeColumns={this.changeColumns}
 						changeDbSchemaDefinitions={this.changeDbSchemaDefinitions}
 						changeDbPkInfo={this.changeDbPkInfo}
-						changeVisibleColumns={this.changeVisibleColumns} />
+						changeVisibleColumns={this.changeVisibleColumns}
+						publicDBStatus={publicDBStatus} />
 					<RightPane
-						dbIndex={this.state.dbIndex}
-						table={this.state.table}
-						rulesFromHistoryPane={this.state.rulesFromHistoryPane}
+						{...this.state}
 						changeRules={this.changeRules}
-						columns={this.state.columns}
-						dbSchemaDefinitions={this.state.dbSchemaDefinitions}
-						dbPkInfo={this.state.dbPkInfo}
-						visibleColumns={this.state.visibleColumns}
-						leftPaneVisibility={this.state.leftPaneVisibility}
 						addToHistory={this.addToHistory}
-						rowLimit={this.state.rowLimit}
-						exactCount={this.state.exactCount} />
+						publicDBStatus={publicDBStatus} />
 					<HistoryPane
-						newHistoryItem={this.state.newHistoryItem}
-						dbIndex={this.state.dbIndex}
-						historyPaneVisibility={this.state.historyPaneVisibility}
+						{...this.state}
 						closeHistoryPane={this.closeHistoryPane}
 						changeTable={this.changeTable}
-						changeRules={this.changeRules} />
+						changeRules={this.changeRules}
+						publicDBStatus={publicDBStatus} />
 				</div>
 			</div>
 		);

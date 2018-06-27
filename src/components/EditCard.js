@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
-//import axios from 'axios';
-import { withStyles } from '@material-ui/core/styles';
 
 import NewRow from './NewRow.js';
 
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-//import TextField from '@material-ui/core/TextField';
+
 import Divider from '@material-ui/core/Divider';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -36,11 +34,10 @@ import amber from '@material-ui/core/colors/amber';
 
 //const timeout = 2000;
 
-class EditCard extends Component {
+export default class EditCard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dbIndex: props.dbIndex,
             table: props.table,
             columns: props.columns,
             url: props.url,
@@ -70,7 +67,6 @@ class EditCard extends Component {
 
     componentWillReceiveProps(newProps) {
         this.setState({
-            dbIndex: newProps.dbIndex,
             table: newProps.table,
             columns: newProps.columns,
             url: newProps.url,
@@ -210,7 +206,7 @@ class EditCard extends Component {
                     <span key={String(i) + String(ii) + "span"}>
                         <ListItem key={String(i) + String(ii)} title={error ? errorResp : ""}>
                             <ListItemAvatar>
-                                {error ? (<Avatar className={this.props.classes.errorAvatar}><CloseIcon /></Avatar>) : markForDeletion ? (<Avatar> <DeleteOutlineIcon /> </Avatar>) : (<Avatar> <CreateIcon /> </Avatar>)}
+                                {error ? (<Avatar style={styleSheet.errorAvatar}><CloseIcon /></Avatar>) : markForDeletion ? (<Avatar> <DeleteOutlineIcon /> </Avatar>) : (<Avatar> <CreateIcon /> </Avatar>)}
                             </ListItemAvatar>
                             {
                                 markForDeletion ? (
@@ -245,13 +241,11 @@ class EditCard extends Component {
     }
 
     render() {
-        const classes = this.props.classes;
-
         return (<div>
-            <Paper elevation={2} className={classes.topMargin}>
-                <Typography variant="subheading" className={classes.cardcardMarginLeftTop}>Edit Table Contents</Typography>
+            <Paper elevation={2} style={styleSheet.topMargin}>
+                <Typography variant="subheading" style={styleSheet.cardcardMarginLeftTop}>Edit Table Contents</Typography>
 
-                {this.state.primaryKeysAvailable ? (<FormGroup className={classes.cardMarginLeft}>
+                {this.state.primaryKeysAvailable ? (<FormGroup style={styleSheet.cardMarginLeft}>
                     <FormControlLabel
                         control={<Switch checked={this.state.featureEnabled} onChange={this.handleFeatureEnabledSwitch} value="featureStatus" />}
                         label="Enable table edit feature" />
@@ -259,7 +253,7 @@ class EditCard extends Component {
                     <List dense={false}>
                         <ListItem>
                             <ListItemAvatar>
-                                <Avatar className={classes.secondaryAvatar}><ErrorIcon /></Avatar>
+                                <Avatar style={styleSheet.secondaryAvatar}><ErrorIcon /></Avatar>
                             </ListItemAvatar>
                             <ListItemText primary="This table cannot be edited because its primary keys were not found." />
                         </ListItem>
@@ -267,7 +261,7 @@ class EditCard extends Component {
                 </div>)}
 
                 {this.state.featureEnabled && this.state.primaryKeysAvailable ? (<div>
-                    <Typography variant="body1" className={classes.cardcardMarginLeftTop}>Changes made to this table</Typography>
+                    <Typography variant="body1" style={styleSheet.cardcardMarginLeftTop}>Changes made to this table</Typography>
 
                     <List dense={true}>
                         {this.createChangeLogList()}
@@ -276,7 +270,7 @@ class EditCard extends Component {
                     <List dense={false}>
                         <ListItem>
                             <ListItemAvatar>
-                                <Avatar className={classes.amberAvatar}><WarningIcon /></Avatar>
+                                <Avatar style={styleSheet.amberAvatar}><WarningIcon /></Avatar>
                             </ListItemAvatar>
                             <ListItemText primary="Unsubmitted changes are detected, these changes will be lost if not submitted." />
                         </ListItem>
@@ -284,25 +278,16 @@ class EditCard extends Component {
                 </div>) : (<div></div>)}
                 <Divider />
 
-                <Button onClick={this.handleSubmitClick} disabled={!(this.state.featureEnabled && this.state.primaryKeysAvailable)} color="primary" className={classes.button} value={this.state.submitButtonLabel} >{this.state.submitButtonLabel}</Button>
-                <Button onClick={this.handleNewRowClick} disabled={!(this.state.featureEnabled && this.state.primaryKeysAvailable)} color="primary" className={classes.button} value={"New Row"} >{"New Row"}</Button>
-                <Button onClick={this.handleRemoveAllClick} disabled={!(this.state.featureEnabled && this.state.primaryKeysAvailable)} className={classes.button && classes.floatRight} value={this.state.removeButtonLabel}>{this.state.removeButtonLabel}</Button>
+                <Button onClick={this.handleSubmitClick} disabled={!(this.state.featureEnabled && this.state.primaryKeysAvailable)} color="primary" style={styleSheet.button} value={this.state.submitButtonLabel} >{this.state.submitButtonLabel}</Button>
+                <Button onClick={this.handleNewRowClick} disabled={!(this.state.featureEnabled && this.state.primaryKeysAvailable)} color="primary" style={styleSheet.button} value={"New Row"} >{"New Row"}</Button>
+                <Button onClick={this.handleRemoveAllClick} disabled={!(this.state.featureEnabled && this.state.primaryKeysAvailable)} style={styleSheet.button && styleSheet.floatRight} value={this.state.removeButtonLabel}>{this.state.removeButtonLabel}</Button>
             </Paper>
 
 
             <NewRow
+                {...this.props}
                 open={this.state.newRowDialogOpen}
-
-                insertNewRow={this.props.insertNewRow}
-                postReqToChangeLog={this.props.postReqToChangeLog}
-
-                dbIndex={this.props.dbIndex}
-                table={this.props.table}
-                columns={this.props.columns}
-                allColumns={this.props.allColumns}
                 primaryKeys={this.state.primaryKeys}
-                qbFilters={this.props.qbFilters}
-                url={this.props.url}
                 handleNewRowClick={this.handleNewRowClick} />
 
             <Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
@@ -310,7 +295,7 @@ class EditCard extends Component {
                 onClose={this.handleRequestClose}
                 ContentProps={{ 'aria-describedby': 'message-id', }}
                 message={<span id="message-id">{this.state.snackBarMessage}</span>}
-                action={[<IconButton key="close" aria-label="Close" color="secondary" className={classes.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton>]} />
+                action={[<IconButton key="close" aria-label="Close" color="secondary" style={styleSheet.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton>]} />
 
         </div>);
     }
@@ -346,6 +331,3 @@ const styleSheet = {
         backgroundColor: red[500]
     }
 };
-
-
-export default withStyles(styleSheet)(EditCard);

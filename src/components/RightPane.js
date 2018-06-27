@@ -2,8 +2,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import axiosCancel from 'axios-cancel';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import CardHeader from '@material-ui/core/CardHeader';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -34,11 +32,10 @@ axiosCancel(axios, {
 });
 
 
-class RightPane extends Component {
+export default class RightPane extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			dbIndex: props.dbIndex,
 			table: props.table,
 			columns: props.columns,
 			visibleColumns: props.visibleColumns,
@@ -69,7 +66,7 @@ class RightPane extends Component {
 
 		if (newProps.rulesFromHistoryPane !== null && newProps.rulesFromHistoryPane !== undefined) {
 			// There is something the user wants to load...
-			const filters = lib.getQBFilters(this.state.dbIndex, this.state.table, this.state.columns, this.state.dbSchemaDefinitions);
+			const filters = lib.getQBFilters(this.props.dbIndex, this.state.table, this.state.columns, this.state.dbSchemaDefinitions);
 			let rules = newProps.rulesFromHistoryPane;
 
 			this.setState({
@@ -97,7 +94,7 @@ class RightPane extends Component {
 		}
 
 		if (newProps.visibleColumns !== undefined &&
-			this.state.dbIndex === newProps.dbIndex &&
+			this.props.dbIndex === newProps.dbIndex &&
 			this.state.table === newProps.table &&
 			this.state.columns === newProps.columns &&
 			this.state.leftPaneVisibility === newProps.leftPaneVisibility) {
@@ -108,9 +105,8 @@ class RightPane extends Component {
 			this.setState({
 				leftPaneVisibility: newProps.leftPaneVisibility
 			});
-		} else if (this.state.dbIndex !== newProps.dbIndex) {
+		} else if (this.props.dbIndex !== newProps.dbIndex) {
 			this.setState({
-				dbIndex: newProps.dbIndex,
 				dbSchemaDefinitions: newProps.dbSchemaDefinitions,
 				table: "",
 				columns: [],
@@ -124,7 +120,7 @@ class RightPane extends Component {
 				rows: null
 			}, () => {
 				this.rebuildQueryBuilder(this.refs.queryBuilder, newProps.dbIndex, newProps.table, newProps.columns);
-				let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
+				let url = lib.getDbConfig(this.props.dbIndex, "url") + "/" + this.state.table;
 				this.setState({ url: url + "?limit=10" });
 				if (this.state.table !== "") {
 					this.fetchOutput(url + "?limit=10", true);
@@ -132,7 +128,6 @@ class RightPane extends Component {
 			});
 		} else {
 			this.setState({
-				dbIndex: newProps.dbIndex,
 				dbSchemaDefinitions: newProps.dbSchemaDefinitions,
 				table: newProps.table,
 				columns: newProps.columns,
@@ -146,7 +141,7 @@ class RightPane extends Component {
 				rows: null
 			}, () => {
 				this.rebuildQueryBuilder(this.refs.queryBuilder, newProps.dbIndex, newProps.table, newProps.columns, newProps.dbSchemaDefinitions);
-				let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
+				let url = lib.getDbConfig(this.props.dbIndex, "url") + "/" + this.state.table;
 				this.setState({ url: url + "?limit=10" });
 				if (this.state.table !== "") {
 					this.fetchOutput(url + "?limit=10", true);
@@ -172,7 +167,7 @@ class RightPane extends Component {
 			window.$(this.refs.queryBuilder).queryBuilder.constructor.DEFAULTS.operators = lib.getQBOperators();
 			window.$(this.refs.queryBuilder).queryBuilder.constructor.DEFAULTS.lang = lib.getQBLang();
 
-			const filters = lib.getQBFilters(this.state.dbIndex, this.state.table, this.state.columns, this.state.dbSchemaDefinitions);
+			const filters = lib.getQBFilters(this.props.dbIndex, this.state.table, this.state.columns, this.state.dbSchemaDefinitions);
 			const rules = newRules ? newRules : defaultRules;
 
 			window.$(element).queryBuilder({ filters, rules, plugins: ['not-group'] });
@@ -280,7 +275,7 @@ class RightPane extends Component {
 
 	// Based on the extracted rules, it builds a PostgREST compliant URL for API call
 	buildURLFromRules(rules) {
-		let url = lib.getDbConfig(this.state.dbIndex, "url") + "/" + this.state.table;
+		let url = lib.getDbConfig(this.props.dbIndex, "url") + "/" + this.state.table;
 
 		// if it is valid, proceed
 		if (rules && rules['valid'] && rules['valid'] === true) {
@@ -331,10 +326,18 @@ class RightPane extends Component {
 		// Get rid of the timer
 		clearTimeout(this.timer);
 		this.timer = null;
+		let preparedHeaders = {};
+		if (this.state.exactRowCount === true && skipFullCount === false) {
+			preparedHeaders['Prefer'] = 'count=exact';
+		} else {
+			preparedHeaders['Prefer'] = 'count=estimated';
+		}
 
-		let exactCountHeader = { Prefer: 'count=exact' };
-		let inexactCountHeader = { Prefer: 'count=estimated' };
-		axios.get(url, { headers: this.state.exactRowCount === true && skipFullCount === false ? exactCountHeader : inexactCountHeader, requestId: "qbAxiosReq" })
+		if (this.props.isLoggedIn && this.props.token) {
+			preparedHeaders['Authorization'] = "Bearer " + this.props.token;
+		}
+
+		axios.get(url, { headers: preparedHeaders, requestId: "qbAxiosReq" })
 			.then((response) => {
 				let responseRows = null;
 				let totalRows = null;
@@ -426,6 +429,12 @@ class RightPane extends Component {
 		});
 	}
 
+	increaseRowLimit = () => {
+		let pseudoEvent = {};
+		pseudoEvent['target'] = {};
+		pseudoEvent['target']['value'] = maxRowsInOutput;
+		this.handleRowLimitChange(pseudoEvent);
+	}
 
 	handleRequestClose = () => {
 		this.setState({ snackBarVisibility: false });
@@ -451,26 +460,24 @@ class RightPane extends Component {
 	}
 
 	render() {
-		const classes = this.props.classes;
-
-		let tableRename = lib.getTableConfig(this.state.dbIndex, this.state.table, "rename");
+		let tableRename = lib.getTableConfig(this.props.dbIndex, this.state.table, "rename");
 		let tableDisplayName = tableRename ? tableRename : this.state.table;
 
 		let tableDescription = lib.getTableConfig(this.props.dbIndex, this.props.table, "description") ? lib.getTableConfig(this.props.dbIndex, this.props.table, "description") : "";
 
-		let hideClass = this.state.table ? "" : classes.hide;
-		let leftMarginClass = this.state.leftPaneVisibility === true ? classes.root : classes.root + " " + classes.rootInvisibleLeft;
-		let paperClasses = hideClass + " " + leftMarginClass;
+		let hideClass = this.state.table ? "" : styleSheet.hide;
+		let leftMarginClass = this.state.leftPaneVisibility === true ? styleSheet.root : { ...styleSheet.root, ...styleSheet.rootInvisibleLeft };
+		let paperClasses = { ...hideClass, ...leftMarginClass };
 
 		return (
-			<div className={classes.middlePaperSection}>
-				<Paper className={paperClasses} elevation={5}>
+			<div style={styleSheet.middlePaperSection}>
+				<Paper style={paperClasses} elevation={5}>
 					<CardHeader title={tableDisplayName} subheader={tableDescription} />
 
-					<Typography type="subheading" className={classes.cardMarginLeftTop} >Query Builder</Typography>
+					<Typography type="subheading" style={styleSheet.cardMarginLeftTop} >Query Builder</Typography>
 					<div id='query-builder' ref='queryBuilder' />
 
-					<Typography type="body1" className={classes.cardMarginLeftTop}>Options</Typography>
+					<Typography type="body1" style={styleSheet.cardMarginLeftTop}>Options</Typography>
 
 
 					<Grid container spacing={24} alignItems={'center'}>
@@ -483,7 +490,7 @@ class RightPane extends Component {
 									type="number"
 									label="Row-limit"
 									value={this.state.rowLimit.toString()}
-									className={classes.rowLimitTextField}
+									style={styleSheet.rowLimitTextField}
 									margin="normal"
 									onChange={this.handleRowLimitChange} />
 							</Tooltip>
@@ -492,7 +499,7 @@ class RightPane extends Component {
 						<Grid item sm={10} md={5}>
 							{/* EXACT COUNT CHECK BOX */}
 							<FormControlLabel
-								className={classes.cardMarginLeft}
+								style={styleSheet.cardMarginLeft}
 								control={
 									<Checkbox
 										color="primary"
@@ -507,7 +514,7 @@ class RightPane extends Component {
 							{/* SUBMIT FLOATING ACTION BUTTON (FAB) */}
 							<div title="Run Query" onClick={this.handleSubmitButtonClickCancelQuery}>
 								<SubmitButton
-									dbIndex={this.state.dbIndex}
+									dbIndex={this.props.dbIndex}
 									table={this.state.table}
 									leftPaneVisibility={this.state.leftPaneVisibility}
 									getRules={this.handleSubmitButtonClick}
@@ -518,13 +525,13 @@ class RightPane extends Component {
 						</Grid>
 					</Grid>
 
-					<Typography type="subheading" className={classes.cardMarginLeftTop}>Query Results</Typography>
+					<Typography type="subheading" style={styleSheet.cardMarginLeftTop}>Query Results</Typography>
 
-					<RightPaneChips rows={this.state.rows} totalRows={this.state.totalRows} rowLimit={this.state.rowLimit} maxRows={maxRowsInOutput} />
+					<RightPaneChips rows={this.state.rows} totalRows={this.state.totalRows} rowLimit={this.state.rowLimit} maxRows={maxRowsInOutput} increaseRowLimit={this.increaseRowLimit} />
 
-					<div className={classes.cardMarginLeftRightTop} >
+					<div style={styleSheet.cardMarginLeftRightTop} >
 						<DataTable
-							dbIndex={this.state.dbIndex}
+							{...this.props}
 							table={this.state.table}
 							columns={this.state.visibleColumns ? this.state.visibleColumns : this.state.columns}
 							allColumns={this.state.columns}
@@ -532,7 +539,6 @@ class RightPane extends Component {
 							qbFilters={this.state.qbFilters}
 							url={this.state.url}
 							totalRows={this.state.totalRows}
-							dbPkInfo={this.props.dbPkInfo}
 							insertNewRow={this.insertNewRow}
 							noDataText={this.state.submitLoading ? "Loading ..." : (this.state.submitError ? "Query error" : (this.state.submitSuccess ? "Success!" : "No rows found"))} />
 					</div>
@@ -543,17 +549,14 @@ class RightPane extends Component {
 					onClose={this.handleRequestClose}
 					ContentProps={{ 'aria-describedby': 'message-id', }}
 					message={<span id="message-id">{this.state.snackBarMessage}</span>}
-					action={[<IconButton key="close" aria-label="Close" color="secondary" className={classes.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton>]} />
+					action={[<IconButton key="close" aria-label="Close" color="secondary" style={styleSheet.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton>]} />
 			</div >
 		);
 	}
 }
 
-RightPane.propTypes = {
-	classes: PropTypes.object.isRequired,
-};
 
-const styleSheet = {
+let styleSheet = {
 	root: {
 		paddingBottom: 50,
 		marginLeft: '30%',
@@ -592,5 +595,3 @@ const styleSheet = {
 		visibility: 'hidden'
 	}
 };
-
-export default withStyles(styleSheet)(RightPane);
