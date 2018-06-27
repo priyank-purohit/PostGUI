@@ -92,20 +92,10 @@ export default class Auth {
 
     _toLocalStorage() {
         //localStorage.setItem("name", this.name);
-        //localStorage.setItem("isLoggedIn", this.isLoggedIn);
-        //localStorage.setItem("userEmail", this.userEmail);
-        //localStorage.setItem("userPassword", this.userPassword);
-        //localStorage.setItem("jwtToken", this.jwtToken);
-        //localStorage.setItem("jwtTokenExpiry", this.jwtTokenExpiry);
     }
 
     _fromLocalStorage() {
         //this.name = localStorage.getItem("name");
-        //this.isLoggedIn = localStorage.getItem("isLoggedIn");
-        //this.userEmail = localStorage.getItem("userEmail");
-        //this.userPassword = localStorage.getItem("userPassword");
-        //this.jwtToken = localStorage.getItem("jwtToken");
-        //this.jwtTokenExpiry = localStorage.getItem("jwtTokenExpiry");
     }
 
     toString() {
