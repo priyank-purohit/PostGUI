@@ -36,9 +36,9 @@ export default class RightPaneChips extends Component {
 		});
 	}
 	render() {
-		let rowCountChipLabel = "Displaying " + String(this.props.rows).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " rows";
+		let rowCountChipLabel = "Displaying " + String(this.props.rows || 0).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " rows";
 		if (this.props.totalRows >= 0) {
-			rowCountChipLabel = "Displaying " + String(this.props.rows).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " of " + String(this.props.totalRows).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " rows";
+			rowCountChipLabel = "Displaying " + String(this.props.rows || 0).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " of " + String(this.props.totalRows || 0).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " rows";
 		}
 		return (
 			<div style={styleSheet.row}>
