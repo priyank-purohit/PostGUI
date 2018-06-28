@@ -366,9 +366,11 @@ export default class Downloads extends Component {
     }
 
     insertToClipboard(str) {
+        console.log("Str = ", JSON.stringify(str));
+
         //based on https://stackoverflow.com/a/12693636
         document.oncopy = function (event) {
-            event.clipboardData.setData("Text", str);
+            event.clipboardData.setData("text/plain", str);
             event.preventDefault();
         };
         let copySuccess = document.execCommand("copy");
