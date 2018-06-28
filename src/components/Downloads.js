@@ -371,7 +371,7 @@ export default class Downloads extends Component {
             event.clipboardData.setData("Text", str);
             event.preventDefault();
         };
-        let copySuccess = document.execCommand("Copy");
+        let copySuccess = document.execCommand("copy");
         document.oncopy = undefined;
         return copySuccess;
     }
