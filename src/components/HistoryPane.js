@@ -70,7 +70,11 @@ export default class HistoryPane extends Component {
 					newHistoryItem: newProps.newHistoryItem,
 					historyArray: arrayvar
 				}, () => {
-					localStorage.setItem("localHistory", JSON.stringify(this.state.historyArray));
+					try {
+						localStorage.setItem("localHistory", JSON.stringify(this.state.historyArray));
+					} catch (e) {
+						console.log(e);
+					}
 				});
 			} else { // already exists, move it to "top" (which in this case is the highest index...)
 				this.setState({
@@ -78,7 +82,11 @@ export default class HistoryPane extends Component {
 					newHistoryItem: newProps.newHistoryItem,
 					historyArray: lib.moveArrayElementFromTo(this.state.historyArray, lib.elementPositionInArray(newProps.newHistoryItem, this.state.historyArray), this.state.historyArray.length - 1)
 				}, () => {
-					localStorage.setItem("localHistory", JSON.stringify(this.state.historyArray));
+					try {
+						localStorage.setItem("localHistory", JSON.stringify(this.state.historyArray));
+					} catch (e) {
+						console.log(e);
+					}
 				});
 			}
 		} else {
@@ -220,7 +228,11 @@ export default class HistoryPane extends Component {
 		this.setState({
 			historyArray: []
 		}, () => {
-			localStorage.setItem("localHistory", []);
+			try {
+				localStorage.setItem("localHistory", []);
+			} catch (e) {
+				console.log(e);
+			}
 		});
 		this.showDeleteHistoryDialog();
 	}
