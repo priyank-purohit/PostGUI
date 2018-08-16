@@ -113,7 +113,7 @@ A local PostgreSQL database with your data. Alternatively, following the Install
 ### Get Software
 1. Install [Node.js](https://nodejs.org/en/).
 1. Install [PostgreSQL](https://www.postgresql.org/download/).
-1. Download PostgREST (https://github.com/begriffs/postgrest/releases/tag/v0.4.4.0).
+1. Download [PostgREST](https://github.com/begriffs/postgrest/releases/tag/v0.4.4.0).
 
 ### Database Requirements Check
 1. Setup a PostgreSQL database on your personal computer (supports Windows, Mac, and Linux).
