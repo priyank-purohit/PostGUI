@@ -27,49 +27,49 @@ Certain features of the PostGUI web application require specific database schema
 
 #### Database Picker
 
-![Database Picker](docs/images/db-picker.png "Database Picker")
+![Database Picker](docs/images/db-picker.png)
 
 The database picker allows multiple PostgreSQL databases to be shared from a single instance of PostGUI. The database name is customizable using the config.json file (databases -> title).
 
 #### Database Schema
 
-![Database Schema](docs/images/schema.png "Database Schema")
+![Database Schema](docs/images/schema.png)
 
 The database schema (tables, columns, and foreign keys) is shown in the left panel of the PostGUI user interface. The table and column names can be replaced with a custom string for a more user-friendly table and column name. Foreign key relationships are shown with “Referenced by” and “FK to” labels. 
 
 #### Search Feature
 
-![Search Box](docs/images/search.png "Search the Schema")
+![Search Box](docs/images/search.png)
 
 Search feature can be used to filter and find a table or column quickly. To search for a specific table or a column, each search term can be tagged with ‘[table]’ or ‘[column]’.
 
 #### Query Builder and Query Options
 
-![Query Builder and Query Options](docs/images/query.png "Query Builder and Options")
+![Query Builder and Query Options](docs/images/query.png)
 
 The integration of the JS Query Builder in this web application makes it easily usable by those who don’t know SQL. Query options can be used to fine tune the data being extracted from the database, and to ensure the full result is being shown (exact row count feature). 
 
 #### Data Table
 
-![Data Table](docs/images/table.png "Sortable and Editable Table")
+![Data Table](docs/images/table.png)
 
 The query result component features a high-performance data table that can sort columns by their values and edit individual cell values (if edit feature is enabled).
 
 #### Download Data
 
-![Download Data](docs/images/downloads.png "Data Download Option")
+![Download Data](docs/images/downloads.png)
 
 The Downloads card features options to download the currently loaded data in CSV, JSON, and XML formats. In addition, it allows for column values to be copied as comma-separated values – this may be used in lieu of a join-table VIEW.
 
 #### Authentication System
 
-![Authentication System](docs/images/auth.png "Login Form")
+![Authentication System](docs/images/auth.png)
 
 Basic authentication system gets you started with the “database-first” approach to secure authentication system. Three basic users are available by simply executing the Authentication SQL script – read, edit, and admin.
 
 #### Edit Contents
 
-![Edit Database](docs/images/edit.png "Edit Database")
+![Edit Database](docs/images/edit.png)
 
 Edit Content feature can allow authenticated users to change the table contents if a primary key is defined for the table.
 
