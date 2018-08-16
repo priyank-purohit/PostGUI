@@ -103,7 +103,7 @@ Set up the PostgreSQL database, PostgREST API tool, and the PostGUI web applicat
 
 Set up the PostgreSQL database, PostgREST API tool, and the PostGUI web application on a web server. In addition, enable the edit feature by ensuring each table has a primary key defined, presence of the primary_keys function in the PostgreSQL database, and enabling the feature in the configuration file of PostGUI.
 
- 
+
 ## Installation
 
 ### Pre-requisite
