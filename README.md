@@ -1,4 +1,4 @@
-# PostgUI
+# PostGUI
 
 **A React web application to query and share any PostgreSQL database.**
 
