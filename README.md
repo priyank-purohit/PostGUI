@@ -2,6 +2,7 @@
 
 **A React web application to query and share any PostgreSQL database.**
 
+
 ## Introduction
 
 A fundamental concept in scientific research is of producing and sharing good quality data sets to allow new hypothesis to be generated from existing knowledge. The emergence of the ‘Big Data’ phenomenon in scientific research has introduced data sharing as a new bottleneck. This web platform allows scientists (and others) to filter and share large data sets that are beyond the limits of traditional spreadsheet software.
@@ -11,10 +12,6 @@ PostGUI is a ReactJS web application that serves as a GUI front-end to any Postg
 #### Getting help
 
 To get help with use cases/feasibility or anything else, please make a new issue on GitHub repository.
-
-
-#### Pre-requisite
-A local PostgreSQL database with your data. Alternatively, following the Installation section will get you started with a sample database.
 
 
 ## Features
@@ -93,6 +90,10 @@ Set up the PostgreSQL database, PostgREST API tool, and the PostGUI web applicat
  
 ## Installation
 
+### Pre-requisite
+
+A local PostgreSQL database with your data. Alternatively, following the Installation section will get you started with a sample database.
+
 ### Get Software
 1. Install [Node.js](https://nodejs.org/en/).
 1. Install [PostgreSQL](https://www.postgresql.org/download/). If you already have a PostgreSQL database running on your personal computer, skip this step.
@@ -112,8 +113,6 @@ Set up the PostgreSQL database, PostgREST API tool, and the PostGUI web applicat
    1. NOT NULL, CHECK, and data types should be carefully considered because they serve as back-end sanitation for the Edit Feature.
 1. Create necessary VIEWs: nice to predefine table joins when queries spanning multiple tables will be executed frequently.
 1. Create necessary indexes: nice to have for large tables to speed up query response time. When the CONTAINS operator will be used frequently with a string column, a pg_trgm idnex would be important to drastically improve performance.
-
-
 
 ### PostgREST Setup:
 1. Download PostgREST (https://github.com/begriffs/postgrest/releases/tag/v0.4.4.0).
@@ -143,7 +142,8 @@ Set up the PostgreSQL database, PostgREST API tool, and the PostGUI web applicat
    1. Give an appropriate title to the database.
 1. Execute `npm start` inside the PostGUI repository directory to run the web application.
 1. Improve configuration file for better user experience.
-   
+
+
 ## Security Setup
 1. Harden PostgREST
    1. Go through the PostgREST docs.
@@ -162,7 +162,6 @@ Set up the PostgreSQL database, PostgREST API tool, and the PostGUI web applicat
    1. Fine tune authentication control:
       1. Users
       1. Permissions
-
 
 
 ## Config file format
