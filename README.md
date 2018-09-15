@@ -2,6 +2,8 @@
 
 **A React web application to query and share any PostgreSQL database.**
 
+** Documentation in progress ** 
+
 
 ## Introduction
 
