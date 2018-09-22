@@ -119,7 +119,7 @@ A local PostgreSQL database with your data. Alternatively, following the Install
 
 ### Database Requirements Check
 1. Setup a PostgreSQL database on your personal computer (supports Windows, Mac, and Linux).
-   1. Having a well designed PostgreSQL database is entirely your resposibility because PostGUI does not enforce any hard requirements on the database schema design. However, to take full advantage of the PostGUI features, some changes may be required to the database schema.
+   1. Having a well designed PostgreSQL database is entirely your responsibility because PostGUI does not enforce any hard requirements on the database schema design. However, to take full advantage of the PostGUI features, some changes may be required to the database schema.
    1. To set up a sample database on personal computer:
       1. Download the DVD Rentals database file from [PostgreSQL Tutorial website](http://www.postgresqltutorial.com/postgresql-sample-database/).
       1. Unzip the file to retrieve the .tar file.
