@@ -2,7 +2,7 @@
 -- Priyank Purohit
 -- 2018
 
--- IMPORTANT!! *************** CHANGE SECRET ON LINE 104, PASSWORDS AND EMAIL ON 115-117. *************** IMPORTANT!!
+-- IMPORTANT!! *************** CHANGE SECRET ON LINE 105, PASSWORDS AND EMAIL ON 115-118. *************** IMPORTANT!!
 
 
 -- INSTALL PGJWT
