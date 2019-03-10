@@ -5,11 +5,11 @@
 
 ## Introduction
 
-PostGUI is a React web application that serves as a front-end to any PostgreSQL database using the PostgREST automatic API tool. PostGUI can automatically adapt any Postgres database to provide an overview of the database schema, a query builder to build a SQL query, and a login system to control access to the database contents. This was a University of Toronto Masters project intended to be a framework for sharing and making data more accessible.
+PostGUI is a React web application that serves as a front-end to any PostgreSQL database using the PostgREST automatic API tool. PostGUI can automatically adapt any PostgreSQL database to provide an overview of the schema, a visual query builder to execute a SQL query, and a login system to control access to the data. The entire framework can run on a personal computer, or on a web server (for data sharing over the internet).
 
-Pre-requisite to deploying this framework is having a PostgreSQL database. Configuration of PostgREST and PostGUI can then be done in a matter of minutes. The PostGUI configuration file (at /data/config.json) in this repository demonstrates how to customize the PostGUI front-end for a [sample PostgreSQL database](http://www.postgresqltutorial.com/postgresql-sample-database/). PostgREST configuration is provided below, along with some suggestions on PostgreSQL database schema design for optimal experience.
+This is a Masters project intended to be a web-based framework for data sharing and making data more accessible to non-computer programmers. Originally intended for biology community, the generic approach towards data has made this framework into a simple alternative to creating a new custom web application each time data set(s) need to be shared. These web applications are usually non-adaptive and require significant changes if the data source changes.
 
-To get help with use cases/feasibility or anything else, please make a new issue on this GitHub repository. This data sharing framework relies on popular open-source works such as: [Material UI](https://material.io/), [PostgREST](http://postgrest.org), [JS Query Builder](https://querybuilder.js.org/), etc.
+A PostgreSQL database is a pre-requisite to setting up this framework - specific tips on database schema design are provided in the Installation section. Configuration of PostgREST and PostGUI can be done in a matter of minutes. The PostGUI configuration file (at `/data/config.json`) in this repository demonstrates how to customize the front-end for a [sample PostgreSQL database](http://www.postgresqltutorial.com/postgresql-sample-database/). PostgREST configuration is provided, along with some suggestions on PostgreSQL database schema design for optimal experience.
 
 
 <p align="center">
@@ -17,14 +17,17 @@ To get help with use cases/feasibility or anything else, please make a new issue
 </p>
 
 
+To get help with confirming use cases/feasibility or anything else, please make a new issue on this GitHub repository. This data sharing framework relies on popular open-source works such as: [Material UI](https://material.io/), [PostgREST](http://postgrest.org), [JS Query Builder](https://querybuilder.js.org/), etc.
+
+
+
 ## Features
 
-#### Data compatibility
+#### Data Compatibility
 
-PostGUI is designed to be as database agnostic as possible by adapting to the client's database schema. It can be used to query a finance, biology, or a sports statistics PostgreSQL database.
+PostGUI is designed to be database agnostic by automatically adapting to the client's database schema. This framework can be setup to query and share a biology, finance, or a sports statistics PostgreSQL database. In short, any tabular data set can be accessed and shared using this framework. If the data set(s) in question can be represented as tables, then the data set(s) is compatible with this framework. Complex data types such as images, videos, or sound clips are currently untested and unsupported.
 
-The client must organize the data set(s) to be shared in a PostgreSQL database instance running on a local computer (only data access, no data sharing over the internet) or a web  server (data access, and data sharing over the internet). Certain features of PostGUI require specific database schema design. For example, to allow users to edit the database tables, the database tables must have a defined primary key (PK) attribute. However, if a PK is not defined for a table, PostGUI will gracefully disable the edit feature for the table.
-
+The client must organize the data to be shared in a PostgreSQL database running on a local computer (only data access, no data sharing over the internet) or a web  server (data access, and data sharing over the internet). Certain features of PostGUI require specific database schema design. For example, to allow users to edit the database tables, the database tables must have a defined primary key (PK) attribute. However, if a PK is not defined for a table, PostGUI will gracefully disable the edit feature for the table.
 
 
 #### Database Picker
@@ -33,7 +36,7 @@ The client must organize the data set(s) to be shared in a PostgreSQL database i
   <img src="/docs/images/db-picker.png">
 </p>
 
-The database picker allows multiple PostgreSQL databases to be shared from a single instance of PostGUI. The database name is customizable using the config.json file (databases -> title).
+The database picker allows multiple PostgreSQL databases to be shared from a single instance of PostGUI. The database name is customizable using the `/data/config.json` file.
 
 #### Database Schema
 
