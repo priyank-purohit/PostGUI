@@ -116,27 +116,35 @@ Set up the PostgreSQL database, PostgREST API tool, and the PostGUI web applicat
 
 ### Pre-requisite
 
-A local PostgreSQL database with your data. Alternatively, following the Installation section will get you started with a sample database.
+This installation guide will walk you through setting up a production-like version of the framework with all features enabled on your personal computer. After testing on your personal computer, deploying the three components of the framework on a web server will allow you to share the data over the internet.
+
 
 ### Get Software
 1. Install [Node.js](https://nodejs.org/en/).
 1. Install [PostgreSQL](https://www.postgresql.org/download/).
 1. Download [PostgREST](https://github.com/begriffs/postgrest/releases/tag/v0.4.4.0).
 
-### Database Requirements Check
+### Database Setup
+
+#### Get Started with Sample Database
+
 1. Setup a PostgreSQL database on your personal computer (supports Windows, Mac, and Linux).
    1. Having a well designed PostgreSQL database is entirely your responsibility because PostGUI does not enforce any hard requirements on the database schema design. However, to take full advantage of the PostGUI features, some changes may be required to the database schema.
    1. To set up a sample database on personal computer:
       1. Download the DVD Rentals database file from [PostgreSQL Tutorial website](http://www.postgresqltutorial.com/postgresql-sample-database/).
       1. Unzip the file to retrieve the .tar file.
       1. Follow these instructions: http://www.postgresqltutorial.com/load-postgresql-sample-database/.
-      1. Skip the remaining Database Requirements Check section steps.
+
+
+#### Get Started with Your Data
+
 1. Ensure necessary column and table attributes are present:
    1. Foreign Key: required only to show two-way relationships in the left panel in addition to the foreign_key function.
    1. Primary Key: required to enable the Edit Feature in addition to the primary_key function.
    1. NOT NULL, CHECK, and data types should be carefully considered because they serve as back-end sanitation for the Edit Feature.
 1. Create necessary VIEWs: nice to predefine table joins when queries spanning multiple tables will be executed frequently.
 1. Create necessary indexes: nice to have for large tables to speed up query response time. When the CONTAINS operator will be used frequently with a string column, a pg_trgm idnex would be important to drastically improve performance.
+
 
 ### PostgREST Setup:
 1. Download PostgREST (https://github.com/begriffs/postgrest/releases/tag/v0.4.4.0).
@@ -196,4 +204,4 @@ A local PostgreSQL database with your data. Alternatively, following the Install
 
 _Priyank K. Purohit, Dr. David Guttman, Dr. Nicholas Provart_
 
-_Department of Cell and Systems Biology, University of Toronto_
+_University of Toronto_
