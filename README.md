@@ -99,15 +99,15 @@ Edit Content feature allows authenticated users to change the table contents if 
 
 This project was built to solve three main scenarios:
 
-#### Accessing a large database (no data sharing)
+#### Accessing a database (no data sharing)
 
 Set up the PostgreSQL database, PostgREST API tool, and the PostGUI web application on a local computer for database access without any data sharing over the internet.
 
-#### Sharing a large database (read-only data sharing mode)
+#### Sharing a database (read-only data sharing mode)
 
 Set up the PostgreSQL database, PostgREST API tool, and the PostGUI web application on a web server for data sharing over the internet.
 
-#### Sharing a large database with edit access (read and write access for authenticated users)
+#### Sharing a database with edit access (read and write access for authenticated users)
 
 Set up the PostgreSQL database, PostgREST API tool, and the PostGUI web application on a web server. In addition, enable the edit feature by ensuring each table has a primary key defined, presence of the primary_keys function in the PostgreSQL database, and enabling the feature in the configuration file of PostGUI.
 
