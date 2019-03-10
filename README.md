@@ -44,7 +44,7 @@ The database picker allows multiple PostgreSQL databases to be shared from a sin
   <img src="/docs/images/schema.png">
 </p>
 
-The database schema (tables, columns, and foreign keys) is shown in the left panel of the PostGUI user interface. The table and column names can be replaced with a custom string for a more user-friendly table and column name. Foreign key relationships are shown with “Referenced by” and “FK to” labels. 
+The database schema (tables, columns, and foreign keys) is shown in the left panel of the PostGUI user interface (UI). The tables and columns can be renamed for a more user-friendly table and column name. Foreign Keys also are shown with “Referenced by” and “FK to” labels.
 
 #### Search Feature
 
@@ -52,7 +52,7 @@ The database schema (tables, columns, and foreign keys) is shown in the left pan
   <img src="/docs/images/search.png">
 </p>
 
-Search feature can be used to filter and find a table or column quickly. To search for a specific table or a column, each search term can be tagged with ‘[table]’ or ‘[column]’.
+Search feature can be used to find a table or column quickly. To search for a specific table vs. a column, each search term can be tagged with ‘[table]’ or ‘[column]’.
 
 #### Query Builder and Query Options
 
@@ -60,7 +60,7 @@ Search feature can be used to filter and find a table or column quickly. To sear
   <img src="/docs/images/query.png">
 </p>
 
-The integration of the JS Query Builder in this web application makes it easily usable by those who don’t know SQL. Query options can be used to fine tune the data being extracted from the database, and to ensure the full result is being shown (exact row count feature). 
+Integration of the [JS Query Builder](https://querybuilder.js.org/) in this web application makes it easily usable by users unfamiliar with SQL programming language. Query options can be used to fine tune the data being extracted from the database, and to ensure the full result is being shown (exact row count feature).
 
 #### Data Table
 
@@ -68,7 +68,7 @@ The integration of the JS Query Builder in this web application makes it easily 
   <img src="/docs/images/table.png">
 </p>
 
-The query result component features a high-performance data table that can sort columns by their values and edit individual cell values (if edit feature is enabled).
+The query result component features a high-performance data table ([React Table](https://github.com/tannerlinsley/react-table)) that can sort columns by their values and edit individual cell values (if edit feature is enabled).
 
 #### Download Data
 
@@ -84,7 +84,7 @@ The Downloads card features options to download the currently loaded data in CSV
   <img src="/docs/images/auth.png">
 </p>
 
-Basic authentication system gets you started with the “database-first” approach to secure authentication system. Three basic users are available by simply executing the Authentication SQL script – read, edit, and admin.
+Basic authentication system gets you started with the “database-first” approach to secure authentication system. Three basic users are available by simply executing the Authentication SQL script – read, edit, and admin. The Installation section provides further instructions on how to set up the authentication system. Further comments in the Security Checklist section.
 
 #### Edit Contents
 
@@ -92,7 +92,7 @@ Basic authentication system gets you started with the “database-first” appro
   <img src="/docs/images/edit.png">
 </p>
 
-Edit Content feature can allow authenticated users to change the table contents if a primary key is defined for the table.
+Edit Content feature allows authenticated users to change the table contents if a primary key is defined for the table. A record of database changes is also kept in a separate table.
 
 
 ## Use Case Scenarios
@@ -107,7 +107,7 @@ Set up the PostgreSQL database, PostgREST API tool, and the PostGUI web applicat
 
 Set up the PostgreSQL database, PostgREST API tool, and the PostGUI web application on a web server for data sharing over the internet.
 
-#### Inventory management system (read and write access for authenticated users)
+#### Sharing a large database with edit access (read and write access for authenticated users)
 
 Set up the PostgreSQL database, PostgREST API tool, and the PostGUI web application on a web server. In addition, enable the edit feature by ensuring each table has a primary key defined, presence of the primary_keys function in the PostgreSQL database, and enabling the feature in the configuration file of PostGUI.
 
