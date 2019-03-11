@@ -2,7 +2,17 @@
 
 **A React web application to query and share any PostgreSQL database.**
 
+## Table of Contents
+1. [ Introduction ](#introduction)
+1. [ Features ](#features)
+1. [ Use Case Scenarios ](#usecases)
+1. [ Installation ](#installation)
+1. [ Security and Deployment Checklist ](#checklist)
+1. [ Contact ](#contact)
 
+
+
+<a name="introduction"></a>
 ## Introduction
 
 PostGUI is a React web application that serves as a front-end to any PostgreSQL database using the PostgREST automatic API tool. PostGUI can automatically adapt any PostgreSQL database to provide an overview of the schema, a visual query builder to execute a SQL query, and a login system to control access to the data. The entire framework can run on a personal computer, or on a web server (for data sharing over the internet).
@@ -20,7 +30,7 @@ A PostgreSQL database is a pre-requisite to setting up this framework - specific
 To get help with confirming use cases/feasibility or anything else, please make a new issue on this GitHub repository. This data sharing framework relies on popular open-source works such as: [Material UI](https://material.io/), [PostgREST](http://postgrest.org), [JS Query Builder](https://querybuilder.js.org/), etc.
 
 
-
+<a name="features"></a>
 ## Features
 
 #### Data Compatibility
@@ -95,6 +105,8 @@ Basic authentication system gets you started with the “database-first” appro
 Edit Content feature allows authenticated users to change the table contents if a primary key is defined for the table. A record of database changes is also kept in a separate table.
 
 
+
+<a name="usecases"></a>
 ## Use Case Scenarios
 
 This project was built to solve three main scenarios:
@@ -112,6 +124,8 @@ Set up the PostgreSQL database, PostgREST API tool, and the PostGUI web applicat
 Set up the PostgreSQL database, PostgREST API tool, and the PostGUI web application on a web server. In addition, enable the edit feature by ensuring each table has a primary key defined, presence of the primary_keys function in the PostgreSQL database, and enabling the feature in the configuration file of PostGUI.
 
 
+
+<a name="installation"></a>
 ## Installation
 
 ### Pre-requisite
@@ -176,6 +190,8 @@ This framework is compatible with any data set(s) that can be represented as a d
 1. Improve configuration file for better user experience according to the Config File Format section of this guide.
 
 
+
+<a name="checklist"></a>
 ## Security and Deployment Checklist
 
 Before deploying the framework on a web server for, consider the following items to improve security.
@@ -201,6 +217,8 @@ Before deploying the framework on a web server for, consider the following items
 <coming soon> -->
 
 
+
+<a name="contact"></a>
 ## Contact
 
 _Priyank K. Purohit, Dr. David Guttman, Dr. Nicholas Provart_
