@@ -147,11 +147,9 @@ This installation guide will walk you through setting up a production-like versi
 
 
 ### PostgREST Setup:
-1. Download PostgREST (https://github.com/begriffs/postgrest/releases/tag/v0.4.4.0).
-1. Extract the binary file into a folder.
-1. Create a `db.conf` configuration file in the same folder as the PostgREST binary.
-   1. Create this configuration file according to: https://postgrest.com/en/v4.4/install.html#configuration .
-   1. Example PostgREST configuration file:
+1. Download and extract the PostgREST binary file into a folder from: https://github.com/begriffs/postgrest/releases/tag/v0.4.4.0.
+1. Create a configuration file named `db.conf` in the same folder as the PostgREST binary.
+1. `db.conf` file should contain the following:
       ```
            db-uri = "postgres://DB_USER:DB_USER_PASS@localhost:5432/DB_NAME"
            db-schema = "public"
@@ -160,20 +158,23 @@ This installation guide will walk you through setting up a production-like versi
            server-host = "*4"
            server-port = 3001
       ```
+   1. This configuration file can be further customized as described in the original docs: https://postgrest.com/en/v4.4/install.html#configuration.
+1. Be sure to replace DB_NAME, DB_USER, DB_USER_PASS in the above configuration file.
 1. Using a command line tool, navigate to the folder containing the PostgREST binary and config file.
-1. Run the PostgREST tool: `./postgrest.exe ./db.conf`.
+1. Run the PostgREST tool: `./postgrest.exe ./db.conf` (remove the .exe extension if not on Windows operating system).
 1. You should see a "Connection successful" message.
 
 ### PostGUI Setup:
-1. Clone this repository.
-1. Using a command line tool, navigate into the cloned repository.
-1. Execute `npm install`.
-1. Create a basic config file:
+1. Open a new command line terminal.
+1. Clone this repository: `git clone git@github.com:priyank-purohit/PostGUI.git`
+1. Navigate into the cloned repository: `cd PostGUI`.
+1. Install node dependencies by executing: `npm install`.
+1. Create a basic configuration file for the front-end web application:
    1. Configuration file location: `/src/data/config.json`.
-   1. Change the `url` if any changes were made to the PostgREST port.
+   1. Change the `url` if any changes were made to the PostgREST port, or if the PostgREST instance is running on a web server.
    1. Give an appropriate title to the database.
-1. Execute `npm start` inside the PostGUI repository directory to run the web application.
-1. Improve configuration file for better user experience.
+1. Using the command line tool, execute `npm start` to run the web application.
+1. Improve configuration file for better user experience according to the Config File Format section of this guide.
 
 
 ## Security Setup
