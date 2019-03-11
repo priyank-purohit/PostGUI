@@ -124,9 +124,9 @@ This installation guide will walk you through setting up a production-like versi
 1. Install [PostgreSQL](https://www.postgresql.org/download/).
 1. Download [PostgREST](https://github.com/begriffs/postgrest/releases/tag/v0.4.4.0).
 
-### Database Setup
+### PostgreSQL Setup
 
-#### Get Started with Sample Database
+#### Get Started with a Sample Database
 
 1. Download the DVD Rentals database file from [PostgreSQL Tutorial website](http://www.postgresqltutorial.com/postgresql-sample-database/).
 1. Unzip the file to retrieve the .tar file.
@@ -194,11 +194,11 @@ Before deploying the framework on a web server for, consider the following items
    1. Fine tune authentication control according to the Authentication System section of this guide.
 
 
-## Authentication System
+<!-- ## Authentication System
 <coming soon>
 
 ## Config file format
-<coming soon>
+<coming soon> -->
 
 
 ## Contact
