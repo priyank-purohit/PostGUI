@@ -128,22 +128,21 @@ This installation guide will walk you through setting up a production-like versi
 
 #### Get Started with Sample Database
 
-1. Setup a PostgreSQL database on your personal computer (supports Windows, Mac, and Linux).
-   1. Having a well designed PostgreSQL database is entirely your responsibility because PostGUI does not enforce any hard requirements on the database schema design. However, to take full advantage of the PostGUI features, some changes may be required to the database schema.
-   1. To set up a sample database on personal computer:
-      1. Download the DVD Rentals database file from [PostgreSQL Tutorial website](http://www.postgresqltutorial.com/postgresql-sample-database/).
-      1. Unzip the file to retrieve the .tar file.
-      1. Follow these instructions: http://www.postgresqltutorial.com/load-postgresql-sample-database/.
+1. Download the DVD Rentals database file from [PostgreSQL Tutorial website](http://www.postgresqltutorial.com/postgresql-sample-database/).
+1. Unzip the file to retrieve the .tar file.
+1. Follow these instructions using a command line tool: http://www.postgresqltutorial.com/load-postgresql-sample-database/.
 
 
 #### Get Started with Your Data
 
+This framework is compatible with any data set(s) that can be represented as a data table. The data set(s) is required to be inserted into the PostgreSQL database system to ensure data integrity and consistent data access. Having a well designed PostgreSQL database is important because PostGUI does not enforce any hard requirements on the database schema design. However, to take full advantage of all PostGUI features, do consider the following when designing your PostgreSQL database schema:
+
 1. Ensure necessary column and table attributes are present:
-   1. Foreign Key: required only to show two-way relationships in the left panel in addition to the foreign_key function.
-   1. Primary Key: required to enable the Edit Feature in addition to the primary_key function.
-   1. NOT NULL, CHECK, and data types should be carefully considered because they serve as back-end sanitation for the Edit Feature.
-1. Create necessary VIEWs: nice to predefine table joins when queries spanning multiple tables will be executed frequently.
-1. Create necessary indexes: nice to have for large tables to speed up query response time. When the CONTAINS operator will be used frequently with a string column, a pg_trgm idnex would be important to drastically improve performance.
+   1. Foreign Key: required only to show two-way relationships in the left panel in addition to the foreign_key function from the `/scripts/` directory.
+   1. Primary Key: required only to enable the Edit Feature in addition to the primary_key function from the `/scripts` directory.
+   1. NOT NULL, CHECK, and data types should be carefully considered because they serve as back-end sanitation of input coming from the Edit Feature.
+1. Create necessary VIEWs: To prevent Denial or Service attacks, the PostgREST framework does not allow for arbitrary table joins. Therefore, the client must predefine join tables when queries spanning multiple tables will be executed frequently. 
+1. Create necessary indexes: important feature of large tables in order to speed up the query response time. When the CONTAINS operator will be used frequently with a string column, a `pg_trgm` idnex would be important to improve performance.
 
 
 ### PostgREST Setup:
@@ -177,25 +176,26 @@ This installation guide will walk you through setting up a production-like versi
 1. Improve configuration file for better user experience according to the Config File Format section of this guide.
 
 
-## Security Checklist
+## Security and Deployment Checklist
 
 Before deploying the framework on a web server for, consider the following items to improve security.
 
-1. Harden PostgREST
+1. Harden PostgREST for improved performance and security.
    1. Go through the PostgREST docs.
    1. Go through https://postgrest.org/en/v5.0/admin.html section.
-1. Enable HTTPS
+1. Enable HTTPS for PostGUI
    1. Install SSL/TLS certificate on the web server. This should automatically enable HTTPS for the web application.
    1. Force the web server to handle the PostgREST traffic as HTTPS by setting up a reverse proxy on the port used by PostgREST.
       1. A sample NGINX configuration file is provided in this repository at `/scripts/Sample NGINX Config File.txt`.
 1. Authentication System
    1. Be sure to enable HTTPS first.
-   1. Execute the authentication script in the `/scripts/` directory to create an authentication system schema in the database.
+   1. Execute the scripts in the `/scripts/` directory to create an authentication system schema in the database.
    1. Insert new emails and passwords for more users.
-   1. Fine tune authentication control:
-      1. Users
-      1. Permissions
+   1. Fine tune authentication control according to the Authentication System section of this guide.
 
+
+## Authentication System
+<coming soon>
 
 ## Config file format
 <coming soon>
