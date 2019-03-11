@@ -1,0 +1,132 @@
+# For more information on configuration, see:
+#   * Official English Documentation: http://nginx.org/en/docs/
+#   * Official Russian Documentation: http://nginx.org/ru/docs/
+
+user nginx;
+worker_processes auto;
+error_log /var/log/nginx/error.log;
+pid /run/nginx.pid;
+
+# Load dynamic modules. See /usr/share/nginx/README.dynamic.
+include /usr/share/nginx/modules/*.conf;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log  /var/log/nginx/access.log  main;
+
+    sendfile            on;
+    tcp_nopush          on;
+    tcp_nodelay         on;
+    keepalive_timeout   65;
+    types_hash_max_size 2048;
+
+    include             /etc/nginx/mime.types;
+    default_type        application/octet-stream;
+
+    # Load modular configuration files from the /etc/nginx/conf.d directory.
+    # See http://nginx.org/en/docs/ngx_core_module.html#include
+    # for more information.
+    include /etc/nginx/conf.d/*.conf;
+
+    #MAIN RATE LIMITING
+    limit_req_zone $binary_remote_addr zone=globalzone:10m rate=15r/s;
+
+    #Expires map
+    map $sent_http_content_type $expires {
+        default 3h;
+    }
+    map $sent_http_content_type $no_expires {
+        default -1;
+    }
+
+
+# FORWARDS ALL HTTP req at port 80 to the HTTPS port
+    server {
+        listen       80 default_server;
+        listen       [::]:80 default_server;
+        server_name  _;
+	
+	    return 301 https://$host$uri;
+    }
+
+# Settings for a TLS enabled server.
+    server {
+        listen       443 ssl http2 default_server;
+        listen       [::]:443 ssl http2 default_server;
+        server_name  www.your-domain.com;                                  // TODO
+        root         /usr/share/nginx/html;
+
+        ssl_certificate "/path/to/ssl_certificate";                       // TODO
+        ssl_certificate_key "/path/to/ssl_certificate_key";               // TODO
+        ssl_session_cache shared:SSL:1m;
+        ssl_session_timeout  10m;
+        ssl_ciphers HIGH:!aNULL:!MD5;
+        ssl_prefer_server_ciphers on;
+
+        # Load configuration files for the default server block.
+        include /etc/nginx/default.d/*.conf;
+
+        location / {
+		try_files $uri /index.html;
+        }
+
+
+	# GZIP FOR EVERYTHING??
+	gzip on;
+	gzip_vary on;
+	gzip_min_length 512;
+	gzip_proxied expired no-cache no-store private auth;
+	gzip_types text/plain text/css text/xml text/javascript application/javascript application/octet-stream application/openapi+json;
+	gzip_disable "MSIE [1-6]\.";
+	
+
+        error_page 404 /404.html;
+            location = /40x.html {
+        }
+
+        error_page 500 502 503 504 /50x.html;
+            location = /50x.html {
+        }
+    }
+
+# Reverse Proxy for PostgREST (accept HTTPS -> HTTP)
+    server {
+        listen 8771 ssl;
+	
+        ssl_certificate "/path/to/ssl_certificate";                        // TODO
+       	ssl_certificate_key "/path/to/ssl_certificate_key";                // TODO
+
+	location / {
+		# Rate limiting
+		limit_req zone=globalzone burst=10 nodelay;
+
+		# Proxy to local
+		proxy_pass http://localhost:7187;                                  // TODO
+		proxy_redirect off;
+		proxy_set_header Host $host:$server_port;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+		proxy_set_header X-Forwarded-Ssl on;
+		proxy_set_header X-Forwarded-proto https;
+
+		expires $no_expires;
+
+	        # GZIP FOR EVERYTHING??
+	        gzip on;
+	        gzip_vary on;
+ 	        gzip_min_length 512;
+        	gzip_proxied expired no-cache no-store private auth;
+        	gzip_types text/plain text/css text/xml text/javascript application/javascript application/octet-stream application/openapi+json;
+        	gzip_disable "MSIE [1-6]\.";
+
+	   }
+    }
+
+}
+

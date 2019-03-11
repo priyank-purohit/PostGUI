@@ -177,20 +177,20 @@ This installation guide will walk you through setting up a production-like versi
 1. Improve configuration file for better user experience according to the Config File Format section of this guide.
 
 
-## Security Setup
+## Security Checklist
+
+Before deploying the framework on a web server for, consider the following items to improve security.
+
 1. Harden PostgREST
    1. Go through the PostgREST docs.
    1. Go through https://postgrest.org/en/v5.0/admin.html section.
 1. Enable HTTPS
    1. Install SSL/TLS certificate on the web server. This should automatically enable HTTPS for the web application.
    1. Force the web server to handle the PostgREST traffic as HTTPS by setting up a reverse proxy on the port used by PostgREST.
-      1. Here is a sample reverse proxy configuration for NGINX:
-      ```
-      <coming soon>
-      ```
+      1. A sample NGINX configuration file is provided in this repository at `/scripts/Sample NGINX Config File.txt`.
 1. Authentication System
-   1. Go through the “Enable HTTPS” section because HTTPS communication protocol is necessary when transmitting sensitive information between clients and web server.
-   1. Execute the authentication script below to create an authentication system schema in the database.
+   1. Be sure to enable HTTPS first.
+   1. Execute the authentication script in the `/scripts/` directory to create an authentication system schema in the database.
    1. Insert new emails and passwords for more users.
    1. Fine tune authentication control:
       1. Users
