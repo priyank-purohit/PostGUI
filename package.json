@@ -3,8 +3,8 @@
   "version": "1.2.0",
   "private": true,
   "dependencies": {
-    "@material-ui/core": "^1.2.3",
-    "@material-ui/icons": "^1.1.0",
+    "@material-ui/core": "^1.5.1",
+    "@material-ui/icons": "^1.1.1",
     "axios": "^0.18.0",
     "axios-cancel": "^0.2.2",
     "dot": "^1.1.1",
