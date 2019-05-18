@@ -13,14 +13,14 @@
     "json2csv": "^4.5.1",
     "lodash": "^4.17.11",
     "npm": "^5.10.0",
-    "react": "^16.4.1",
+    "react": "^16.8.6",
     "react-copy-to-clipboard": "^5.0.0",
-    "react-dom": "^16.4.1",
+    "react-dom": "^16.8.6",
     "react-table": "^6.8.6",
     "typeface-roboto": "0.0.54"
   },
   "devDependencies": {
-    "react-scripts": "^1.1.4"
+    "react-scripts": "^1.1.5"
   },
   "scripts": {
     "start": "PORT=8771 react-scripts start",
