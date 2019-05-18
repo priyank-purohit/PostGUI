@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import green from "@material-ui/core/colors/green";
 import red from "@material-ui/core/colors/red";
-import Button from "@material-ui/core/Button";
+import Fab from "@material-ui/core/Fab";
 import CheckIcon from "@material-ui/icons/Check";
 import CloseIcon from "@material-ui/icons/Close";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
@@ -57,8 +57,7 @@ export default class CircularFab extends Component {
 
     return (
       <div style={styleSheet.wrapper}>
-        <Button
-          variant="fab"
+        <Fab
           color="secondary"
           style={buttonClass}
           onClick={this.handleButtonClick}
@@ -72,7 +71,7 @@ export default class CircularFab extends Component {
           ) : (
             <ArrowForwardIcon />
           )}
-        </Button>
+        </Fab>
         {loading && <CircularProgress size={68} style={styleSheet.progress} />}
       </div>
     );
