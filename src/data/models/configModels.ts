@@ -1,4 +1,4 @@
-export interface ConfigDatabase {
+export interface IConfigDatabase {
   title: string;
   url: string;
   publicDbAcessType: string;

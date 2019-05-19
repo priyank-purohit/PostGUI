@@ -5,18 +5,19 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { INITIAL_ROW_LIMIT } from '../data/constants';
-import { ConfigDatabase } from '../data/models/configModels';
+import { IConfigDatabase } from '../data/models/configModels';
 import Auth from './Auth.js';
 import HistoryPane from './HistoryPane.js';
 import { LeftPane } from './LeftPane';
 import Navigation from './Navigation.js';
 import RightPane from './RightPane.js';
 
+
 let lib = require("../utils/library.ts");
 let auth: Nullable<Auth> = null;
-interface AppProps {}
+interface IAppProps {}
 
-interface AppState {
+interface IAppState {
   dbIndex: number;
   table: string;
   rowLimit: number;
@@ -36,8 +37,8 @@ interface AppState {
   isLoggedIn: boolean;
 }
 
-export default class Layout extends React.Component<AppProps, AppState> {
-  constructor(props: AppProps) {
+export default class Layout extends React.Component<IAppProps, IAppState> {
+  constructor(props: IAppProps) {
     super(props);
 
     // Parse URL
@@ -107,7 +108,7 @@ export default class Layout extends React.Component<AppProps, AppState> {
     lib
       .getValueFromConfig("databases")
       .map(
-        (obj: ConfigDatabase, index: number) =>
+        (obj: IConfigDatabase, index: number) =>
           (databasesMapped[index] = obj.title || "Untitled database")
       );
     if (!databasesMapped[db]) {
