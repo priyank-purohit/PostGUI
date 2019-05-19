@@ -20,7 +20,6 @@ interface LeftPaneProps {
 
 interface LeftPaneState {}
 
-//export const AccountsList: React.SFC = () => {
 export const LeftPane: React.FunctionComponent<LeftPaneProps> = props => {
   let rootClasses =
     props.leftPaneVisibility === true ? styleSheet.root : styleSheet.rootHide;
