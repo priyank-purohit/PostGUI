@@ -123,7 +123,7 @@ export function isColumnInDefaultView(
   dbIndex: number,
   table: string,
   column: string
-) {
+): Nullable<boolean> {
   if (dbIndex !== null && table !== null && column !== null) {
     try {
       let defaultColumns = getTableConfig(dbIndex, table, "defaultViewColumns");
@@ -137,6 +137,7 @@ export function isColumnInDefaultView(
       return null;
     }
   }
+  return null;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -167,7 +168,7 @@ export function getQBLang() {
 }
 
 // Returns the default operators
-export function getQBOperators() {
+export function getQBOperators(): Array<any> {
   return [
     { type: "equal" },
     { type: "not_equal" },
@@ -451,7 +452,7 @@ export function visitPage(url = "https://www.google.ca") {
 }
 
 // Extracts the keys from a JSON string DATA
-export function getKeysFromJSON(data: any) {
+export function getKeysFromJSON(data: any): Array<string> {
   let keys = [];
   for (let i in data) {
     let val = data[i];
@@ -464,7 +465,7 @@ export function getKeysFromJSON(data: any) {
 }
 
 // Extracts unique values from an array ARR
-export function arrNoDup(arr: Array<any>) {
+export function arrNoDup(arr: Array<any>): Array<any> {
   var temp: any = {};
   for (var i = 0; i < arr.length; i++) {
     temp[arr[i]] = true;
