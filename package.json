@@ -20,7 +20,7 @@
     "typeface-roboto": "0.0.54"
   },
   "devDependencies": {
-    "react-scripts": "^1.1.5"
+    "react-scripts": "^3.0.1"
   },
   "scripts": {
     "start": "PORT=8771 react-scripts start",
@@ -29,5 +29,17 @@
     "build-and-serve": "react-scripts build && serve -s build -p 8771",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
