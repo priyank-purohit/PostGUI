@@ -21,7 +21,6 @@ export const SubmitButton: React.FunctionComponent<
   SubmitButtonProps
 > = props => {
   let buttonClass = null;
-
   if (props.success) {
     buttonClass = { ...styleSheet.successButton };
   }
