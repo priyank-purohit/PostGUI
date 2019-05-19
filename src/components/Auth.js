@@ -87,7 +87,7 @@ export default class Auth {
         return data;
       } catch (e) {
         this._setStatusTokenExpiry(false, null, 0);
-        console.log(e);
+        console.error(e);
       }
     }
   }

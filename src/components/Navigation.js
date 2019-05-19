@@ -79,7 +79,6 @@ export default class Navigation extends Component {
   };
 
   handleHelpToggle = e => {
-    console.log(e.target.id);
     this.setState({
       isHelpOpen: !this.state.isHelpOpen
     });
