@@ -7,16 +7,19 @@ import Navigation from "./Navigation.js";
 import HistoryPane from "./HistoryPane.js";
 import RightPane from "./RightPane.js";
 import LeftPane from "./LeftPane.js";
-
+import { INITIAL_ROW_LIMIT } from "../data/constants";
+import { ConfigDatabase } from "../data/models/configModels";
 import "../styles/index.css";
 
 let lib = require("../utils/library.js");
 let auth: Nullable<Auth> = null;
 
+interface AppProps {}
+
 interface AppState {
   dbIndex: number;
   table: string;
-  rowLimit: Nullable<number>;
+  rowLimit: number;
   exactCount: Nullable<boolean>;
   rulesFromURL: Nullable<string>;
   rulesFromHistoryPane: Nullable<string>;
@@ -33,13 +36,6 @@ interface AppState {
   isLoggedIn: boolean;
 }
 
-interface AppProps {}
-
-interface ConfigDatabase {
-  title: string;
-  url: string;
-}
-
 export default class Layout extends React.Component<AppProps, AppState> {
   constructor(props: AppProps) {
     super(props);
@@ -50,7 +46,7 @@ export default class Layout extends React.Component<AppProps, AppState> {
     this.state = {
       dbIndex: parsedURL["db"] || 0,
       table: parsedURL["table"] || "",
-      rowLimit: parsedURL["rowLimit"] || null,
+      rowLimit: parsedURL["rowLimit"] || INITIAL_ROW_LIMIT,
       exactCount: parsedURL["exactCount"] || null,
       rulesFromURL: parsedURL["urlRules"] || null,
       rulesFromHistoryPane: null,
