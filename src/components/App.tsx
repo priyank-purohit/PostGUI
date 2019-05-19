@@ -1,19 +1,19 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import Auth from "./Auth.js";
-import "typeface-roboto";
+import 'typeface-roboto';
+import '../styles/index.css';
 
-import Navigation from "./Navigation.js";
-import HistoryPane from "./HistoryPane.js";
-import RightPane from "./RightPane.js";
-import LeftPane from "./LeftPane.js";
-import { INITIAL_ROW_LIMIT } from "../data/constants";
-import { ConfigDatabase } from "../data/models/configModels";
-import "../styles/index.css";
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import { INITIAL_ROW_LIMIT } from '../data/constants';
+import { ConfigDatabase } from '../data/models/configModels';
+import Auth from './Auth.js';
+import HistoryPane from './HistoryPane.js';
+import LeftPane from './LeftPane.js';
+import Navigation from './Navigation.js';
+import RightPane from './RightPane.js';
 
 let lib = require("../utils/library.ts");
 let auth: Nullable<Auth> = null;
-
 interface AppProps {}
 
 interface AppState {
@@ -385,7 +385,7 @@ ReactDOM.render(<Layout />, app);
 		urlQuery = urlQuery.replace(/not.and\(/g, "(not.and,").replace(/not.or\(/g, "(not.or,");
 		urlQuery = urlQuery.replace(/and=\(/g, "(and,").replace(/or=\(/g, "(or,");
 		urlQuery = urlQuery.replace(/and\(/g, "(and,").replace(/or\(/g, "(or,");
-		
+
 		urlQuery = urlQuery.replace(/\(/g, "[").replace(/\)\s/g, "], ");
 		urlQuery = urlQuery.replace(/\)/g, "]");
 		urlQuery = urlQuery.replace(/\s+/, ", ");
@@ -397,7 +397,7 @@ ReactDOM.render(<Layout />, app);
 		if (urlQuery.length === 1 && urlQuery[0] instanceof Array) {
 			urlQuery = urlQuery[0];
 		}
-		
+
 		return this.recursiveRulesCreation(urlQuery);
 	}*/
 

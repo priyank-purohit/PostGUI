@@ -1,2 +1,44 @@
 {
+  "search.usePCRE2": true,
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+
+  "importSorter.generalConfiguration.sortOnBeforeSave": true,
+  "importSorter.importStringConfiguration.numberOfEmptyLinesAfterAllImports": 1,
+  "importSorter.sortConfiguration.customOrderingRules.defaultNumberOfEmptyLinesAfterGroup": 1,
+  "importSorter.sortConfiguration.customOrderingRules.defaultOrderLevel": 20,
+  "importSorter.sortConfiguration.customOrderingRules.disableDefaultOrderSort": false,
+  "importSorter.sortConfiguration.customOrderingRules.rules": [
+    {
+      "regex": "[.](svg|png|gif|jpe?g|ico)$",
+      "orderLevel": 49
+    },
+    {
+      "regex": "[.]json$",
+      "orderLevel": 5
+    },
+    {
+      "type": "importMember",
+      "regex": "^$",
+      "orderLevel": 10,
+      "disableSort": true
+    },
+    {
+      "regex": "^(react|redux)",
+      "orderLevel": 15
+    },
+    {
+      "regex": "^@material-ui",
+      "orderLevel": 21
+    },
+    {
+      "regex": "^material-ui",
+      "orderLevel": 22
+    },
+    {
+      "regex": "^[.]",
+      "orderLevel": 40
+    }
+  ],
+  "importSorter.sortConfiguration.joinImportPaths": true
 }
