@@ -342,14 +342,14 @@ export default class HistoryPane extends Component {
 						<ListSubheader>Delete history?</ListSubheader>
 						<Button
 							onClick={this.deleteHistory}
-							variant="raised"
+							variant="contained"
 							style={{ margin: "5px" }}
 						>
 							Yes
             </Button>
 						<Button
 							onClick={this.showDeleteHistoryDialog}
-							variant="raised"
+							variant="contained"
 							style={{ margin: "5px", background: amber[500] }}
 						>
 							No
