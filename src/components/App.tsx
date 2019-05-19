@@ -5,7 +5,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { INITIAL_ROW_LIMIT } from '../data/constants';
-import { IConfigDatabase } from '../data/models/configModels';
+import { IConfigDatabase } from '../data/models/configModel';
 import Auth from './Auth.js';
 import HistoryPane from './HistoryPane.js';
 import { LeftPane } from './LeftPane';
