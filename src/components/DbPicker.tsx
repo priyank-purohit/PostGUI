@@ -1,14 +1,26 @@
-import React, { Component } from "react";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
+import React, { Component } from 'react';
+
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 
 let lib = require("../utils/library.ts");
 
-export default class DbPicker extends Component {
-  constructor(props) {
+interface DbPickerProps {
+  changeDbIndex: Function;
+  dbIndex: number;
+}
+
+interface DbPickerState {
+  anchorEl: Maybe<HTMLElement>;
+  open: boolean;
+  databases: Array<string>;
+}
+
+export default class DbPicker extends Component<DbPickerProps, DbPickerState> {
+  constructor(props: DbPickerProps) {
     super(props);
     this.state = {
       anchorEl: undefined,
@@ -19,11 +31,11 @@ export default class DbPicker extends Component {
 
   //button = undefined;
 
-  handleClickListItem = event => {
+  handleClickListItem = (event: any) => {
     this.setState({ open: true, anchorEl: event.currentTarget });
   };
 
-  handleMenuItemClick = (event, index) => {
+  handleMenuItemClick = (event: any, index: number) => {
     this.setState({ open: false });
     this.props.changeDbIndex(index);
   };
@@ -34,11 +46,11 @@ export default class DbPicker extends Component {
 
   // get a list of databases in the config.json
   componentDidMount() {
-    let databasesMapped = [];
+    let databasesMapped: Array<string> = [];
     lib
       .getValueFromConfig("databases")
       .map(
-        (obj, index) =>
+        (obj: any, index: number) =>
           (databasesMapped[index] = obj.title || "Untitled database")
       );
     this.setState({
@@ -69,7 +81,7 @@ export default class DbPicker extends Component {
           open={this.state.open}
           onClose={this.handleRequestClose}
         >
-          {this.state.databases.map((option, index) => (
+          {this.state.databases.map((option: any, index: number) => (
             <MenuItem
               key={option}
               selected={index === this.props.dbIndex}

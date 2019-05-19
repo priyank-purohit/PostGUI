@@ -2,11 +2,12 @@ import React from 'react';
 
 import Divider from '@material-ui/core/Divider';
 
-import DbPicker from './DbPicker.js';
+import DbPicker from './DbPicker';
 import DbSchema from './DbSchema.js';
 
 interface LeftPaneProps {
   leftPaneVisibility: boolean;
+  dbIndex: number;
 
   changeSearchTerm: Function;
   changeDbIndex: Function;
