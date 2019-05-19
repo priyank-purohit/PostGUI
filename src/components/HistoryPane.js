@@ -91,7 +91,7 @@ export default class HistoryPane extends Component {
 								JSON.stringify(this.state.historyArray)
 							);
 						} catch (e) {
-							console.log(e);
+							console.error(e);
 						}
 					}
 				);
@@ -117,7 +117,7 @@ export default class HistoryPane extends Component {
 								JSON.stringify(this.state.historyArray)
 							);
 						} catch (e) {
-							console.log(e);
+							console.error(e);
 						}
 					}
 				);
@@ -134,7 +134,7 @@ export default class HistoryPane extends Component {
 	handleHistoryItemClick(index) {
 		let url = this.state.historyArray[index][0];
 		let rules = this.state.historyArray[index][1];
-		//console.log("[",JSON.stringify(url),"," ,JSON.stringify(rules),"]");
+
 		this.props.changeTable(this.extractTableNameFromURL(url, true));
 		this.props.changeRules(rules);
 	}
@@ -300,7 +300,7 @@ export default class HistoryPane extends Component {
 				try {
 					localStorage.setItem("localHistory", []);
 				} catch (e) {
-					console.log(e);
+					console.error(e);
 				}
 			}
 		);

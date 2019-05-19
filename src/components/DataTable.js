@@ -235,9 +235,6 @@ export default class DataTable extends Component {
     changeLogPostReqBody["notes"] = notes;
     changeLogPostReqBody["user_name"] = userName; // TODO: This will change after LOGIN SYSTEM is developed.
 
-    //console.log("Changes Log URL:" + changeLogURL);
-    //console.log("Changes Log POST Body:" + JSON.stringify(changeLogPostReqBody));
-
     let preparedHeaders = { Prefer: "return=representation" };
     if (this.props.isLoggedIn && this.props.token) {
       preparedHeaders["Authorization"] = "Bearer " + this.props.token;
@@ -246,7 +243,7 @@ export default class DataTable extends Component {
     axios
       .post(changeLogURL, changeLogPostReqBody, { headers: preparedHeaders })
       .then(response => {
-        //console.log("Change Log POST Successful:" + JSON.stringify(response));
+        //console.info("Change Log POST Successful:" + JSON.stringify(response));
       })
       .catch(error => {
         // Show error in Snack-Bar
@@ -311,10 +308,6 @@ export default class DataTable extends Component {
           let patchReqBody = {};
           patchReqBody[columnChanged] = newValue;
 
-          //console.log("\n\n\nSubmitting change: PATCH: " + url);
-          //console.log("Change=" + JSON.stringify(change));
-          //console.log("PATCH req BODY=" + JSON.stringify({ [columnChanged]: newValue }));
-
           let preparedHeaders = { Prefer: "return=representation" };
           if (this.props.isLoggedIn && this.props.token) {
             preparedHeaders["Authorization"] = "Bearer " + this.props.token;
@@ -329,7 +322,6 @@ export default class DataTable extends Component {
               { headers: preparedHeaders }
             )
             .then(response => {
-              //console.log("PATCH RESPONSE:", JSON.stringify(response.data));
               this.deleteChange(columnChanged, keyChanged, true); // true => do not restore original value when deleting change
 
               // Add an entry to the database's change log
@@ -346,7 +338,7 @@ export default class DataTable extends Component {
               );
             })
             .catch(error => {
-              console.log("PATCH ERROR RESP:" + String(error));
+              console.error("PATCH ERROR RESP:" + String(error));
               this.setChangeError(
                 columnChanged,
                 keyChanged,
@@ -371,7 +363,6 @@ export default class DataTable extends Component {
             });
         } else if (deleteRow) {
           // DELETE ROW FEATURE
-          //console.log("\n\n\nDeleting a row");
           // Create the URL, add in the new value as URL param
           let url =
             lib.getDbConfig(this.props.dbIndex, "url") +
@@ -380,7 +371,6 @@ export default class DataTable extends Component {
             "?and=(" +
             this.primaryKeyAsUrlParam(primaryKey) +
             ")";
-          //console.log("DELETE url = " + url);
 
           let preparedHeaders = { Prefer: "return=representation" };
           if (this.props.isLoggedIn && this.props.token) {
@@ -397,14 +387,10 @@ export default class DataTable extends Component {
               for (let i = 0; i < this.state.tablePrimaryKeys.length; i++) {
                 needle.push(primaryKey[this.state.tablePrimaryKeys[i]]);
               }
-              //console.log("Needle", needle);
 
-              // iterate over each element in the array
               for (var i = 0; i < this.state.data.length; i++) {
-                //console.log(this.state.data.length, i, String(this.state.data[i]._id), String(needle), String(this.state.data[i]._id) === String(needle));
                 // look for the entry with a matching `code` value
                 if (String(this.state.data[i]._id) === String(needle)) {
-                  //console.log("............ Found at i = " + i);
                   oldRow = JSON.stringify(this.state.data[i]);
                 }
               }
@@ -421,11 +407,10 @@ export default class DataTable extends Component {
                 this.props.userName || "Unknown Username"
               );
 
-              //console.log("DELETE RESPONSE = ", JSON.stringify(response));
               this.deleteChange("id", keyChanged, "delete");
             })
             .catch(error => {
-              console.log("ERROR RESP: " + String(error));
+              console.error("ERROR RESP: " + String(error));
               this.setChangeError("id", keyChanged, true, error.response.data);
               // Show error in Snack-Bar
               this.setState(
@@ -445,7 +430,7 @@ export default class DataTable extends Component {
             });
         } else {
           // Tell user that the change was not actually detected... and that they should submit a bug
-          console.log(
+          console.error(
             "Tell user that the change was not actually detected... and that they should submit a bug"
           );
           // Show error in Snack-Bar
@@ -519,8 +504,6 @@ export default class DataTable extends Component {
                 data[changedRowIndex][this.state.tablePrimaryKeys[i]]
               );
             }
-
-            // console.log(changedColumnName, "column of row #", changedRowIndex, "with pk = (", JSON.stringify(changedRowPk), ") changed from ", oldCellValue, "to", newCellValue);
 
             // Update the local variable to this function
             data[changedRowIndex][changedColumnName] = newCellValue;

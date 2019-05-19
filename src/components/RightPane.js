@@ -223,7 +223,7 @@ export default class RightPane extends Component {
         .$(element)
         .queryBuilder({ filters, rules, plugins: ["not-group"] });
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 
@@ -515,7 +515,7 @@ export default class RightPane extends Component {
         );
       })
       .catch(error => {
-        console.log("HTTP Req:", error);
+        console.error("HTTP Req:", error);
         this.setState(
           {
             rawData: [],
@@ -571,7 +571,7 @@ export default class RightPane extends Component {
         try {
           rules = window.$(this.refs.queryBuilder).queryBuilder("getRules");
         } catch (e) {
-          console.log(e.toString());
+          console.error(e.toString());
         }
 
         this.setState({ rules: rules }, () => {

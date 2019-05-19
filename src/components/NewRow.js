@@ -81,14 +81,9 @@ class ResponsiveDialog extends React.Component {
       inputValues[column]["dataType"] = dataType;
     }
 
-    this.setState(
-      {
-        inputVals: inputValues
-      },
-      () => {
-        //console.log(JSON.stringify(this.state.inputVals));
-      }
-    );
+    this.setState({
+      inputVals: inputValues
+    });
   };
 
   commitToChangeLog(newRow) {
@@ -97,7 +92,7 @@ class ResponsiveDialog extends React.Component {
       primaryKey[this.state.primaryKeys[i]] =
         newRow[0][this.state.primaryKeys[i]];
     }
-    //console.log(this.props.dbIndex, new Date(Date.now()).toISOString(), this.state.table, primaryKey, "ROW_INSERT", "{}", newRow[0], "ROW INSERTED.", "public")
+
     this.props.postReqToChangeLog(
       this.props.dbIndex,
       new Date(Date.now()).toISOString(),
@@ -152,9 +147,6 @@ class ResponsiveDialog extends React.Component {
         postReqBody[column] = value;
       }
 
-      //console.log("Changes Log URL:" + newRowURL);
-      //console.log("Changes Log POST Body:" + JSON.stringify(postReqBody));
-
       let preparedHeaders = { Prefer: "return=representation" };
       if (this.props.isLoggedIn && this.props.token) {
         preparedHeaders["Authorization"] = "Bearer " + this.props.token;
@@ -163,7 +155,6 @@ class ResponsiveDialog extends React.Component {
       axios
         .post(newRowURL, postReqBody, { headers: preparedHeaders })
         .then(response => {
-          //console.log("New row inserted successfully:" + JSON.stringify(response.data));
           this.commitToChangeLog(response.data);
           this.props.insertNewRow(response.data);
           this.handleReset();

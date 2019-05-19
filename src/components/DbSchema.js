@@ -88,7 +88,6 @@ export default class DbSchema extends Component {
 					searchTerm: newProps.searchTerm
 				},
 				() => {
-					//console.log("TABLE COLUMN SEARCH RESULT SAVED", JSON.stringify(this.searchTablesColumnsFK()));
 					this.setState({
 						searchResults: this.searchTablesColumnsFK()
 					});
@@ -143,7 +142,6 @@ export default class DbSchema extends Component {
 			return false;
 		}
 
-		//console.log("isForeignKey() .. fkSearchResults = " + JSON.stringify(fkSearchResults));
 
 		let prettifiedStr = "";
 		_.forEach(fkSearchResults, function (result) {
@@ -153,7 +151,6 @@ export default class DbSchema extends Component {
 
 		if (prettifiedStr !== "") {
 			prettifiedStr = prettifiedStr.replace(/,\s$/g, "");
-			//console.log("isForeignKey(" + table + ", " + column + ") = " + prettifiedStr);
 		}
 
 		return prettifiedStr;
@@ -194,32 +191,22 @@ export default class DbSchema extends Component {
 			.toLowerCase()
 			.match(/(?:[^\s"]+|"[^"]*")+/g); // Splits on all sapces that are not contained within double quotes
 
-		//console.log("Raw search term is", rawSearchTerm, "that was split as:");
 		_.forEach(rawSearchTerm, term => {
 			if (term) {
-				//console.log("\tUnderstanding term", term);
-
 				if (term.indexOf("[table]") > -1 || term.indexOf("[tables]") > -1) {
-					//console.log("\t\tSeparating to the tables search term");
 					tablesSearchTerm +=
 						" " + term.replace("[table]", "").replace("[tables]", "");
 				} else if (
 					term.indexOf("[column]") > -1 ||
 					term.indexOf("[columns]") > -1
 				) {
-					//console.log("\t\tSeparating to the columns search term");
 					columnsSearchTerm +=
 						" " + term.replace("[column]", "").replace("[columns]", "");
 				} else {
-					//console.log("\t\tSeparating to the global search term");
 					tablesColumnsSearchTerm += " " + term;
 				}
 			}
 		});
-
-		//console.log("Global search is", JSON.stringify(tablesColumnsSearchTerm));
-		//console.log("Table search is", JSON.stringify(tablesColumnsSearchTerm), JSON.stringify(tablesSearchTerm));
-		//console.log("Column search is", JSON.stringify(tablesColumnsSearchTerm), JSON.stringify(columnsSearchTerm));
 
 		// Search tables
 		if (tablesColumnsSearchTerm || tablesSearchTerm) {
@@ -255,11 +242,8 @@ export default class DbSchema extends Component {
 
 	// Returns a list of tables matching state.saerchTerm from the current tables' raw and rename names
 	searchTables(searchTerm) {
-		//console.log("SearchTables Search term is", searchTerm);
 		let tableSearchResults = [];
 		searchTerm = searchTerm.toLowerCase().match(/(?:[^\s"]+|"[^"]*")+/g); // Splits on all sapces that are not contained within double quotes
-
-		//console.log("SearchTables Search term is now", JSON.stringify(searchTerm));
 
 		for (let i = 0; i < searchTerm.length; i++) {
 			let splitTerm = searchTerm[i].replace(/"/g, ""); // remove all quotes from the search term
@@ -290,10 +274,9 @@ export default class DbSchema extends Component {
 
 	// Returns a list of tables that have columns matching state.saerchTerm from the tables' raw and rename column names
 	searchColumns(searchTerm) {
-		//console.log("SearchCOLUMNS Search term is", searchTerm);
 		let tableSearchResults = [];
 		searchTerm = searchTerm.toLowerCase().match(/(?:[^\s"]+|"[^"]*")+/g); // Splits on all sapces that are not contained within double quotes
-		//console.log("SEARCHCOLUMNS Search term is now", JSON.stringify(searchTerm));
+
 		for (let i = 0; i < searchTerm.length; i++) {
 			let splitTerm = searchTerm[i].replace(/"/g, ""); // remove all quotes from the search term
 			if (splitTerm !== "") {
@@ -521,7 +504,6 @@ export default class DbSchema extends Component {
 								}
 							}
 						);
-						//console.log(JSON.stringify(response.data[0]["primary_keys"]), pkAvailable);
 					}
 				})
 				.catch(error => {

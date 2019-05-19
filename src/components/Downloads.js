@@ -363,7 +363,7 @@ export default class Downloads extends Component {
                     let fileName = this.createFileName();
                     this.downloadFile(result, fileName, "text/plain");
                 } catch (err) {
-                    console.log(err);
+                    console.error(err);
                 }
             } else if (dataFullStatus === true) {
                 if (JSON.stringify(this.state.dataFull) !== "[]") {
@@ -392,7 +392,7 @@ export default class Downloads extends Component {
                         let fileName = this.createFileName(true);
                         this.downloadFile(result, fileName, "text/plain");
                     } catch (err) {
-                        console.log(err);
+                        console.error(err);
                     }
                 }
             }
@@ -403,8 +403,6 @@ export default class Downloads extends Component {
     }
 
     insertToClipboard(str) {
-        console.log("Str = ", JSON.stringify(str));
-
         //based on https://stackoverflow.com/a/12693636
         document.oncopy = function (event) {
             event.clipboardData.setData("text/plain", str);
@@ -758,7 +756,7 @@ export default class Downloads extends Component {
                 );
             })
             .catch(error => {
-                console.log("HTTP Req:", error);
+                console.error("HTTP Req:", error);
                 this.setState(
                     {
                         dataFull: [],
