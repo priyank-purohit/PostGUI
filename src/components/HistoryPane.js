@@ -416,7 +416,7 @@ export default class HistoryPane extends Component {
 											</Tooltip>
 
 											{/* Nicely formatted history item */}
-											<div>
+											<>
 												<ListItemText primary={tableName} />
 												{rules.map(rule => {
 													let displayStr = "";
@@ -474,7 +474,7 @@ export default class HistoryPane extends Component {
 														/>
 													);
 												})}
-											</div>
+											</>
 										</ListItem>
 									);
 								} else {
@@ -504,13 +504,13 @@ export default class HistoryPane extends Component {
 												</ListItemIcon>
 											</Tooltip>
 
-											<div>
+											<>
 												<ListItemText primary={tableName} />
 												<ListItemText
 													secondary={"Get random rows..."}
 													key={index + tableName}
 												/>
-											</div>
+											</>
 										</ListItem>
 									);
 								}

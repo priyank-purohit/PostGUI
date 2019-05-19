@@ -957,7 +957,7 @@ export default class DbSchema extends Component {
 			searchTermTrucated += " ...";
 		}
 		return (
-			<div>
+			<>
 				{this.state.searchTerm !== "" ? (
 					<Chip
 						label={"Searching: " + searchTermTrucated}
@@ -1001,7 +1001,7 @@ export default class DbSchema extends Component {
 						})}
 					</List>
 				)}
-			</div>
+			</>
 		);
 	}
 }

@@ -285,7 +285,7 @@ export default class Layout extends React.Component {
     let publicDBStatus =
       lib.getDbConfig(this.state.dbIndex, "publicDbAcessType") || "read";
     return (
-      <div>
+      <>
         <Navigation
           {...this.state}
           changeSearchTerm={this.changeSearchTerm}
@@ -322,7 +322,7 @@ export default class Layout extends React.Component {
             publicDBStatus={publicDBStatus}
           />
         </div>
-      </div>
+      </>
     );
   }
 }

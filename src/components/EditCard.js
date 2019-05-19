@@ -285,7 +285,7 @@ export default class EditCard extends Component {
 
   render() {
     return (
-      <div>
+      <>
         <Paper elevation={2} style={styleSheet.topMargin}>
           <Typography
             variant="subheading"
@@ -308,7 +308,7 @@ export default class EditCard extends Component {
               />
             </FormGroup>
           ) : (
-            <div>
+            <>
               <List dense={false}>
                 <ListItem>
                   <ListItemAvatar>
@@ -319,11 +319,11 @@ export default class EditCard extends Component {
                   <ListItemText primary="This table cannot be edited because its primary keys were not found." />
                 </ListItem>
               </List>
-            </div>
+            </>
           )}
 
           {this.state.featureEnabled && this.state.primaryKeysAvailable ? (
-            <div>
+            <>
               <Typography
                 variant="body1"
                 style={styleSheet.cardcardMarginLeftTop}
@@ -332,9 +332,9 @@ export default class EditCard extends Component {
               </Typography>
 
               <List dense={true}>{this.createChangeLogList()}</List>
-            </div>
+            </>
           ) : JSON.stringify(this.state.changesMade) !== "{}" ? (
-            <div>
+            <>
               <List dense={false}>
                 <ListItem>
                   <ListItemAvatar>
@@ -345,7 +345,7 @@ export default class EditCard extends Component {
                   <ListItemText primary="Unsubmitted changes are detected, these changes will be lost if not submitted." />
                 </ListItem>
               </List>
-            </div>
+            </>
           ) : (
             <div />
           )}
@@ -411,7 +411,7 @@ export default class EditCard extends Component {
             </IconButton>
           ]}
         />
-      </div>
+      </>
     );
   }
 }

@@ -745,7 +745,7 @@ export default class DataTable extends Component {
 
     // render() return
     return (
-      <div>
+      <>
         {this.state.editFeatureEnabled ? (
           <CheckboxTable
             data={data}
@@ -830,7 +830,7 @@ export default class DataTable extends Component {
             </IconButton>
           ]}
         />
-      </div>
+      </>
     );
   }
 }

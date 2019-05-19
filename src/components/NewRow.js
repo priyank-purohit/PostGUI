@@ -184,7 +184,7 @@ class ResponsiveDialog extends React.Component {
     let tableDisplayName = tableRename ? tableRename : this.state.table;
 
     return (
-      <div>
+      <>
         <Dialog
           fullScreen={fullScreen}
           open={this.state.open}
@@ -272,7 +272,7 @@ class ResponsiveDialog extends React.Component {
             </Button>
           </DialogActions>
         </Dialog>
-      </div>
+      </>
     );
   }
 }
