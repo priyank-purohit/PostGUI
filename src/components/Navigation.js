@@ -111,7 +111,7 @@ export default class Navigation extends Component {
       .replace("database", "db");
 
     return (
-      <div style={styleSheet.root}>
+      <>
         <AppBar position="absolute">
           <Toolbar>
             <FeatureDiscoveryPrompt
@@ -243,15 +243,12 @@ export default class Navigation extends Component {
             handleHelpToggle={this.handleHelpToggle}
           />
         </AppBar>
-      </div>
+      </>
     );
   }
 }
 
 const styleSheet = {
-  root: {
-    width: "100%"
-  },
   dbTitleFlex: {
     flex: 0.3
   },

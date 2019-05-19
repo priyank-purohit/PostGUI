@@ -48,7 +48,7 @@ export default class DbPicker extends Component {
 
   render() {
     return (
-      <div style={styleSheet.root}>
+      <>
         <List>
           <ListItem
             button
@@ -79,13 +79,7 @@ export default class DbPicker extends Component {
             </MenuItem>
           ))}
         </Menu>
-      </div>
+      </>
     );
   }
 }
-
-const styleSheet = {
-  root: {
-    width: "99%"
-  }
-};
