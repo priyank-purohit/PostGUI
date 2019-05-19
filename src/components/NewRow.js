@@ -240,7 +240,7 @@ class ResponsiveDialog extends React.Component {
             >
               New Row
             </Typography>
-            <div style={styleSheet.cardMarginLeft}>
+            <>
               {this.state.qbFilters.map(column => {
                 return (
                   <TextField
@@ -261,7 +261,7 @@ class ResponsiveDialog extends React.Component {
                   />
                 );
               })}
-            </div>
+            </>
           </DialogContent>
           <Divider />
           <DialogActions>
