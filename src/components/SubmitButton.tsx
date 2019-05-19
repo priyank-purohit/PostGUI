@@ -22,16 +22,10 @@ export default class CircularFab extends Component<
   CircularFabProps,
   CircularFabState
 > {
-  timer = undefined;
-
   constructor(props: CircularFabProps) {
     super(props);
 
     this.handleButtonClick = this.handleButtonClick.bind(this);
-  }
-
-  componentWillUnmount() {
-    clearTimeout(this.timer);
   }
 
   handleButtonClick(event: any) {
