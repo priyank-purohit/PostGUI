@@ -8,7 +8,7 @@ import { INITIAL_ROW_LIMIT } from '../data/constants';
 import { ConfigDatabase } from '../data/models/configModels';
 import Auth from './Auth.js';
 import HistoryPane from './HistoryPane.js';
-import LeftPane from './LeftPane';
+import { LeftPane } from './LeftPane';
 import Navigation from './Navigation.js';
 import RightPane from './RightPane.js';
 

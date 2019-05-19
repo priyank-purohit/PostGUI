@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import Divider from '@material-ui/core/Divider';
 
@@ -20,21 +20,19 @@ interface LeftPaneProps {
 
 interface LeftPaneState {}
 
-export default class LeftPane extends Component<LeftPaneProps> {
-  render() {
-    let rootClasses =
-      this.props.leftPaneVisibility === true
-        ? styleSheet.root
-        : styleSheet.rootHide;
-    return (
-      <div style={{ ...rootClasses }}>
-        <DbPicker {...this.props} />
-        <Divider />
-        <DbSchema {...this.props} />
-      </div>
-    );
-  }
-}
+//export const AccountsList: React.SFC = () => {
+export const LeftPane: React.FunctionComponent<LeftPaneProps> = props => {
+  let rootClasses =
+    props.leftPaneVisibility === true ? styleSheet.root : styleSheet.rootHide;
+
+  return (
+    <div style={{ ...rootClasses }}>
+      <DbPicker {...props} />
+      <Divider />
+      <DbSchema {...props} />
+    </div>
+  );
+};
 
 const styleSheet: any = {
   root: {
