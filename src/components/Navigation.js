@@ -30,7 +30,7 @@ export default class Navigation extends Component {
     super(props);
     this.state = {
       isSearchBarFdpOpen: false,
-      isLoginFdpOpen: false,
+      isLoginFdpOpen: null,
       loginDialogOpen: false,
       isHelpOpen: false
     };
@@ -48,9 +48,11 @@ export default class Navigation extends Component {
         newProps.publicDBStatus === "read") &&
       !newProps.isLoggedIn
     ) {
-      this.setState({
-        isLoginFdpOpen: true
-      });
+      if (this.state.isLoginFdpOpen === null) {
+        this.setState({
+          isLoginFdpOpen: true
+        });
+      }
     }
   }
 
@@ -111,7 +113,7 @@ export default class Navigation extends Component {
       .replace("database", "db");
 
     return (
-      <div style={styleSheet.root}>
+      <>
         <AppBar position="absolute">
           <Toolbar>
             <FeatureDiscoveryPrompt
@@ -205,14 +207,15 @@ export default class Navigation extends Component {
                 this.setState({ isLoginFdpOpen: false });
               }}
               open={
-                !this.props.isLoggedIn &&
-                this.state.isLoginFdpOpen &&
-                !this.state.isSearchBarFdpOpen &&
-                !(
-                  !this.props.leftPaneVisibility &&
-                  this.props.table === "" &&
-                  !this.state.isSearchBarFdpOpen
-                )
+                (!this.props.isLoggedIn &&
+                  this.state.isLoginFdpOpen &&
+                  !this.state.isSearchBarFdpOpen &&
+                  !(
+                    !this.props.leftPaneVisibility &&
+                    this.props.table === "" &&
+                    !this.state.isSearchBarFdpOpen
+                  )) ||
+                false
               }
               backgroundColor={pink[500]}
               title={"Private Database"}
@@ -243,15 +246,12 @@ export default class Navigation extends Component {
             handleHelpToggle={this.handleHelpToggle}
           />
         </AppBar>
-      </div>
+      </>
     );
   }
 }
 
 const styleSheet = {
-  root: {
-    width: "100%"
-  },
   dbTitleFlex: {
     flex: 0.3
   },

@@ -184,7 +184,7 @@ class ResponsiveDialog extends React.Component {
     let tableDisplayName = tableRename ? tableRename : this.state.table;
 
     return (
-      <div>
+      <>
         <Dialog
           fullScreen={fullScreen}
           open={this.state.open}
@@ -240,7 +240,7 @@ class ResponsiveDialog extends React.Component {
             >
               New Row
             </Typography>
-            <div style={styleSheet.cardMarginLeft}>
+            <>
               {this.state.qbFilters.map(column => {
                 return (
                   <TextField
@@ -261,7 +261,7 @@ class ResponsiveDialog extends React.Component {
                   />
                 );
               })}
-            </div>
+            </>
           </DialogContent>
           <Divider />
           <DialogActions>
@@ -272,7 +272,7 @@ class ResponsiveDialog extends React.Component {
             </Button>
           </DialogActions>
         </Dialog>
-      </div>
+      </>
     );
   }
 }
