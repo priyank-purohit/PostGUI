@@ -13,8 +13,6 @@ import "../styles/index.css";
 let lib = require("../utils/library.js");
 let auth: Nullable<Auth> = null;
 
-type Nullable<T> = T | null;
-
 interface AppState {
   dbIndex: number;
   table: string;
