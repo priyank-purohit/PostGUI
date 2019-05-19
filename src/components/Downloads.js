@@ -1,28 +1,28 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+import React, { Component } from "react";
+import axios from "axios";
 
-import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControl from '@material-ui/core/FormControl';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import TextField from '@material-ui/core/TextField';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Snackbar from '@material-ui/core/Snackbar';
+import Button from "@material-ui/core/Button";
+import Paper from "@material-ui/core/Paper";
+import Typography from "@material-ui/core/Typography";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormControl from "@material-ui/core/FormControl";
+import FormGroup from "@material-ui/core/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import TextField from "@material-ui/core/TextField";
+import Divider from "@material-ui/core/Divider";
+import IconButton from "@material-ui/core/IconButton";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import Snackbar from "@material-ui/core/Snackbar";
 
-import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
-import CloseIcon from '@material-ui/icons/Close';
+import NavigateNextIcon from "@material-ui/icons/NavigateNext";
+import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
+import CloseIcon from "@material-ui/icons/Close";
 
 //import worker_script from './WebWorker';
 //var myWorker = new Worker(worker_script);
@@ -30,8 +30,8 @@ import CloseIcon from '@material-ui/icons/Close';
 const timeout = 2000;
 const maxRowsInDownload = 2500000;
 
-let lib = require('../utils/library.js');
-let json2csv = require('json2csv');
+let lib = require("../utils/library.js");
+let json2csv = require("json2csv");
 var js2xmlparser = require("js2xmlparser");
 
 export default class Downloads extends Component {
@@ -43,14 +43,14 @@ export default class Downloads extends Component {
             data: [],
             dataFull: [],
             url: props.url,
-            fileFormat: 'delimited',
-            delimiterChoice: ',',
+            fileFormat: "delimited",
+            delimiterChoice: ",",
             columnChosen: 0,
             tableHeader: true,
             batchDownloadCheckBox: false,
-            fileNameCustom: '',
+            fileNameCustom: "",
             reRunQuery: false,
-            fileNameAuto: '',
+            fileNameAuto: "",
             anchorEl: undefined,
             open: false,
             copyLoading: false,
@@ -59,13 +59,19 @@ export default class Downloads extends Component {
             batchDownloadLowerNum: 0,
             batchDownloadUpperNum: 100000,
             snackBarVisibility: false,
-            snackBarMessage: "Unknown error occured",
+            snackBarMessage: "Unknown error occured"
         };
 
         this.handleDelimiterChange = this.handleDelimiterChange.bind(this);
-        this.handlebatchDownloadCheckBox = this.handlebatchDownloadCheckBox.bind(this);
-        this.handleLeftButtonClickRangeDownload = this.handleLeftButtonClickRangeDownload.bind(this);
-        this.handleRightButtonClickRangeDownload = this.handleRightButtonClickRangeDownload.bind(this);
+        this.handlebatchDownloadCheckBox = this.handlebatchDownloadCheckBox.bind(
+            this
+        );
+        this.handleLeftButtonClickRangeDownload = this.handleLeftButtonClickRangeDownload.bind(
+            this
+        );
+        this.handleRightButtonClickRangeDownload = this.handleRightButtonClickRangeDownload.bind(
+            this
+        );
         this.handleTableHeaderToggle = this.handleTableHeaderToggle.bind(this);
         this.handleFileNameChange = this.handleFileNameChange.bind(this);
         this.handleCopyOutputClick = this.handleCopyOutputClick.bind(this);
@@ -75,21 +81,24 @@ export default class Downloads extends Component {
     }
 
     componentWillReceiveProps(newProps) {
-        this.setState({
-            table: newProps.table,
-            columns: newProps.columns,
-            url: newProps.url,
-            data: newProps.data,
-            fileNameCustom: '',
-            dataFull: [],
-            columnChosen: 0
-        }, () => {
-            this.createFileName();
-        });
+        this.setState(
+            {
+                table: newProps.table,
+                columns: newProps.columns,
+                url: newProps.url,
+                data: newProps.data,
+                fileNameCustom: "",
+                dataFull: [],
+                columnChosen: 0
+            },
+            () => {
+                this.createFileName();
+            }
+        );
     }
 
     downloadFile(data, fileName, mimeType) {
-        if (this.state.fileNameCustom === '') {
+        if (this.state.fileNameCustom === "") {
             window.download(data, fileName, mimeType);
         } else {
             window.download(data, this.state.fileNameCustom, mimeType);
@@ -98,29 +107,37 @@ export default class Downloads extends Component {
 
     createFileName(dataFullStatus = false) {
         // Parse out the delimiter
-        let delimiter = this.state.delimiterChoice.replace(/\\t/g, '\t'); // for tabs
+        let delimiter = this.state.delimiterChoice.replace(/\\t/g, "\t"); // for tabs
 
         // Create a good file name for the file so user knows what the data in the file is all about
         /* EXPLANATIONS FOR THE REGEXES
-        let fileName = this.state.url.replace(lib.getDbConfig(this.props.dbIndex, "url") + "/", "") // Get rid of the URL
-            .replace("?", "-") /////// The params q-mark can be replaced with dash
-            .replace(/&/g, '-') /////// All URL key-value separating ampersands can be replaced with dashes
-            .replace(/=/g, '-') /////// Get rid of the = in favour of the -
-            .replace(/\([^()]{15,}\)/g, "(vals)") /////// Replaces any single non-nested AND/OR conditions with (vals) if they're longer than 15 chars
-            .replace(/\(([^()]|\(vals\)){50,}\)/g,"(nested-vals)") /////// Replaces any AND/OR conds with a single (vals) if it's longer than 50 chars
-            .replace(/[.]([\w,"\s]{30,})[,]/g, "(in-vals)"); /////// Specifically targets the IN operator's comma separated vals .. replace if longer than 30 chars
-        */
+            let fileName = this.state.url.replace(lib.getDbConfig(this.props.dbIndex, "url") + "/", "") // Get rid of the URL
+                .replace("?", "-") /////// The params q-mark can be replaced with dash
+                .replace(/&/g, '-') /////// All URL key-value separating ampersands can be replaced with dashes
+                .replace(/=/g, '-') /////// Get rid of the = in favour of the -
+                .replace(/\([^()]{15,}\)/g, "(vals)") /////// Replaces any single non-nested AND/OR conditions with (vals) if they're longer than 15 chars
+                .replace(/\(([^()]|\(vals\)){50,}\)/g,"(nested-vals)") /////// Replaces any AND/OR conds with a single (vals) if it's longer than 50 chars
+                .replace(/[.]([\w,"\s]{30,})[,]/g, "(in-vals)"); /////// Specifically targets the IN operator's comma separated vals .. replace if longer than 30 chars
+            */
         let fileName = this.state.url
             .replace(lib.getDbConfig(this.props.dbIndex, "url") + "/", "")
             .replace("?", "-")
-            .replace(/&/g, '-')
-            .replace(/=/g, '-')
+            .replace(/&/g, "-")
+            .replace(/=/g, "-")
             .replace(/\([^()]{15,}\)/g, "(vals)")
             .replace(/\(([^()]|\(vals\)){50,}\)/g, "(nested-vals)")
             .replace(/[.]([\w,"\s]{30,})[,]/g, "(in-vals)");
 
         if (this.state.batchDownloadCheckBox === true || dataFullStatus === true) {
-            fileName = fileName.replace(/limit-\d*/g, "limit-" + maxRowsInDownload + "-range-" + this.state.batchDownloadLowerNum + "-" + this.state.batchDownloadUpperNum);
+            fileName = fileName.replace(
+                /limit-\d*/g,
+                "limit-" +
+                maxRowsInDownload +
+                "-range-" +
+                this.state.batchDownloadLowerNum +
+                "-" +
+                this.state.batchDownloadUpperNum
+            );
         }
 
         if (this.state.fileFormat === "delimited") {
@@ -133,7 +150,10 @@ export default class Downloads extends Component {
             }
 
             if (this.state.tableHeader === true) {
-                fileName = fileName.replace(".csv", "-header.csv").replace(".tsv", "-header.tsv").replace(".txt", "-header.txt");
+                fileName = fileName
+                    .replace(".csv", "-header.csv")
+                    .replace(".tsv", "-header.tsv")
+                    .replace(".txt", "-header.txt");
             }
         } else if (this.state.fileFormat === "xml") {
             fileName += ".xml";
@@ -156,8 +176,12 @@ export default class Downloads extends Component {
         if (dataFullStatus === false && JSON.stringify(this.state.data) !== "[]") {
             try {
                 // Parse out the delimiter
-                let delimiter = this.state.delimiterChoice.replace(/\\t/g, '\t'); // for tabs
-                let result = json2csv.parse(this.state.data, { fields: this.state.columns, delimiter: delimiter, header: this.state.tableHeader });
+                let delimiter = this.state.delimiterChoice.replace(/\\t/g, "\t"); // for tabs
+                let result = json2csv.parse(this.state.data, {
+                    fields: this.state.columns,
+                    delimiter: delimiter,
+                    header: this.state.tableHeader
+                });
                 let fileName = this.createFileName();
 
                 this.downloadFile(result, fileName, "text/plain");
@@ -168,8 +192,12 @@ export default class Downloads extends Component {
             if (JSON.stringify(this.state.dataFull) !== "[]") {
                 try {
                     // Parse out the delimiter
-                    let delimiter = this.state.delimiterChoice.replace(/\\t/g, '\t'); // for tabs
-                    let result = json2csv.parse(this.state.data, { fields: this.state.columns, delimiter: delimiter, header: this.state.tableHeader });
+                    let delimiter = this.state.delimiterChoice.replace(/\\t/g, "\t"); // for tabs
+                    let result = json2csv.parse(this.state.data, {
+                        fields: this.state.columns,
+                        delimiter: delimiter,
+                        header: this.state.tableHeader
+                    });
                     let fileName = this.createFileName(true);
 
                     this.downloadFile(result, fileName, "text/plain");
@@ -209,7 +237,7 @@ export default class Downloads extends Component {
             try {
                 let result = JSON.stringify(this.state.data);
                 this.setState({ copyResult: result });
-                let copySuccess = this.insertToClipboard(result)
+                let copySuccess = this.insertToClipboard(result);
                 if (copySuccess) {
                     this.setState({ copyLoading: false });
                 }
@@ -220,7 +248,7 @@ export default class Downloads extends Component {
             if (JSON.stringify(this.state.dataFull) !== "[]") {
                 try {
                     let result = JSON.stringify(this.state.dataFull);
-                    let copySuccess = this.insertToClipboard(result)
+                    let copySuccess = this.insertToClipboard(result);
                     if (copySuccess) {
                         this.setState({ copyLoading: false });
                     }
@@ -244,7 +272,10 @@ export default class Downloads extends Component {
         } else if (dataFullStatus === true) {
             if (JSON.stringify(this.state.dataFull) !== "[]") {
                 try {
-                    let result = js2xmlparser.parse(this.state.table, this.state.dataFull);
+                    let result = js2xmlparser.parse(
+                        this.state.table,
+                        this.state.dataFull
+                    );
                     let fileName = this.createFileName(true);
 
                     this.downloadFile(result, fileName, "text/plain");
@@ -259,7 +290,7 @@ export default class Downloads extends Component {
         if (dataFullStatus === false && JSON.stringify(this.state.data) !== "[]") {
             try {
                 let result = js2xmlparser.parse(this.state.table, this.state.data);
-                let copySuccess = this.insertToClipboard(result)
+                let copySuccess = this.insertToClipboard(result);
                 if (copySuccess) {
                     this.setState({ copyLoading: false });
                 }
@@ -269,8 +300,11 @@ export default class Downloads extends Component {
         } else if (dataFullStatus === true) {
             if (JSON.stringify(this.state.dataFull) !== "[]") {
                 try {
-                    let result = js2xmlparser.parse(this.state.table, this.state.dataFull);
-                    let copySuccess = this.insertToClipboard(result)
+                    let result = js2xmlparser.parse(
+                        this.state.table,
+                        this.state.dataFull
+                    );
+                    let copySuccess = this.insertToClipboard(result);
                     if (copySuccess) {
                         this.setState({ copyLoading: false });
                     }
@@ -283,7 +317,7 @@ export default class Downloads extends Component {
 
     identifySeqColumnInStateColumns() {
         let seqColumn = null;
-        let seqColumnNames = lib.getValueFromConfig('seq_column_names');
+        let seqColumnNames = lib.getValueFromConfig("seq_column_names");
         for (let i in this.state.columns) {
             let columnName = this.state.columns[i];
 
@@ -300,7 +334,10 @@ export default class Downloads extends Component {
 
         // proceed if a sequence column was found, proceed w/ the first found column....
         if (seqColumn !== null) {
-            if (dataFullStatus === false && JSON.stringify(this.state.data) !== "[]") {
+            if (
+                dataFullStatus === false &&
+                JSON.stringify(this.state.data) !== "[]"
+            ) {
                 // TO DO: DETECT Protein or nucleotide tables automatically by name
                 try {
                     let result = "";
@@ -326,7 +363,7 @@ export default class Downloads extends Component {
                     let fileName = this.createFileName();
                     this.downloadFile(result, fileName, "text/plain");
                 } catch (err) {
-                    console.log(err);
+                    console.error(err);
                 }
             } else if (dataFullStatus === true) {
                 if (JSON.stringify(this.state.dataFull) !== "[]") {
@@ -355,7 +392,7 @@ export default class Downloads extends Component {
                         let fileName = this.createFileName(true);
                         this.downloadFile(result, fileName, "text/plain");
                     } catch (err) {
-                        console.log(err);
+                        console.error(err);
                     }
                 }
             }
@@ -366,8 +403,6 @@ export default class Downloads extends Component {
     }
 
     insertToClipboard(str) {
-        console.log("Str = ", JSON.stringify(str));
-
         //based on https://stackoverflow.com/a/12693636
         document.oncopy = function (event) {
             event.clipboardData.setData("text/plain", str);
@@ -379,70 +414,115 @@ export default class Downloads extends Component {
     }
 
     handleFileFormatChange = (event, fileFormat) => {
-        if (event.target.id !== 'delimiterInput') {
+        if (event.target.id !== "delimiterInput") {
             this.setState({ fileFormat: fileFormat }, () => {
                 this.createFileName();
-                this.setState({ fileNameCustom: '' });
+                this.setState({ fileNameCustom: "" });
             });
         }
     };
 
     handleTableHeaderToggle() {
-        this.setState({
-            tableHeader: !this.state.tableHeader
-        }, () => {
-            this.createFileName();
-        });
+        this.setState(
+            {
+                tableHeader: !this.state.tableHeader
+            },
+            () => {
+                this.createFileName();
+            }
+        );
     }
 
     handlebatchDownloadCheckBox() {
-        this.setState({
-            batchDownloadCheckBox: !this.state.batchDownloadCheckBox
-        }, () => {
-            this.createFileName();
-        });
+        this.setState(
+            {
+                batchDownloadCheckBox: !this.state.batchDownloadCheckBox
+            },
+            () => {
+                this.createFileName();
+            }
+        );
     }
 
     handlebatchDownloadChange(e) {
-        this.setState({
-            batchSize: e,
-            batchDownloadLowerNum: 0,
-            batchDownloadUpperNum: parseInt(e.replace("K", ""), 10) * 1000
-        }, () => { this.createFileName(true) });
+        this.setState(
+            {
+                batchSize: e,
+                batchDownloadLowerNum: 0,
+                batchDownloadUpperNum: parseInt(e.replace("K", ""), 10) * 1000
+            },
+            () => {
+                this.createFileName(true);
+            }
+        );
     }
 
     handleLeftButtonClickRangeDownload() {
         let range = parseInt(this.state.batchSize.replace("K", ""), 10) * 1000;
         if (this.state.batchDownloadLowerNum - range > this.props.totalRows) {
-            this.setState({
-                batchDownloadLowerNum: Math.trunc(this.props.totalRows / range) * range,
-                batchDownloadUpperNum: this.props.totalRows
-            }, () => { this.createFileName(true) });
-        } else if (this.state.batchDownloadLowerNum > 0 && this.state.batchDownloadLowerNum - range >= 0) {
-            this.setState({
-                batchDownloadLowerNum: this.state.batchDownloadLowerNum - range,
-                batchDownloadUpperNum: this.state.batchDownloadLowerNum
-            }, () => { this.createFileName(true) });
+            this.setState(
+                {
+                    batchDownloadLowerNum:
+                        Math.trunc(this.props.totalRows / range) * range,
+                    batchDownloadUpperNum: this.props.totalRows
+                },
+                () => {
+                    this.createFileName(true);
+                }
+            );
+        } else if (
+            this.state.batchDownloadLowerNum > 0 &&
+            this.state.batchDownloadLowerNum - range >= 0
+        ) {
+            this.setState(
+                {
+                    batchDownloadLowerNum: this.state.batchDownloadLowerNum - range,
+                    batchDownloadUpperNum: this.state.batchDownloadLowerNum
+                },
+                () => {
+                    this.createFileName(true);
+                }
+            );
         } else {
-            this.setState({
-                batchDownloadLowerNum: 0,
-                batchDownloadUpperNum: range
-            }, () => { this.createFileName(true) });
+            this.setState(
+                {
+                    batchDownloadLowerNum: 0,
+                    batchDownloadUpperNum: range
+                },
+                () => {
+                    this.createFileName(true);
+                }
+            );
         }
     }
 
     handleRightButtonClickRangeDownload() {
         let range = parseInt(this.state.batchSize.replace("K", ""), 10) * 1000;
-        if (this.props.totalRows && this.state.batchDownloadLowerNum + range + range > this.props.totalRows) {
-            this.setState({
-                batchDownloadLowerNum: Math.trunc(this.props.totalRows / range) * range,
-                batchDownloadUpperNum: this.props.totalRows
-            }, () => { this.createFileName(true) });
+        if (
+            this.props.totalRows &&
+            this.state.batchDownloadLowerNum + range + range > this.props.totalRows
+        ) {
+            this.setState(
+                {
+                    batchDownloadLowerNum:
+                        Math.trunc(this.props.totalRows / range) * range,
+                    batchDownloadUpperNum: this.props.totalRows
+                },
+                () => {
+                    this.createFileName(true);
+                }
+            );
         } else {
-            this.setState({
-                batchDownloadLowerNum: this.state.batchDownloadLowerNum + range,
-                batchDownloadUpperNum: this.state.batchDownloadLowerNum + range + range
-            }, () => { this.createFileName(true) });
+            this.setState(
+                {
+                    batchDownloadLowerNum: this.state.batchDownloadLowerNum + range,
+                    batchDownloadUpperNum:
+                        this.state.batchDownloadLowerNum + range + range
+                },
+                () => {
+                    this.createFileName(true);
+                }
+            );
         }
     }
 
@@ -450,14 +530,14 @@ export default class Downloads extends Component {
         let newValue = event.target.value;
 
         if (newValue.length === 0) {
-            this.setState({ delimiterChoice: ',' }, () => {
+            this.setState({ delimiterChoice: "," }, () => {
                 this.createFileName();
-                this.setState({ fileNameCustom: '' });
+                this.setState({ fileNameCustom: "" });
             });
         } else if (newValue.length <= 5) {
             this.setState({ delimiterChoice: newValue }, () => {
                 this.createFileName();
-                this.setState({ fileNameCustom: '' });
+                this.setState({ fileNameCustom: "" });
             });
         }
     }
@@ -468,27 +548,38 @@ export default class Downloads extends Component {
     }
 
     handleResetClick() {
-        this.setState({
-            fileFormat: 'delimited',
-            delimiterChoice: ',',
-            columnChosen: 0,
-            tableHeader: true,
-            batchDownloadCheckBox: false,
-            fileNameCustom: '',
-            copyLoading: false,
-            copyResult: "",
-            batchSize: "100K",
-            batchDownloadLowerNum: 0,
-            batchDownloadUpperNum: 100000
-        }, () => {
-            this.createFileName();
-        });
+        this.setState(
+            {
+                fileFormat: "delimited",
+                delimiterChoice: ",",
+                columnChosen: 0,
+                tableHeader: true,
+                batchDownloadCheckBox: false,
+                fileNameCustom: "",
+                copyLoading: false,
+                copyResult: "",
+                batchSize: "100K",
+                batchDownloadLowerNum: 0,
+                batchDownloadUpperNum: 100000
+            },
+            () => {
+                this.createFileName();
+            }
+        );
     }
 
     handleCopyClick() {
         this.setState({ copyLoading: true }, () => {
-            if (this.state.batchDownloadCheckBox === true && this.state.fileFormat !== 'delimitedColumn' && 1 === 0) { // DISABLED FOR NOW
-                let dataFullURL = this.state.url.replace(/limit=\d*/g, "limit=" + maxRowsInDownload);
+            if (
+                this.state.batchDownloadCheckBox === true &&
+                this.state.fileFormat !== "delimitedColumn" &&
+                1 === 0
+            ) {
+                // DISABLED FOR NOW
+                let dataFullURL = this.state.url.replace(
+                    /limit=\d*/g,
+                    "limit=" + maxRowsInDownload
+                );
                 this.fetchOutput(dataFullURL);
             } else {
                 if (this.state.fileFormat === "delimited") {
@@ -496,11 +587,11 @@ export default class Downloads extends Component {
                 } else if (this.state.fileFormat === "delimitedColumn") {
                     // With threads
                     /*
-                    myWorker.postMessage({ method: 'delimitedColumn', column: this.state.columnChosen, data: this.state.data, columns: this.state.columns });
-                    myWorker.onmessage = (m) => {
-                        this.setState({ copyLoading: false, copyResult: m.data });
-                    };
-                    */
+                              myWorker.postMessage({ method: 'delimitedColumn', column: this.state.columnChosen, data: this.state.data, columns: this.state.columns });
+                              myWorker.onmessage = (m) => {
+                                  this.setState({ copyLoading: false, copyResult: m.data });
+                              };
+                              */
 
                     // Without threads
                     let column = this.state.columnChosen;
@@ -511,7 +602,7 @@ export default class Downloads extends Component {
                     for (let i = 0; i < data.length; i++) {
                         let valueToCopy = data[i][columns[column]];
                         if (String(valueToCopy) && String(valueToCopy).match(/[\W|\s]/g)) {
-                            output += "\"" + valueToCopy + "\",";
+                            output += '"' + valueToCopy + '",';
                         } else {
                             output += valueToCopy + ",";
                         }
@@ -521,18 +612,21 @@ export default class Downloads extends Component {
 
                     let result = this.insertToClipboard(output);
 
-                    this.setState({
-                        copyLoading: false,
-                        snackBarVisibility: true,
-                        snackBarMessage: result ? "Copied!" : "Error copying data ...",
-                    }, () => {
-                        this.timer = setTimeout(() => {
-                            this.setState({
-                                snackBarVisibility: false,
-                                snackBarMessage: "Unknown error"
-                            });
-                        }, 2500);
-                    });
+                    this.setState(
+                        {
+                            copyLoading: false,
+                            snackBarVisibility: true,
+                            snackBarMessage: result ? "Copied!" : "Error copying data ..."
+                        },
+                        () => {
+                            this.timer = setTimeout(() => {
+                                this.setState({
+                                    snackBarVisibility: false,
+                                    snackBarMessage: "Unknown error"
+                                });
+                            }, 2500);
+                        }
+                    );
                 } else if (this.state.fileFormat === "json") {
                     this.copyTableAsJSON();
                     // myWorker.postMessage({method: 'json', data: this.state.data});
@@ -566,37 +660,43 @@ export default class Downloads extends Component {
     handleDownloadClick() {
         this.createFileName();
 
-        this.setState({
-            submitLoading: true,
-            submitSuccess: false,
-            submitError: false,
-            dataFull: []
-        }, () => {
-            if (this.state.batchDownloadCheckBox === true) {
-                let dataFullURL = this.state.url.replace(/limit=\d*/g, "limit=" + maxRowsInDownload);
-                this.fetchOutput(dataFullURL);
-            } else {
-                if (this.state.fileFormat === "delimited") {
-                    this.downloadTableWithDelimiter();
-                } else if (this.state.fileFormat === "json") {
-                    this.downloadTableAsJSON();
-                } else if (this.state.fileFormat === "xml") {
-                    this.downloadTableAsXML();
-                } else if (this.state.fileFormat === "fasta") {
-                    this.downloadTableAsFASTA();
-                }
+        this.setState(
+            {
+                submitLoading: true,
+                submitSuccess: false,
+                submitError: false,
+                dataFull: []
+            },
+            () => {
+                if (this.state.batchDownloadCheckBox === true) {
+                    let dataFullURL = this.state.url.replace(
+                        /limit=\d*/g,
+                        "limit=" + maxRowsInDownload
+                    );
+                    this.fetchOutput(dataFullURL);
+                } else {
+                    if (this.state.fileFormat === "delimited") {
+                        this.downloadTableWithDelimiter();
+                    } else if (this.state.fileFormat === "json") {
+                        this.downloadTableAsJSON();
+                    } else if (this.state.fileFormat === "xml") {
+                        this.downloadTableAsXML();
+                    } else if (this.state.fileFormat === "fasta") {
+                        this.downloadTableAsFASTA();
+                    }
 
-                this.setState({
-                    submitSuccess: true,
-                    submitError: false,
-                    submitLoading: false,
-                    dataFull: []
-                });
+                    this.setState({
+                        submitSuccess: true,
+                        submitError: false,
+                        submitLoading: false,
+                        dataFull: []
+                    });
+                }
             }
-        });
+        );
     }
 
-    handleClickListItem = (event) => {
+    handleClickListItem = event => {
         this.setState({ open: true, anchorEl: event.currentTarget });
     };
 
@@ -611,160 +711,339 @@ export default class Downloads extends Component {
     fetchOutput(url) {
         let preparedHeaders = {};
         if (this.state.batchDownloadCheckBox === true) {
-            preparedHeaders = { 'Range': String(this.state.batchDownloadLowerNum) + '-' + String(this.state.batchDownloadUpperNum - 1), 'Accept': 'application/json', 'Prefer': 'count=exact' };
+            preparedHeaders = {
+                Range:
+                    String(this.state.batchDownloadLowerNum) +
+                    "-" +
+                    String(this.state.batchDownloadUpperNum - 1),
+                Accept: "application/json",
+                Prefer: "count=exact"
+            };
         }
 
         if (this.props.isLoggedIn && this.props.token) {
-            preparedHeaders['Authorization'] = "Bearer " + this.props.token;
+            preparedHeaders["Authorization"] = "Bearer " + this.props.token;
         }
 
-        axios.get(url, { headers: preparedHeaders, requestId: "qbAxiosReq" })
-            .then((response) => {
-                this.setState({
-                    dataFull: response.data,
-                    submitLoading: false,
-                    submitError: false,
-                    submitSuccess: true
-                }, () => {
-                    this.timer = setTimeout(() => {
-                        this.setState({
-                            submitLoading: false,
-                            submitSuccess: false,
-                            submitError: false
-                        })
-                    }, timeout);
-                    if (this.state.fileFormat === "delimited") {
-                        this.downloadTableWithDelimiter(true);
-                    } else if (this.state.fileFormat === "json") {
-                        this.downloadTableAsJSON(true);
-                    } else if (this.state.fileFormat === "xml") {
-                        this.downloadTableAsXML(true);
-                    } else if (this.state.fileFormat === "fasta") {
-                        this.downloadTableAsFASTA(true);
+        axios
+            .get(url, { headers: preparedHeaders, requestId: "qbAxiosReq" })
+            .then(response => {
+                this.setState(
+                    {
+                        dataFull: response.data,
+                        submitLoading: false,
+                        submitError: false,
+                        submitSuccess: true
+                    },
+                    () => {
+                        this.timer = setTimeout(() => {
+                            this.setState({
+                                submitLoading: false,
+                                submitSuccess: false,
+                                submitError: false
+                            });
+                        }, timeout);
+                        if (this.state.fileFormat === "delimited") {
+                            this.downloadTableWithDelimiter(true);
+                        } else if (this.state.fileFormat === "json") {
+                            this.downloadTableAsJSON(true);
+                        } else if (this.state.fileFormat === "xml") {
+                            this.downloadTableAsXML(true);
+                        } else if (this.state.fileFormat === "fasta") {
+                            this.downloadTableAsFASTA(true);
+                        }
                     }
-                });
+                );
             })
-            .catch((error) => {
-                console.log("HTTP Req:", error);
-                this.setState({
-                    dataFull: [],
-                    submitLoading: false,
-                    submitSuccess: true,
-                    submitError: true // both true implies request successfully reported an error
-                }, () => {
-                    this.timer = setTimeout(() => {
-                        this.setState({
-                            submitLoading: false,
-                            submitSuccess: false,
-                            submitError: false
-                        })
-                    }, timeout);
-                });
+            .catch(error => {
+                console.error("HTTP Req:", error);
+                this.setState(
+                    {
+                        dataFull: [],
+                        submitLoading: false,
+                        submitSuccess: true,
+                        submitError: true // both true implies request successfully reported an error
+                    },
+                    () => {
+                        this.timer = setTimeout(() => {
+                            this.setState({
+                                submitLoading: false,
+                                submitSuccess: false,
+                                submitError: false
+                            });
+                        }, timeout);
+                    }
+                );
             });
     }
 
     render() {
-        return (<div>
-            <Paper elevation={2} style={styleSheet.topMargin}>
-                <Typography variant="subheading" style={styleSheet.cardcardMarginLeftTop}>Download Query Results</Typography>
+        return (
+            <div>
+                <Paper elevation={2} style={styleSheet.topMargin}>
+                    <Typography
+                        variant="subheading"
+                        style={styleSheet.cardcardMarginLeftTop}
+                    >
+                        Download Query Results
+          </Typography>
 
-                {/* FILE FORMAT RADIO GROUP */}
-                <Typography variant="body1" style={styleSheet.cardcardMarginLeftTop}>File Format</Typography>
-                <FormControl component="fieldset" required>
-                    <RadioGroup onChange={this.handleFileFormatChange} value={this.state.fileFormat} style={styleSheet.cardcardMarginLeftTop} >
-                        <FormControlLabel label="Delimited file (spreadsheet)" value="delimited" control={<Radio />} />
-                        {
-                            this.state.fileFormat === 'delimited' && (
+                    {/* FILE FORMAT RADIO GROUP */}
+                    <Typography variant="body1" style={styleSheet.cardcardMarginLeftTop}>
+                        File Format
+          </Typography>
+                    <FormControl component="fieldset" required>
+                        <RadioGroup
+                            onChange={this.handleFileFormatChange}
+                            value={this.state.fileFormat}
+                            style={styleSheet.cardcardMarginLeftTop}
+                        >
+                            <FormControlLabel
+                                label="Delimited file (spreadsheet)"
+                                value="delimited"
+                                control={<Radio />}
+                            />
+                            {this.state.fileFormat === "delimited" && (
                                 <TextField
                                     required
                                     onChange={this.handleDelimiterChange}
                                     label={"Use , or \\t delimiter for sheet"}
                                     value={this.state.delimiterChoice}
-                                    disabled={this.state.fileFormat !== 'delimited' ? true : false}
-                                    style={styleSheet.textField && styleSheet.cardMarginLeft && styleSheet.inlineTextField}
+                                    disabled={
+                                        this.state.fileFormat !== "delimited" ? true : false
+                                    }
+                                    style={
+                                        styleSheet.textField &&
+                                        styleSheet.cardMarginLeft &&
+                                        styleSheet.inlineTextField
+                                    }
                                     id="delimiterInput"
                                     type="text"
                                     margin="none"
-                                    fullWidth={true} />
-                            )
-                        }
-                        <FormControlLabel label="JSON File" value="json" control={<Radio />} />
-                        <FormControlLabel label="XML File" value="xml" control={<Radio />} />
-                        <FormControlLabel label="FASTA File" value="fasta" control={<Radio />} style={this.identifySeqColumnInStateColumns() === null ? styleSheet.hidden : null} />
+                                    fullWidth={true}
+                                />
+                            )}
+                            <FormControlLabel
+                                label="JSON File"
+                                value="json"
+                                control={<Radio />}
+                            />
+                            <FormControlLabel
+                                label="XML File"
+                                value="xml"
+                                control={<Radio />}
+                            />
+                            <FormControlLabel
+                                label="FASTA File"
+                                value="fasta"
+                                control={<Radio />}
+                                style={
+                                    this.identifySeqColumnInStateColumns() === null
+                                        ? styleSheet.hidden
+                                        : null
+                                }
+                            />
 
-                        {this.state.fileFormat === 'fasta' && <Typography style={styleSheet.inlineTextField}>Note: FASTA header is composed from visible columns</Typography>}
+                            {this.state.fileFormat === "fasta" && (
+                                <Typography style={styleSheet.inlineTextField}>
+                                    Note: FASTA header is composed from visible columns
+                </Typography>
+                            )}
 
-                        <FormControlLabel label="Copy single column values" value="delimitedColumn" control={<Radio />} />
-                        {/* The options are loaded below in the <span>. This was needed because RadioGroup/FormControl does not work with a Span child element...*/}
-
-                    </RadioGroup>
-                </FormControl>
-                {
-                    this.state.fileFormat === 'delimitedColumn' &&
-                    (<span>
-                        <List style={styleSheet.inlineTextFieldSpan}>
-                            <ListItem button onClick={this.handleClickListItem} aria-haspopup="true" aria-controls="columnMenu" aria-label="Choose column" >
-                                <ListItemText primary="Choose a column" secondary={this.state.columns[this.state.columnChosen]} />
-                            </ListItem>
-                        </List>
-                        <Menu open={this.state.open} onClose={this.handleRequestClose} id="columnMenu" anchorEl={this.state.anchorEl} >
-                            {
-                                this.state.columns.map((option, index) =>
-                                    <MenuItem selected={index === this.state.columnChosen} onClick={event => this.handleMenuItemClick(event, index)} key={option} >
+                            <FormControlLabel
+                                label="Copy single column values"
+                                value="delimitedColumn"
+                                control={<Radio />}
+                            />
+                            {/* The options are loaded below in the <span>. This was needed because RadioGroup/FormControl does not work with a Span child element...*/}
+                        </RadioGroup>
+                    </FormControl>
+                    {this.state.fileFormat === "delimitedColumn" && (
+                        <span>
+                            <List style={styleSheet.inlineTextFieldSpan}>
+                                <ListItem
+                                    button
+                                    onClick={this.handleClickListItem}
+                                    aria-haspopup="true"
+                                    aria-controls="columnMenu"
+                                    aria-label="Choose column"
+                                >
+                                    <ListItemText
+                                        primary="Choose a column"
+                                        secondary={this.state.columns[this.state.columnChosen]}
+                                    />
+                                </ListItem>
+                            </List>
+                            <Menu
+                                open={this.state.open}
+                                onClose={this.handleRequestClose}
+                                id="columnMenu"
+                                anchorEl={this.state.anchorEl}
+                            >
+                                {this.state.columns.map((option, index) => (
+                                    <MenuItem
+                                        selected={index === this.state.columnChosen}
+                                        onClick={event => this.handleMenuItemClick(event, index)}
+                                        key={option}
+                                    >
                                         {option}
                                     </MenuItem>
-                                )
+                                ))}
+                            </Menu>
+                        </span>
+                    )}
+
+                    {/* ADDITIONAL DOWNLOADS OPTIONS */}
+                    <Typography variant="body1" style={styleSheet.cardcardMarginLeftTop}>
+                        Options
+          </Typography>
+                    <FormGroup style={styleSheet.cardcardMarginLeftTop}>
+                        <FormControlLabel
+                            label={"Batch download"}
+                            control={
+                                <Checkbox
+                                    onChange={this.handlebatchDownloadCheckBox}
+                                    value="batchDownloadCheckBox"
+                                />
                             }
-                        </Menu>
-                    </span>)
-                }
+                            disabled={
+                                this.state.fileFormat === "delimitedColumn" ? true : false
+                            }
+                            checked={this.state.batchDownloadCheckBox}
+                        />
+                        <span
+                            style={
+                                this.state.batchDownloadCheckBox !== true ||
+                                    this.state.fileFormat === "delimitedColumn"
+                                    ? styleSheet.hidden
+                                    : styleSheet.inlineTextField1
+                            }
+                        >
+                            <div
+                                style={
+                                    isNaN(this.props.totalRows) === false &&
+                                        this.props.totalRows >= 0
+                                        ? styleSheet.hidden
+                                        : null
+                                }
+                            >
+                                <Typography variant="body2" style={styleSheet.inlineTextField1}>
+                                    Re-run query with "Get exact row count" option selected
+                </Typography>
+                            </div>
+                            <div>
+                                <Button
+                                    onClick={this.handlebatchDownloadChange.bind(this, "10K")}
+                                    color={this.state.batchSize === "10K" ? "primary" : "inherit"}
+                                    style={styleSheet.button}
+                                >
+                                    10K
+                </Button>
+                                <Button
+                                    onClick={this.handlebatchDownloadChange.bind(this, "25K")}
+                                    color={this.state.batchSize === "25K" ? "primary" : "inherit"}
+                                    style={styleSheet.button}
+                                >
+                                    25K
+                </Button>
+                                <Button
+                                    onClick={this.handlebatchDownloadChange.bind(this, "100K")}
+                                    color={
+                                        this.state.batchSize === "100K" ? "primary" : "inherit"
+                                    }
+                                    style={styleSheet.button}
+                                >
+                                    100K
+                </Button>
+                                <Button
+                                    onClick={this.handlebatchDownloadChange.bind(this, "250K")}
+                                    color={
+                                        this.state.batchSize === "250K" ? "primary" : "inherit"
+                                    }
+                                    style={styleSheet.button}
+                                >
+                                    250K
+                </Button>
+                            </div>
+                            <div style={styleSheet.inlineTextField}>
+                                <Typography variant="body1" style={styleSheet.inlineTextField}>
+                                    {String(this.state.batchDownloadLowerNum).replace(
+                                        /\B(?=(\d{3})+(?!\d))/g,
+                                        ","
+                                    )}{" "}
+                                    to{" "}
+                                    {String(this.state.batchDownloadUpperNum).replace(
+                                        /\B(?=(\d{3})+(?!\d))/g,
+                                        ","
+                                    )}{" "}
+                                    of{" "}
+                                    {String(this.props.totalRows)
+                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                        .replace("NaN", "unknown")}{" "}
+                                    rows
+                </Typography>
+                            </div>
+                            <div style={styleSheet.inlineTextField3}>
+                                <IconButton
+                                    onClick={this.handleLeftButtonClickRangeDownload}
+                                    color="primary"
+                                    style={styleSheet.button}
+                                    aria-label="COPY"
+                                >
+                                    <NavigateBeforeIcon />
+                                </IconButton>
+                                <IconButton
+                                    onClick={this.handleRightButtonClickRangeDownload}
+                                    color="primary"
+                                    style={styleSheet.button}
+                                    aria-label="COPY"
+                                >
+                                    <NavigateNextIcon />
+                                </IconButton>
+                            </div>
+                        </span>
 
-                {/* ADDITIONAL DOWNLOADS OPTIONS */}
-                <Typography variant="body1" style={styleSheet.cardcardMarginLeftTop}>Options</Typography>
-                <FormGroup style={styleSheet.cardcardMarginLeftTop}>
-                    <FormControlLabel label={"Batch download"} control={<Checkbox onChange={this.handlebatchDownloadCheckBox} value="batchDownloadCheckBox" />} disabled={this.state.fileFormat === 'delimitedColumn' ? true : false} checked={this.state.batchDownloadCheckBox} />
-                    <span style={this.state.batchDownloadCheckBox !== true || this.state.fileFormat === 'delimitedColumn' ? styleSheet.hidden : styleSheet.inlineTextField1}>
-                        <div style={isNaN(this.props.totalRows) === false && this.props.totalRows >= 0 ? styleSheet.hidden : null} >
-                            <Typography variant="body2" style={styleSheet.inlineTextField1}>Re-run query with "Get exact row count" option selected</Typography>
-                        </div>
-                        <div>
-                            <Button onClick={this.handlebatchDownloadChange.bind(this, "10K")} color={this.state.batchSize === "10K" ? 'primary' : 'inherit'} style={styleSheet.button} >10K</Button>
-                            <Button onClick={this.handlebatchDownloadChange.bind(this, "25K")} color={this.state.batchSize === "25K" ? 'primary' : 'inherit'} style={styleSheet.button} >25K</Button>
-                            <Button onClick={this.handlebatchDownloadChange.bind(this, "100K")} color={this.state.batchSize === "100K" ? 'primary' : 'inherit'} style={styleSheet.button} >100K</Button>
-                            <Button onClick={this.handlebatchDownloadChange.bind(this, "250K")} color={this.state.batchSize === "250K" ? 'primary' : 'inherit'} style={styleSheet.button} >250K</Button>
-                        </div>
-                        <div style={styleSheet.inlineTextField}>
-                            <Typography variant="body1" style={styleSheet.inlineTextField}>{String(this.state.batchDownloadLowerNum).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} to {String(this.state.batchDownloadUpperNum).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} of {String(this.props.totalRows).replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace("NaN", "unknown")} rows</Typography>
-                        </div>
-                        <div style={styleSheet.inlineTextField3}>
-                            <IconButton onClick={this.handleLeftButtonClickRangeDownload} color="primary" style={styleSheet.button} aria-label="COPY">
-                                <NavigateBeforeIcon />
-                            </IconButton>
-                            <IconButton onClick={this.handleRightButtonClickRangeDownload} color="primary" style={styleSheet.button} aria-label="COPY">
-                                <NavigateNextIcon />
-                            </IconButton>
-                        </div>
-                    </span>
+                        <FormControlLabel
+                            label={"Include table headers"}
+                            control={
+                                <Checkbox
+                                    onChange={this.handleTableHeaderToggle}
+                                    disabled={
+                                        this.state.fileFormat !== "delimited" ? true : false
+                                    }
+                                    value="tableHeader"
+                                />
+                            }
+                            checked={this.state.tableHeader}
+                        />
+                    </FormGroup>
 
-                    <FormControlLabel label={"Include table headers"} control={<Checkbox onChange={this.handleTableHeaderToggle} disabled={this.state.fileFormat !== 'delimited' ? true : false} value="tableHeader" />} checked={this.state.tableHeader} />
-                </FormGroup>
+                    {/* FILE NAME INPUT */}
+                    <FormGroup
+                        style={
+                            styleSheet.cardcardMarginLeftTop &&
+                            styleSheet.cardcardMarginBottomRight
+                        }
+                    >
+                        <TextField
+                            required
+                            disabled={this.state.fileFormat === "delimitedColumn"}
+                            id="fileNameInput"
+                            type="text"
+                            label="File name"
+                            onChange={this.handleFileNameChange}
+                            value={
+                                this.state.fileNameCustom === ""
+                                    ? this.state.fileNameAuto
+                                    : this.state.fileNameCustom
+                            }
+                            style={styleSheet.textField && styleSheet.cardMarginLeft}
+                            margin="normal"
+                        />
+                    </FormGroup>
 
-                {/* FILE NAME INPUT */}
-                <FormGroup style={styleSheet.cardcardMarginLeftTop && styleSheet.cardcardMarginBottomRight}>
-                    <TextField
-                        required
-                        disabled={this.state.fileFormat === 'delimitedColumn'}
-                        id="fileNameInput"
-                        type="text"
-                        label="File name"
-                        onChange={this.handleFileNameChange}
-                        value={this.state.fileNameCustom === '' ? this.state.fileNameAuto : this.state.fileNameCustom}
-                        style={styleSheet.textField && styleSheet.cardMarginLeft}
-                        margin="normal" />
-                </FormGroup>
-
-                {/* COPY FEATURE OUTPUT BOX + 2ND BUTTON */}
-                {/*<div style={styleSheet.cardcardMarginLeftTop && styleSheet.cardcardMarginBottomRight}>
+                    {/* COPY FEATURE OUTPUT BOX + 2ND BUTTON */}
+                    {/*<div style={styleSheet.cardcardMarginLeftTop && styleSheet.cardcardMarginBottomRight}>
                     <TextField
                         id="copyOutput"
                         type="text"
@@ -778,22 +1057,66 @@ export default class Downloads extends Component {
                     </IconButton>
                 </div>*/}
 
-                {this.state.copyLoading || this.state.submitLoading ? <img src={require('../resources/progress.gif')} width="100%" alt="Progress indicator" /> : <Divider />}
+                    {this.state.copyLoading || this.state.submitLoading ? (
+                        <img
+                            src={require("../resources/progress.gif")}
+                            width="100%"
+                            alt="Progress indicator"
+                        />
+                    ) : (
+                            <Divider />
+                        )}
 
-                <Button color="primary" style={styleSheet.button} onClick={this.handleDownloadClick} disabled={this.state.fileFormat === 'delimitedColumn'} >Download</Button>
-                <Button color="primary" disabled={this.state.fileFormat !== 'delimitedColumn' && this.state.fileFormat !== 'json' && this.state.fileFormat !== 'xml'} style={styleSheet.button} onClick={this.handleCopyClick} >Copy</Button>
-                <Button style={styleSheet.button && styleSheet.floatRight} onClick={this.handleResetClick} >Reset</Button>
-                {/* <Button style={styleSheet.button}>Help</Button> */}
-            </Paper>
+                    <Button
+                        color="primary"
+                        style={styleSheet.button}
+                        onClick={this.handleDownloadClick}
+                        disabled={this.state.fileFormat === "delimitedColumn"}
+                    >
+                        Download
+          </Button>
+                    <Button
+                        color="primary"
+                        disabled={
+                            this.state.fileFormat !== "delimitedColumn" &&
+                            this.state.fileFormat !== "json" &&
+                            this.state.fileFormat !== "xml"
+                        }
+                        style={styleSheet.button}
+                        onClick={this.handleCopyClick}
+                    >
+                        Copy
+          </Button>
+                    <Button
+                        style={styleSheet.button && styleSheet.floatRight}
+                        onClick={this.handleResetClick}
+                    >
+                        Reset
+          </Button>
+                    {/* <Button style={styleSheet.button}>Help</Button> */}
+                </Paper>
 
-            <Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-                open={this.state.snackBarVisibility}
-                onClose={this.handleRequestClose}
-                ContentProps={{ 'aria-describedby': 'message-id', }}
-                message={<span id="message-id">{this.state.snackBarMessage}</span>}
-                action={[<IconButton key="close" aria-label="Close" color="secondary" style={styleSheet.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton>]} />
-
-        </div>);
+                <Snackbar
+                    anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                    open={this.state.snackBarVisibility}
+                    onClose={this.handleRequestClose}
+                    ContentProps={{ "aria-describedby": "message-id" }}
+                    message={<span id="message-id">{this.state.snackBarMessage}</span>}
+                    action={[
+                        <IconButton
+                            key="close"
+                            aria-label="Close"
+                            color="secondary"
+                            style={styleSheet.close}
+                            onClick={this.handleRequestClose}
+                        >
+                            {" "}
+                            <CloseIcon />{" "}
+                        </IconButton>
+                    ]}
+                />
+            </div>
+        );
     }
 }
 
@@ -820,7 +1143,8 @@ const styleSheet = {
     topMargin: {
         marginTop: 16
     },
-    cardMarginLeft: { // For items within the same section
+    cardMarginLeft: {
+        // For items within the same section
         marginLeft: 32
     },
     cardMarginLeftRightTop: {
@@ -828,7 +1152,8 @@ const styleSheet = {
         marginTop: 16,
         marginRight: 6
     },
-    cardcardMarginLeftTop: { // For a new section
+    cardcardMarginLeftTop: {
+        // For a new section
         marginLeft: 16,
         paddingTop: 16
     },
@@ -836,7 +1161,8 @@ const styleSheet = {
         marginLeft: 48,
         width: 275 + "px"
     },
-    cardcardMarginBottomRight: { // For a new section
+    cardcardMarginBottomRight: {
+        // For a new section
         marginRight: 16,
         paddingBottom: 16
     },
@@ -850,12 +1176,12 @@ const styleSheet = {
     textFieldCopyOutput: {
         marginLeft: 32,
         marginRight: 0,
-        width: '70%'
+        width: "70%"
     },
     hidden: {
-        display: 'none'
+        display: "none"
     },
     floatRight: {
-        float: 'right'
+        float: "right"
     }
 };
