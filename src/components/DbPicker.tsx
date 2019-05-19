@@ -29,8 +29,6 @@ export default class DbPicker extends Component<DbPickerProps, DbPickerState> {
     };
   }
 
-  //button = undefined;
-
   handleClickListItem = (event: any) => {
     this.setState({ open: true, anchorEl: event.currentTarget });
   };
