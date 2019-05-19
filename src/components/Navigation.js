@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import LoginDialog from "./LoginDialog.js";
+import LoginDialog from "./LoginDialog";
 import Help from "./Help.js";
 
 import AppBar from "@material-ui/core/AppBar";

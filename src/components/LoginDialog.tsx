@@ -9,8 +9,24 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 
-export default class LoginDialog extends Component {
-  constructor(props) {
+interface LoginDialogProps {
+  dbName: string;
+  open: boolean;
+
+  setUserEmailPassword: Function;
+  handleLoginDialogCloseClick: React.ReactEventHandler<{}>;
+}
+interface LoginDialogState {
+  email: Nullable<string>;
+  password: Nullable<string>;
+  [x: number]: any;
+}
+
+export default class LoginDialog extends Component<
+  LoginDialogProps,
+  LoginDialogState
+> {
+  constructor(props: LoginDialogProps) {
     super(props);
     this.state = {
       email: null,
@@ -21,14 +37,14 @@ export default class LoginDialog extends Component {
     this.handleLoginClick = this.handleLoginClick.bind(this);
   }
 
-  handleLoginClick() {
+  handleLoginClick(e: any) {
     if (this.state.email && this.state.password) {
       this.props.setUserEmailPassword(this.state.email, this.state.password);
-      this.props.handleLoginDialogCloseClick();
+      this.props.handleLoginDialogCloseClick(e);
     }
   }
 
-  onChangeHandler(e) {
+  onChangeHandler(e: any) {
     this.setState({
       [e.target.id]: e.target.value
     });
