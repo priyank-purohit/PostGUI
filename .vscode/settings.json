@@ -4,7 +4,7 @@
   "editor.tabSize": 2,
 
   "importSorter.generalConfiguration.sortOnBeforeSave": true,
-  "importSorter.importStringConfiguration.numberOfEmptyLinesAfterAllImports": 1,
+  "importSorter.importStringConfiguration.numberOfEmptyLinesAfterAllImports": 2,
   "importSorter.sortConfiguration.customOrderingRules.defaultNumberOfEmptyLinesAfterGroup": 1,
   "importSorter.sortConfiguration.customOrderingRules.defaultOrderLevel": 20,
   "importSorter.sortConfiguration.customOrderingRules.disableDefaultOrderSort": false,

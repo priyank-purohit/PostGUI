@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 import green from '@material-ui/core/colors/green';
@@ -8,65 +8,46 @@ import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 
-interface CircularFabProps {
+
+interface SubmitButtonProps {
   loading: boolean;
   success: boolean;
   error: boolean;
 
-  getRules: Function;
+  getRules: React.EventHandler<any>;
 }
 
-interface CircularFabState {}
+export const SubmitButton: React.FunctionComponent<
+  SubmitButtonProps
+> = props => {
+  let buttonClass = null;
 
-export default class CircularFab extends Component<
-  CircularFabProps,
-  CircularFabState
-> {
-  constructor(props: CircularFabProps) {
-    super(props);
-
-    this.handleButtonClick = this.handleButtonClick.bind(this);
+  if (props.success) {
+    buttonClass = { ...styleSheet.successButton };
+  }
+  if (props.success && props.error) {
+    buttonClass = { ...styleSheet.errorButton };
   }
 
-  handleButtonClick(event: any) {
-    this.props.getRules();
-  }
-
-  render() {
-    let buttonClass = null;
-
-    if (this.props.success) {
-      buttonClass = { ...styleSheet.successButton };
-    }
-
-    if (this.props.success && this.props.error) {
-      buttonClass = { ...styleSheet.errorButton };
-    }
-
-    return (
-      <div style={styleSheet.wrapper}>
-        <Fab
-          color="secondary"
-          style={buttonClass}
-          onClick={this.handleButtonClick}
-        >
-          {this.props.success ? (
-            this.props.error ? (
-              <CloseIcon />
-            ) : (
-              <CheckIcon />
-            )
+  return (
+    <div style={styleSheet.wrapper}>
+      <Fab color="secondary" style={buttonClass} onClick={props.getRules}>
+        {props.success ? (
+          props.error ? (
+            <CloseIcon />
           ) : (
-            <ArrowForwardIcon />
-          )}
-        </Fab>
-        {this.props.loading && (
-          <CircularProgress size={68} style={styleSheet.progress} />
+            <CheckIcon />
+          )
+        ) : (
+          <ArrowForwardIcon />
         )}
-      </div>
-    );
-  }
-}
+      </Fab>
+      {props.loading && (
+        <CircularProgress size={68} style={styleSheet.progress} />
+      )}
+    </div>
+  );
+};
 
 const styleSheet: any = {
   wrapper: {
