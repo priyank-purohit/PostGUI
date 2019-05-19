@@ -6,7 +6,7 @@ import Paper from "@material-ui/core/Paper";
 import CardHeader from "@material-ui/core/CardHeader";
 import Snackbar from "@material-ui/core/Snackbar";
 import TextField from "@material-ui/core/TextField";
-import SubmitButton from "./SubmitButton";
+import { SubmitButton } from "./SubmitButton";
 import Typography from "@material-ui/core/Typography";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -551,7 +551,7 @@ export default class RightPane extends Component {
     });
   };
 
-  handleSubmitButtonClick() {
+  handleSubmitButtonClick = e => {
     // Get rid of the timer
     clearTimeout(this.timer);
     this.timer = null;
@@ -582,7 +582,7 @@ export default class RightPane extends Component {
         return rules;
       }
     );
-  }
+  };
 
   increaseRowLimit = () => {
     let pseudoEvent = {};
