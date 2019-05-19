@@ -779,7 +779,7 @@ export default class Downloads extends Component {
 
     render() {
         return (
-            <div>
+            <>
                 <Paper elevation={2} style={styleSheet.topMargin}>
                     <Typography
                         variant="subheading"
@@ -931,7 +931,7 @@ export default class Downloads extends Component {
                                     Re-run query with "Get exact row count" option selected
                 </Typography>
                             </div>
-                            <div>
+                            <>
                                 <Button
                                     onClick={this.handlebatchDownloadChange.bind(this, "10K")}
                                     color={this.state.batchSize === "10K" ? "primary" : "inherit"}
@@ -964,7 +964,7 @@ export default class Downloads extends Component {
                                 >
                                     250K
                 </Button>
-                            </div>
+                            </>
                             <div style={styleSheet.inlineTextField}>
                                 <Typography variant="body1" style={styleSheet.inlineTextField}>
                                     {String(this.state.batchDownloadLowerNum).replace(
@@ -1115,7 +1115,7 @@ export default class Downloads extends Component {
                         </IconButton>
                     ]}
                 />
-            </div>
+            </>
         );
     }
 }
