@@ -20,7 +20,7 @@ interface AppState {
   dbIndex: number;
   table: string;
   rowLimit: number;
-  exactCount: Nullable<boolean>;
+  exactCount: boolean;
   rulesFromURL: Nullable<string>;
   rulesFromHistoryPane: Nullable<string>;
   columns: Array<string>;
@@ -47,7 +47,7 @@ export default class Layout extends React.Component<AppProps, AppState> {
       dbIndex: parsedURL["db"] || 0,
       table: parsedURL["table"] || "",
       rowLimit: parsedURL["rowLimit"] || INITIAL_ROW_LIMIT,
-      exactCount: parsedURL["exactCount"] || null,
+      exactCount: parsedURL["exactCount"] || false,
       rulesFromURL: parsedURL["urlRules"] || null,
       rulesFromHistoryPane: null,
       columns: [],
