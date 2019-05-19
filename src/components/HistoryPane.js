@@ -1,25 +1,25 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import Drawer from '@material-ui/core/Drawer';
+import Drawer from "@material-ui/core/Drawer";
 
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import Tooltip from '@material-ui/core/Tooltip';
-import Snackbar from '@material-ui/core/Snackbar';
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListSubheader from "@material-ui/core/ListSubheader";
+import Tooltip from "@material-ui/core/Tooltip";
+import Snackbar from "@material-ui/core/Snackbar";
 
-import IconButton from '@material-ui/core/IconButton';
-import Button from '@material-ui/core/Button';
-import LinkIcon from '@material-ui/icons/Link';
-import DeleteIcon from '@material-ui/icons/Delete';
-import CloseIcon from '@material-ui/icons/Close';
-import { Divider } from '@material-ui/core';
+import IconButton from "@material-ui/core/IconButton";
+import Button from "@material-ui/core/Button";
+import LinkIcon from "@material-ui/icons/Link";
+import DeleteIcon from "@material-ui/icons/Delete";
+import CloseIcon from "@material-ui/icons/Close";
+import { Divider } from "@material-ui/core";
 
-import amber from '@material-ui/core/colors/amber';
+import amber from "@material-ui/core/colors/amber";
 
-let _ = require('lodash');
+let _ = require("lodash");
 let lib = require("../utils/library.js");
 let displayLengthCutoff = 50;
 
@@ -27,8 +27,13 @@ export default class HistoryPane extends Component {
 	constructor(props) {
 		super(props);
 
-		let localHistoryArray = JSON.parse(localStorage.getItem("localHistory") ? localStorage.getItem("localHistory") : "[]");
-		localHistoryArray = JSON.stringify(localHistoryArray) === "[]" ? null : localHistoryArray;
+		let localHistoryArray = JSON.parse(
+			localStorage.getItem("localHistory")
+				? localStorage.getItem("localHistory")
+				: "[]"
+		);
+		localHistoryArray =
+			JSON.stringify(localHistoryArray) === "[]" ? null : localHistoryArray;
 
 		// historyArray will have the latest URL at the end ... i.e. 0 position is the earliest query, and the highest position index is the latest query...
 		// TODO: Need to make historyArray db specific!!!
@@ -39,9 +44,12 @@ export default class HistoryPane extends Component {
 			historyArray: localHistoryArray ? localHistoryArray : [],
 			deleteHistoryDialogVisibility: styleSheet.hide,
 			snackBarVisibility: false,
-			snackBarMessage: "Unknown error occured",
+			snackBarMessage: "Unknown error occured"
 		};
-		this.changeDisplayIndexDebounce = _.debounce(value => this.setState({ displayIndex: value }), 300);
+		this.changeDisplayIndexDebounce = _.debounce(
+			value => this.setState({ displayIndex: value }),
+			300
+		);
 
 		this.closeDrawer = this.closeDrawer.bind(this);
 		this.showDeleteHistoryDialog = this.showDeleteHistoryDialog.bind(this);
@@ -55,39 +63,64 @@ export default class HistoryPane extends Component {
 		});
 
 		// If the incoming newHistoryItem isn't already the current state.newHistoryItem AND it actually exists THEN
-		if (this.state.newHistoryItem !== newProps.newHistoryItem &&
+		if (
+			this.state.newHistoryItem !== newProps.newHistoryItem &&
 			newProps.newHistoryItem !== [] &&
 			newProps.newHistoryItem !== undefined &&
 			newProps.newHistoryItem !== null &&
-			newProps.newHistoryItem) {
+			newProps.newHistoryItem
+		) {
 			// Check if the new item already exists in the historyArray
-			if (lib.inArray(newProps.newHistoryItem, this.state.historyArray) === false) { // doesn't exist, so insert it at highestIndex+1 position (i.e. 0th index is oldest)
+			if (
+				lib.inArray(newProps.newHistoryItem, this.state.historyArray) === false
+			) {
+				// doesn't exist, so insert it at highestIndex+1 position (i.e. 0th index is oldest)
 				var arrayvar = this.state.historyArray.slice();
 				arrayvar.push(newProps.newHistoryItem);
 
-				this.setState({
-					historyPaneVisibility: newProps.historyPaneVisibility,
-					newHistoryItem: newProps.newHistoryItem,
-					historyArray: arrayvar
-				}, () => {
-					try {
-						localStorage.setItem("localHistory", JSON.stringify(this.state.historyArray));
-					} catch (e) {
-						console.log(e);
+				this.setState(
+					{
+						historyPaneVisibility: newProps.historyPaneVisibility,
+						newHistoryItem: newProps.newHistoryItem,
+						historyArray: arrayvar
+					},
+					() => {
+						try {
+							localStorage.setItem(
+								"localHistory",
+								JSON.stringify(this.state.historyArray)
+							);
+						} catch (e) {
+							console.error(e);
+						}
 					}
-				});
-			} else { // already exists, move it to "top" (which in this case is the highest index...)
-				this.setState({
-					historyPaneVisibility: newProps.historyPaneVisibility,
-					newHistoryItem: newProps.newHistoryItem,
-					historyArray: lib.moveArrayElementFromTo(this.state.historyArray, lib.elementPositionInArray(newProps.newHistoryItem, this.state.historyArray), this.state.historyArray.length - 1)
-				}, () => {
-					try {
-						localStorage.setItem("localHistory", JSON.stringify(this.state.historyArray));
-					} catch (e) {
-						console.log(e);
+				);
+			} else {
+				// already exists, move it to "top" (which in this case is the highest index...)
+				this.setState(
+					{
+						historyPaneVisibility: newProps.historyPaneVisibility,
+						newHistoryItem: newProps.newHistoryItem,
+						historyArray: lib.moveArrayElementFromTo(
+							this.state.historyArray,
+							lib.elementPositionInArray(
+								newProps.newHistoryItem,
+								this.state.historyArray
+							),
+							this.state.historyArray.length - 1
+						)
+					},
+					() => {
+						try {
+							localStorage.setItem(
+								"localHistory",
+								JSON.stringify(this.state.historyArray)
+							);
+						} catch (e) {
+							console.error(e);
+						}
 					}
-				});
+				);
 			}
 		} else {
 			// just make sure the (potentially) new visibility setting is saved...
@@ -101,21 +134,24 @@ export default class HistoryPane extends Component {
 	handleHistoryItemClick(index) {
 		let url = this.state.historyArray[index][0];
 		let rules = this.state.historyArray[index][1];
-		//console.log("[",JSON.stringify(url),"," ,JSON.stringify(rules),"]");
+
 		this.props.changeTable(this.extractTableNameFromURL(url, true));
 		this.props.changeRules(rules);
 	}
 
 	// Inserts shareable URL to clipboard
 	handleLinkIconClick(index) {
-		let error = false, insertSuccess = false;
+		let error = false,
+			insertSuccess = false;
 
 		let url = this.state.historyArray[index][0];
 		let rules = this.state.historyArray[index][1];
 
 		// Extract the table name from URL
 		let tableRx = /\/\w+/g;
-		let tableName = tableRx.exec(url.replace(lib.getDbConfig(this.props.dbIndex, "url"), ""));
+		let tableName = tableRx.exec(
+			url.replace(lib.getDbConfig(this.props.dbIndex, "url"), "")
+		);
 		if (tableName) {
 			tableName = tableName[0].replace(/\//g, "");
 		} else {
@@ -126,7 +162,12 @@ export default class HistoryPane extends Component {
 		// Create the URL needed for sharing
 		let shareUrl = "";
 		if (!error) {
-			shareUrl = window.location.origin + "/queryBuilder/db/" + this.props.dbIndex + "/table/" + tableName;
+			shareUrl =
+				window.location.origin +
+				"/queryBuilder/db/" +
+				this.props.dbIndex +
+				"/table/" +
+				tableName;
 			if (rules !== null) {
 				shareUrl += "?query=" + encodeURIComponent(JSON.stringify(rules));
 			}
@@ -137,17 +178,20 @@ export default class HistoryPane extends Component {
 
 		// if no errors, show a successfully inserted message to user...
 		if (!error && insertSuccess) {
-			this.setState({
-				snackBarVisibility: true,
-				snackBarMessage: "Link copied!",
-			}, () => {
-				this.timer = setTimeout(() => {
-					this.setState({
-						snackBarVisibility: false,
-						snackBarMessage: "Unknown error"
-					});
-				}, 2500);
-			});
+			this.setState(
+				{
+					snackBarVisibility: true,
+					snackBarMessage: "Link copied!"
+				},
+				() => {
+					this.timer = setTimeout(() => {
+						this.setState({
+							snackBarVisibility: false,
+							snackBarMessage: "Unknown error"
+						});
+					}, 2500);
+				}
+			);
 		}
 	}
 
@@ -165,23 +209,38 @@ export default class HistoryPane extends Component {
 	closeDrawer() {
 		this.props.closeHistoryPane();
 		this.setState({
-			historyPaneVisibility: false,
+			historyPaneVisibility: false
 		});
 	}
 
 	extractTableNameFromURL(url, getRaw = false) {
-		let rawTableName = url.replace(lib.getDbConfig(this.props.dbIndex, "url"), "").replace(/\?.*/, "").replace(/\s/g, "").replace("/", "");
+		let rawTableName = url
+			.replace(lib.getDbConfig(this.props.dbIndex, "url"), "")
+			.replace(/\?.*/, "")
+			.replace(/\s/g, "")
+			.replace("/", "");
 
-		if (getRaw) { return rawTableName; }
+		if (getRaw) {
+			return rawTableName;
+		}
 
-		let tableRename = lib.getTableConfig(this.props.dbIndex, rawTableName, "rename");
+		let tableRename = lib.getTableConfig(
+			this.props.dbIndex,
+			rawTableName,
+			"rename"
+		);
 		let displayName = tableRename ? tableRename : rawTableName;
 
 		return displayName;
 	}
 
 	cleanUpRules(url) {
-		return url.replace(lib.getDbConfig(this.props.dbIndex, "url"), "").replace(/.*\?/, "").replace(/&/g, "\n").replace(/,/g, ",\n").replace(/limit=\d*/g, "");
+		return url
+			.replace(lib.getDbConfig(this.props.dbIndex, "url"), "")
+			.replace(/.*\?/, "")
+			.replace(/&/g, "\n")
+			.replace(/,/g, ",\n")
+			.replace(/limit=\d*/g, "");
 	}
 
 	recursiveRulesExtraction(rules, condition, depth = 0) {
@@ -190,13 +249,21 @@ export default class HistoryPane extends Component {
 			rulesArray = [[Array(depth).join("\t") + condition]];
 		}
 		for (let i = 0; i < rules.length; i++) {
-			let potentialName = rules[i]['field'];
+			let potentialName = rules[i]["field"];
 			if (potentialName !== null && potentialName !== undefined) {
-				rulesArray.push([Array(depth + 1).join("\t") + potentialName, rules[i]['operator'], rules[i]['value']]);
+				rulesArray.push([
+					Array(depth + 1).join("\t") + potentialName,
+					rules[i]["operator"],
+					rules[i]["value"]
+				]);
 			} else {
 				// Check if it's a GROUP by looking for "condition" key
-				if (rules[i]['condition'] === "AND" || rules[i]['condition'] === "OR") {
-					let subGroupRules = this.recursiveRulesExtraction(rules[i]['rules'], rules[i]['condition'], depth + 1);
+				if (rules[i]["condition"] === "AND" || rules[i]["condition"] === "OR") {
+					let subGroupRules = this.recursiveRulesExtraction(
+						rules[i]["rules"],
+						rules[i]["condition"],
+						depth + 1
+					);
 					for (let ii = 0; ii < subGroupRules.length; ii++) {
 						if (subGroupRules[ii] !== null && subGroupRules[ii] !== undefined) {
 							rulesArray.push(subGroupRules[ii]);
@@ -225,18 +292,20 @@ export default class HistoryPane extends Component {
 	}
 
 	deleteHistory() {
-		this.setState({
-			historyArray: []
-		}, () => {
-			try {
-				localStorage.setItem("localHistory", []);
-			} catch (e) {
-				console.log(e);
+		this.setState(
+			{
+				historyArray: []
+			},
+			() => {
+				try {
+					localStorage.setItem("localHistory", []);
+				} catch (e) {
+					console.error(e);
+				}
 			}
-		});
+		);
 		this.showDeleteHistoryDialog();
 	}
-
 
 	render() {
 		const historyPanelItemsList = (
@@ -244,42 +313,80 @@ export default class HistoryPane extends Component {
 				<List
 					dense
 					subheader={
-						<ListSubheader style={styleSheet.subheaderBackgroundColour}>Query History
-								<IconButton onClick={this.closeDrawer} style={{ float: "right" }} aria-label="Close">
+						<ListSubheader style={styleSheet.subheaderBackgroundColour}>
+							Query History
+              <IconButton
+								onClick={this.closeDrawer}
+								style={{ float: "right" }}
+								aria-label="Close"
+							>
 								<CloseIcon />
 							</IconButton>
-							<IconButton onClick={this.showDeleteHistoryDialog} style={{ float: "right" }} aria-label="Delete">
+							<IconButton
+								onClick={this.showDeleteHistoryDialog}
+								style={{ float: "right" }}
+								aria-label="Delete"
+							>
 								<DeleteIcon />
 							</IconButton>
-						</ListSubheader>}>
-
+						</ListSubheader>
+					}
+				>
 					{/* Delete History Button and Dialog */}
-					<div style={{ ...this.state.deleteHistoryDialogVisibility, ...{ height: "100px", float: "right" } }}>
+					<div
+						style={{
+							...this.state.deleteHistoryDialogVisibility,
+							...{ height: "100px", float: "right" }
+						}}
+					>
 						<ListSubheader>Delete history?</ListSubheader>
-						<Button onClick={this.deleteHistory} variant="raised" style={{ margin: "5px" }}>Yes</Button>
-						<Button onClick={this.showDeleteHistoryDialog} variant="raised" style={{ margin: "5px", background: amber[500] }}>No</Button>
+						<Button
+							onClick={this.deleteHistory}
+							variant="raised"
+							style={{ margin: "5px" }}
+						>
+							Yes
+            </Button>
+						<Button
+							onClick={this.showDeleteHistoryDialog}
+							variant="raised"
+							style={{ margin: "5px", background: amber[500] }}
+						>
+							No
+            </Button>
 					</div>
 
 					<Divider />
 
 					{/* History Items List */}
-					{
-						this.state.historyArray.slice(0).reverse().map((item) => {
+					{this.state.historyArray
+						.slice(0)
+						.reverse()
+						.map(item => {
 							// Item[0] is the URL
 							// Item[1] are the rules?
 
 							// Display the current item iff it belongs to currently active db
-							if (item[0].indexOf(lib.getDbConfig(this.props.dbIndex, "url")) >= 0) {
-
+							if (
+								item[0].indexOf(lib.getDbConfig(this.props.dbIndex, "url")) >= 0
+							) {
 								let tableName = this.extractTableNameFromURL(item[0]);
 								if (tableName.length > displayLengthCutoff) {
-									tableName = tableName.substring(0, displayLengthCutoff) + "...";
+									tableName =
+										tableName.substring(0, displayLengthCutoff) + "...";
 								}
 
 								// If there are rules are present, then display it with limited number of rows for rules
 								if (item[0] && item[1]) {
-									let rules = this.recursiveRulesExtraction(item[1]['rules'], item[1]['condition'], 0);
-									let index = lib.elementPositionInArray(item, this.state.historyArray);
+									let rules = this.recursiveRulesExtraction(
+										item[1]["rules"],
+										item[1]["condition"],
+										0
+									);
+									let index = lib.elementPositionInArray(
+										item,
+										this.state.historyArray
+									);
 
 									// When user hovers over a history item, show rest of the lines
 									let classNames = styleSheet.hide;
@@ -287,12 +394,23 @@ export default class HistoryPane extends Component {
 										classNames = null;
 									}
 
-
 									return (
-										<ListItem button key={index} onMouseEnter={this.changeDisplayIndex.bind(this, index)} onClick={this.handleHistoryItemClick.bind(this, index)}>
+										<ListItem
+											button
+											key={index}
+											onMouseEnter={this.changeDisplayIndex.bind(this, index)}
+											onClick={this.handleHistoryItemClick.bind(this, index)}
+										>
 											{/* Clicking on this edit button should load the history item in the Query Builder */}
-											<Tooltip id="tooltip-bottom" title={"Copy shareable link"} placement="bottom">
-												<ListItemIcon style={styleSheet.noStyleButton} onClick={this.handleLinkIconClick.bind(this, index)}>
+											<Tooltip
+												id="tooltip-bottom"
+												title={"Copy shareable link"}
+												placement="bottom"
+											>
+												<ListItemIcon
+													style={styleSheet.noStyleButton}
+													onClick={this.handleLinkIconClick.bind(this, index)}
+												>
 													<LinkIcon />
 												</ListItemIcon>
 											</Tooltip>
@@ -300,57 +418,98 @@ export default class HistoryPane extends Component {
 											{/* Nicely formatted history item */}
 											<div>
 												<ListItemText primary={tableName} />
-												{
-													rules.map((rule) => {
-														let displayStr = "";
-														let columnName = "";
-														let displayName = "";
-														let rawOperator = "";
-														let niceOperator = "";
-														for (let i = 0; i < rule.length; i++) {
-															displayStr += " " + rule[i] + " ";
-															// if there are more than 1 rules (i.e. it's not AND/OR only) then extract column name
-															if (i === 1) {
-																columnName = rule[0].replace(/\s/g, "");
-																rawOperator = rule[1].replace(/\s/g, "");
-																niceOperator = lib.translateOperatorToHuman(rawOperator);
+												{rules.map(rule => {
+													let displayStr = "";
+													let columnName = "";
+													let displayName = "";
+													let rawOperator = "";
+													let niceOperator = "";
+													for (let i = 0; i < rule.length; i++) {
+														displayStr += " " + rule[i] + " ";
+														// if there are more than 1 rules (i.e. it's not AND/OR only) then extract column name
+														if (i === 1) {
+															columnName = rule[0].replace(/\s/g, "");
+															rawOperator = rule[1].replace(/\s/g, "");
+															niceOperator = lib.translateOperatorToHuman(
+																rawOperator
+															);
+														}
+													}
+
+													// find column's rename rules from config
+													if (columnName) {
+														let columnRename = lib.getColumnConfig(
+															this.props.dbIndex,
+															this.extractTableNameFromURL(item[0], true),
+															columnName,
+															"rename"
+														);
+														displayName = columnRename
+															? columnRename
+															: columnName;
+													}
+
+													displayStr = displayStr
+														.replace(columnName, displayName)
+														.replace(rawOperator, niceOperator)
+														.replace(/\t/g, " . . ");
+													let currRuleIndexInRules = lib.elementPositionInArray(
+														rule,
+														rules
+													);
+
+													if (displayStr.length > displayLengthCutoff) {
+														displayStr =
+															displayStr.substring(0, displayLengthCutoff) +
+															"...";
+													}
+
+													return (
+														<ListItemText
+															secondary={displayStr}
+															key={index + rule}
+															style={
+																currRuleIndexInRules > 3 ? classNames : null
 															}
-														}
-
-														// find column's rename rules from config
-														if (columnName) {
-															let columnRename = lib.getColumnConfig(this.props.dbIndex, this.extractTableNameFromURL(item[0], true), columnName, "rename");
-															displayName = columnRename ? columnRename : columnName;
-														}
-
-														displayStr = displayStr.replace(columnName, displayName).replace(rawOperator, niceOperator).replace(/\t/g, " . . ");
-														let currRuleIndexInRules = lib.elementPositionInArray(rule, rules);
-
-														if (displayStr.length > displayLengthCutoff) {
-															displayStr = displayStr.substring(0, displayLengthCutoff) + "...";
-														}
-
-														return <ListItemText secondary={displayStr} key={index + rule} style={currRuleIndexInRules > 3 ? classNames : null} />;
-													})
-												}
+														/>
+													);
+												})}
 											</div>
 										</ListItem>
 									);
-								} else { // If only table name is present, then display just a table name
-									let index = lib.elementPositionInArray(item, this.state.historyArray);
+								} else {
+									// If only table name is present, then display just a table name
+									let index = lib.elementPositionInArray(
+										item,
+										this.state.historyArray
+									);
 
 									return (
-										<ListItem button key={index} onMouseEnter={this.changeDisplayIndex.bind(this, index)} onClick={this.handleHistoryItemClick.bind(this, index)}>
-
-											<Tooltip id="tooltip-bottom" title={"Copy shareable link"} placement="bottom">
-												<ListItemIcon style={styleSheet.noStyleButton} onClick={this.handleLinkIconClick.bind(this, index)}>
+										<ListItem
+											button
+											key={index}
+											onMouseEnter={this.changeDisplayIndex.bind(this, index)}
+											onClick={this.handleHistoryItemClick.bind(this, index)}
+										>
+											<Tooltip
+												id="tooltip-bottom"
+												title={"Copy shareable link"}
+												placement="bottom"
+											>
+												<ListItemIcon
+													style={styleSheet.noStyleButton}
+													onClick={this.handleLinkIconClick.bind(this, index)}
+												>
 													<LinkIcon />
 												</ListItemIcon>
 											</Tooltip>
 
 											<div>
 												<ListItemText primary={tableName} />
-												<ListItemText secondary={"Get random rows..."} key={index + tableName} />
+												<ListItemText
+													secondary={"Get random rows..."}
+													key={index + tableName}
+												/>
 											</div>
 										</ListItem>
 									);
@@ -358,20 +517,36 @@ export default class HistoryPane extends Component {
 							} else {
 								return null;
 							}
-						})
-					}
+						})}
 				</List>
-				<Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+				<Snackbar
+					anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
 					open={this.state.snackBarVisibility}
 					onClose={this.handleRequestClose}
-					ContentProps={{ 'aria-describedby': 'message-id', }}
+					ContentProps={{ "aria-describedby": "message-id" }}
 					message={<span id="message-id">{this.state.snackBarMessage}</span>}
-					action={[<IconButton key="close" aria-label="Close" color="secondary" style={styleSheet.close} onClick={this.handleRequestClose}> <CloseIcon /> </IconButton>]} />
+					action={[
+						<IconButton
+							key="close"
+							aria-label="Close"
+							color="secondary"
+							style={styleSheet.close}
+							onClick={this.handleRequestClose}
+						>
+							{" "}
+							<CloseIcon />{" "}
+						</IconButton>
+					]}
+				/>
 			</div>
 		);
 
 		return (
-			<Drawer anchor="right" open={this.state.historyPaneVisibility} onClose={this.closeDrawer}>
+			<Drawer
+				anchor="right"
+				open={this.state.historyPaneVisibility}
+				onClose={this.closeDrawer}
+			>
 				<div tabIndex={0} role="button">
 					{historyPanelItemsList}
 				</div>
@@ -382,15 +557,15 @@ export default class HistoryPane extends Component {
 
 const styleSheet = {
 	root: {
-		width: '30%',
-		height: '100%',
-		float: 'right'
+		width: "30%",
+		height: "100%",
+		float: "right"
 	},
 	list: {
-		width: 400,
+		width: 400
 	},
 	listFull: {
-		width: 'auto',
+		width: "auto"
 	},
 	noStyleButton: {
 		border: "none",
@@ -400,6 +575,6 @@ const styleSheet = {
 		background: amber[500]
 	},
 	hide: {
-		display: 'none'
+		display: "none"
 	}
 };
