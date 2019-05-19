@@ -22,7 +22,7 @@ import pink from "@material-ui/core/colors/pink";
 import Button from "@material-ui/core/Button";
 
 let _ = require("lodash");
-let lib = require("../utils/library.js");
+let lib = require("../utils/library.ts");
 
 //join: predicted genes, protein seqs
 export default class Navigation extends Component {

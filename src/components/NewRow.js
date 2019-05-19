@@ -13,7 +13,7 @@ import { Divider, Paper } from "@material-ui/core";
 
 import axios from "axios";
 
-let lib = require("../utils/library.js");
+let lib = require("../utils/library.ts");
 
 class ResponsiveDialog extends React.Component {
   constructor(props) {

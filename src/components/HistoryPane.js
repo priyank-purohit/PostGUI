@@ -20,7 +20,7 @@ import { Divider } from "@material-ui/core";
 import amber from "@material-ui/core/colors/amber";
 
 let _ = require("lodash");
-let lib = require("../utils/library.js");
+let lib = require("../utils/library.ts");
 let displayLengthCutoff = 50;
 
 export default class HistoryPane extends Component {
