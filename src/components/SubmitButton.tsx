@@ -9,7 +9,7 @@ import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 
 
-interface SubmitButtonProps {
+interface ISubmitButtonProps {
   loading: boolean;
   success: boolean;
   error: boolean;
@@ -18,7 +18,7 @@ interface SubmitButtonProps {
 }
 
 export const SubmitButton: React.FunctionComponent<
-  SubmitButtonProps
+  ISubmitButtonProps
 > = props => {
   let buttonClass = null;
   if (props.success) {

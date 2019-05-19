@@ -9,24 +9,25 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 
-interface LoginDialogProps {
+
+interface ILoginDialogProps {
   dbName: string;
   open: boolean;
 
   setUserEmailPassword: Function;
   handleLoginDialogCloseClick: React.ReactEventHandler<{}>;
 }
-interface LoginDialogState {
+interface ILoginDialogState {
   email: Nullable<string>;
   password: Nullable<string>;
   [x: number]: any;
 }
 
 export default class LoginDialog extends Component<
-  LoginDialogProps,
-  LoginDialogState
+  ILoginDialogProps,
+  ILoginDialogState
 > {
-  constructor(props: LoginDialogProps) {
+  constructor(props: ILoginDialogProps) {
     super(props);
     this.state = {
       email: null,

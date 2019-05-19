@@ -6,21 +6,25 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
+
 let lib = require("../utils/library.ts");
 
-interface DbPickerProps {
+interface IDbPickerProps {
   changeDbIndex: Function;
   dbIndex: number;
 }
 
-interface DbPickerState {
+interface IDbPickerState {
   anchorEl: Maybe<HTMLElement>;
   open: boolean;
   databases: Array<string>;
 }
 
-export default class DbPicker extends Component<DbPickerProps, DbPickerState> {
-  constructor(props: DbPickerProps) {
+export default class DbPicker extends Component<
+  IDbPickerProps,
+  IDbPickerState
+> {
+  constructor(props: IDbPickerProps) {
     super(props);
     this.state = {
       anchorEl: undefined,

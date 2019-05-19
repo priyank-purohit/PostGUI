@@ -6,7 +6,7 @@ import DbPicker from './DbPicker';
 import DbSchema from './DbSchema.js';
 
 
-interface LeftPaneProps {
+interface ILeftPaneProps {
   leftPaneVisibility: boolean;
   dbIndex: number;
 
@@ -20,9 +20,9 @@ interface LeftPaneProps {
   publicDBStatus: Function;
 }
 
-interface LeftPaneState {}
+interface ILeftPaneState {}
 
-export const LeftPane: React.FunctionComponent<LeftPaneProps> = props => {
+export const LeftPane: React.FunctionComponent<ILeftPaneProps> = props => {
   let rootClasses =
     props.leftPaneVisibility === true ? styleSheet.root : styleSheet.rootHide;
 
