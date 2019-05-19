@@ -1,9 +1,26 @@
-import React, { Component } from "react";
-import Divider from "@material-ui/core/Divider";
-import DbPicker from "./DbPicker.js";
-import DbSchema from "./DbSchema.js";
+import React, { Component } from 'react';
 
-export default class LeftPane extends Component {
+import Divider from '@material-ui/core/Divider';
+
+import DbPicker from './DbPicker.js';
+import DbSchema from './DbSchema.js';
+
+interface LeftPaneProps {
+  leftPaneVisibility: boolean;
+
+  changeSearchTerm: Function;
+  changeDbIndex: Function;
+  changeTable: Function;
+  changeColumns: Function;
+  changeDbSchemaDefinitions: Function;
+  changeDbPkInfo: Function;
+  changeVisibleColumns: Function;
+  publicDBStatus: Function;
+}
+
+interface LeftPaneState {}
+
+export default class LeftPane extends Component<LeftPaneProps> {
   render() {
     let rootClasses =
       this.props.leftPaneVisibility === true
@@ -19,7 +36,7 @@ export default class LeftPane extends Component {
   }
 }
 
-const styleSheet = {
+const styleSheet: any = {
   root: {
     width: "29%",
     height: "100%",
