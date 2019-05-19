@@ -11,7 +11,7 @@ import { INITIAL_ROW_LIMIT } from "../data/constants";
 import { ConfigDatabase } from "../data/models/configModels";
 import "../styles/index.css";
 
-let lib = require("../utils/library.js");
+let lib = require("../utils/library.ts");
 let auth: Nullable<Auth> = null;
 
 interface AppProps {}

@@ -21,7 +21,7 @@ import RightPaneChips from "./RightPaneChips.js";
 
 import "../styles/QueryBuilder.css";
 
-let lib = require("../utils/library.js");
+let lib = require("../utils/library.ts");
 const defaultRules = lib.getQBRules();
 
 const timeout = 2000;

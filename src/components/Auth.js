@@ -1,6 +1,6 @@
 import axios from "axios";
 
-let lib = require("../utils/library.js");
+let lib = require("../utils/library.ts");
 
 export default class Auth {
   name = null;

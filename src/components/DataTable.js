@@ -16,7 +16,7 @@ import "react-table/react-table.css";
 import checkboxHOC from "react-table/lib/hoc/selectTable";
 let CheckboxTable = checkboxHOC(ReactTable);
 
-let lib = require("../utils/library.js");
+let lib = require("../utils/library.ts");
 
 export default class DataTable extends Component {
   constructor(props) {

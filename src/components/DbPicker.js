@@ -5,7 +5,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 
-let lib = require("../utils/library.js");
+let lib = require("../utils/library.ts");
 
 export default class DbPicker extends Component {
   constructor(props) {
