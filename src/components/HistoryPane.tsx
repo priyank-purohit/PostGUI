@@ -33,7 +33,6 @@ interface HistoryPaneProps {
 }
 
 interface HistoryPaneState {
-  historyPaneVisibility: boolean;
   newHistoryItem: any;
   displayIndex: number;
   historyArray: Array<any>;
@@ -61,7 +60,6 @@ export default class HistoryPane extends Component<
     // historyArray will have the latest URL at the end ... i.e. 0 position is the earliest query, and the highest position index is the latest query...
     // TODO: Need to make historyArray db specific!!!
     this.state = {
-      historyPaneVisibility: this.props.historyPaneVisibility || false,
       newHistoryItem: this.props.newHistoryItem,
       displayIndex: -1,
       historyArray: localHistoryArray ? localHistoryArray : [],
@@ -81,10 +79,6 @@ export default class HistoryPane extends Component<
 
   // Keeps track of the incoming queries in an array
   componentWillReceiveProps(newProps: HistoryPaneProps) {
-    this.setState({
-      historyPaneVisibility: newProps.historyPaneVisibility
-    });
-
     // If the incoming newHistoryItem isn't already the current state.newHistoryItem AND it actually exists THEN
     if (
       this.state.newHistoryItem !== newProps.newHistoryItem &&
@@ -103,7 +97,6 @@ export default class HistoryPane extends Component<
 
         this.setState(
           {
-            historyPaneVisibility: newProps.historyPaneVisibility,
             newHistoryItem: newProps.newHistoryItem,
             historyArray: arrayvar
           },
@@ -122,7 +115,6 @@ export default class HistoryPane extends Component<
         // already exists, move it to "top" (which in this case is the highest index...)
         this.setState(
           {
-            historyPaneVisibility: newProps.historyPaneVisibility,
             newHistoryItem: newProps.newHistoryItem,
             historyArray: lib.moveArrayElementFromTo(
               this.state.historyArray,
@@ -145,11 +137,6 @@ export default class HistoryPane extends Component<
           }
         );
       }
-    } else {
-      // just make sure the (potentially) new visibility setting is saved...
-      this.setState({
-        historyPaneVisibility: newProps.historyPaneVisibility
-      });
     }
   }
 
@@ -234,9 +221,6 @@ export default class HistoryPane extends Component<
 
   closeDrawer() {
     this.props.closeHistoryPane();
-    this.setState({
-      historyPaneVisibility: false
-    });
   }
 
   extractTableNameFromURL(url: string, getRaw = false) {
@@ -318,18 +302,13 @@ export default class HistoryPane extends Component<
   }
 
   deleteHistory() {
-    this.setState(
-      {
-        historyArray: []
-      },
-      () => {
-        try {
-          localStorage.setItem("localHistory", "[]");
-        } catch (e) {
-          console.error(e);
-        }
+    this.setState({ historyArray: [] }, () => {
+      try {
+        localStorage.setItem("localHistory", "[]");
+      } catch (e) {
+        console.error(e);
       }
-    );
+    });
     this.showDeleteHistoryDialog();
   }
 
@@ -574,7 +553,7 @@ export default class HistoryPane extends Component<
     return (
       <Drawer
         anchor="right"
-        open={this.state.historyPaneVisibility}
+        open={this.props.historyPaneVisibility}
         onClose={this.closeDrawer}
       >
         <div tabIndex={0} role="button">
