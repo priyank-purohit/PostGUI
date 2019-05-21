@@ -63,6 +63,8 @@ export default class RightPaneChips extends Component {
           description="Keep track of rows count to ensure full query result is displayed. Increase 'Row-limit' and enable 'Get exact row count' option to ensure full result."
         >
           <Chip
+            color={"secondary"}
+            variant={"outlined"}
             label={rowCountChipLabel}
             onMouseEnter={() => {
               this.timer = setTimeout(() => {
@@ -127,6 +129,8 @@ export default class RightPaneChips extends Component {
             <Chip
               label={this.state.tip3}
               key={2}
+              color={"secondary"}
+              variant={"outlined"}
               style={styleSheet.chip}
               onMouseEnter={() => {
                 this.timer = setTimeout(() => {
