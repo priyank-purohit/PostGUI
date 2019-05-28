@@ -30,7 +30,7 @@ import CloseIcon from "@material-ui/icons/Close";
 const timeout = 2000;
 const maxRowsInDownload = 2500000;
 
-let lib = require("../utils/library.js");
+let lib = require("../utils/library.ts");
 let json2csv = require("json2csv");
 var js2xmlparser = require("js2xmlparser");
 

@@ -1,5 +1,5 @@
 // worker.js
-const workercode = () => {
+export function workercod() {
   self.onmessage = function(e) {
     // TODO: implement an IF statement to allow the main thread to specify which function they wanna execute by means of providing a string value to e.data.method = "delimitedColumnCSV" for current algorithm...
     if (e.data.method === "delimitedColumn") {
@@ -36,7 +36,7 @@ const workercode = () => {
       self.postMessage(result);
     }
   };
-};
+}
 
 let code = workercode.toString();
 code = code.substring(code.indexOf("{") + 1, code.lastIndexOf("}"));
