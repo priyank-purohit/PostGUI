@@ -1,17 +1,33 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import { Divider } from "@material-ui/core";
+import { Divider } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import TextField from '@material-ui/core/TextField';
 
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
 
-export default class LoginDialog extends Component {
-  constructor(props) {
+interface ILoginDialogProps {
+  dbName: string;
+  open: boolean;
+
+  setUserEmailPassword: Function;
+  handleLoginDialogCloseClick: React.ReactEventHandler<{}>;
+}
+interface ILoginDialogState {
+  email: Nullable<string>;
+  password: Nullable<string>;
+  [x: number]: any;
+}
+
+export default class LoginDialog extends Component<
+  ILoginDialogProps,
+  ILoginDialogState
+> {
+  constructor(props: ILoginDialogProps) {
     super(props);
     this.state = {
       email: null,
@@ -22,14 +38,14 @@ export default class LoginDialog extends Component {
     this.handleLoginClick = this.handleLoginClick.bind(this);
   }
 
-  handleLoginClick() {
+  handleLoginClick(e: any) {
     if (this.state.email && this.state.password) {
       this.props.setUserEmailPassword(this.state.email, this.state.password);
-      this.props.handleLoginDialogCloseClick();
+      this.props.handleLoginDialogCloseClick(e);
     }
   }
 
-  onChangeHandler(e) {
+  onChangeHandler(e: any) {
     this.setState({
       [e.target.id]: e.target.value
     });

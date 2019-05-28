@@ -23,7 +23,7 @@ import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 import indigo from "@material-ui/core/colors/indigo";
 
 let _ = require("lodash");
-let lib = require("../utils/library.js");
+let lib = require("../utils/library.ts");
 
 export default class DbSchema extends Component {
 	// Set true in DidMount, and false in WillUnmount
