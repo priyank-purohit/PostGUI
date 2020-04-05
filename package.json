@@ -16,7 +16,7 @@
     "js2xmlparser": "^3.0.0",
     "json2csv": "^4.5.1",
     "lodash": "^4.17.11",
-    "npm": "^6.9.0",
+    "npm": "^6.13.4",
     "react": "^16.8.6",
     "react-copy-to-clipboard": "^5.0.0",
     "react-dom": "^16.8.6",
