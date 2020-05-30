@@ -5,7 +5,7 @@ import {
   Toolbar,
   IconButton,
   Typography,
-  Slide
+  Slide,
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import amber from "@material-ui/core/colors/amber";
@@ -35,7 +35,6 @@ export default class Help extends Component {
             <Typography variant="title" color="default" style={styleSheet.flex}>
               Help
             </Typography>
-            {/* <Button color="inherit" onClick={this.props.handleHelpToggle}>save</Button> */}
           </Toolbar>
         </AppBar>
         <img
@@ -53,14 +52,14 @@ const styleSheet = {
   appBar: {
     position: "relative",
     color: "black",
-    background: amber[600]
+    background: amber[600],
   },
   flex: {
-    flex: 1
+    flex: 1,
   },
   centered: {
     marginLeft: "auto",
     marginRight: "auto",
-    marginTop: 20
-  }
+    marginTop: 20,
+  },
 };
