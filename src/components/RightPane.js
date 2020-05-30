@@ -1,4 +1,3 @@
-// @flow weak
 import React, { Component } from "react";
 import axios from "axios";
 import axiosCancel from "axios-cancel";
@@ -28,7 +27,7 @@ const timeout = 2000;
 const maxRowsInOutput = 250000;
 
 axiosCancel(axios, {
-  debug: false // default
+  debug: false, // default
 });
 
 export default class RightPane extends Component {
@@ -49,7 +48,7 @@ export default class RightPane extends Component {
       snackBarVisibility: false,
       snackBarMessage: "Unknown error occured",
       rowLimit: Math.min(this.props.rowLimit, maxRowsInOutput) || 25000,
-      url: ""
+      url: "",
     };
 
     this.handleRowLimitChange = this.handleRowLimitChange.bind(this);
@@ -81,7 +80,7 @@ export default class RightPane extends Component {
       let rules = newProps.rulesFromHistoryPane;
 
       this.setState({
-        rulesFromHistoryPane: rules
+        rulesFromHistoryPane: rules,
       });
 
       // Rebuild if all columns exist in the current table list of column
@@ -108,7 +107,7 @@ export default class RightPane extends Component {
       }
     } else {
       this.setState({
-        rulesFromHistoryPane: null
+        rulesFromHistoryPane: null,
       });
     }
 
@@ -120,11 +119,11 @@ export default class RightPane extends Component {
       this.state.leftPaneVisibility === newProps.leftPaneVisibility
     ) {
       this.setState({
-        visibleColumns: newProps.visibleColumns
+        visibleColumns: newProps.visibleColumns,
       });
     } else if (this.state.leftPaneVisibility !== newProps.leftPaneVisibility) {
       this.setState({
-        leftPaneVisibility: newProps.leftPaneVisibility
+        leftPaneVisibility: newProps.leftPaneVisibility,
       });
     } else if (this.props.dbIndex !== newProps.dbIndex) {
       this.setState(
@@ -139,7 +138,7 @@ export default class RightPane extends Component {
           submitError: false,
           submitSuccess: false,
           rawData: [],
-          rows: null
+          rows: null,
         },
         () => {
           this.rebuildQueryBuilder(
@@ -169,7 +168,7 @@ export default class RightPane extends Component {
           submitError: false,
           submitSuccess: false,
           rawData: [],
-          rows: null
+          rows: null,
         },
         () => {
           this.rebuildQueryBuilder(
@@ -252,7 +251,7 @@ export default class RightPane extends Component {
     );
 
     this.setState({
-      qbFilters: filters
+      qbFilters: filters,
     });
 
     if (
@@ -437,13 +436,13 @@ export default class RightPane extends Component {
       this.setState(
         {
           snackBarVisibility: true,
-          snackBarMessage: "Incomplete query"
+          snackBarMessage: "Incomplete query",
         },
         () => {
           this.timer = setTimeout(() => {
             this.setState({
               snackBarVisibility: false,
-              snackBarMessage: "Unknown error"
+              snackBarMessage: "Unknown error",
             });
           }, 2500);
         }
@@ -473,7 +472,7 @@ export default class RightPane extends Component {
 
     axios
       .get(url, { headers: preparedHeaders, requestId: "qbAxiosReq" })
-      .then(response => {
+      .then((response) => {
         let responseRows = null;
         let totalRows = null;
         if (
@@ -501,20 +500,20 @@ export default class RightPane extends Component {
             totalRows: totalRows,
             submitLoading: false,
             submitError: false,
-            submitSuccess: true
+            submitSuccess: true,
           },
           () => {
             this.timer = setTimeout(() => {
               this.setState({
                 submitLoading: false,
                 submitSuccess: false,
-                submitError: false
+                submitError: false,
               });
             }, timeout);
           }
         );
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("HTTP Req:", error);
         this.setState(
           {
@@ -522,14 +521,14 @@ export default class RightPane extends Component {
             rows: null,
             submitLoading: false,
             submitSuccess: true,
-            submitError: true // both true implies request successfully reported an error
+            submitError: true, // both true implies request successfully reported an error
           },
           () => {
             this.timer = setTimeout(() => {
               this.setState({
                 submitLoading: false,
                 submitSuccess: false,
-                submitError: false
+                submitError: false,
               });
             }, timeout);
           }
@@ -543,15 +542,15 @@ export default class RightPane extends Component {
   }
 
   // Allows NewRow.js to insert a new row to state.rawData
-  insertNewRow = row => {
+  insertNewRow = (row) => {
     let data = this.state.rawData;
     data.splice(0, 0, row[0]);
     this.setState({
-      rawData: data
+      rawData: data,
     });
   };
 
-  handleSubmitButtonClick = e => {
+  handleSubmitButtonClick = (e) => {
     // Get rid of the timer
     clearTimeout(this.timer);
     this.timer = null;
@@ -564,7 +563,7 @@ export default class RightPane extends Component {
         rows: 0,
         submitLoading: true,
         submitError: false,
-        submitSuccess: false
+        submitSuccess: false,
       },
       () => {
         let rules = null;
@@ -609,7 +608,7 @@ export default class RightPane extends Component {
   handleGetExactRowCountToggle() {
     this.setState(
       {
-        exactRowCount: !this.state.exactRowCount
+        exactRowCount: !this.state.exactRowCount,
       } /*, () => {
 			this.createFileName();
 		}*/
@@ -644,7 +643,7 @@ export default class RightPane extends Component {
         <Paper style={paperClasses} elevation={5}>
           <CardHeader title={tableDisplayName} subheader={tableDescription} />
 
-          <Typography type="subheading" style={styleSheet.cardMarginLeftTop}>
+          <Typography type="subtitle1" style={styleSheet.cardMarginLeftTop}>
             Query Builder
           </Typography>
           <div id="query-builder" ref="queryBuilder" />
@@ -653,7 +652,7 @@ export default class RightPane extends Component {
             Options
           </Typography>
 
-          <Grid container spacing={24} alignItems={"center"}>
+          <Grid container spacing={10} alignItems={"center"}>
             <Grid item sm={10} md={5}>
               {/* ROW LIMIT INPUT BOX */}
               <Tooltip
@@ -711,7 +710,7 @@ export default class RightPane extends Component {
             </Grid>
           </Grid>
 
-          <Typography type="subheading" style={styleSheet.cardMarginLeftTop}>
+          <Typography type="subtitle1" style={styleSheet.cardMarginLeftTop}>
             Query Results
           </Typography>
 
@@ -767,7 +766,7 @@ export default class RightPane extends Component {
             >
               {" "}
               <CloseIcon />{" "}
-            </IconButton>
+            </IconButton>,
           ]}
         />
       </div>
@@ -780,39 +779,39 @@ let styleSheet = {
     paddingBottom: 50,
     marginLeft: "30%",
     marginBottom: "2%",
-    transition: "all 0.25s"
+    transition: "all 0.25s",
   },
   rootInvisibleLeft: {
     paddingBottom: 50,
-    marginLeft: "1%"
+    marginLeft: "1%",
   },
   middlePaperSection: {
     width: "99%",
     height: "100%",
-    marginTop: 75
+    marginTop: 75,
   },
   cardMarginLeft: {
     // For items within the same section
-    marginLeft: 32
+    marginLeft: 32,
   },
   cardMarginLeftRightTop: {
     marginLeft: 16,
     marginTop: 16,
-    marginRight: 6
+    marginRight: 6,
   },
   cardMarginLeftTop: {
     // For a new section
     marginLeft: 16,
-    marginTop: 32 // want a bit more space at top to clearly indicate new section...
+    marginTop: 32, // want a bit more space at top to clearly indicate new section...
   },
   rowLimitTextField: {
     marginLeft: 32,
     marginRight: 5,
-    width: 300
+    width: 300,
   },
   hide: {
     opacity: 0.0,
     marginTop: 75,
-    visibility: "hidden"
-  }
+    visibility: "hidden",
+  },
 };

@@ -28,7 +28,7 @@ class ResponsiveDialog extends React.Component {
       url: props.url,
       inputVals: {},
       error: "",
-      submitButtonLabel: "Submit"
+      submitButtonLabel: "Submit",
     };
   }
 
@@ -42,7 +42,7 @@ class ResponsiveDialog extends React.Component {
       qbFilters: newProps.qbFilters || [],
       url: newProps.url,
       inputVals: {},
-      error: ""
+      error: "",
     });
   }
 
@@ -59,11 +59,11 @@ class ResponsiveDialog extends React.Component {
         qbFilters: [],
         inputVals: {},
         error: "",
-        submitButtonLabel: "Submit"
+        submitButtonLabel: "Submit",
       },
       () => {
         this.setState({
-          qbFilters: qbFiltersTemp
+          qbFilters: qbFiltersTemp,
         });
       }
     );
@@ -82,7 +82,7 @@ class ResponsiveDialog extends React.Component {
     }
 
     this.setState({
-      inputVals: inputValues
+      inputVals: inputValues,
     });
   };
 
@@ -110,18 +110,18 @@ class ResponsiveDialog extends React.Component {
     if (this.state.submitButtonLabel === "Submit") {
       // Give user 4 seconds to confirm
       this.setState({
-        submitButtonLabel: "Are you sure?"
+        submitButtonLabel: "Are you sure?",
       });
       this.timer = setTimeout(() => {
         this.setState({
-          submitButtonLabel: "Submit"
+          submitButtonLabel: "Submit",
         });
       }, 4000);
     } else {
       // User wants to submit for sure, so do it
       clearTimeout(this.timer);
       this.setState({
-        submitButtonLabel: "Submit"
+        submitButtonLabel: "Submit",
       });
       let input = this.state.inputVals;
       let keys = Object.keys(this.state.inputVals);
@@ -154,16 +154,16 @@ class ResponsiveDialog extends React.Component {
 
       axios
         .post(newRowURL, postReqBody, { headers: preparedHeaders })
-        .then(response => {
+        .then((response) => {
           this.commitToChangeLog(response.data);
           this.props.insertNewRow(response.data);
           this.handleReset();
           this.props.handleNewRowClick(false);
         })
-        .catch(error => {
+        .catch((error) => {
           this.setState(
             {
-              error: error.response
+              error: error.response,
             },
             () => {
               let element = document.getElementById("errorPaper");
@@ -202,7 +202,7 @@ class ResponsiveDialog extends React.Component {
                 elevation={4}
               >
                 <Typography
-                  variant="subheading"
+                  variant="subtitle1"
                   style={styleSheet.paperMarginTopLeft}
                 >
                   Request Denied
@@ -234,17 +234,16 @@ class ResponsiveDialog extends React.Component {
                 ") are mandatory (*). Other constraints may be imposed by the database schema, follow instructions in the error details."}
             </DialogContentText>
 
-            <Typography
-              type="subheading"
-              style={styleSheet.cardMarginTopBottom}
-            >
+            <Typography type="subtitle1" style={styleSheet.cardMarginTopBottom}>
               New Row
             </Typography>
             <>
-              {this.state.qbFilters.map(column => {
+              {this.state.qbFilters.map((column) => {
                 return (
                   <TextField
-                    onChange={e => this.handleInput(e, column.id, column.type)}
+                    onChange={(e) =>
+                      this.handleInput(e, column.id, column.type)
+                    }
                     key={column.id}
                     label={column.label ? column.label : column.id}
                     required={this.state.primaryKeys.indexOf(column.id) >= 0}
@@ -281,35 +280,35 @@ const styleSheet = {
   paperMarginTopLeft: {
     paddingLeft: 16,
     paddingTop: 16,
-    paddingBottom: 8
+    paddingBottom: 8,
   },
   paperMarginTop: {
     paddingLeft: 16,
-    paddingTop: 16
+    paddingTop: 16,
   },
   paperMarginLeft: {
     paddingLeft: 16,
     paddingBottom: 8,
-    paddingRight: 8
+    paddingRight: 8,
   },
   cardMarginTopBottom: {
     // For items within the same section
     marginBottom: 8,
-    marginTop: 16
+    marginTop: 16,
   },
   cardMarginLeft: {
-    marginLeft: 16
+    marginLeft: 16,
   },
   textField: {
-    width: 60 + "%"
+    width: 60 + "%",
   },
   paperError: {
-    backgroundColor: "pink"
-  }
+    backgroundColor: "pink",
+  },
 };
 
 ResponsiveDialog.propTypes = {
-  fullScreen: PropTypes.bool.isRequired
+  fullScreen: PropTypes.bool.isRequired,
 };
 
 export default withMobileDialog()(ResponsiveDialog);
