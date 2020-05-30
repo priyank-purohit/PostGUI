@@ -20,7 +20,7 @@
     "react": "^16.13.1",
     "react-copy-to-clipboard": "^5.0.2",
     "react-dom": "^16.13.1",
-    "react-table": "^6.11.5",
+    "react-table": "6.10.0",
     "typeface-roboto": "0.0.75",
     "typescript": "^3.9.3"
   },
