@@ -65,7 +65,7 @@ export default class HistoryPane extends Component<
       historyArray: localHistoryArray ? localHistoryArray : [],
       deleteHistoryDialogVisibilityStyles: styleSheet.hide,
       snackBarVisibility: false,
-      snackBarMessage: "Unknown error occured"
+      snackBarMessage: "Unknown error occured",
     };
     this.changeDisplayIndexDebounce = _.debounce(
       (value: number) => this.setState({ displayIndex: value }),
@@ -98,7 +98,7 @@ export default class HistoryPane extends Component<
         this.setState(
           {
             newHistoryItem: newProps.newHistoryItem,
-            historyArray: arrayvar
+            historyArray: arrayvar,
           },
           () => {
             try {
@@ -123,7 +123,7 @@ export default class HistoryPane extends Component<
                 this.state.historyArray
               ),
               this.state.historyArray.length - 1
-            )
+            ),
           },
           () => {
             try {
@@ -192,13 +192,13 @@ export default class HistoryPane extends Component<
       this.setState(
         {
           snackBarVisibility: true,
-          snackBarMessage: "Link copied!"
+          snackBarMessage: "Link copied!",
         },
         () => {
           this.timer = setTimeout(() => {
             this.setState({
               snackBarVisibility: false,
-              snackBarMessage: "Unknown error"
+              snackBarMessage: "Unknown error",
             });
           }, 2500);
         }
@@ -208,7 +208,7 @@ export default class HistoryPane extends Component<
 
   insertToClipboard(str: string) {
     //based on https://stackoverflow.com/a/12693636
-    document.oncopy = function(event) {
+    document.oncopy = function (event) {
       if (event && event.clipboardData) {
         event.clipboardData.setData("Text", str);
         event.preventDefault();
@@ -264,7 +264,7 @@ export default class HistoryPane extends Component<
         rulesArray.push([
           Array(depth + 1).join("\t") + potentialName,
           rules[i]["operator"],
-          rules[i]["value"]
+          rules[i]["value"],
         ]);
       } else {
         // Check if it's a GROUP by looking for "condition" key
@@ -292,11 +292,11 @@ export default class HistoryPane extends Component<
   showDeleteHistoryDialog() {
     if (this.state.deleteHistoryDialogVisibilityStyles === null) {
       this.setState({
-        deleteHistoryDialogVisibilityStyles: styleSheet.hide
+        deleteHistoryDialogVisibilityStyles: styleSheet.hide,
       });
     } else {
       this.setState({
-        deleteHistoryDialogVisibilityStyles: null
+        deleteHistoryDialogVisibilityStyles: null,
       });
     }
   }
@@ -341,7 +341,7 @@ export default class HistoryPane extends Component<
           <div
             style={{
               ...this.state.deleteHistoryDialogVisibilityStyles,
-              ...{ height: "100px", float: "right" }
+              ...{ height: "100px", float: "right" },
             }}
           >
             <ListSubheader>Delete history?</ListSubheader>
@@ -367,7 +367,7 @@ export default class HistoryPane extends Component<
           {this.state.historyArray
             .slice(0)
             .reverse()
-            .map(item => {
+            .map((item) => {
               // Item[0] is the URL
               // Item[1] are the rules?
 
@@ -423,7 +423,7 @@ export default class HistoryPane extends Component<
                       {/* Nicely formatted history item */}
                       <>
                         <ListItemText primary={tableName} />
-                        {rules.map(rule => {
+                        {rules.map((rule) => {
                           let displayStr = "";
                           let columnName = "";
                           let displayName = "";
@@ -544,7 +544,7 @@ export default class HistoryPane extends Component<
             >
               {" "}
               <CloseIcon />{" "}
-            </IconButton>
+            </IconButton>,
           ]}
         />
       </div>
@@ -568,22 +568,22 @@ const styleSheet: any = {
   root: {
     width: "30%",
     height: "100%",
-    float: "right"
+    float: "right",
   },
   list: {
-    width: 400
+    width: 400,
   },
   listFull: {
-    width: "auto"
+    width: "auto",
   },
   noStyleButton: {
     border: "none",
-    fill: amber[700]
+    fill: amber[700],
   },
   subheaderBackgroundColour: {
-    background: amber[500]
+    background: amber[500],
   },
   hide: {
-    display: "none"
-  }
+    display: "none",
+  },
 };

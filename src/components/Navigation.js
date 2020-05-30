@@ -32,12 +32,12 @@ export default class Navigation extends Component {
       isSearchBarFdpOpen: false,
       isLoginFdpOpen: null,
       loginDialogOpen: false,
-      isHelpOpen: false
+      isHelpOpen: false,
     };
-    this.changeSearchTermDebounce = _.debounce(value => {
+    this.changeSearchTermDebounce = _.debounce((value) => {
       this.props.changeSearchTerm(value);
       this.setState({
-        isSearchBarFdpOpen: true
+        isSearchBarFdpOpen: true,
       });
     }, 350);
   }
@@ -50,7 +50,7 @@ export default class Navigation extends Component {
     ) {
       if (this.state.isLoginFdpOpen === null) {
         this.setState({
-          isLoginFdpOpen: true
+          isLoginFdpOpen: true,
         });
       }
     }
@@ -69,20 +69,20 @@ export default class Navigation extends Component {
       this.props.handleLogoutClick();
     } else {
       this.setState({
-        loginDialogOpen: !this.state.loginDialogOpen
+        loginDialogOpen: !this.state.loginDialogOpen,
       });
     }
   };
 
   handleLoginDialogCloseClick = () => {
     this.setState({
-      loginDialogOpen: false
+      loginDialogOpen: false,
     });
   };
 
-  handleHelpToggle = e => {
+  handleHelpToggle = (e) => {
     this.setState({
-      isHelpOpen: !this.state.isHelpOpen
+      isHelpOpen: !this.state.isHelpOpen,
     });
   };
 
@@ -95,7 +95,7 @@ export default class Navigation extends Component {
         backgroundColor: "white",
         border: "1px solid grey",
         width: 325 + "px",
-        minWidth: "inherit"
+        minWidth: "inherit",
       };
     } else {
       searchBarFdpOpenStyles = {
@@ -103,7 +103,7 @@ export default class Navigation extends Component {
         border: "none",
         width: 45 + "%",
         maxWidth: 525 + "px",
-        minWidth: 325 + "px"
+        minWidth: 325 + "px",
       };
     }
 
@@ -140,7 +140,7 @@ export default class Navigation extends Component {
             </FeatureDiscoveryPrompt>
 
             <Typography
-              variant="title"
+              variant="h6"
               color="inherit"
               style={styleSheet.dbTitleFlex}
             >
@@ -177,7 +177,7 @@ export default class Navigation extends Component {
                           }
                         />
                       </InputAdornment>
-                    )
+                    ),
                   }}
                   autoComplete="off"
                   autoCorrect="off"
@@ -253,14 +253,14 @@ export default class Navigation extends Component {
 
 const styleSheet = {
   dbTitleFlex: {
-    flex: 0.3
+    flex: 0.3,
   },
   searchBarFlex: {
     flex: 0.6,
     display: "block",
     marginLeft: 5,
     marginRight: 5,
-    marginTop: 0
+    marginTop: 0,
   },
   searchBar: {
     marginLeft: 5,
@@ -270,20 +270,20 @@ const styleSheet = {
     paddingBottom: 5,
     borderRadius: 3,
     float: "right",
-    transition: "all 0.2s"
+    transition: "all 0.2s",
   },
   rightIconsFlex: {
     flex: 0.05,
-    display: "block"
+    display: "block",
   },
   floatRight: {
-    float: "right"
+    float: "right",
   },
   floatRightPadded: {
     float: "right",
-    marginRight: 5
+    marginRight: 5,
   },
   button: {
-    margin: 15
-  }
+    margin: 15,
+  },
 };

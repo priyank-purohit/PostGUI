@@ -56,7 +56,7 @@ export default class EditCard extends Component {
       submitButtonLabel: "Submit",
       removeButtonLabel: "Remove All",
 
-      newRowDialogOpen: false
+      newRowDialogOpen: false,
     };
 
     this.handleFeatureEnabledSwitch = this.handleFeatureEnabledSwitch.bind(
@@ -77,7 +77,7 @@ export default class EditCard extends Component {
       primaryKeysAvailable: false,
       changesMade: newProps.changesMade,
       rowsStrikedOut: newProps.rowsStrikedOut,
-      featureEnabled: newProps.featureEnabled
+      featureEnabled: newProps.featureEnabled,
     });
 
     // Enable PK related features if table has a PK
@@ -87,7 +87,7 @@ export default class EditCard extends Component {
           this.setState({
             primaryKeys: newProps.dbPkInfo[i]["primary_keys"],
             primaryKeysAvailable:
-              JSON.stringify(newProps.dbPkInfo[i]["primary_keys"]) !== "[]"
+              JSON.stringify(newProps.dbPkInfo[i]["primary_keys"]) !== "[]",
           });
         }
       }
@@ -97,17 +97,17 @@ export default class EditCard extends Component {
   handleRemoveAllClick(e) {
     if (this.state.removeButtonLabel === "Remove All") {
       this.setState({
-        removeButtonLabel: "Are You Sure?"
+        removeButtonLabel: "Are You Sure?",
       });
       this.timer = setTimeout(() => {
         this.setState({
-          removeButtonLabel: "Remove All"
+          removeButtonLabel: "Remove All",
         });
       }, 4000);
     } else {
       clearTimeout(this.timer);
       this.setState({
-        removeButtonLabel: "Remove All"
+        removeButtonLabel: "Remove All",
       });
       this.props.deleteTableChanges();
     }
@@ -117,11 +117,11 @@ export default class EditCard extends Component {
   handleNewRowClick(newState) {
     if (newState === false || newState === true) {
       this.setState({
-        newRowDialogOpen: newState
+        newRowDialogOpen: newState,
       });
     } else {
       this.setState({
-        newRowDialogOpen: !this.state.newRowDialogOpen
+        newRowDialogOpen: !this.state.newRowDialogOpen,
       });
     }
   }
@@ -131,17 +131,17 @@ export default class EditCard extends Component {
 
     if (this.state.submitButtonLabel === "Submit") {
       this.setState({
-        submitButtonLabel: "Are you sure?"
+        submitButtonLabel: "Are you sure?",
       });
       this.timer = setTimeout(() => {
         this.setState({
-          submitButtonLabel: "Submit"
+          submitButtonLabel: "Submit",
         });
       }, 4000);
     } else {
       clearTimeout(this.timer);
       this.setState({
-        submitButtonLabel: "Submit"
+        submitButtonLabel: "Submit",
       });
       this.props.submitChanges();
     }
@@ -152,7 +152,7 @@ export default class EditCard extends Component {
     // Set the featureEnabled state to opposite of what it is at the moment...
     this.setState(
       {
-        featureEnabled: !this.state.featureEnabled
+        featureEnabled: !this.state.featureEnabled,
       },
       () => {
         this.props.changeEditFeatureEnabled(this.state.featureEnabled);
@@ -288,7 +288,7 @@ export default class EditCard extends Component {
       <>
         <Paper elevation={2} style={styleSheet.topMargin}>
           <Typography
-            variant="subheading"
+            variant="subtitle1"
             style={styleSheet.cardcardMarginLeftTop}
           >
             Edit Table Contents
@@ -408,7 +408,7 @@ export default class EditCard extends Component {
             >
               {" "}
               <CloseIcon />{" "}
-            </IconButton>
+            </IconButton>,
           ]}
         />
       </>
@@ -418,33 +418,33 @@ export default class EditCard extends Component {
 
 const styleSheet = {
   button: {
-    marginBottom: 4
+    marginBottom: 4,
   },
   topMargin: {
-    marginTop: 16
+    marginTop: 16,
   },
   cardMarginLeft: {
     // For items within the same section
-    marginLeft: 32
+    marginLeft: 32,
   },
   cardcardMarginLeftTop: {
     // For a new section
     marginLeft: 16,
-    paddingTop: 16
+    paddingTop: 16,
   },
   floatRight: {
-    float: "right"
+    float: "right",
   },
   secondaryAvatar: {
     color: "#fff",
-    backgroundColor: pink[500]
+    backgroundColor: pink[500],
   },
   amberAvatar: {
     color: "#fff",
-    backgroundColor: amber[500]
+    backgroundColor: amber[500],
   },
   errorAvatar: {
     color: "#fff",
-    backgroundColor: red[500]
-  }
+    backgroundColor: red[500],
+  },
 };

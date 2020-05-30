@@ -30,7 +30,7 @@ export default class DataTable extends Component {
       tablePrimaryKeys: [],
       editFeatureEnabled: false,
       editFeatureChangesMade: {},
-      rowsStrikedOut: []
+      rowsStrikedOut: [],
     };
 
     this.renderEditableCell = this.renderEditableCell.bind(this);
@@ -51,7 +51,7 @@ export default class DataTable extends Component {
       editFeatureEnabled:
         this.state.table !== newProps.table
           ? false
-          : this.state.editFeatureEnabled
+          : this.state.editFeatureEnabled,
     });
 
     // Enable PK related features if table has a PK
@@ -59,7 +59,7 @@ export default class DataTable extends Component {
       for (let i = 0; i < newProps.dbPkInfo.length; i++) {
         if (newProps.dbPkInfo[i]["table"] === this.state.table) {
           this.setState({
-            tablePrimaryKeys: newProps.dbPkInfo[i]["primary_keys"]
+            tablePrimaryKeys: newProps.dbPkInfo[i]["primary_keys"],
           });
         }
       }
@@ -72,7 +72,7 @@ export default class DataTable extends Component {
       return [];
     }
 
-    let data = originalData.map(item => {
+    let data = originalData.map((item) => {
       let pkValues = [];
       for (let i = 0; i < this.state.tablePrimaryKeys.length; i++) {
         pkValues.push(item[this.state.tablePrimaryKeys[i]]);
@@ -80,7 +80,7 @@ export default class DataTable extends Component {
       let _id = pkValues;
       return {
         _id,
-        ...item
+        ...item,
       };
     });
     return data;
@@ -89,14 +89,14 @@ export default class DataTable extends Component {
   // Allows EditCard.js to change the state here
   changeEditFeatureEnabled(featureEnabled) {
     this.setState({
-      editFeatureEnabled: featureEnabled
+      editFeatureEnabled: featureEnabled,
     });
   }
 
   // Allows EditCard.js to change the state here
   changeEditFeatureChangesMade(newChanges) {
     this.setState({
-      editFeatureChangesMade: newChanges
+      editFeatureChangesMade: newChanges,
     });
   }
 
@@ -139,7 +139,7 @@ export default class DataTable extends Component {
           column
         ] = originalValue;
         this.setState({
-          data: data
+          data: data,
         });
       }
     }
@@ -160,7 +160,7 @@ export default class DataTable extends Component {
       let data = this.state.data;
       data.splice(rowToDeleteIndex, 1);
       this.setState({
-        data: data
+        data: data,
       });
     }
 
@@ -178,7 +178,7 @@ export default class DataTable extends Component {
     }
 
     this.setState({
-      editFeatureChangesMade: tempChanges
+      editFeatureChangesMade: tempChanges,
     });
   }
 
@@ -191,7 +191,7 @@ export default class DataTable extends Component {
     tempChanges[this.state.table][column][key]["errorResp"] = errorResp;
 
     this.setState({
-      editFeatureChangesMade: tempChanges
+      editFeatureChangesMade: tempChanges,
     });
   }
 
@@ -242,21 +242,21 @@ export default class DataTable extends Component {
 
     axios
       .post(changeLogURL, changeLogPostReqBody, { headers: preparedHeaders })
-      .then(response => {
+      .then((response) => {
         //console.info("Change Log POST Successful:" + JSON.stringify(response));
       })
-      .catch(error => {
+      .catch((error) => {
         // Show error in Snack-Bar
         this.setState(
           {
             snackBarVisibility: true,
-            snackBarMessage: "Error committing CHANGE LOG!"
+            snackBarMessage: "Error committing CHANGE LOG!",
           },
           () => {
             this.timer = setTimeout(() => {
               this.setState({
                 snackBarVisibility: false,
-                snackBarMessage: "Unknown error"
+                snackBarMessage: "Unknown error",
               });
             }, 5000);
           }
@@ -321,7 +321,7 @@ export default class DataTable extends Component {
               { [columnChanged]: newValue },
               { headers: preparedHeaders }
             )
-            .then(response => {
+            .then((response) => {
               this.deleteChange(columnChanged, keyChanged, true); // true => do not restore original value when deleting change
 
               // Add an entry to the database's change log
@@ -337,7 +337,7 @@ export default class DataTable extends Component {
                 this.props.userName || "Unknown Username"
               );
             })
-            .catch(error => {
+            .catch((error) => {
               console.error("PATCH ERROR RESP:" + String(error));
               this.setChangeError(
                 columnChanged,
@@ -349,13 +349,13 @@ export default class DataTable extends Component {
               this.setState(
                 {
                   snackBarVisibility: true,
-                  snackBarMessage: "Database update failed."
+                  snackBarMessage: "Database update failed.",
                 },
                 () => {
                   this.timer = setTimeout(() => {
                     this.setState({
                       snackBarVisibility: false,
-                      snackBarMessage: "Unknown error"
+                      snackBarMessage: "Unknown error",
                     });
                   }, 5000);
                 }
@@ -380,7 +380,7 @@ export default class DataTable extends Component {
           // Send the DELETE request and check response
           axios
             .delete(url, { headers: preparedHeaders })
-            .then(response => {
+            .then((response) => {
               // Add an entry to the database's change log
               let oldRow = null;
               let needle = [];
@@ -409,20 +409,20 @@ export default class DataTable extends Component {
 
               this.deleteChange("id", keyChanged, "delete");
             })
-            .catch(error => {
+            .catch((error) => {
               console.error("ERROR RESP: " + String(error));
               this.setChangeError("id", keyChanged, true, error.response.data);
               // Show error in Snack-Bar
               this.setState(
                 {
                   snackBarVisibility: true,
-                  snackBarMessage: "Row delete request failed."
+                  snackBarMessage: "Row delete request failed.",
                 },
                 () => {
                   this.timer = setTimeout(() => {
                     this.setState({
                       snackBarVisibility: false,
-                      snackBarMessage: "Unknown error"
+                      snackBarMessage: "Unknown error",
                     });
                   }, 5000);
                 }
@@ -437,13 +437,13 @@ export default class DataTable extends Component {
           this.setState(
             {
               snackBarVisibility: true,
-              snackBarMessage: "Change was not detected."
+              snackBarMessage: "Change was not detected.",
             },
             () => {
               this.timer = setTimeout(() => {
                 this.setState({
                   snackBarVisibility: false,
-                  snackBarMessage: "Unknown error"
+                  snackBarMessage: "Unknown error",
                 });
               }, 2500);
             }
@@ -461,11 +461,11 @@ export default class DataTable extends Component {
           backgroundColor: "#fafafa",
           border: "none",
           borderBottom: "1px solid lightpink",
-          padding: "1px"
+          padding: "1px",
         }}
         contentEditable
         suppressContentEditableWarning
-        onBlur={e => {
+        onBlur={(e) => {
           let data = [...this.state.data];
 
           let changedRowIndex = cellInfo.index;
@@ -556,12 +556,12 @@ export default class DataTable extends Component {
 
             this.setState({
               data: data,
-              editFeatureChangesMade: currentChanges
+              editFeatureChangesMade: currentChanges,
             });
           }
         }}
         dangerouslySetInnerHTML={{
-          __html: this.state.data[cellInfo.index][cellInfo.column.id]
+          __html: this.state.data[cellInfo.index][cellInfo.column.id],
         }}
       />
     );
@@ -619,12 +619,12 @@ export default class DataTable extends Component {
     }
 
     this.setState({
-      editFeatureChangesMade: currentChanges
+      editFeatureChangesMade: currentChanges,
     });
   };
 
   // Returns true iff row identified by KEY is marked for deletion in editFeatureChangesMade
-  isSelected = key => {
+  isSelected = (key) => {
     // Change doesn't even exist, so return false
     if (
       this.state.editFeatureChangesMade === {} ||
@@ -649,7 +649,7 @@ export default class DataTable extends Component {
 
     // Create columns with expected column properties
     if (columns) {
-      parsedColumns = columns.map(columnName => {
+      parsedColumns = columns.map((columnName) => {
         let columnRename = lib.getColumnConfig(
           this.props.dbIndex,
           this.state.table,
@@ -712,10 +712,10 @@ export default class DataTable extends Component {
             this.state.editFeatureEnabled === true &&
             columnEditability !== false
               ? this.renderEditableCell
-              : row =>
+              : (row) =>
                   row.value !== undefined && row.value !== null
                     ? String(row.value)
-                    : row.value
+                    : row.value,
         };
       });
     }
@@ -737,10 +737,10 @@ export default class DataTable extends Component {
         return {
           style: {
             backgroundColor: selected ? "lightpink" : "inherit",
-            textDecoration: selected ? "line-through" : "none"
-          }
+            textDecoration: selected ? "line-through" : "none",
+          },
         };
-      }
+      },
     };
 
     // render() return
@@ -774,7 +774,7 @@ export default class DataTable extends Component {
         <div style={styleSheet.cardGroups}>
           <Grid
             container
-            spacing={16}
+            spacing={10}
             direction={
               this.state.tablePrimaryKeys.join(",") === ""
                 ? "row-reverse"
@@ -827,7 +827,7 @@ export default class DataTable extends Component {
             >
               {" "}
               <CloseIcon />{" "}
-            </IconButton>
+            </IconButton>,
           ]}
         />
       </>
@@ -839,20 +839,20 @@ const styleSheet = {
   root: {
     width: "29%",
     height: "100%",
-    float: "left"
+    float: "left",
   },
   headerClass: {
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   button: {
     margin: 5,
-    float: "right"
+    float: "right",
   },
   topMargin: {
     margin: 5,
-    marginTop: 5 * 5
+    marginTop: 5 * 5,
   },
   cardGroups: {
-    flexGrow: 1
-  }
+    flexGrow: 1,
+  },
 };

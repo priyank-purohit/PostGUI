@@ -23,7 +23,7 @@ export default class RightPaneChips extends Component {
       tip3: "Use Batch Download option.",
       isTip1FdpOpen: false,
       isTip2FdpOpen: false,
-      isTip3FdpOpen: false
+      isTip3FdpOpen: false,
     };
   }
 
@@ -32,7 +32,7 @@ export default class RightPaneChips extends Component {
       rows: newProps.rows ? newProps.rows : 0,
       totalRows: newProps.totalRows ? newProps.totalRows : 0,
       rowLimit: newProps.rowLimit ? newProps.rowLimit : 2500,
-      maxRows: newProps.maxRows ? newProps.maxRows : 100000
+      maxRows: newProps.maxRows ? newProps.maxRows : 100000,
     });
   }
   render() {
@@ -64,12 +64,12 @@ export default class RightPaneChips extends Component {
         >
           <Chip
             color={"secondary"}
-            variant={"outlined"}
+            variant="outlined"
             label={rowCountChipLabel}
             onMouseEnter={() => {
               this.timer = setTimeout(() => {
                 this.setState({
-                  isTip1FdpOpen: true
+                  isTip1FdpOpen: true,
                 });
               }, 250);
             }}
@@ -103,7 +103,7 @@ export default class RightPaneChips extends Component {
               onMouseEnter={() => {
                 this.timer = setTimeout(() => {
                   this.setState({
-                    isTip2FdpOpen: true
+                    isTip2FdpOpen: true,
                   });
                 }, 250);
               }}
@@ -129,13 +129,13 @@ export default class RightPaneChips extends Component {
             <Chip
               label={this.state.tip3}
               key={2}
-              color={"secondary"}
-              variant={"outlined"}
+              color="secondary"
+              variant="outlined"
               style={styleSheet.chip}
               onMouseEnter={() => {
                 this.timer = setTimeout(() => {
                   this.setState({
-                    isTip3FdpOpen: true
+                    isTip3FdpOpen: true,
                   });
                 }, 250);
               }}
@@ -156,13 +156,13 @@ export default class RightPaneChips extends Component {
 
 const styleSheet = {
   chip: {
-    margin: 5
+    margin: 5,
   },
   row: {
     display: "flex",
     justifyContent: "flex-end",
     flexWrap: "wrap",
     marginTop: -30,
-    marginRight: "1%"
-  }
+    marginRight: "1%",
+  },
 };
