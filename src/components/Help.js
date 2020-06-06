@@ -1,18 +1,18 @@
-import React, { Component } from "react";
+import React, {Component} from 'react'
 import {
   Dialog,
   AppBar,
   Toolbar,
   IconButton,
   Typography,
-  Slide,
-} from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
-import amber from "@material-ui/core/colors/amber";
+  Slide
+} from '@material-ui/core'
+import CloseIcon from '@material-ui/icons/Close'
+import amber from '@material-ui/core/colors/amber'
 
 export default class Help extends Component {
   transition(props) {
-    return <Slide direction="up" {...props} />;
+    return <Slide direction='up' {...props} />
   }
 
   render() {
@@ -26,40 +26,40 @@ export default class Help extends Component {
         <AppBar style={styleSheet.appBar}>
           <Toolbar>
             <IconButton
-              color="default"
+              color='default'
               onClick={this.props.handleHelpToggle}
-              aria-label="Close"
+              aria-label='Close'
             >
               <CloseIcon />
             </IconButton>
-            <Typography variant="title" color="default" style={styleSheet.flex}>
+            <Typography variant='title' color='default' style={styleSheet.flex}>
               Help
             </Typography>
           </Toolbar>
         </AppBar>
         <img
-          src={require("../resources/mr_clippy.jpeg")}
-          alt="Help section not available yet"
+          src={require('../resources/mr_clippy.jpeg')}
+          alt='Help section not available yet'
           width={400}
           style={styleSheet.centered}
         />
       </Dialog>
-    );
+    )
   }
 }
 
 const styleSheet = {
   appBar: {
-    position: "relative",
-    color: "black",
-    background: amber[600],
+    position: 'relative',
+    color: 'black',
+    background: amber[600]
   },
   flex: {
-    flex: 1,
+    flex: 1
   },
   centered: {
-    marginLeft: "auto",
-    marginRight: "auto",
-    marginTop: 20,
-  },
-};
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginTop: 20
+  }
+}

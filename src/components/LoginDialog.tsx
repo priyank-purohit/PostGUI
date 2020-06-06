@@ -11,16 +11,16 @@ import TextField from '@material-ui/core/TextField';
 
 
 interface ILoginDialogProps {
-  dbName: string;
-  open: boolean;
+  dbName: string
+  open: boolean
 
-  setUserEmailPassword: Function;
-  handleLoginDialogCloseClick: React.ReactEventHandler<{}>;
+  setUserEmailPassword: Function
+  handleLoginDialogCloseClick: React.ReactEventHandler<{}>
 }
 interface ILoginDialogState {
-  email: Nullable<string>;
-  password: Nullable<string>;
-  [x: number]: any;
+  email: Nullable<string>
+  password: Nullable<string>
+  [x: number]: any
 }
 
 export default class LoginDialog extends Component<
@@ -28,27 +28,27 @@ export default class LoginDialog extends Component<
   ILoginDialogState
 > {
   constructor(props: ILoginDialogProps) {
-    super(props);
+    super(props)
     this.state = {
       email: null,
       password: null
-    };
+    }
 
-    this.onChangeHandler = this.onChangeHandler.bind(this);
-    this.handleLoginClick = this.handleLoginClick.bind(this);
+    this.onChangeHandler = this.onChangeHandler.bind(this)
+    this.handleLoginClick = this.handleLoginClick.bind(this)
   }
 
   handleLoginClick(e: any) {
     if (this.state.email && this.state.password) {
-      this.props.setUserEmailPassword(this.state.email, this.state.password);
-      this.props.handleLoginDialogCloseClick(e);
+      this.props.setUserEmailPassword(this.state.email, this.state.password)
+      this.props.handleLoginDialogCloseClick(e)
     }
   }
 
   onChangeHandler(e: any) {
     this.setState({
       [e.target.id]: e.target.value
-    });
+    })
   }
 
   render() {
@@ -56,10 +56,10 @@ export default class LoginDialog extends Component<
       <Dialog
         open={this.props.open || false}
         onClose={this.props.handleLoginDialogCloseClick}
-        aria-labelledby="form-dialog-title"
+        aria-labelledby='form-dialog-title'
       >
-        <DialogTitle id="form-dialog-title">
-          PostGUI Login{this.props.dbName ? " - " + this.props.dbName : ""}
+        <DialogTitle id='form-dialog-title'>
+          PostGUI Login{this.props.dbName ? ' - ' + this.props.dbName : ''}
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -69,19 +69,19 @@ export default class LoginDialog extends Component<
           <TextField
             autoFocus
             required
-            margin="dense"
-            id="email"
-            label="Email Address"
-            type="email"
+            margin='dense'
+            id='email'
+            label='Email Address'
+            type='email'
             onChange={this.onChangeHandler}
             fullWidth
           />
           <TextField
             required
-            margin="dense"
-            id="password"
-            label="Password"
-            type="password"
+            margin='dense'
+            id='password'
+            label='Password'
+            type='password'
             onChange={this.onChangeHandler}
             fullWidth
           />
@@ -90,15 +90,15 @@ export default class LoginDialog extends Component<
         <DialogActions>
           <Button
             onClick={this.props.handleLoginDialogCloseClick}
-            color="default"
+            color='default'
           >
             Cancel
           </Button>
-          <Button onClick={this.handleLoginClick} color="secondary">
+          <Button onClick={this.handleLoginClick} color='secondary'>
             Login
           </Button>
         </DialogActions>
       </Dialog>
-    );
+    )
   }
 }

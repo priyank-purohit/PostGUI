@@ -1,42 +1,42 @@
-import React, { Component } from "react";
+import React, {Component} from 'react'
 
-import NewRow from "./NewRow.js";
+import NewRow from './NewRow.js'
 
-import Button from "@material-ui/core/Button";
-import Paper from "@material-ui/core/Paper";
-import Typography from "@material-ui/core/Typography";
+import Button from '@material-ui/core/Button'
+import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography'
 
-import Divider from "@material-ui/core/Divider";
-import FormGroup from "@material-ui/core/FormGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Switch from "@material-ui/core/Switch";
-import Snackbar from "@material-ui/core/Snackbar";
-import IconButton from "@material-ui/core/IconButton";
-import CloseIcon from "@material-ui/icons/Close";
+import Divider from '@material-ui/core/Divider'
+import FormGroup from '@material-ui/core/FormGroup'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Switch from '@material-ui/core/Switch'
+import Snackbar from '@material-ui/core/Snackbar'
+import IconButton from '@material-ui/core/IconButton'
+import CloseIcon from '@material-ui/icons/Close'
 
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import ListItemText from "@material-ui/core/ListItemText";
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemAvatar from '@material-ui/core/ListItemAvatar'
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
+import ListItemText from '@material-ui/core/ListItemText'
 
-import Avatar from "@material-ui/core/Avatar";
-import CreateIcon from "@material-ui/icons/Create";
-import SearchIcon from "@material-ui/icons/Search";
-import ErrorIcon from "@material-ui/icons/Error";
-import WarningIcon from "@material-ui/icons/Warning";
-import DeleteIcon from "@material-ui/icons/Delete";
-import DeleteOutlineIcon from "@material-ui/icons/DeleteSweep";
+import Avatar from '@material-ui/core/Avatar'
+import CreateIcon from '@material-ui/icons/Create'
+import SearchIcon from '@material-ui/icons/Search'
+import ErrorIcon from '@material-ui/icons/Error'
+import WarningIcon from '@material-ui/icons/Warning'
+import DeleteIcon from '@material-ui/icons/Delete'
+import DeleteOutlineIcon from '@material-ui/icons/DeleteSweep'
 
-import pink from "@material-ui/core/colors/pink";
-import red from "@material-ui/core/colors/red";
-import amber from "@material-ui/core/colors/amber";
+import pink from '@material-ui/core/colors/pink'
+import red from '@material-ui/core/colors/red'
+import amber from '@material-ui/core/colors/amber'
 
 //const timeout = 2000;
 
 export default class EditCard extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       table: props.table,
       columns: props.columns,
@@ -51,20 +51,18 @@ export default class EditCard extends Component {
       rowsStrikedOut: props.rowsStrikedOut,
 
       snackBarVisibility: false,
-      snackBarMessage: "Unknown error occured",
+      snackBarMessage: 'Unknown error occured',
 
-      submitButtonLabel: "Submit",
-      removeButtonLabel: "Remove All",
+      submitButtonLabel: 'Submit',
+      removeButtonLabel: 'Remove All',
 
-      newRowDialogOpen: false,
-    };
+      newRowDialogOpen: false
+    }
 
-    this.handleFeatureEnabledSwitch = this.handleFeatureEnabledSwitch.bind(
-      this
-    );
-    this.handleSubmitClick = this.handleSubmitClick.bind(this);
-    this.handleNewRowClick = this.handleNewRowClick.bind(this);
-    this.handleRemoveAllClick = this.handleRemoveAllClick.bind(this);
+    this.handleFeatureEnabledSwitch = this.handleFeatureEnabledSwitch.bind(this)
+    this.handleSubmitClick = this.handleSubmitClick.bind(this)
+    this.handleNewRowClick = this.handleNewRowClick.bind(this)
+    this.handleRemoveAllClick = this.handleRemoveAllClick.bind(this)
   }
 
   componentWillReceiveProps(newProps) {
@@ -77,39 +75,39 @@ export default class EditCard extends Component {
       primaryKeysAvailable: false,
       changesMade: newProps.changesMade,
       rowsStrikedOut: newProps.rowsStrikedOut,
-      featureEnabled: newProps.featureEnabled,
-    });
+      featureEnabled: newProps.featureEnabled
+    })
 
     // Enable PK related features if table has a PK
     if (newProps.dbPkInfo && this.state.table) {
       for (let i = 0; i < newProps.dbPkInfo.length; i++) {
-        if (newProps.dbPkInfo[i]["table"] === this.state.table) {
+        if (newProps.dbPkInfo[i]['table'] === this.state.table) {
           this.setState({
-            primaryKeys: newProps.dbPkInfo[i]["primary_keys"],
+            primaryKeys: newProps.dbPkInfo[i]['primary_keys'],
             primaryKeysAvailable:
-              JSON.stringify(newProps.dbPkInfo[i]["primary_keys"]) !== "[]",
-          });
+              JSON.stringify(newProps.dbPkInfo[i]['primary_keys']) !== '[]'
+          })
         }
       }
     }
   }
 
   handleRemoveAllClick(e) {
-    if (this.state.removeButtonLabel === "Remove All") {
+    if (this.state.removeButtonLabel === 'Remove All') {
       this.setState({
-        removeButtonLabel: "Are You Sure?",
-      });
+        removeButtonLabel: 'Are You Sure?'
+      })
       this.timer = setTimeout(() => {
         this.setState({
-          removeButtonLabel: "Remove All",
-        });
-      }, 4000);
+          removeButtonLabel: 'Remove All'
+        })
+      }, 4000)
     } else {
-      clearTimeout(this.timer);
+      clearTimeout(this.timer)
       this.setState({
-        removeButtonLabel: "Remove All",
-      });
-      this.props.deleteTableChanges();
+        removeButtonLabel: 'Remove All'
+      })
+      this.props.deleteTableChanges()
     }
   }
 
@@ -117,33 +115,33 @@ export default class EditCard extends Component {
   handleNewRowClick(newState) {
     if (newState === false || newState === true) {
       this.setState({
-        newRowDialogOpen: newState,
-      });
+        newRowDialogOpen: newState
+      })
     } else {
       this.setState({
-        newRowDialogOpen: !this.state.newRowDialogOpen,
-      });
+        newRowDialogOpen: !this.state.newRowDialogOpen
+      })
     }
   }
 
   handleSubmitClick() {
-    console.clear();
+    console.clear()
 
-    if (this.state.submitButtonLabel === "Submit") {
+    if (this.state.submitButtonLabel === 'Submit') {
       this.setState({
-        submitButtonLabel: "Are you sure?",
-      });
+        submitButtonLabel: 'Are you sure?'
+      })
       this.timer = setTimeout(() => {
         this.setState({
-          submitButtonLabel: "Submit",
-        });
-      }, 4000);
+          submitButtonLabel: 'Submit'
+        })
+      }, 4000)
     } else {
-      clearTimeout(this.timer);
+      clearTimeout(this.timer)
       this.setState({
-        submitButtonLabel: "Submit",
-      });
-      this.props.submitChanges();
+        submitButtonLabel: 'Submit'
+      })
+      this.props.submitChanges()
     }
   }
 
@@ -152,33 +150,33 @@ export default class EditCard extends Component {
     // Set the featureEnabled state to opposite of what it is at the moment...
     this.setState(
       {
-        featureEnabled: !this.state.featureEnabled,
+        featureEnabled: !this.state.featureEnabled
       },
       () => {
-        this.props.changeEditFeatureEnabled(this.state.featureEnabled);
+        this.props.changeEditFeatureEnabled(this.state.featureEnabled)
       }
-    );
+    )
   }
 
   // Converts the JSON object for PK into a string that can be displayed to user
   primaryKeyStringify(primaryKey) {
-    let keys = Object.keys(primaryKey);
-    let stringified = "";
+    let keys = Object.keys(primaryKey)
+    let stringified = ''
 
     for (let i in Object.keys(primaryKey)) {
-      stringified += keys[i] + " = " + primaryKey[keys[i]];
+      stringified += keys[i] + ' = ' + primaryKey[keys[i]]
       if (parseInt(i, 10) !== keys.length - 1) {
-        stringified += " and ";
+        stringified += ' and '
       }
     }
-    return stringified;
+    return stringified
   }
 
   // Creates the <list> that shows the changes made
   createChangeLogList() {
     if (
-      this.state.table === "" ||
-      JSON.stringify(this.state.changesMade) === "{}" ||
+      this.state.table === '' ||
+      JSON.stringify(this.state.changesMade) === '{}' ||
       this.state.changesMade[this.state.table] === null ||
       this.state.changesMade[this.state.table] === undefined
     ) {
@@ -189,34 +187,34 @@ export default class EditCard extends Component {
               <SearchIcon />
             </Avatar>
           </ListItemAvatar>
-          <ListItemText primary={"No unsubmitted changes found..."} />
+          <ListItemText primary={'No unsubmitted changes found...'} />
         </ListItem>
-      );
+      )
     }
 
-    let length = Object.keys(this.state.changesMade[this.state.table]).length;
-    let keys = Object.keys(this.state.changesMade[this.state.table]);
-    let listItems = [];
+    let length = Object.keys(this.state.changesMade[this.state.table]).length
+    let keys = Object.keys(this.state.changesMade[this.state.table])
+    let listItems = []
 
     for (let i = 0; i < length; i++) {
-      let column = keys[i];
+      let column = keys[i]
 
-      let change = this.state.changesMade[this.state.table][column];
-      let changeCount = Object.keys(change).length;
+      let change = this.state.changesMade[this.state.table][column]
+      let changeCount = Object.keys(change).length
 
       for (let ii = 0; ii < changeCount; ii++) {
-        let oldValue = change[Object.keys(change)[ii]]["oldValue"];
-        let newValue = change[Object.keys(change)[ii]]["newValue"];
-        let markForDeletion = change[Object.keys(change)[ii]]["delete"];
-        let primaryKey = change[Object.keys(change)[ii]]["primaryKey"];
-        let error = change[Object.keys(change)[ii]]["error"];
-        let errorResp = change[Object.keys(change)[ii]]["errorResp"];
+        let oldValue = change[Object.keys(change)[ii]]['oldValue']
+        let newValue = change[Object.keys(change)[ii]]['newValue']
+        let markForDeletion = change[Object.keys(change)[ii]]['delete']
+        let primaryKey = change[Object.keys(change)[ii]]['primaryKey']
+        let error = change[Object.keys(change)[ii]]['error']
+        let errorResp = change[Object.keys(change)[ii]]['errorResp']
 
         listItems.push(
-          <span key={String(i) + String(ii) + "span"}>
+          <span key={String(i) + String(ii) + 'span'}>
             <ListItem
               key={String(i) + String(ii)}
-              title={error ? errorResp : ""}
+              title={error ? errorResp : ''}
             >
               <ListItemAvatar>
                 {error ? (
@@ -225,24 +223,24 @@ export default class EditCard extends Component {
                   </Avatar>
                 ) : markForDeletion ? (
                   <Avatar>
-                    {" "}
-                    <DeleteOutlineIcon />{" "}
+                    {' '}
+                    <DeleteOutlineIcon />{' '}
                   </Avatar>
                 ) : (
                   <Avatar>
-                    {" "}
-                    <CreateIcon />{" "}
+                    {' '}
+                    <CreateIcon />{' '}
                   </Avatar>
                 )}
               </ListItemAvatar>
               {markForDeletion ? (
                 <ListItemText
-                  primary={"Delete row"}
-                  secondary={"Where " + this.primaryKeyStringify(primaryKey)}
+                  primary={'Delete row'}
+                  secondary={'Where ' + this.primaryKeyStringify(primaryKey)}
                 />
               ) : (
                 <ListItemText
-                  primary={column + " column changed"}
+                  primary={column + ' column changed'}
                   secondary={
                     "From '" +
                     oldValue +
@@ -262,25 +260,25 @@ export default class EditCard extends Component {
                   markForDeletion || false
                 )}
               >
-                <IconButton aria-label="Delete">
+                <IconButton aria-label='Delete'>
                   <DeleteIcon />
                 </IconButton>
               </ListItemSecondaryAction>
             </ListItem>
 
             {error && errorResp && errorResp.code && errorResp.message && (
-              <ListItem key={String(i) + String(ii) + "err"}>
+              <ListItem key={String(i) + String(ii) + 'err'}>
                 <ListItemText
-                  primary={"PostgreSQL Error Code: " + errorResp.code}
-                  secondary={"Error: " + errorResp.message}
+                  primary={'PostgreSQL Error Code: ' + errorResp.code}
+                  secondary={'Error: ' + errorResp.message}
                 />
               </ListItem>
             )}
           </span>
-        );
+        )
       }
     }
-    return listItems;
+    return listItems
   }
 
   render() {
@@ -288,7 +286,7 @@ export default class EditCard extends Component {
       <>
         <Paper elevation={2} style={styleSheet.topMargin}>
           <Typography
-            variant="subtitle1"
+            variant='subtitle1'
             style={styleSheet.cardcardMarginLeftTop}
           >
             Edit Table Contents
@@ -301,10 +299,10 @@ export default class EditCard extends Component {
                   <Switch
                     checked={this.state.featureEnabled}
                     onChange={this.handleFeatureEnabledSwitch}
-                    value="featureStatus"
+                    value='featureStatus'
                   />
                 }
-                label="Enable table edit feature"
+                label='Enable table edit feature'
               />
             </FormGroup>
           ) : (
@@ -316,7 +314,7 @@ export default class EditCard extends Component {
                       <ErrorIcon />
                     </Avatar>
                   </ListItemAvatar>
-                  <ListItemText primary="This table cannot be edited because its primary keys were not found." />
+                  <ListItemText primary='This table cannot be edited because its primary keys were not found.' />
                 </ListItem>
               </List>
             </>
@@ -325,7 +323,7 @@ export default class EditCard extends Component {
           {this.state.featureEnabled && this.state.primaryKeysAvailable ? (
             <>
               <Typography
-                variant="body1"
+                variant='body1'
                 style={styleSheet.cardcardMarginLeftTop}
               >
                 Changes made to this table
@@ -333,7 +331,7 @@ export default class EditCard extends Component {
 
               <List dense={true}>{this.createChangeLogList()}</List>
             </>
-          ) : JSON.stringify(this.state.changesMade) !== "{}" ? (
+          ) : JSON.stringify(this.state.changesMade) !== '{}' ? (
             <>
               <List dense={false}>
                 <ListItem>
@@ -342,7 +340,7 @@ export default class EditCard extends Component {
                       <WarningIcon />
                     </Avatar>
                   </ListItemAvatar>
-                  <ListItemText primary="Unsubmitted changes are detected, these changes will be lost if not submitted." />
+                  <ListItemText primary='Unsubmitted changes are detected, these changes will be lost if not submitted.' />
                 </ListItem>
               </List>
             </>
@@ -356,7 +354,7 @@ export default class EditCard extends Component {
             disabled={
               !(this.state.featureEnabled && this.state.primaryKeysAvailable)
             }
-            color="primary"
+            color='primary'
             style={styleSheet.button}
             value={this.state.submitButtonLabel}
           >
@@ -367,11 +365,11 @@ export default class EditCard extends Component {
             disabled={
               !(this.state.featureEnabled && this.state.primaryKeysAvailable)
             }
-            color="primary"
+            color='primary'
             style={styleSheet.button}
-            value={"New Row"}
+            value={'New Row'}
           >
-            {"New Row"}
+            {'New Row'}
           </Button>
           <Button
             onClick={this.handleRemoveAllClick}
@@ -393,58 +391,58 @@ export default class EditCard extends Component {
         />
 
         <Snackbar
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
           open={this.state.snackBarVisibility}
           onClose={this.handleRequestClose}
-          ContentProps={{ "aria-describedby": "message-id" }}
-          message={<span id="message-id">{this.state.snackBarMessage}</span>}
+          ContentProps={{'aria-describedby': 'message-id'}}
+          message={<span id='message-id'>{this.state.snackBarMessage}</span>}
           action={[
             <IconButton
-              key="close"
-              aria-label="Close"
-              color="secondary"
+              key='close'
+              aria-label='Close'
+              color='secondary'
               style={styleSheet.close}
               onClick={this.handleRequestClose}
             >
-              {" "}
-              <CloseIcon />{" "}
-            </IconButton>,
+              {' '}
+              <CloseIcon />{' '}
+            </IconButton>
           ]}
         />
       </>
-    );
+    )
   }
 }
 
 const styleSheet = {
   button: {
-    marginBottom: 4,
+    marginBottom: 4
   },
   topMargin: {
-    marginTop: 16,
+    marginTop: 16
   },
   cardMarginLeft: {
     // For items within the same section
-    marginLeft: 32,
+    marginLeft: 32
   },
   cardcardMarginLeftTop: {
     // For a new section
     marginLeft: 16,
-    paddingTop: 16,
+    paddingTop: 16
   },
   floatRight: {
-    float: "right",
+    float: 'right'
   },
   secondaryAvatar: {
-    color: "#fff",
-    backgroundColor: pink[500],
+    color: '#fff',
+    backgroundColor: pink[500]
   },
   amberAvatar: {
-    color: "#fff",
-    backgroundColor: amber[500],
+    color: '#fff',
+    backgroundColor: amber[500]
   },
   errorAvatar: {
-    color: "#fff",
-    backgroundColor: red[500],
-  },
-};
+    color: '#fff',
+    backgroundColor: red[500]
+  }
+}

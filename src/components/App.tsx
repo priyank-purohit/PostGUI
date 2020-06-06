@@ -13,150 +13,150 @@ import Navigation from './Navigation.js';
 import RightPane from './RightPane.js';
 
 
-let lib = require("../utils/library.ts");
-let auth: Nullable<Auth> = null;
+let lib = require('../utils/library.ts')
+let auth: Nullable<Auth> = null
 interface IAppProps {}
 
 interface IAppState {
-  dbIndex: number;
-  table: string;
-  rowLimit: number;
-  exactCount: boolean;
-  rulesFromURL: Nullable<string>;
-  rulesFromHistoryPane: Nullable<string>;
-  columns: Array<string>;
-  newHistoryItem: Array<string>;
-  visibleColumns: Array<string>;
-  leftPaneVisibility: boolean;
-  historyPaneVisibility: boolean;
-  searchTerm: string;
-  dbSchemaDefinitions: Nullable<string>;
-  dbPkInfo: Nullable<string>;
-  userName: string;
-  token: Nullable<string>;
-  isLoggedIn: boolean;
+  dbIndex: number
+  table: string
+  rowLimit: number
+  exactCount: boolean
+  rulesFromURL: Nullable<string>
+  rulesFromHistoryPane: Nullable<string>
+  columns: Array<string>
+  newHistoryItem: Array<string>
+  visibleColumns: Array<string>
+  leftPaneVisibility: boolean
+  historyPaneVisibility: boolean
+  searchTerm: string
+  dbSchemaDefinitions: Nullable<string>
+  dbPkInfo: Nullable<string>
+  userName: string
+  token: Nullable<string>
+  isLoggedIn: boolean
 }
 
 export default class Layout extends React.Component<IAppProps, IAppState> {
   constructor(props: IAppProps) {
-    super(props);
+    super(props)
 
     // Parse URL
-    let parsedURL = this.parseURL();
+    let parsedURL = this.parseURL()
 
     this.state = {
-      dbIndex: parsedURL["db"] || 0,
-      table: parsedURL["table"] || "",
-      rowLimit: parsedURL["rowLimit"] || INITIAL_ROW_LIMIT,
-      exactCount: parsedURL["exactCount"] || false,
-      rulesFromURL: parsedURL["urlRules"] || null,
+      dbIndex: parsedURL['db'] || 0,
+      table: parsedURL['table'] || '',
+      rowLimit: parsedURL['rowLimit'] || INITIAL_ROW_LIMIT,
+      exactCount: parsedURL['exactCount'] || false,
+      rulesFromURL: parsedURL['urlRules'] || null,
       rulesFromHistoryPane: null,
       columns: [],
       newHistoryItem: [],
       visibleColumns: [],
       leftPaneVisibility: true,
       historyPaneVisibility: false,
-      searchTerm: "",
+      searchTerm: '',
       dbSchemaDefinitions: null,
       dbPkInfo: null,
-      userName: "Unknown username",
+      userName: 'Unknown username',
       token: null,
       isLoggedIn: false
-    };
+    }
 
-    auth = new Auth(parsedURL["db"] || 0);
+    auth = new Auth(parsedURL['db'] || 0)
 
-    this.setUserEmailPassword = this.setUserEmailPassword.bind(this);
-    this.toggleLeftPane = this.toggleLeftPane.bind(this);
-    this.toggleHistoryPane = this.toggleHistoryPane.bind(this);
-    this.changeSearchTerm = this.changeSearchTerm.bind(this);
-    this.changeDbIndex = this.changeDbIndex.bind(this);
-    this.changeColumns = this.changeColumns.bind(this);
-    this.changeDbSchemaDefinitions = this.changeDbSchemaDefinitions.bind(this);
-    this.changeDbPkInfo = this.changeDbPkInfo.bind(this);
-    this.changeVisibleColumns = this.changeVisibleColumns.bind(this);
-    this.addToHistory = this.addToHistory.bind(this);
-    this.closeHistoryPane = this.closeHistoryPane.bind(this);
-    this.changeTable = this.changeTable.bind(this);
-    this.changeRules = this.changeRules.bind(this);
+    this.setUserEmailPassword = this.setUserEmailPassword.bind(this)
+    this.toggleLeftPane = this.toggleLeftPane.bind(this)
+    this.toggleHistoryPane = this.toggleHistoryPane.bind(this)
+    this.changeSearchTerm = this.changeSearchTerm.bind(this)
+    this.changeDbIndex = this.changeDbIndex.bind(this)
+    this.changeColumns = this.changeColumns.bind(this)
+    this.changeDbSchemaDefinitions = this.changeDbSchemaDefinitions.bind(this)
+    this.changeDbPkInfo = this.changeDbPkInfo.bind(this)
+    this.changeVisibleColumns = this.changeVisibleColumns.bind(this)
+    this.addToHistory = this.addToHistory.bind(this)
+    this.closeHistoryPane = this.closeHistoryPane.bind(this)
+    this.changeTable = this.changeTable.bind(this)
+    this.changeRules = this.changeRules.bind(this)
   }
 
   // This should be called once, when app loads, to load a shared query via URL
   parseURL() {
-    let url: string = "" + window.location.href;
+    let url: string = '' + window.location.href
 
-    let databaseRx: RegExp = /\/db\/\d\//g;
-    let tableRx: RegExp = /\/table\/\w+\/?/g;
-    let queryRx: RegExp = /query=.*/g;
-    let rowLimitRx: RegExp = /rowLimit=\d+/g;
-    let exactCountRx: RegExp = /exactCount=True|exactCount=False/g;
+    let databaseRx: RegExp = /\/db\/\d\//g
+    let tableRx: RegExp = /\/table\/\w+\/?/g
+    let queryRx: RegExp = /query=.*/g
+    let rowLimitRx: RegExp = /rowLimit=\d+/g
+    let exactCountRx: RegExp = /exactCount=True|exactCount=False/g
 
     // Extract the db
-    let dbExecResults: Nullable<RegExpExecArray> = databaseRx.exec(url);
-    let db: number;
+    let dbExecResults: Nullable<RegExpExecArray> = databaseRx.exec(url)
+    let db: number
     if (dbExecResults) {
       db = parseInt(
-        dbExecResults[0].replace(/\/db\//g, "").replace(/\//g, ""),
+        dbExecResults[0].replace(/\/db\//g, '').replace(/\//g, ''),
         10
-      );
+      )
     } else {
-      db = 0;
+      db = 0
     }
 
     // Confirm DB exists
-    let databasesMapped: Array<string> = [];
+    let databasesMapped: Array<string> = []
     lib
-      .getValueFromConfig("databases")
+      .getValueFromConfig('databases')
       .map(
         (obj: IConfigDatabase, index: number) =>
-          (databasesMapped[index] = obj.title || "Untitled database")
-      );
+          (databasesMapped[index] = obj.title || 'Untitled database')
+      )
     if (!databasesMapped[db]) {
-      db = 0;
+      db = 0
     }
 
     // Extract the table
-    let tableExecResults: Nullable<RegExpExecArray> = tableRx.exec(url);
-    let table: Nullable<string>;
+    let tableExecResults: Nullable<RegExpExecArray> = tableRx.exec(url)
+    let table: Nullable<string>
 
     if (tableExecResults) {
-      table = tableExecResults[0].replace(/\/table\//g, "").replace(/\//g, "");
+      table = tableExecResults[0].replace(/\/table\//g, '').replace(/\//g, '')
     } else {
-      table = null;
+      table = null
     }
 
     // Extract the query
-    let queryExecResults: Nullable<RegExpExecArray> = queryRx.exec(url);
-    let query: Nullable<string>;
+    let queryExecResults: Nullable<RegExpExecArray> = queryRx.exec(url)
+    let query: Nullable<string>
     if (queryExecResults) {
-      query = queryExecResults[0].replace("query=", "");
-      query = decodeURIComponent(query);
+      query = queryExecResults[0].replace('query=', '')
+      query = decodeURIComponent(query)
       if (query) {
-        query = JSON.parse(query);
+        query = JSON.parse(query)
       }
     } else {
-      query = null;
+      query = null
     }
 
     // Extract the rowLimit
-    let rowLimitExecResults: Nullable<RegExpExecArray> = rowLimitRx.exec(url);
-    let rowLimit: Nullable<number>;
+    let rowLimitExecResults: Nullable<RegExpExecArray> = rowLimitRx.exec(url)
+    let rowLimit: Nullable<number>
     if (rowLimitExecResults) {
-      rowLimit = parseInt(rowLimitExecResults[0].replace(/rowLimit=/g, ""), 10);
+      rowLimit = parseInt(rowLimitExecResults[0].replace(/rowLimit=/g, ''), 10)
     } else {
-      rowLimit = null;
+      rowLimit = null
     }
 
     // Extract the exactCount
     let exactCountExecResults: Nullable<RegExpExecArray> = exactCountRx.exec(
       url
-    );
-    let exactCount: boolean;
+    )
+    let exactCount: boolean
     if (exactCountExecResults) {
       exactCount =
-        exactCountExecResults[0].replace(/exactCount=/g, "") === "True";
+        exactCountExecResults[0].replace(/exactCount=/g, '') === 'True'
     } else {
-      exactCount = false;
+      exactCount = false
     }
 
     return {
@@ -165,25 +165,25 @@ export default class Layout extends React.Component<IAppProps, IAppState> {
       urlRules: query,
       rowLimit: rowLimit,
       exactCount: exactCount
-    };
+    }
   }
 
   toggleLeftPane() {
     this.setState({
       leftPaneVisibility: !this.state.leftPaneVisibility
-    });
+    })
   }
 
   toggleHistoryPane() {
     this.setState({
       historyPaneVisibility: !this.state.historyPaneVisibility
-    });
+    })
   }
 
   closeHistoryPane() {
     this.setState({
       historyPaneVisibility: false
-    });
+    })
   }
 
   changeDbIndex(newIndex: number) {
@@ -191,123 +191,123 @@ export default class Layout extends React.Component<IAppProps, IAppState> {
       dbIndex: newIndex,
       isLoggedIn: false,
       token: null,
-      userName: "Unknown username"
-    });
+      userName: 'Unknown username'
+    })
 
     if (auth) {
-      auth.setDb(newIndex);
+      auth.setDb(newIndex)
 
       // Get new token usign existing credentials. Otherwise log out the user
-      auth.getUserDetails().then(resp => {
+      auth.getUserDetails().then((resp) => {
         if (resp.isLoggedIn) {
           this.setState({
             token: resp.jwtToken,
             userName: resp.name,
             isLoggedIn: true
-          });
+          })
         } else {
           this.setState({
             isLoggedIn: false,
             token: null,
-            userName: "Unknown username"
-          });
+            userName: 'Unknown username'
+          })
         }
-      });
+      })
     }
   }
 
   changeSearchTerm(newTerm: string) {
-    this.setState({ searchTerm: newTerm });
+    this.setState({searchTerm: newTerm})
   }
 
   changeTable(newTable: string) {
     this.setState({
       table: newTable
-    });
+    })
   }
 
   changeRules(newRules: string) {
     this.setState({
       rulesFromHistoryPane: newRules
-    });
+    })
   }
 
   changeDbSchemaDefinitions(newDefinitions: string) {
     this.setState({
       dbSchemaDefinitions: newDefinitions
-    });
+    })
   }
 
   changeDbPkInfo(pkInfo: string) {
     this.setState({
       dbPkInfo: pkInfo
-    });
+    })
   }
 
   changeColumns(newColumns: Array<string>) {
     this.setState({
       columns: newColumns
-    });
+    })
   }
 
   addToHistory(newUrl: string, newRules: string) {
     this.setState({
-      newHistoryItem: [newUrl.replace(/\?limit=\d*/g, ""), newRules]
-    });
+      newHistoryItem: [newUrl.replace(/\?limit=\d*/g, ''), newRules]
+    })
   }
 
   changeVisibleColumns(newVisibleColumns: Array<string>) {
     this.setState({
       visibleColumns: newVisibleColumns
-    });
+    })
   }
 
   handleLogoutClick = () => {
     if (auth) {
-      auth.logout();
+      auth.logout()
     }
     this.setState({
       token: null,
-      userName: "Unknown username",
+      userName: 'Unknown username',
       isLoggedIn: false
-    });
-  };
+    })
+  }
 
   setUserEmailPassword(email: string, password: string) {
     if (auth) {
-      auth.setCredentials(email, password);
-      auth.getUserDetails().then(resp => {
+      auth.setCredentials(email, password)
+      auth.getUserDetails().then((resp) => {
         if (resp.isLoggedIn) {
           this.setState({
             token: resp.jwtToken,
             userName: resp.name,
             isLoggedIn: true
-          });
+          })
         } else {
           this.setState({
             isLoggedIn: false,
             token: null,
-            userName: "Unknown username"
-          });
+            userName: 'Unknown username'
+          })
         }
         if (
           this.state.rulesFromURL &&
-          lib.getDbConfig(this.state.dbIndex, "publicDbAcessType") ===
-            "private" &&
+          lib.getDbConfig(this.state.dbIndex, 'publicDbAcessType') ===
+            'private' &&
           resp.isLoggedIn
         ) {
-          this.changeRules(this.state.rulesFromURL);
+          this.changeRules(this.state.rulesFromURL)
         }
-      });
+      })
     }
   }
 
   componentDidMount() {
     if (
       this.state.rulesFromURL &&
-      lib.getDbConfig(this.state.dbIndex, "publicDbAcessType") !== "private"
+      lib.getDbConfig(this.state.dbIndex, 'publicDbAcessType') !== 'private'
     ) {
-      this.changeRules(this.state.rulesFromURL);
+      this.changeRules(this.state.rulesFromURL)
       // setTimeout( ()=> {
       // 	history.pushState('Shared Query', 'Shared Query', 'https://localhost:3000/');
       // }, 1000);
@@ -315,21 +315,21 @@ export default class Layout extends React.Component<IAppProps, IAppState> {
 
     // TRY TO GET a token usign existing credentials
     if (auth) {
-      auth.getUserDetails().then(resp => {
+      auth.getUserDetails().then((resp) => {
         if (resp.isLoggedIn) {
           this.setState({
             token: resp.jwtToken,
             userName: resp.name,
             isLoggedIn: true
-          });
+          })
         }
-      });
+      })
     }
   }
 
   render() {
     let publicDBStatus =
-      lib.getDbConfig(this.state.dbIndex, "publicDbAcessType") || "read";
+      lib.getDbConfig(this.state.dbIndex, 'publicDbAcessType') || 'read'
     return (
       <>
         <Navigation
@@ -342,7 +342,7 @@ export default class Layout extends React.Component<IAppProps, IAppState> {
           handleLogoutClick={this.handleLogoutClick}
         />
 
-        <div className="bodyDiv">
+        <div className='bodyDiv'>
           <LeftPane
             {...this.state}
             changeSearchTerm={this.changeSearchTerm}
@@ -369,12 +369,12 @@ export default class Layout extends React.Component<IAppProps, IAppState> {
           />
         </div>
       </>
-    );
+    )
   }
 }
 
-const app = document.getElementById("root");
-ReactDOM.render(<Layout />, app);
+const app = document.getElementById('root')
+ReactDOM.render(<Layout />, app)
 
 // Takes the query part of the URL used to make PostgREST API call and converts to an array object that can be traversed
 /*parseURLRules(urlQuery) {

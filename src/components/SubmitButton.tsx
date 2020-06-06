@@ -10,27 +10,27 @@ import CloseIcon from '@material-ui/icons/Close';
 
 
 interface ISubmitButtonProps {
-  loading: boolean;
-  success: boolean;
-  error: boolean;
+  loading: boolean
+  success: boolean
+  error: boolean
 
-  getRules: React.EventHandler<any>;
+  getRules: React.EventHandler<any>
 }
 
-export const SubmitButton: React.FunctionComponent<
-  ISubmitButtonProps
-> = props => {
-  let buttonClass = null;
+export const SubmitButton: React.FunctionComponent<ISubmitButtonProps> = (
+  props
+) => {
+  let buttonClass = null
   if (props.success) {
-    buttonClass = { ...styleSheet.successButton };
+    buttonClass = {...styleSheet.successButton}
   }
   if (props.success && props.error) {
-    buttonClass = { ...styleSheet.errorButton };
+    buttonClass = {...styleSheet.errorButton}
   }
 
   return (
     <div style={styleSheet.wrapper}>
-      <Fab color="secondary" style={buttonClass} onClick={props.getRules}>
+      <Fab color='secondary' style={buttonClass} onClick={props.getRules}>
         {props.success ? (
           props.error ? (
             <CloseIcon />
@@ -45,31 +45,31 @@ export const SubmitButton: React.FunctionComponent<
         <CircularProgress size={68} style={styleSheet.progress} />
       )}
     </div>
-  );
-};
+  )
+}
 
 const styleSheet: any = {
   wrapper: {
-    marginRight: "5%",
-    position: "relative"
+    marginRight: '5%',
+    position: 'relative'
   },
   successButton: {
     backgroundColor: green[500],
-    "&:hover": {
+    '&:hover': {
       backgroundColor: green[700]
     }
   },
   errorButton: {
     backgroundColor: red[500],
-    "&:hover": {
+    '&:hover': {
       backgroundColor: red[700]
     }
   },
   progress: {
     color: green[500],
-    position: "absolute",
+    position: 'absolute',
     top: -6,
     left: -6,
     zIndex: 5
   }
-};
+}
