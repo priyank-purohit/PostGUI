@@ -21,10 +21,10 @@ import pink from '@material-ui/core/colors/pink'
 
 import Button from '@material-ui/core/Button'
 
-let _ = require('lodash')
-let lib = require('../utils/library.ts')
+const _ = require('lodash')
+const lib = require('../utils/library.ts')
 
-//join: predicted genes, protein seqs
+// join: predicted genes, protein seqs
 export default class Navigation extends Component {
   constructor(props) {
     super(props)
@@ -57,9 +57,9 @@ export default class Navigation extends Component {
   }
 
   changeSearchTerm(e) {
-    /*if (e && ((e.key && e.key === 'Enter') || !e.target.value)) {
+    /* if (e && ((e.key && e.key === 'Enter') || !e.target.value)) {
 			this.props.changeSearchTerm(e.target.value);
-		}*/
+		} */
     this.changeSearchTermDebounce(e.target.value)
   }
 
@@ -87,23 +87,23 @@ export default class Navigation extends Component {
   }
 
   render() {
-    let dbTitle =
+    const dbTitle =
       lib.getDbConfig(this.props.dbIndex, 'title') || 'Untitled database'
     let searchBarFdpOpenStyles = null
     if (this.state.isSearchBarFdpOpen) {
       searchBarFdpOpenStyles = {
         backgroundColor: 'white',
         border: '1px solid grey',
-        width: 325 + 'px',
+        width: `${325}px`,
         minWidth: 'inherit'
       }
     } else {
       searchBarFdpOpenStyles = {
         backgroundColor: 'rgba(255, 255, 255, 0.1)',
         border: 'none',
-        width: 45 + '%',
-        maxWidth: 525 + 'px',
-        minWidth: 325 + 'px'
+        width: `${45}%`,
+        maxWidth: `${525}px`,
+        minWidth: `${325}px`
       }
     }
 
@@ -216,7 +216,7 @@ export default class Navigation extends Component {
                 false
               }
               backgroundColor={pink[500]}
-              title={'Private Database'}
+              title='Private Database'
               subtractFromTopPos={50}
               opacity={0.95}
               description='Provide your credentials for full access.'

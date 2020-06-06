@@ -14,9 +14,10 @@ import axios from 'axios'
 import 'react-table/react-table.css'
 
 import checkboxHOC from 'react-table/lib/hoc/selectTable'
-let CheckboxTable = checkboxHOC(ReactTable)
 
-let lib = require('../utils/library.ts')
+const CheckboxTable = checkboxHOC(ReactTable)
+
+const lib = require('../utils/library.ts')
 
 export default class DataTable extends Component {
   constructor(props) {
@@ -57,9 +58,9 @@ export default class DataTable extends Component {
     // Enable PK related features if table has a PK
     if (newProps.dbPkInfo && this.state.table) {
       for (let i = 0; i < newProps.dbPkInfo.length; i++) {
-        if (newProps.dbPkInfo[i]['table'] === this.state.table) {
+        if (newProps.dbPkInfo[i].table === this.state.table) {
           this.setState({
-            tablePrimaryKeys: newProps.dbPkInfo[i]['primary_keys']
+            tablePrimaryKeys: newProps.dbPkInfo[i].primary_keys
           })
         }
       }
@@ -72,12 +73,12 @@ export default class DataTable extends Component {
       return []
     }
 
-    let data = originalData.map((item) => {
-      let pkValues = []
+    const data = originalData.map((item) => {
+      const pkValues = []
       for (let i = 0; i < this.state.tablePrimaryKeys.length; i++) {
         pkValues.push(item[this.state.tablePrimaryKeys[i]])
       }
-      let _id = pkValues
+      const _id = pkValues
       return {
         _id,
         ...item
@@ -102,20 +103,20 @@ export default class DataTable extends Component {
 
   // Deletes all changes in the current table (for Remove All button functionality)
   deleteTableChanges() {
-    let tempChanges = this.state.editFeatureChangesMade[this.state.table]
+    const tempChanges = this.state.editFeatureChangesMade[this.state.table]
     if (tempChanges) {
-      let columnsChanged = Object.keys(tempChanges)
-      let columnsChangeCount = columnsChanged.length
+      const columnsChanged = Object.keys(tempChanges)
+      const columnsChangeCount = columnsChanged.length
 
       // Iterate over all keys (list of column specific changes)
       for (let i = 0; i < columnsChangeCount; i++) {
-        let column = columnsChanged[i]
-        let keysChanged = Object.keys(tempChanges[column])
-        let changeCount = keysChanged.length
+        const column = columnsChanged[i]
+        const keysChanged = Object.keys(tempChanges[column])
+        const changeCount = keysChanged.length
 
         // Iterate over all keys (all changes individually)
         for (let ii = 0; ii < changeCount; ii++) {
-          let key = keysChanged[ii]
+          const key = keysChanged[ii]
 
           // delete using column + key
           this.deleteChange(column, key, false)
@@ -127,18 +128,18 @@ export default class DataTable extends Component {
   // Given a COLUMN and KEY, deletes the change from the state's changesMade value (for individual deletion of changes)
   // If noRestore is true, it does not try to restore the original value
   deleteChange(column, key, noRestore) {
-    let tempChanges = this.state.editFeatureChangesMade
+    const tempChanges = this.state.editFeatureChangesMade
 
     if (noRestore === false) {
       // Restore original value in state.data if it is available
-      let originalValue = tempChanges[this.state.table][column][key]['oldValue']
+      const originalValue = tempChanges[this.state.table][column][key].oldValue
       if (originalValue) {
-        let data = this.state.data
-        data[tempChanges[this.state.table][column][key]['rowIndex']][
+        const data = this.state.data
+        data[tempChanges[this.state.table][column][key].rowIndex][
           column
         ] = originalValue
         this.setState({
-          data: data
+          data
         })
       }
     }
@@ -146,20 +147,20 @@ export default class DataTable extends Component {
     // Delete the row from state.data
     if (column === 'id' && key && noRestore === 'delete') {
       // Find the index of row to be deleted
-      let dataLength = this.state.data.length
+      const dataLength = this.state.data.length
       let rowToDeleteIndex = null
       for (let i = 0; i < dataLength; i++) {
-        if (this.state.data[i]['_id'].join('') === key) {
+        if (this.state.data[i]._id.join('') === key) {
           rowToDeleteIndex = i
           break
         }
       }
 
       // Delete the found row...
-      let data = this.state.data
+      const data = this.state.data
       data.splice(rowToDeleteIndex, 1)
       this.setState({
-        data: data
+        data
       })
     }
 
@@ -183,11 +184,11 @@ export default class DataTable extends Component {
 
   // Given a COLUMN and KEY, toggles the error code for a change (when server responds with error)
   setChangeError(column, key, error, errorResp) {
-    let tempChanges = this.state.editFeatureChangesMade
+    const tempChanges = this.state.editFeatureChangesMade
 
     // Toggle the change...
-    tempChanges[this.state.table][column][key]['error'] = error || true
-    tempChanges[this.state.table][column][key]['errorResp'] = errorResp
+    tempChanges[this.state.table][column][key].error = error || true
+    tempChanges[this.state.table][column][key].errorResp = errorResp
 
     this.setState({
       editFeatureChangesMade: tempChanges
@@ -196,11 +197,11 @@ export default class DataTable extends Component {
 
   // Converts the JSON object for PK into a string and into part of a PostgREST compliant URL
   primaryKeyAsUrlParam(primaryKey) {
-    let keys = Object.keys(primaryKey)
+    const keys = Object.keys(primaryKey)
     let stringified = ''
 
-    for (let i in Object.keys(primaryKey)) {
-      stringified += keys[i] + '.eq.' + primaryKey[keys[i]]
+    for (const i in Object.keys(primaryKey)) {
+      stringified += `${keys[i]}.eq.${primaryKey[keys[i]]}`
       if (parseInt(i, 10) !== keys.length - 1) {
         stringified += ','
       }
@@ -219,30 +220,28 @@ export default class DataTable extends Component {
     notes,
     userName
   ) {
-    let changeLogURL = lib.getDbConfig(dbIndex, 'url') + '/change_log'
-    let changeLogPostReqBody = {}
+    const changeLogURL = `${lib.getDbConfig(dbIndex, 'url')}/change_log`
+    const changeLogPostReqBody = {}
 
     // These columns are hardcoded ... the db schema for the change-log table is provided separately
-    changeLogPostReqBody['change_timestamp'] = changeTimeStamp
-    changeLogPostReqBody['table_changed'] = tableChanged
-    changeLogPostReqBody['primary_key_of_changed_row'] = JSON.stringify(
-      primaryKey
-    )
-    changeLogPostReqBody['column_changed'] = columnChanged
-    changeLogPostReqBody['old_value'] = String(oldValue) || 'error'
-    changeLogPostReqBody['new_value'] = String(newValue) || 'error'
-    changeLogPostReqBody['notes'] = notes
-    changeLogPostReqBody['user_name'] = userName // TODO: This will change after LOGIN SYSTEM is developed.
+    changeLogPostReqBody.change_timestamp = changeTimeStamp
+    changeLogPostReqBody.table_changed = tableChanged
+    changeLogPostReqBody.primary_key_of_changed_row = JSON.stringify(primaryKey)
+    changeLogPostReqBody.column_changed = columnChanged
+    changeLogPostReqBody.old_value = String(oldValue) || 'error'
+    changeLogPostReqBody.new_value = String(newValue) || 'error'
+    changeLogPostReqBody.notes = notes
+    changeLogPostReqBody.user_name = userName // TODO: This will change after LOGIN SYSTEM is developed.
 
-    let preparedHeaders = {Prefer: 'return=representation'}
+    const preparedHeaders = {Prefer: 'return=representation'}
     if (this.props.isLoggedIn && this.props.token) {
-      preparedHeaders['Authorization'] = 'Bearer ' + this.props.token
+      preparedHeaders.Authorization = `Bearer ${this.props.token}`
     }
 
     axios
       .post(changeLogURL, changeLogPostReqBody, {headers: preparedHeaders})
       .then((response) => {
-        //console.info("Change Log POST Successful:" + JSON.stringify(response));
+        // console.info("Change Log POST Successful:" + JSON.stringify(response));
       })
       .catch((error) => {
         // Show error in Snack-Bar
@@ -268,7 +267,7 @@ export default class DataTable extends Component {
   // TODO: Keeps track of all changes in the updates table.
   // Also marks any changes that are not successful.
   submitChanges() {
-    let currentChanges = this.state.editFeatureChangesMade[this.state.table]
+    const currentChanges = this.state.editFeatureChangesMade[this.state.table]
 
     // Nothing to submit
     if (currentChanges === null || currentChanges === undefined) {
@@ -277,39 +276,36 @@ export default class DataTable extends Component {
 
     for (let i = 0; i < Object.keys(currentChanges).length; i++) {
       // For all columns changed
-      let currentColumnChanges = currentChanges[Object.keys(currentChanges)[i]]
+      const currentColumnChanges =
+        currentChanges[Object.keys(currentChanges)[i]]
       for (let ii = 0; ii < Object.keys(currentColumnChanges).length; ii++) {
         // For all rows of a column changed
-        let change =
+        const change =
           currentChanges[Object.keys(currentChanges)[i]][
             Object.keys(currentColumnChanges)[ii]
           ]
 
-        let primaryKey = change['primaryKey']
-        let columnChanged = Object.keys(currentChanges)[i]
-        let keyChanged = Object.keys(currentColumnChanges)[ii]
-        let oldValue = change['oldValue']
-        let newValue = change['newValue']
-        let deleteRow = change['delete']
+        const primaryKey = change.primaryKey
+        const columnChanged = Object.keys(currentChanges)[i]
+        const keyChanged = Object.keys(currentColumnChanges)[ii]
+        const oldValue = change.oldValue
+        const newValue = change.newValue
+        const deleteRow = change.delete
 
         if (deleteRow !== true && String(oldValue) !== String(newValue)) {
           // UPDATE SINGLE CELL VALUE
           // Create the URL, add in the new value as URL param
-          let url =
-            lib.getDbConfig(this.props.dbIndex, 'url') +
-            '/' +
-            this.state.table +
-            '?and=(' +
-            this.primaryKeyAsUrlParam(primaryKey) +
-            ')'
+          const url = `${lib.getDbConfig(this.props.dbIndex, 'url')}/${
+            this.state.table
+          }?and=(${this.primaryKeyAsUrlParam(primaryKey)})`
 
           // Patch HTTP request
-          let patchReqBody = {}
+          const patchReqBody = {}
           patchReqBody[columnChanged] = newValue
 
-          let preparedHeaders = {Prefer: 'return=representation'}
+          const preparedHeaders = {Prefer: 'return=representation'}
           if (this.props.isLoggedIn && this.props.token) {
-            preparedHeaders['Authorization'] = 'Bearer ' + this.props.token
+            preparedHeaders.Authorization = `Bearer ${this.props.token}`
           }
 
           // Send the Request and check its response:
@@ -333,7 +329,7 @@ export default class DataTable extends Component {
               )
             })
             .catch((error) => {
-              console.error('PATCH ERROR RESP:' + String(error))
+              console.error(`PATCH ERROR RESP:${String(error)}`)
               this.setChangeError(
                 columnChanged,
                 keyChanged,
@@ -359,17 +355,13 @@ export default class DataTable extends Component {
         } else if (deleteRow) {
           // DELETE ROW FEATURE
           // Create the URL, add in the new value as URL param
-          let url =
-            lib.getDbConfig(this.props.dbIndex, 'url') +
-            '/' +
-            this.state.table +
-            '?and=(' +
-            this.primaryKeyAsUrlParam(primaryKey) +
-            ')'
+          const url = `${lib.getDbConfig(this.props.dbIndex, 'url')}/${
+            this.state.table
+          }?and=(${this.primaryKeyAsUrlParam(primaryKey)})`
 
-          let preparedHeaders = {Prefer: 'return=representation'}
+          const preparedHeaders = {Prefer: 'return=representation'}
           if (this.props.isLoggedIn && this.props.token) {
-            preparedHeaders['Authorization'] = 'Bearer ' + this.props.token
+            preparedHeaders.Authorization = `Bearer ${this.props.token}`
           }
 
           // Send the DELETE request and check response
@@ -378,12 +370,12 @@ export default class DataTable extends Component {
             .then((response) => {
               // Add an entry to the database's change log
               let oldRow = null
-              let needle = []
+              const needle = []
               for (let i = 0; i < this.state.tablePrimaryKeys.length; i++) {
                 needle.push(primaryKey[this.state.tablePrimaryKeys[i]])
               }
 
-              for (var i = 0; i < this.state.data.length; i++) {
+              for (let i = 0; i < this.state.data.length; i++) {
                 // look for the entry with a matching `code` value
                 if (String(this.state.data[i]._id) === String(needle)) {
                   oldRow = JSON.stringify(this.state.data[i])
@@ -405,7 +397,7 @@ export default class DataTable extends Component {
               this.deleteChange('id', keyChanged, 'delete')
             })
             .catch((error) => {
-              console.error('ERROR RESP: ' + String(error))
+              console.error(`ERROR RESP: ${String(error)}`)
               this.setChangeError('id', keyChanged, true, error.response.data)
               // Show error in Snack-Bar
               this.setState(
@@ -461,26 +453,24 @@ export default class DataTable extends Component {
         contentEditable
         suppressContentEditableWarning
         onBlur={(e) => {
-          let data = [...this.state.data]
+          const data = [...this.state.data]
 
-          let changedRowIndex = cellInfo.index
-          let changedColumnName = cellInfo.column.id
-          //let oldRow = JSON.stringify(this.state.data[changedRowIndex]);
-          let oldCellValue = data[changedRowIndex][changedColumnName]
+          const changedRowIndex = cellInfo.index
+          const changedColumnName = cellInfo.column.id
+          // let oldRow = JSON.stringify(this.state.data[changedRowIndex]);
+          const oldCellValue = data[changedRowIndex][changedColumnName]
           let newCellValue = e.target.innerHTML
 
           // Data type assignment for newValue based on the data type of oldValue
           // TODO: this should be done when a change is detected?
           if (String(newCellValue) === '') {
             newCellValue = null
-          } else {
-            if (typeof oldCellValue === 'string') {
-              newCellValue = String(newCellValue)
-            } else if (typeof oldCellValue === 'number') {
-              newCellValue = Number(newCellValue)
-            } else if (typeof oldCellValue === 'boolean') {
-              newCellValue = Boolean(newCellValue)
-            }
+          } else if (typeof oldCellValue === 'string') {
+            newCellValue = String(newCellValue)
+          } else if (typeof oldCellValue === 'number') {
+            newCellValue = Number(newCellValue)
+          } else if (typeof oldCellValue === 'boolean') {
+            newCellValue = Boolean(newCellValue)
           }
 
           // ToDo: when original value is NULL, and you don't change it, it sets it to "" from NULL... prevent it
@@ -490,7 +480,7 @@ export default class DataTable extends Component {
             String(newCellValue).indexOf('<br>') < 0 &&
             String(newCellValue).indexOf('<div>') < 0
           ) {
-            let changedRowPk = {}
+            const changedRowPk = {}
             let changedRowPkStr = ''
             for (let i = 0; i < this.state.tablePrimaryKeys.length; i++) {
               changedRowPk[this.state.tablePrimaryKeys[i]] =
@@ -502,9 +492,9 @@ export default class DataTable extends Component {
 
             // Update the local variable to this function
             data[changedRowIndex][changedColumnName] = newCellValue
-            //let newRow = data[changedRowIndex];
+            // let newRow = data[changedRowIndex];
 
-            let currentChanges = this.state.editFeatureChangesMade
+            const currentChanges = this.state.editFeatureChangesMade
 
             // Create the JSON objects if they do not exist
             currentChanges[this.state.table] =
@@ -522,35 +512,35 @@ export default class DataTable extends Component {
             // * Original means the value in the db on server
             currentChanges[this.state.table][changedColumnName][
               changedRowPkStr
-            ]['oldValue'] =
+            ].oldValue =
               currentChanges[this.state.table][changedColumnName][
                 changedRowPkStr
-              ]['oldValue'] || oldCellValue
+              ].oldValue || oldCellValue
 
             // Insert the updates + keep track of the PK
             currentChanges[this.state.table][changedColumnName][
               changedRowPkStr
-            ]['newValue'] = newCellValue
+            ].newValue = newCellValue
             currentChanges[this.state.table][changedColumnName][
               changedRowPkStr
-            ]['primaryKey'] = changedRowPk
+            ].primaryKey = changedRowPk
             currentChanges[this.state.table][changedColumnName][
               changedRowPkStr
-            ]['rowIndex'] = changedRowIndex
+            ].rowIndex = changedRowIndex
 
             // If the newly made change causes the old and new values to be the same, then this change should be deleted altogether
             if (
               String(
                 currentChanges[this.state.table][changedColumnName][
                   changedRowPkStr
-                ]['oldValue']
+                ].oldValue
               ) === String(newCellValue)
             ) {
               this.deleteChange(changedColumnName, changedRowPkStr, true)
             }
 
             this.setState({
-              data: data,
+              data,
               editFeatureChangesMade: currentChanges
             })
           }
@@ -567,13 +557,13 @@ export default class DataTable extends Component {
     if (
       this.state.editFeatureChangesMade &&
       this.state.editFeatureChangesMade[this.state.table] &&
-      this.state.editFeatureChangesMade[this.state.table]['id']
+      this.state.editFeatureChangesMade[this.state.table].id
     ) {
       // Intentioanlly removed the functionality to select all, can only unselect all
-      let keysChanged = Object.keys(
-        this.state.editFeatureChangesMade[this.state.table]['id']
+      const keysChanged = Object.keys(
+        this.state.editFeatureChangesMade[this.state.table].id
       )
-      let changeCount = keysChanged.length
+      const changeCount = keysChanged.length
 
       // Iterate over all keys (all changes individually)
       for (let i = 0; i < changeCount; i++) {
@@ -585,32 +575,32 @@ export default class DataTable extends Component {
   // Toggles single rows' status from checked to unchecked (delete the change)
   toggleSelection = (primaryKey, shift, row) => {
     // Create a PK {} and STRING
-    let changedRowPk = {}
-    let changedRowPkStr = primaryKey.join('')
+    const changedRowPk = {}
+    const changedRowPkStr = primaryKey.join('')
     for (let i = 0; i < this.state.tablePrimaryKeys.length; i++) {
       changedRowPk[this.state.tablePrimaryKeys[i]] = primaryKey[i]
     }
 
-    let currentChanges = this.state.editFeatureChangesMade
+    const currentChanges = this.state.editFeatureChangesMade
     // Create the JSON objects if they do not exist
     currentChanges[this.state.table] = currentChanges[this.state.table] || {}
-    currentChanges[this.state.table]['id'] =
-      currentChanges[this.state.table]['id'] || {}
-    currentChanges[this.state.table]['id'][changedRowPkStr] =
-      currentChanges[this.state.table]['id'][changedRowPkStr] || {}
+    currentChanges[this.state.table].id =
+      currentChanges[this.state.table].id || {}
+    currentChanges[this.state.table].id[changedRowPkStr] =
+      currentChanges[this.state.table].id[changedRowPkStr] || {}
 
     // Mark the row for deletion (set delete property true), or delete the change from editFeatureChangesMade state object
-    if (currentChanges[this.state.table]['id'][changedRowPkStr]['delete']) {
+    if (currentChanges[this.state.table].id[changedRowPkStr].delete) {
       // the row was marked for deletion, and user unchecked the row
       this.deleteChange('id', changedRowPkStr, true)
     } else {
       // the row was not marked for deletion, but user wants to mark it for deletion
-      currentChanges[this.state.table]['id'][changedRowPkStr][
-        'primaryKey'
-      ] = changedRowPk
-      currentChanges[this.state.table]['id'][changedRowPkStr][
-        'delete'
-      ] = !currentChanges[this.state.table]['id'][changedRowPkStr]['delete']
+      currentChanges[this.state.table].id[
+        changedRowPkStr
+      ].primaryKey = changedRowPk
+      currentChanges[this.state.table].id[
+        changedRowPkStr
+      ].delete = !currentChanges[this.state.table].id[changedRowPkStr].delete
     }
 
     this.setState({
@@ -624,12 +614,12 @@ export default class DataTable extends Component {
     if (
       this.state.editFeatureChangesMade === {} ||
       this.state.editFeatureChangesMade[this.state.table] === undefined ||
-      this.state.editFeatureChangesMade[this.state.table]['id'] === undefined
+      this.state.editFeatureChangesMade[this.state.table].id === undefined
     ) {
       return false
     }
     return Object.keys(
-      this.state.editFeatureChangesMade[this.state.table]['id']
+      this.state.editFeatureChangesMade[this.state.table].id
     ).includes(key.join(''))
   }
 
@@ -639,50 +629,50 @@ export default class DataTable extends Component {
   }
 
   render() {
-    let {columns, data} = this.state
+    const {columns, data} = this.state
     let parsedColumns = []
 
     // Create columns with expected column properties
     if (columns) {
       parsedColumns = columns.map((columnName) => {
-        let columnRename = lib.getColumnConfig(
+        const columnRename = lib.getColumnConfig(
           this.props.dbIndex,
           this.state.table,
           columnName,
           'rename'
         )
-        let columnVisibility = lib.getColumnConfig(
+        const columnVisibility = lib.getColumnConfig(
           this.props.dbIndex,
           this.state.table,
           columnName,
           'visible'
         )
-        let columnEditability = lib.getColumnConfig(
+        const columnEditability = lib.getColumnConfig(
           this.props.dbIndex,
           this.state.table,
           columnName,
           'editable'
         )
 
-        let columnWidthDefault = lib.getTableConfig(
+        const columnWidthDefault = lib.getTableConfig(
           this.props.dbIndex,
           this.state.table,
           'defaultWidthPx'
         )
-        let columnWidth = lib.getColumnConfig(
+        const columnWidth = lib.getColumnConfig(
           this.props.dbIndex,
           this.state.table,
           columnName,
           'widthPx'
         )
 
-        let columnMinWidth = lib.getColumnConfig(
+        const columnMinWidth = lib.getColumnConfig(
           this.props.dbIndex,
           this.state.table,
           columnName,
           'minWidthPx'
         )
-        let columnMaxWidth = lib.getColumnConfig(
+        const columnMaxWidth = lib.getColumnConfig(
           this.props.dbIndex,
           this.state.table,
           columnName,
@@ -691,15 +681,13 @@ export default class DataTable extends Component {
 
         return {
           id: columnName,
-          Header: columnRename ? columnRename : columnName,
+          Header: columnRename || columnName,
           accessor: columnName,
           show: columnVisibility !== null ? columnVisibility : true,
           width:
             columnWidth !== null
               ? columnWidth
-              : columnWidthDefault
-              ? columnWidthDefault
-              : undefined,
+              : columnWidthDefault || undefined,
           maxWidth: columnMaxWidth !== null ? columnMaxWidth : undefined,
           minWidth: columnMinWidth !== null ? columnMinWidth : 100,
           headerStyle: {fontWeight: 'bold'},
@@ -716,8 +704,8 @@ export default class DataTable extends Component {
     }
 
     // Prepare for CheckboxTable
-    let {toggleSelection, isSelected, toggleAll} = this
-    let checkboxProps = {
+    const {toggleSelection, isSelected, toggleAll} = this
+    const checkboxProps = {
       isSelected,
       toggleSelection,
       toggleAll,

@@ -1,13 +1,18 @@
 import axios from 'axios'
 
-let lib = require('../utils/library.ts')
+const lib = require('../utils/library.ts')
 
 export default class Auth {
   name = null
+
   isLoggedIn = false
+
   userEmail = null
+
   userPassword = null
+
   jwtToken = null
+
   jwtTokenExpiry = null
 
   constructor(dbIndex) {
@@ -54,7 +59,7 @@ export default class Auth {
 
   isAuthenticated() {
     // Return true iff user is authenticated and jwt is still valid
-    let emailRegEx = /^(([^<>()\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ // From http://emailregex.com/
+    const emailRegEx = /^(([^<>()\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ // From http://emailregex.com/
 
     if (
       this.jwtTokenExpiry > Date.now() &&
@@ -73,15 +78,15 @@ export default class Auth {
 
   async _loginPostRequest() {
     if (this.userEmail && this.userPassword) {
-      let loginUrl = lib.getDbConfig(this.dbIndex, 'url') + '/rpc/login'
+      const loginUrl = `${lib.getDbConfig(this.dbIndex, 'url')}/rpc/login`
 
       // Makes the HTTP request to obtain JWT token + jwtTokenExpiry + user details
       try {
-        let rawResp = await axios.post(loginUrl, {
+        const rawResp = await axios.post(loginUrl, {
           email: this.userEmail,
           pass: this.userPassword
         })
-        let data = rawResp.data[0]
+        const data = rawResp.data[0]
         this._setStatusTokenExpiry(true, data.token, data.tokenExpiry)
 
         return data
@@ -101,11 +106,11 @@ export default class Auth {
   }
 
   _toLocalStorage() {
-    //localStorage.setItem("name", this.name);
+    // localStorage.setItem("name", this.name);
   }
 
   _fromLocalStorage() {
-    //this.name = localStorage.getItem("name");
+    // this.name = localStorage.getItem("name");
   }
 
   toString() {
