@@ -50,6 +50,8 @@
   },
   "scripts": {
     "start": "PORT=8771 react-scripts start",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint 'src/**/*.tsx'",
     "windows-start": "set PORT=8771 && react-scripts start",
     "build": "react-scripts build",
     "build-and-serve": "react-scripts build && serve -s build -p 8771",
