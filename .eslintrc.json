@@ -1,0 +1,167 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "extends": [
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "eslint:recommended",
+    "airbnb",
+    "plugin:react/recommended",
+    "prettier",
+    "prettier/react",
+    "prettier/@typescript-eslint"
+  ],
+  "globals": {
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly"
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "plugins": ["react", "@typescript-eslint", "prettier", "react-hooks"],
+  "rules": {
+    /**
+      React
+    */
+    "jsx-boolean-value": 0,
+    "jsx-no-multiline-js": 0,
+    "jsx-curly-spacing": 0,
+    "jsx-alignment": 0,
+    "jsx-no-lambda": 0,
+    /**
+     * React Hooks activation
+     */
+    "react-hooks/exhaustive-deps": 0, // "error"
+    "react-hooks/rules-of-hooks": 0, // "warn"
+
+    "@typescript-eslint/ban-ts-ignore": 0,
+    "@typescript-eslint/camelcase": 0, // *2 rules*
+    "@typescript-eslint/explicit-function-return-type": 0,
+    "@typescript-eslint/interface-name-prefix": [1, {"prefixWithI": "always"}],
+    "@typescript-eslint/no-empty-function": 0, // some catch need to be empty
+    "@typescript-eslint/no-empty-interface": 0, // Good for renaming without duplicating code *2 rules*
+    "@typescript-eslint/no-explicit-any": 0,
+    "@typescript-eslint/no-unused-vars": 0, // *2 rules*
+    "@typescript-eslint/no-use-before-define": 0, // *2 rules* should turn to WARNING?
+
+    "import/no-unresolved": 0,
+    "import/no-useless-path-segments": 0,
+    "import/order": 0, // wants specific import order
+    "import/prefer-default-export": 0,
+    "import/no-extraneous-dependencies": [
+      0,
+      {
+        "devDependencies": false,
+        "optionalDependencies": false,
+        "peerDependencies": false,
+        "packageDir": "./"
+      }
+    ],
+
+    "react/destructuring-assignment": 0,
+    "react/display-name": 0,
+    "react/jsx-filename-extension": 0, // does not like JSX in .tsx files
+    "react/jsx-props-no-spreading": 0,
+    "react/no-access-state-in-setstate": 0,
+    "react/no-array-index-key": 0, // should turn to WARNING?
+    "react/no-deprecated": 0,
+    "react/no-did-update-set-state": 0,
+    "react/no-this-in-sfc": 0,
+    "react/no-unescaped-entities": 0, // conflicts with another rule
+    "react/no-unused-state": 0,
+    "react/prefer-stateless-function": 0,
+    "react/prop-types": 0,
+    "react/sort-comp": 0,
+    "react/state-in-constructor": 0,
+    "react/static-property-placement": 0, // conflicts with React default props
+    "react/style-prop-object": 0, // conflicts with formatters#style prop
+
+    "align": 0,
+    "array-type": 0,
+    "class-methods-use-this": 0,
+    "consistent-return": 0, // conflicts with React lifecycle methods
+    "curly": [1, "all"],
+    "cyclomatic-complexity": 0,
+    "camelcase": 0, // *2 rules*
+    "default-case": 0, // should turn to WARNING?
+    "early-exit": 0,
+    "forin": 0,
+    "func-names": 2,
+    "getter-return": 0,
+    "global-require": 0,
+    "guard-for-in": 0,
+    "import-name": 0,
+    "max-classes-per-file": 0,
+    "max-line-length": 0,
+    "member-access": 0,
+    "member-ordering": 0,
+    "newline-before-return": 0,
+    "no-alphabetical-sort": 0,
+    "no-big-function": 0,
+    "no-bitwise": 0,
+    "no-boolean-literal-compare": 0,
+    "no-continue": 0, // should turn to WARNING?
+    "no-empty": 0, // some catch need to be empty
+    "no-empty-interface": 0,
+    "no-extra-boolean-cast": 0, // allows for !!
+    "no-extra-semicolon": 0,
+    "no-implicit-dependencies": 0,
+    "no-increment-decrement": [0],
+    "no-nested-ternary": 0,
+    "no-object-literal-type-assertion": 0,
+    "no-param-reassign": 0, // immutability
+    "no-parameter-reassignment": [0],
+    "no-plusplus": 0, // should turn to WARNING?
+    "no-reference": 0,
+    "no-reference-import": 0,
+    "no-restricted-syntax": 0,
+    "no-return-assign": 0,
+    "no-shadow": 0, // should turn to WARNING?
+    "no-shadowed-variable": 0,
+    "no-submodule-imports": 0,
+    "no-underscore-dangle": 0,
+    "no-unused-vars": 0,
+    "no-use-before-define": 0, // *2 rules* should turn to WARNING?
+    "no-useless-return": 0,
+    "no-undef": 0,
+    "object-curly-spacing": 0,
+    "object-literal-sort-keys": 0,
+    "ordered-imports": 0,
+    "prefer-array-literal": 0,
+    "prefer-destructuring": 0,
+    "quotes": [
+      1,
+      "single",
+      {"allowTemplateLiterals": false, "avoidEscape": true}
+    ],
+    "require-await": 2,
+    "semicolon": 0,
+    "space-before-function-paren": 0,
+    "symbol-description": 0,
+    "ter-arrow-parens": 0,
+    "ter-computed-property-spacing": 0,
+    "ter-func-call-spacing": 0,
+    "ter-indent": 0,
+    "ter-prefer-arrow-callback": 0,
+    "trailing-comma": [0, {"multiline": "never", "singleline": "never"}],
+    "no-console": [
+      "error",
+      {"allow": ["table", "warn", "error", "info", "group", "groupEnd"]}
+    ],
+    /*
+     * Accessibility
+     */
+    "jsx-a11y/click-events-have-key-events": 0,
+    "jsx-a11y/no-noninteractive-element-interactions": 0,
+    "jsx-a11y/no-static-element-interactions": 0,
+    "jsx-a11y/tabindex-no-positive": 0,
+    "jsx-a11y/alt-text": 0
+  }
+}
