@@ -7,7 +7,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
 
-let lib = require('../utils/library.ts')
+const lib = require('../utils/library.ts')
 
 interface IDbPickerProps {
   changeDbIndex: Function
@@ -48,7 +48,7 @@ export default class DbPicker extends Component<
 
   // get a list of databases in the config.json
   componentDidMount() {
-    let databasesMapped: Array<string> = []
+    const databasesMapped: Array<string> = []
     lib
       .getValueFromConfig('databases')
       .map(
