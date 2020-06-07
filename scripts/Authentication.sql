@@ -8,7 +8,7 @@
 -- INSTALL PGJWT
 -- Copy both files to /postgres/share/extensions/
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
-CREATE EXTENSION IF NOT EXISTS pgjwt;
+CREATE EXTENSION IF NOT EXISTS pgjwt;  -- Note: for AWS RDS see ./pgjwt_alternative_for_aws_rds.sql
 
 
 
@@ -126,7 +126,8 @@ CREATE ROLE authenticator noinherit;
 GRANT anon TO authenticator;
 
 GRANT usage ON SCHEMA public, basic_auth TO anon;
-GRANT SELECT ON TABLE pg_authid, basic_auth.users TO anon;
+GRANT SELECT ON TABLE pg_authid TO anon;
+GRANT SELECT ON TABLE basic_auth.users TO anon;
 GRANT EXECUTE ON FUNCTION login(text,text) TO anon;
 
 
