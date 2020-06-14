@@ -928,7 +928,7 @@ export default class Downloads extends Component {
                 style={styleSheet.cardMarginLeft}
                 control={
                   <Checkbox
-                    color="primary"
+                    color="secondary"
                     onChange={this.handleCopyUniqueValuesOnlyToggle}
                     value="copyUniqueValuesOnly"
                   />
