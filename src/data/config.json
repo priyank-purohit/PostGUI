@@ -14,6 +14,8 @@
     "alignment_sequence",
     "nucleotide_sequence",
     "aminoacid_sequence",
+    "nucleotide_seq",
+    "amino_acid_seq",
     "nuc_seq",
     "aa_seq",
     "dna_seq",
