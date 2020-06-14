@@ -933,7 +933,7 @@ export default class Downloads extends Component {
                     value="copyUniqueValuesOnly"
                   />
                 }
-                checked={this.state.exactRowCount}
+                checked={this.state.copyUniqueValuesOnlyToggle}
                 label={"Copy unique values only"}
               />
             </span>
