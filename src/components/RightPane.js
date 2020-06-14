@@ -687,7 +687,7 @@ export default class RightPane extends Component {
                   />
                 }
                 checked={this.state.exactRowCount}
-                label={"Get exact row count (slow)"}
+                label={"Get exact row count"}
               />
             </Grid>
 
