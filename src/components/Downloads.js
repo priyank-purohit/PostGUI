@@ -48,6 +48,7 @@ export default class Downloads extends Component {
       columnChosen: 0,
       tableHeader: true,
       batchDownloadCheckBox: false,
+      copyUniqueValuesOnlyToggle: false,
       fileNameCustom: "",
       reRunQuery: false,
       fileNameAuto: "",
@@ -64,6 +65,9 @@ export default class Downloads extends Component {
 
     this.handleDelimiterChange = this.handleDelimiterChange.bind(this);
     this.handlebatchDownloadCheckBox = this.handlebatchDownloadCheckBox.bind(
+      this
+    );
+    this.handleCopyUniqueValuesOnlyToggle = this.handleCopyUniqueValuesOnlyToggle.bind(
       this
     );
     this.handleLeftButtonClickRangeDownload = this.handleLeftButtonClickRangeDownload.bind(
@@ -444,6 +448,12 @@ export default class Downloads extends Component {
     );
   }
 
+  handleCopyUniqueValuesOnlyToggle() {
+    this.setState({
+      copyUniqueValuesOnlyToggle: !this.state.copyUniqueValuesOnlyToggle,
+    });
+  }
+
   handlebatchDownloadChange(e) {
     this.setState(
       {
@@ -555,6 +565,7 @@ export default class Downloads extends Component {
         columnChosen: 0,
         tableHeader: true,
         batchDownloadCheckBox: false,
+        copyUniqueValuesOnlyToggle: false,
         fileNameCustom: "",
         copyLoading: false,
         copyResult: "",
@@ -597,14 +608,37 @@ export default class Downloads extends Component {
           let column = this.state.columnChosen;
           let data = this.state.data;
           let columns = this.state.columns;
+          let uniqueOnly = this.state.copyUniqueValuesOnlyToggle;
 
           let output = "";
-          for (let i = 0; i < data.length; i++) {
-            let valueToCopy = data[i][columns[column]];
-            if (String(valueToCopy) && String(valueToCopy).match(/[\W|\s]/g)) {
-              output += '"' + valueToCopy + '",';
-            } else {
-              output += valueToCopy + ",";
+
+          if (uniqueOnly) {
+            let uniqueValues = new Set();
+            for (let i = 0; i < data.length; i++) {
+              uniqueValues.add(data[i][columns[column]]);
+            }
+
+            for (let valueToCopy of uniqueValues.values()) {
+              if (
+                String(valueToCopy) &&
+                String(valueToCopy).match(/[\W|\s]/g)
+              ) {
+                output += '"' + valueToCopy + '",';
+              } else {
+                output += valueToCopy + ",";
+              }
+            }
+          } else {
+            for (let i = 0; i < data.length; i++) {
+              let valueToCopy = data[i][columns[column]];
+              if (
+                String(valueToCopy) &&
+                String(valueToCopy).match(/[\W|\s]/g)
+              ) {
+                output += '"' + valueToCopy + '",';
+              } else {
+                output += valueToCopy + ",";
+              }
             }
           }
 
@@ -890,6 +924,18 @@ export default class Downloads extends Component {
                   </MenuItem>
                 ))}
               </Menu>
+              <FormControlLabel
+                style={styleSheet.cardMarginLeft}
+                control={
+                  <Checkbox
+                    color="primary"
+                    onChange={this.handleCopyUniqueValuesOnlyToggle}
+                    value="copyUniqueValuesOnly"
+                  />
+                }
+                checked={this.state.exactRowCount}
+                label={"Copy unique values only"}
+              />
             </span>
           )}
 
