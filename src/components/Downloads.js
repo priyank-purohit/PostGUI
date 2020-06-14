@@ -928,12 +928,12 @@ export default class Downloads extends Component {
                 style={styleSheet.cardMarginLeft}
                 control={
                   <Checkbox
-                    color="primary"
+                    color="secondary"
                     onChange={this.handleCopyUniqueValuesOnlyToggle}
                     value="copyUniqueValuesOnly"
                   />
                 }
-                checked={this.state.exactRowCount}
+                checked={this.state.copyUniqueValuesOnlyToggle}
                 label={"Copy unique values only"}
               />
             </span>
