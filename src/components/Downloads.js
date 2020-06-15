@@ -24,15 +24,15 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext'
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore'
 import CloseIcon from '@material-ui/icons/Close'
 
-//import worker_script from './WebWorker';
-//var myWorker = new Worker(worker_script);
+// import worker_script from './WebWorker';
+// var myWorker = new Worker(worker_script);
 
 const timeout = 2000
 const maxRowsInDownload = 2500000
 
-let lib = require('../utils/library.ts')
-let json2csv = require('json2csv')
-var js2xmlparser = require('js2xmlparser')
+const lib = require('../utils/library.ts')
+const json2csv = require('json2csv')
+const js2xmlparser = require('js2xmlparser')
 
 export default class Downloads extends Component {
   constructor(props) {
@@ -48,6 +48,7 @@ export default class Downloads extends Component {
       columnChosen: 0,
       tableHeader: true,
       batchDownloadCheckBox: false,
+      copyUniqueValuesOnlyToggle: false,
       fileNameCustom: '',
       reRunQuery: false,
       fileNameAuto: '',
@@ -64,6 +65,9 @@ export default class Downloads extends Component {
 
     this.handleDelimiterChange = this.handleDelimiterChange.bind(this)
     this.handlebatchDownloadCheckBox = this.handlebatchDownloadCheckBox.bind(
+      this
+    )
+    this.handleCopyUniqueValuesOnlyToggle = this.handleCopyUniqueValuesOnlyToggle.bind(
       this
     )
     this.handleLeftButtonClickRangeDownload = this.handleLeftButtonClickRangeDownload.bind(
@@ -107,7 +111,7 @@ export default class Downloads extends Component {
 
   createFileName(dataFullStatus = false) {
     // Parse out the delimiter
-    let delimiter = this.state.delimiterChoice.replace(/\\t/g, '\t') // for tabs
+    const delimiter = this.state.delimiterChoice.replace(/\\t/g, '\t') // for tabs
 
     // Create a good file name for the file so user knows what the data in the file is all about
     /* EXPLANATIONS FOR THE REGEXES
@@ -120,7 +124,7 @@ export default class Downloads extends Component {
                 .replace(/[.]([\w,"\s]{30,})[,]/g, "(in-vals)"); /////// Specifically targets the IN operator's comma separated vals .. replace if longer than 30 chars
             */
     let fileName = this.state.url
-      .replace(lib.getDbConfig(this.props.dbIndex, 'url') + '/', '')
+      .replace(`${lib.getDbConfig(this.props.dbIndex, 'url')}/`, '')
       .replace('?', '-')
       .replace(/&/g, '-')
       .replace(/=/g, '-')
@@ -131,12 +135,7 @@ export default class Downloads extends Component {
     if (this.state.batchDownloadCheckBox === true || dataFullStatus === true) {
       fileName = fileName.replace(
         /limit-\d*/g,
-        'limit-' +
-          maxRowsInDownload +
-          '-range-' +
-          this.state.batchDownloadLowerNum +
-          '-' +
-          this.state.batchDownloadUpperNum
+        `limit-${maxRowsInDownload}-range-${this.state.batchDownloadLowerNum}-${this.state.batchDownloadUpperNum}`
       )
     }
 
@@ -176,13 +175,13 @@ export default class Downloads extends Component {
     if (dataFullStatus === false && JSON.stringify(this.state.data) !== '[]') {
       try {
         // Parse out the delimiter
-        let delimiter = this.state.delimiterChoice.replace(/\\t/g, '\t') // for tabs
-        let result = json2csv.parse(this.state.data, {
+        const delimiter = this.state.delimiterChoice.replace(/\\t/g, '\t') // for tabs
+        const result = json2csv.parse(this.state.data, {
           fields: this.state.columns,
-          delimiter: delimiter,
+          delimiter,
           header: this.state.tableHeader
         })
-        let fileName = this.createFileName()
+        const fileName = this.createFileName()
 
         this.downloadFile(result, fileName, 'text/plain')
       } catch (err) {
@@ -192,13 +191,13 @@ export default class Downloads extends Component {
       if (JSON.stringify(this.state.dataFull) !== '[]') {
         try {
           // Parse out the delimiter
-          let delimiter = this.state.delimiterChoice.replace(/\\t/g, '\t') // for tabs
-          let result = json2csv.parse(this.state.data, {
+          const delimiter = this.state.delimiterChoice.replace(/\\t/g, '\t') // for tabs
+          const result = json2csv.parse(this.state.data, {
             fields: this.state.columns,
-            delimiter: delimiter,
+            delimiter,
             header: this.state.tableHeader
           })
-          let fileName = this.createFileName(true)
+          const fileName = this.createFileName(true)
 
           this.downloadFile(result, fileName, 'text/plain')
         } catch (err) {
@@ -211,8 +210,8 @@ export default class Downloads extends Component {
   downloadTableAsJSON(dataFullStatus = false) {
     if (dataFullStatus === false && JSON.stringify(this.state.data) !== '[]') {
       try {
-        let result = JSON.stringify(this.state.data)
-        let fileName = this.createFileName()
+        const result = JSON.stringify(this.state.data)
+        const fileName = this.createFileName()
 
         this.downloadFile(result, fileName, 'text/plain')
       } catch (err) {
@@ -221,8 +220,8 @@ export default class Downloads extends Component {
     } else if (dataFullStatus === true) {
       if (JSON.stringify(this.state.dataFull) !== '[]') {
         try {
-          let result = JSON.stringify(this.state.dataFull)
-          let fileName = this.createFileName(true)
+          const result = JSON.stringify(this.state.dataFull)
+          const fileName = this.createFileName(true)
 
           this.downloadFile(result, fileName, 'text/plain')
         } catch (err) {
@@ -235,9 +234,9 @@ export default class Downloads extends Component {
   copyTableAsJSON(dataFullStatus = false) {
     if (dataFullStatus === false && JSON.stringify(this.state.data) !== '[]') {
       try {
-        let result = JSON.stringify(this.state.data)
+        const result = JSON.stringify(this.state.data)
         this.setState({copyResult: result})
-        let copySuccess = this.insertToClipboard(result)
+        const copySuccess = this.insertToClipboard(result)
         if (copySuccess) {
           this.setState({copyLoading: false})
         }
@@ -247,8 +246,8 @@ export default class Downloads extends Component {
     } else if (dataFullStatus === true) {
       if (JSON.stringify(this.state.dataFull) !== '[]') {
         try {
-          let result = JSON.stringify(this.state.dataFull)
-          let copySuccess = this.insertToClipboard(result)
+          const result = JSON.stringify(this.state.dataFull)
+          const copySuccess = this.insertToClipboard(result)
           if (copySuccess) {
             this.setState({copyLoading: false})
           }
@@ -262,8 +261,8 @@ export default class Downloads extends Component {
   downloadTableAsXML(dataFullStatus = false) {
     if (dataFullStatus === false && JSON.stringify(this.state.data) !== '[]') {
       try {
-        let result = js2xmlparser.parse(this.state.table, this.state.data)
-        let fileName = this.createFileName()
+        const result = js2xmlparser.parse(this.state.table, this.state.data)
+        const fileName = this.createFileName()
 
         this.downloadFile(result, fileName, 'text/plain')
       } catch (err) {
@@ -272,8 +271,11 @@ export default class Downloads extends Component {
     } else if (dataFullStatus === true) {
       if (JSON.stringify(this.state.dataFull) !== '[]') {
         try {
-          let result = js2xmlparser.parse(this.state.table, this.state.dataFull)
-          let fileName = this.createFileName(true)
+          const result = js2xmlparser.parse(
+            this.state.table,
+            this.state.dataFull
+          )
+          const fileName = this.createFileName(true)
 
           this.downloadFile(result, fileName, 'text/plain')
         } catch (err) {
@@ -286,8 +288,8 @@ export default class Downloads extends Component {
   copyTableAsXML(dataFullStatus = false) {
     if (dataFullStatus === false && JSON.stringify(this.state.data) !== '[]') {
       try {
-        let result = js2xmlparser.parse(this.state.table, this.state.data)
-        let copySuccess = this.insertToClipboard(result)
+        const result = js2xmlparser.parse(this.state.table, this.state.data)
+        const copySuccess = this.insertToClipboard(result)
         if (copySuccess) {
           this.setState({copyLoading: false})
         }
@@ -297,8 +299,11 @@ export default class Downloads extends Component {
     } else if (dataFullStatus === true) {
       if (JSON.stringify(this.state.dataFull) !== '[]') {
         try {
-          let result = js2xmlparser.parse(this.state.table, this.state.dataFull)
-          let copySuccess = this.insertToClipboard(result)
+          const result = js2xmlparser.parse(
+            this.state.table,
+            this.state.dataFull
+          )
+          const copySuccess = this.insertToClipboard(result)
           if (copySuccess) {
             this.setState({copyLoading: false})
           }
@@ -311,9 +316,9 @@ export default class Downloads extends Component {
 
   identifySeqColumnInStateColumns() {
     let seqColumn = null
-    let seqColumnNames = lib.getValueFromConfig('seq_column_names')
-    for (let i in this.state.columns) {
-      let columnName = this.state.columns[i]
+    const seqColumnNames = lib.getValueFromConfig('seq_column_names')
+    for (const i in this.state.columns) {
+      const columnName = this.state.columns[i]
 
       if (lib.inArray(columnName, seqColumnNames)) {
         seqColumn = columnName
@@ -324,7 +329,7 @@ export default class Downloads extends Component {
   }
 
   downloadTableAsFASTA(dataFullStatus = false) {
-    let seqColumn = this.identifySeqColumnInStateColumns()
+    const seqColumn = this.identifySeqColumnInStateColumns()
 
     // proceed if a sequence column was found, proceed w/ the first found column....
     if (seqColumn !== null) {
@@ -336,15 +341,15 @@ export default class Downloads extends Component {
         try {
           let result = ''
 
-          for (let index in this.state.data) {
-            let element = this.state.data[index]
-            let seq = element[seqColumn]
+          for (const index in this.state.data) {
+            const element = this.state.data[index]
+            const seq = element[seqColumn]
 
             // Parse header string ...
             let header = '>'
-            for (let index in this.state.columns) {
+            for (const index in this.state.columns) {
               if (this.state.columns[index] !== seqColumn) {
-                header += '|' + element[this.state.columns[index]]
+                header += `|${element[this.state.columns[index]]}`
               }
             }
 
@@ -354,7 +359,7 @@ export default class Downloads extends Component {
             result += '\n'
           }
 
-          let fileName = this.createFileName()
+          const fileName = this.createFileName()
           this.downloadFile(result, fileName, 'text/plain')
         } catch (err) {
           console.error(err)
@@ -365,15 +370,15 @@ export default class Downloads extends Component {
           try {
             let result = ''
 
-            for (let index in this.state.dataFull) {
-              let element = this.state.dataFull[index]
-              let seq = element[seqColumn]
+            for (const index in this.state.dataFull) {
+              const element = this.state.dataFull[index]
+              const seq = element[seqColumn]
 
               // Parse header string ...
               let header = '>'
-              for (let index in this.state.columns) {
+              for (const index in this.state.columns) {
                 if (this.state.columns[index] !== seqColumn) {
-                  header += '|' + element[this.state.columns[index]]
+                  header += `|${element[this.state.columns[index]]}`
                 }
               }
 
@@ -383,7 +388,7 @@ export default class Downloads extends Component {
               result += '\n'
             }
 
-            let fileName = this.createFileName(true)
+            const fileName = this.createFileName(true)
             this.downloadFile(result, fileName, 'text/plain')
           } catch (err) {
             console.error(err)
@@ -397,19 +402,19 @@ export default class Downloads extends Component {
   }
 
   insertToClipboard(str) {
-    //based on https://stackoverflow.com/a/12693636
-    document.oncopy = function (event) {
+    // based on https://stackoverflow.com/a/12693636
+    document.oncopy = (event) => {
       event.clipboardData.setData('text/plain', str)
       event.preventDefault()
     }
-    let copySuccess = document.execCommand('copy')
+    const copySuccess = document.execCommand('copy')
     document.oncopy = undefined
     return copySuccess
   }
 
   handleFileFormatChange = (event, fileFormat) => {
     if (event.target.id !== 'delimiterInput') {
-      this.setState({fileFormat: fileFormat}, () => {
+      this.setState({fileFormat}, () => {
         this.createFileName()
         this.setState({fileNameCustom: ''})
       })
@@ -438,6 +443,12 @@ export default class Downloads extends Component {
     )
   }
 
+  handleCopyUniqueValuesOnlyToggle() {
+    this.setState({
+      copyUniqueValuesOnlyToggle: !this.state.copyUniqueValuesOnlyToggle
+    })
+  }
+
   handlebatchDownloadChange(e) {
     this.setState(
       {
@@ -452,7 +463,7 @@ export default class Downloads extends Component {
   }
 
   handleLeftButtonClickRangeDownload() {
-    let range = parseInt(this.state.batchSize.replace('K', ''), 10) * 1000
+    const range = parseInt(this.state.batchSize.replace('K', ''), 10) * 1000
     if (this.state.batchDownloadLowerNum - range > this.props.totalRows) {
       this.setState(
         {
@@ -491,7 +502,7 @@ export default class Downloads extends Component {
   }
 
   handleRightButtonClickRangeDownload() {
-    let range = parseInt(this.state.batchSize.replace('K', ''), 10) * 1000
+    const range = parseInt(this.state.batchSize.replace('K', ''), 10) * 1000
     if (
       this.props.totalRows &&
       this.state.batchDownloadLowerNum + range + range > this.props.totalRows
@@ -521,7 +532,7 @@ export default class Downloads extends Component {
   }
 
   handleDelimiterChange(event) {
-    let newValue = event.target.value
+    const newValue = event.target.value
 
     if (newValue.length === 0) {
       this.setState({delimiterChoice: ','}, () => {
@@ -537,7 +548,7 @@ export default class Downloads extends Component {
   }
 
   handleFileNameChange(event) {
-    let newValue = event.target.value
+    const newValue = event.target.value
     this.setState({fileNameCustom: newValue})
   }
 
@@ -549,6 +560,7 @@ export default class Downloads extends Component {
         columnChosen: 0,
         tableHeader: true,
         batchDownloadCheckBox: false,
+        copyUniqueValuesOnlyToggle: false,
         fileNameCustom: '',
         copyLoading: false,
         copyResult: '',
@@ -570,14 +582,14 @@ export default class Downloads extends Component {
         1 === 0
       ) {
         // DISABLED FOR NOW
-        let dataFullURL = this.state.url.replace(
+        const dataFullURL = this.state.url.replace(
           /limit=\d*/g,
-          'limit=' + maxRowsInDownload
+          `limit=${maxRowsInDownload}`
         )
         this.fetchOutput(dataFullURL)
       } else {
         if (this.state.fileFormat === 'delimited') {
-          //this.downloadTableWithDelimiter();
+          // this.downloadTableWithDelimiter();
         } else if (this.state.fileFormat === 'delimitedColumn') {
           // With threads
           /*
@@ -588,23 +600,46 @@ export default class Downloads extends Component {
                               */
 
           // Without threads
-          let column = this.state.columnChosen
-          let data = this.state.data
-          let columns = this.state.columns
+          const column = this.state.columnChosen
+          const data = this.state.data
+          const columns = this.state.columns
+          const uniqueOnly = this.state.copyUniqueValuesOnlyToggle
 
           let output = ''
-          for (let i = 0; i < data.length; i++) {
-            let valueToCopy = data[i][columns[column]]
-            if (String(valueToCopy) && String(valueToCopy).match(/[\W|\s]/g)) {
-              output += '"' + valueToCopy + '",'
-            } else {
-              output += valueToCopy + ','
+
+          if (uniqueOnly) {
+            const uniqueValues = new Set()
+            for (let i = 0; i < data.length; i++) {
+              uniqueValues.add(data[i][columns[column]])
+            }
+
+            for (const valueToCopy of uniqueValues.values()) {
+              if (
+                String(valueToCopy) &&
+                String(valueToCopy).match(/[\W|\s]/g)
+              ) {
+                output += `"${valueToCopy}",`
+              } else {
+                output += `${valueToCopy},`
+              }
+            }
+          } else {
+            for (let i = 0; i < data.length; i++) {
+              const valueToCopy = data[i][columns[column]]
+              if (
+                String(valueToCopy) &&
+                String(valueToCopy).match(/[\W|\s]/g)
+              ) {
+                output += `"${valueToCopy}",`
+              } else {
+                output += `${valueToCopy},`
+              }
             }
           }
 
           output = output.replace(/,$/g, '')
 
-          let result = this.insertToClipboard(output)
+          const result = this.insertToClipboard(output)
 
           this.setState(
             {
@@ -634,7 +669,7 @@ export default class Downloads extends Component {
           //     this.setState({copyLoading: false, copyResult: m.data});
           // };
         } else if (this.state.fileFormat === 'fasta') {
-          //this.downloadTableAsFASTA();
+          // this.downloadTableAsFASTA();
         }
 
         this.setState({
@@ -663,9 +698,9 @@ export default class Downloads extends Component {
       },
       () => {
         if (this.state.batchDownloadCheckBox === true) {
-          let dataFullURL = this.state.url.replace(
+          const dataFullURL = this.state.url.replace(
             /limit=\d*/g,
-            'limit=' + maxRowsInDownload
+            `limit=${maxRowsInDownload}`
           )
           this.fetchOutput(dataFullURL)
         } else {
@@ -706,17 +741,16 @@ export default class Downloads extends Component {
     let preparedHeaders = {}
     if (this.state.batchDownloadCheckBox === true) {
       preparedHeaders = {
-        Range:
-          String(this.state.batchDownloadLowerNum) +
-          '-' +
-          String(this.state.batchDownloadUpperNum - 1),
+        Range: `${String(this.state.batchDownloadLowerNum)}-${String(
+          this.state.batchDownloadUpperNum - 1
+        )}`,
         Accept: 'application/json',
         Prefer: 'count=exact'
       }
     }
 
     if (this.props.isLoggedIn && this.props.token) {
-      preparedHeaders['Authorization'] = 'Bearer ' + this.props.token
+      preparedHeaders.Authorization = `Bearer ${this.props.token}`
     }
 
     axios
@@ -803,9 +837,7 @@ export default class Downloads extends Component {
                   onChange={this.handleDelimiterChange}
                   label={'Use , or \\t delimiter for sheet'}
                   value={this.state.delimiterChoice}
-                  disabled={
-                    this.state.fileFormat !== 'delimited' ? true : false
-                  }
+                  disabled={this.state.fileFormat !== 'delimited'}
                   style={
                     styleSheet.textField &&
                     styleSheet.cardMarginLeft &&
@@ -814,7 +846,7 @@ export default class Downloads extends Component {
                   id='delimiterInput'
                   type='text'
                   margin='none'
-                  fullWidth={true}
+                  fullWidth
                 />
               )}
               <FormControlLabel
@@ -849,7 +881,7 @@ export default class Downloads extends Component {
                 value='delimitedColumn'
                 control={<Radio />}
               />
-              {/* The options are loaded below in the <span>. This was needed because RadioGroup/FormControl does not work with a Span child element...*/}
+              {/* The options are loaded below in the <span>. This was needed because RadioGroup/FormControl does not work with a Span child element... */}
             </RadioGroup>
           </FormControl>
           {this.state.fileFormat === 'delimitedColumn' && (
@@ -884,6 +916,18 @@ export default class Downloads extends Component {
                   </MenuItem>
                 ))}
               </Menu>
+              <FormControlLabel
+                style={styleSheet.cardMarginLeft}
+                control={
+                  <Checkbox
+                    color='secondary'
+                    onChange={this.handleCopyUniqueValuesOnlyToggle}
+                    value='copyUniqueValuesOnly'
+                  />
+                }
+                checked={this.state.copyUniqueValuesOnlyToggle}
+                label='Copy unique values only'
+              />
             </span>
           )}
 
@@ -893,16 +937,14 @@ export default class Downloads extends Component {
           </Typography>
           <FormGroup style={styleSheet.cardcardMarginLeftTop}>
             <FormControlLabel
-              label={'Batch download'}
+              label='Batch download'
               control={
                 <Checkbox
                   onChange={this.handlebatchDownloadCheckBox}
                   value='batchDownloadCheckBox'
                 />
               }
-              disabled={
-                this.state.fileFormat === 'delimitedColumn' ? true : false
-              }
+              disabled={this.state.fileFormat === 'delimitedColumn'}
               checked={this.state.batchDownloadCheckBox}
             />
             <span
@@ -998,13 +1040,11 @@ export default class Downloads extends Component {
             </span>
 
             <FormControlLabel
-              label={'Include table headers'}
+              label='Include table headers'
               control={
                 <Checkbox
                   onChange={this.handleTableHeaderToggle}
-                  disabled={
-                    this.state.fileFormat !== 'delimited' ? true : false
-                  }
+                  disabled={this.state.fileFormat !== 'delimited'}
                   value='tableHeader'
                 />
               }
@@ -1037,7 +1077,7 @@ export default class Downloads extends Component {
           </FormGroup>
 
           {/* COPY FEATURE OUTPUT BOX + 2ND BUTTON */}
-          {/*<div style={styleSheet.cardcardMarginLeftTop && styleSheet.cardcardMarginBottomRight}>
+          {/* <div style={styleSheet.cardcardMarginLeftTop && styleSheet.cardcardMarginBottomRight}>
                     <TextField
                         id="copyOutput"
                         type="text"
@@ -1049,7 +1089,7 @@ export default class Downloads extends Component {
                     <IconButton onClick={this.insertToClipboard.bind(this, this.state.copyResult)} style={this.state.copyResult === "" ? styleSheet.hidden : styleSheet.button} aria-label="Copy">
                         <CopyIcon />
                     </IconButton>
-                </div>*/}
+                </div> */}
 
           {this.state.copyLoading || this.state.submitLoading ? (
             <img
@@ -1153,7 +1193,7 @@ const styleSheet = {
   },
   inlineTextFieldSpan: {
     marginLeft: 48,
-    width: 275 + 'px'
+    width: `${275}px`
   },
   cardcardMarginBottomRight: {
     // For a new section
