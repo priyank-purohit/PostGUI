@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Navigation } from '../top-navigation';
 import { ApiDataContextProvider, UserSelectionContextProvider } from './context';
 
 
@@ -9,7 +10,7 @@ export const App: React.FC = () => {
       <UserSelectionContextProvider
         value={{deleteMe: 'Another random prop...'}}
       >
-        <div>App</div>
+        <Navigation databaseDisplayName='Database Name' />
       </UserSelectionContextProvider>
     </ApiDataContextProvider>
   )
