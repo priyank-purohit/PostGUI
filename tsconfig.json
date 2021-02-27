@@ -8,8 +8,14 @@
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
-    "jsx": "react",
-    "lib": ["es7", "es2017", "dom", "esnext", "dom.iterable", "esnext"],
+    "jsx": "react-jsx",
+    "lib": [
+      "es7",
+      "es2017",
+      "dom",
+      "esnext",
+      "dom.iterable"
+    ],
     "module": "esnext",
     "moduleResolution": "node",
     "noEmit": true,
@@ -23,9 +29,20 @@
     "strict": true,
     "strictNullChecks": false,
     "target": "es6",
-    "types": ["node", "jest"],
-    "typeRoots": ["./node_modules/@types", "./src"]
+    "types": [
+      "node",
+      "jest"
+    ],
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src"
+    ],
+    "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
-  "exclude": ["src/components/__old_components"]
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "src/components/__old_components"
+  ]
 }
