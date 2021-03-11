@@ -10,7 +10,7 @@ export const APP_CONFIGURATION: IAppConfigContextValues = {
   databases: [
     {
       title: 'DVD Rentals',
-      url: 'http://localhost:3001',
+      baseUrl: 'http://localhost:3001',
       publicDbAcessType: 'read',
       foreignKeySearch: true,
       primaryKeyFunction: true,

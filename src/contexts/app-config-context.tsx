@@ -3,8 +3,8 @@ import React, { createContext, useContext, useState } from 'react';
 
 export interface IConfigDatabase {
   title: string
-  url: string
-  publicDbAcessType: string
+  baseUrl: string
+  publicDbAcessType: 'read' | 'private'
   foreignKeySearch: boolean
   primaryKeyFunction: boolean
   regexSupport: boolean

@@ -1,13 +1,16 @@
+/* eslint-disable no-console */
 import React, { createContext, useEffect, useState } from 'react';
 
 import axios from 'axios';
 
+import { IParsedDatabaseSchema, parseDatabaseSchema } from './api-data-lib';
+import { useAppConfigContext } from './app-config-context';
 import { useUserSelectionContext } from './user-selection-context';
 
 
 export interface IApiDataContextValues {
   deleteMe: string
-  // queryResult: any
+  parsedDatabaseSchema: any
 }
 export const ApiDataContext = createContext<IApiDataContextValues>(null)
 
@@ -20,22 +23,28 @@ export interface IApiDataContextProviderProps {
 export const ApiDataContextProvider: React.FC<IApiDataContextProviderProps> = (
   props
 ) => {
+  const {databases} = useAppConfigContext()
+  const {databaseIndex, selectedTableName} = useUserSelectionContext()
+
   const [headers, setHeaders] = useState({
     Authorization:
-      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicmVhZHVzZXIiLCJlbWFpbCI6InJlYWRAcHJpeWFua3B1cm9oaXQuY29tIiwiZXhwIjoxNjE1NDM1NDk0fQ.w1k2YZKvBaAFTw2hG9wALnNikV1F43qZvtJgXdNDtx8'
+      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicmVhZHVzZXIiLCJlbWFpbCI6InJlYWRAcHJpeWFua3B1cm9oaXQuY29tIiwiZXhwIjoxNjE1NDM5MzYzfQ.jYkAin5AaAw2TO4WXJuqHHOUJP0MmZvWVZETOT_3k5k'
   })
 
-  const {databaseIndex, selectedTableName} = useUserSelectionContext()
+  const [
+    parsedDatabaseSchema,
+    setParsedDatabaseSchema
+  ] = useState<IParsedDatabaseSchema>(null)
+
+  console.log(parsedDatabaseSchema)
 
   useEffect(() => {
     const fetchDatabaseSchema = async () => {
-      const response = await axios(
-        'http://ec2-3-96-54-2.ca-central-1.compute.amazonaws.com:3001',
-        {headers}
-      )
+      const response = await axios(`${databases[databaseIndex].baseUrl}/`, {
+        headers
+      })
 
-      // eslint-disable-next-line no-console
-      console.log(response.data)
+      setParsedDatabaseSchema(parseDatabaseSchema(response.data))
     }
 
     fetchDatabaseSchema()
@@ -48,7 +57,8 @@ export const ApiDataContextProvider: React.FC<IApiDataContextProviderProps> = (
   return (
     <ApiDataContext.Provider
       value={{
-        ...props.value
+        ...props.value,
+        parsedDatabaseSchema
       }}
     >
       {props.children}
