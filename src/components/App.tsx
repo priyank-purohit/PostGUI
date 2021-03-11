@@ -13,7 +13,7 @@ import { TopNavigation } from './top-navigation';
 
 
 export const App: React.FC = () => {
-  const [leftPanelVisibility, toggleLeftPanelVisibility] = useToggleState(false)
+  const [leftPanelVisibility, toggleLeftPanelVisibility] = useToggleState(true)
 
   return (
     <ApiDataContextProvider value={{deleteMe: 'Just a random prop...'}}>
