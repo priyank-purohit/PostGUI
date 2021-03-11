@@ -1,8 +1,14 @@
+import 'styles/index.css';
+
 import React, { useState } from 'react';
 
+import { UserSelectionContextProvider } from 'contexts/user-selection-context';
 import { useToggleState } from 'hooks/use-toggle-state';
 
-import { ApiDataContextProvider, UserSelectionContextProvider } from './context';
+import { Grid } from '@material-ui/core';
+
+import { ApiDataContextProvider } from '../contexts/api-data-context';
+import { DatabaseSchema } from './database-schema';
 import { TopNavigation } from './top-navigation';
 
 
@@ -12,12 +18,33 @@ export const App: React.FC = () => {
   return (
     <ApiDataContextProvider value={{deleteMe: 'Just a random prop...'}}>
       <UserSelectionContextProvider
-        value={{deleteMe: 'Another random prop...'}}
+        value={{
+          deleteMe: 'Possibly use these to provide defaults or overrides'
+        }}
       >
-        <TopNavigation
-          databaseDisplayName='Database Name'
-          toggleLeftPanelVisibility={toggleLeftPanelVisibility}
-        />
+        <Grid container direction='column'>
+          <Grid item xs={12}>
+            <TopNavigation
+              databaseDisplayName='Database Name'
+              toggleLeftPanelVisibility={toggleLeftPanelVisibility}
+            />
+          </Grid>
+          <Grid
+            container
+            direction='row'
+            justify='flex-start'
+            alignItems='flex-start'
+          >
+            {leftPanelVisibility && (
+              <Grid item xs={4}>
+                <DatabaseSchema />
+              </Grid>
+            )}
+            <Grid item xs={leftPanelVisibility ? 8 : 12}>
+              <div>Right Panel</div>
+            </Grid>
+          </Grid>
+        </Grid>
       </UserSelectionContextProvider>
     </ApiDataContextProvider>
   )

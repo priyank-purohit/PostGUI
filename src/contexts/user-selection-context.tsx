@@ -1,30 +1,7 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
 
-export interface IApiDataContextValues {
-  deleteMe: string
-  // queryResult: any
-}
-export const ApiDataContext = createContext<IApiDataContextValues>(null)
-
-export interface IApiDataContextProviderProps {
-  value: Pick<IApiDataContextValues, 'deleteMe'>
-}
-/**
- * For API responses shared across the app.
- */
-export const ApiDataContextProvider: React.FC<IApiDataContextProviderProps> = (
-  props
-) => (
-  <ApiDataContext.Provider
-    value={{
-      ...props.value
-    }}
-  >
-    {props.children}
-  </ApiDataContext.Provider>
-)
-
+// Context Values
 export interface IUserSelectionContextValues {
   deleteMe: string
   databaseIndex: string
@@ -33,16 +10,16 @@ export interface IUserSelectionContextValues {
   setDatabaseIndex(dbName: string): void
   setSelectedTableName(tableName: string): void
 }
+
 export const UserSelectionContext = createContext<IUserSelectionContextValues>(
   null
 )
 
+// Provider props
 export interface IUserSelectionContextProviderProps {
   value: Pick<IUserSelectionContextValues, 'deleteMe'>
 }
-/**
- * For all user selections to propogate throughout the app.
- */
+
 export const UserSelectionContextProvider: React.FC<IUserSelectionContextProviderProps> = (
   props
 ) => {
@@ -62,4 +39,11 @@ export const UserSelectionContextProvider: React.FC<IUserSelectionContextProvide
       {props.children}
     </UserSelectionContext.Provider>
   )
+}
+
+/**
+ * For all user selections to propogate throughout the app.
+ */
+export function useUserSelectionContext(): IUserSelectionContextValues {
+  return useContext(UserSelectionContext)
 }

@@ -18,7 +18,7 @@ interface INavigationProps {
 }
 
 export const TopNavigation: React.FC<INavigationProps> = (props) => (
-  <AppBar position='absolute'>
+  <AppBar position='static'>
     <Toolbar>
       <Grid
         container
