@@ -8,13 +8,13 @@ import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
  */
 export function useGetApiState<T>(
   url: string,
-  headers: AxiosRequestConfig
+  requestConfig: AxiosRequestConfig
 ): [AxiosResponse<T>] {
   const [response, setResponse] = useState<AxiosResponse<T>>(null)
 
   useEffect(() => {
     const fetchResponse = async () => {
-      const response: AxiosResponse<T> = await axios(url, headers)
+      const response: AxiosResponse<T> = await axios(url, requestConfig)
 
       setResponse(response)
     }

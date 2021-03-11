@@ -24,7 +24,16 @@ export const App: React.FC = () => {
           deleteMe: 'Possibly use these to provide defaults or overrides'
         }}
       >
-        <ApiDataContextProvider value={{deleteMe: 'Just a random prop...'}}>
+        <ApiDataContextProvider
+          value={{
+            requestConfig: {
+              headers: {
+                Authorization:
+                  'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicmVhZHVzZXIiLCJlbWFpbCI6InJlYWRAcHJpeWFua3B1cm9oaXQuY29tIiwiZXhwIjoxNjE1NDQyNzc3fQ.OlpNbuF1Fisyad2DHToT0MkHwKKaVVG-H2f_YxvG_Xo'
+              }
+            }
+          }}
+        >
           <Grid container direction='column'>
             <Grid item xs={12}>
               <TopNavigation

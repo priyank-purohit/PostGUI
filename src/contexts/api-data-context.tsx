@@ -1,6 +1,7 @@
-import React, { createContext, useEffect, useMemo, useState } from 'react';
+/* eslint-disable no-console */
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import { useGetApiState } from 'hooks/use-api-state';
 
 import {
@@ -11,14 +12,16 @@ import { useUserSelectionContext } from './user-selection-context';
 
 
 export interface IApiDataContextValues {
-  deleteMe: string
-  parsedDatabaseSchema: any
+  parsedDatabaseSchema: IParsedDatabaseSchema
+  requestConfig: AxiosRequestConfig
 }
-export const ApiDataContext = createContext<IApiDataContextValues>(null)
 
 export interface IApiDataContextProviderProps {
-  value: Pick<IApiDataContextValues, 'deleteMe'>
+  value: Pick<IApiDataContextValues, 'requestConfig'>
 }
+
+export const ApiDataContext = createContext<IApiDataContextValues>(null)
+
 /**
  * For API responses shared across the app.
  */
@@ -28,14 +31,9 @@ export const ApiDataContextProvider: React.FC<IApiDataContextProviderProps> = (
   const {databases} = useAppConfigContext()
   const {databaseIndex, selectedTableName} = useUserSelectionContext()
 
-  const [headers, setHeaders] = useState({
-    Authorization:
-      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicmVhZHVzZXIiLCJlbWFpbCI6InJlYWRAcHJpeWFua3B1cm9oaXQuY29tIiwiZXhwIjoxNjE1NDQyNzc3fQ.OlpNbuF1Fisyad2DHToT0MkHwKKaVVG-H2f_YxvG_Xo'
-  })
-
   const [rawDatabaseSchema] = useGetApiState<IPostgRESTBaseUrlResponse>(
     `${databases[databaseIndex].baseUrl}/`,
-    {headers}
+    {...props.value.requestConfig}
   )
 
   const parsedDatabaseSchema: IParsedDatabaseSchema = useMemo(() => {
@@ -44,10 +42,6 @@ export const ApiDataContextProvider: React.FC<IApiDataContextProviderProps> = (
     }
     return parseDatabaseSchema(rawDatabaseSchema.data)
   }, [rawDatabaseSchema])
-
-  useEffect(() => {
-    //
-  }, [selectedTableName])
 
   return (
     <ApiDataContext.Provider
@@ -59,4 +53,11 @@ export const ApiDataContextProvider: React.FC<IApiDataContextProviderProps> = (
       {props.children}
     </ApiDataContext.Provider>
   )
+}
+
+/**
+ * Provides commonly shared parsed API responses to all app components.
+ */
+export function useApiContext(): IApiDataContextValues {
+  return useContext(ApiDataContext)
 }
