@@ -16,12 +16,12 @@ export const App: React.FC = () => {
   const [leftPanelVisibility, toggleLeftPanelVisibility] = useToggleState(true)
 
   return (
-    <ApiDataContextProvider value={{deleteMe: 'Just a random prop...'}}>
-      <UserSelectionContextProvider
-        value={{
-          deleteMe: 'Possibly use these to provide defaults or overrides'
-        }}
-      >
+    <UserSelectionContextProvider
+      value={{
+        deleteMe: 'Possibly use these to provide defaults or overrides'
+      }}
+    >
+      <ApiDataContextProvider value={{deleteMe: 'Just a random prop...'}}>
         <Grid container direction='column'>
           <Grid item xs={12}>
             <TopNavigation
@@ -45,7 +45,7 @@ export const App: React.FC = () => {
             </Grid>
           </Grid>
         </Grid>
-      </UserSelectionContextProvider>
-    </ApiDataContextProvider>
+      </ApiDataContextProvider>
+    </UserSelectionContextProvider>
   )
 }
