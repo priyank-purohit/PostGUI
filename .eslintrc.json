@@ -42,7 +42,17 @@
     "@typescript-eslint/ban-ts-ignore": 0,
     "@typescript-eslint/camelcase": 0, // *2 rules*
     "@typescript-eslint/explicit-function-return-type": 0,
-    "@typescript-eslint/interface-name-prefix": [1, {"prefixWithI": "always"}],
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        "selector": "interface",
+        "format": ["PascalCase"],
+        "custom": {
+          "regex": "^I[A-Z]",
+          "match": true
+        }
+      }
+    ],
     "@typescript-eslint/no-empty-function": 0, // some catch need to be empty
     "@typescript-eslint/no-empty-interface": 0, // Good for renaming without duplicating code *2 rules*
     "@typescript-eslint/no-explicit-any": 0,

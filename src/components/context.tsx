@@ -10,19 +10,20 @@ export const ApiDataContext = createContext<IApiDataContextValues>(null)
 export interface IApiDataContextProviderProps {
   value: Pick<IApiDataContextValues, 'deleteMe'>
 }
+/**
+ * For API responses shared across the app.
+ */
 export const ApiDataContextProvider: React.FC<IApiDataContextProviderProps> = (
   props
-) => {
-  return (
-    <ApiDataContext.Provider
-      value={{
-        ...props.value
-      }}
-    >
-      {props.children}
-    </ApiDataContext.Provider>
-  )
-}
+) => (
+  <ApiDataContext.Provider
+    value={{
+      ...props.value
+    }}
+  >
+    {props.children}
+  </ApiDataContext.Provider>
+)
 
 export interface IUserSelectionContextValues {
   deleteMe: string
@@ -39,6 +40,9 @@ export const UserSelectionContext = createContext<IUserSelectionContextValues>(
 export interface IUserSelectionContextProviderProps {
   value: Pick<IUserSelectionContextValues, 'deleteMe'>
 }
+/**
+ * For all user selections to propogate throughout the app.
+ */
 export const UserSelectionContextProvider: React.FC<IUserSelectionContextProviderProps> = (
   props
 ) => {

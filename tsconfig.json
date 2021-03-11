@@ -9,18 +9,12 @@
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
-    "lib": [
-      "es7",
-      "es2017",
-      "dom",
-      "esnext",
-      "dom.iterable"
-    ],
+    "lib": ["es7", "es2017", "dom", "esnext", "dom.iterable"],
     "module": "esnext",
     "moduleResolution": "node",
     "noEmit": true,
     "noImplicitAny": false,
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
     "noUnusedParameters": false,
     "outDir": "./dist",
     "resolveJsonModule": true,
@@ -29,20 +23,10 @@
     "strict": true,
     "strictNullChecks": false,
     "target": "es6",
-    "types": [
-      "node",
-      "jest"
-    ],
-    "typeRoots": [
-      "./node_modules/@types",
-      "./src"
-    ],
+    "types": ["node", "jest"],
+    "typeRoots": ["./node_modules/@types", "./src"],
     "noFallthroughCasesInSwitch": true
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "src/components/__old_components"
-  ]
+  "include": ["src"],
+  "exclude": ["src/components/__old_components"]
 }
