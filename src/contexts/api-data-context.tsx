@@ -31,11 +31,11 @@ export const ApiDataContextProvider: React.FC<IApiDataContextProviderProps> = (
   const {databases} = useAppConfigContext()
   const {databaseIndex, selectedTableName} = useUserSelectionContext()
 
+  // Database schema
   const [rawDatabaseSchema] = useGetApiState<IPostgRESTBaseUrlResponse>(
     `${databases[databaseIndex].baseUrl}/`,
     {...props.value.requestConfig}
   )
-
   const parsedDatabaseSchema: IParsedDatabaseSchema = useMemo(() => {
     if (!rawDatabaseSchema) {
       return null
