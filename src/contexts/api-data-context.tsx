@@ -1,9 +1,11 @@
-/* eslint-disable no-console */
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useEffect, useMemo, useState } from 'react';
 
 import axios from 'axios';
+import { useGetApiState } from 'hooks/use-api-state';
 
-import { IParsedDatabaseSchema, parseDatabaseSchema } from './api-data-lib';
+import {
+    IParsedDatabaseSchema, IPostgRESTBaseUrlResponse, parseDatabaseSchema
+} from './api-data-lib';
 import { useAppConfigContext } from './app-config-context';
 import { useUserSelectionContext } from './user-selection-context';
 
@@ -28,27 +30,20 @@ export const ApiDataContextProvider: React.FC<IApiDataContextProviderProps> = (
 
   const [headers, setHeaders] = useState({
     Authorization:
-      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicmVhZHVzZXIiLCJlbWFpbCI6InJlYWRAcHJpeWFua3B1cm9oaXQuY29tIiwiZXhwIjoxNjE1NDM5MzYzfQ.jYkAin5AaAw2TO4WXJuqHHOUJP0MmZvWVZETOT_3k5k'
+      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicmVhZHVzZXIiLCJlbWFpbCI6InJlYWRAcHJpeWFua3B1cm9oaXQuY29tIiwiZXhwIjoxNjE1NDQyNzc3fQ.OlpNbuF1Fisyad2DHToT0MkHwKKaVVG-H2f_YxvG_Xo'
   })
 
-  const [
-    parsedDatabaseSchema,
-    setParsedDatabaseSchema
-  ] = useState<IParsedDatabaseSchema>(null)
+  const [rawDatabaseSchema] = useGetApiState<IPostgRESTBaseUrlResponse>(
+    `${databases[databaseIndex].baseUrl}/`,
+    {headers}
+  )
 
-  console.log(parsedDatabaseSchema)
-
-  useEffect(() => {
-    const fetchDatabaseSchema = async () => {
-      const response = await axios(`${databases[databaseIndex].baseUrl}/`, {
-        headers
-      })
-
-      setParsedDatabaseSchema(parseDatabaseSchema(response.data))
+  const parsedDatabaseSchema: IParsedDatabaseSchema = useMemo(() => {
+    if (!rawDatabaseSchema) {
+      return null
     }
-
-    fetchDatabaseSchema()
-  }, [databaseIndex])
+    return parseDatabaseSchema(rawDatabaseSchema.data)
+  }, [rawDatabaseSchema])
 
   useEffect(() => {
     //

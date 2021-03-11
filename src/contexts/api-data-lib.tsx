@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 export interface IPostgRESTBaseUrlResponse {
   definitions: {
     [tableName: string]: {
