@@ -50,3 +50,6 @@ jspm_packages
 
 #Webstorm dir
 .idea
+
+# Ignore local config
+src/data/config.local.tsx

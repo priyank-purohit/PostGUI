@@ -4,10 +4,15 @@ import React, { createContext, useContext, useState } from 'react';
 // Context Values
 export interface IUserSelectionContextValues {
   deleteMe: string
-  databaseIndex: string
+  /**
+   * Index of the chosen database in the response of `GET /`.
+   */
+  databaseIndex: number
+  /**
+   * Name of the table to query for the selected `databaseIndex`.
+   */
   selectedTableName: string
-
-  setDatabaseIndex(dbName: string): void
+  setDatabaseIndex(dbIndex: number): void
   setSelectedTableName(tableName: string): void
 }
 
@@ -25,14 +30,15 @@ export const UserSelectionContextProvider: React.FC<IUserSelectionContextProvide
 ) => {
   const [dbName, setDbName] = useState<string>(null)
   const [selectedTableName, setSelectedTableName] = useState<string>(null)
+  const [databaseIndex, setDatabaseIndex] = useState<number>(0)
 
   return (
     <UserSelectionContext.Provider
       value={{
         ...props.value,
-        databaseIndex: dbName,
+        databaseIndex,
         selectedTableName,
-        setDatabaseIndex: setDbName,
+        setDatabaseIndex,
         setSelectedTableName
       }}
     >
