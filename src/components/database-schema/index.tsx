@@ -6,9 +6,10 @@ import { useUserSelectionContext } from 'contexts/user-selection-context';
 import { useStringToggleState } from 'hooks/use-element-toggle-state';
 
 import {
-    Collapse, List, ListItem, ListItemIcon, ListItemText, ListSubheader
+    Collapse, List, ListItem, ListItemIcon, ListItemText, ListSubheader, Tooltip
 } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
+import ForeignKeyToIcon from '@material-ui/icons/CallReceived';
 import ClearIcon from '@material-ui/icons/Clear';
 import CloseIcon from '@material-ui/icons/Close';
 import FolderIcon from '@material-ui/icons/Folder';
@@ -16,6 +17,7 @@ import FolderIconOpen from '@material-ui/icons/FolderOpen';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import KeyIcon from '@material-ui/icons/VpnKey';
 
 
 export interface IDatabaseSchemaProps {}
@@ -45,11 +47,23 @@ export const DatabaseSchema: React.FC<IDatabaseSchemaProps> = () => {
     ): JSX.Element => (
       <ListItem button key={columnName}>
         <ListItemIcon>
-          <FolderIcon />
+          <VisibilityIcon />
         </ListItemIcon>
         <ListItemText primary={columnName} />
         <ListItemIcon>
-          <FolderIcon />
+          {columnSchema.isPrimaryKey && (
+            <Tooltip title='Primary key'>
+              <KeyIcon style={{padding: '5px'}} />
+            </Tooltip>
+          )}
+          {columnSchema.foreignKeyTo && (
+            <Tooltip
+              title={`Foreign key to ${columnSchema.foreignKeyTo.table}.${columnSchema.foreignKeyTo.column}`}
+              placement='right'
+            >
+              <ForeignKeyToIcon style={{padding: '5px'}} />
+            </Tooltip>
+          )}
         </ListItemIcon>
       </ListItem>
     )
@@ -83,7 +97,7 @@ export const DatabaseSchema: React.FC<IDatabaseSchemaProps> = () => {
           <Collapse
             in={[selectedTableName, expandedTableName].includes(tableName)}
             timeout='auto'
-            style={{marginLeft: '25px'}}
+            style={{marginLeft: '35px'}}
             key={`${tableName}-collapse`}
           >
             <List component='div' key={`${tableName}-columns`}>
@@ -107,7 +121,9 @@ export const DatabaseSchema: React.FC<IDatabaseSchemaProps> = () => {
     <div>
       <List
         subheader={
-          <ListSubheader component='div'>Tables and Columns</ListSubheader>
+          <ListSubheader disableSticky component='div'>
+            Tables and Columns
+          </ListSubheader>
         }
       >
         {tablesAndColumns()}

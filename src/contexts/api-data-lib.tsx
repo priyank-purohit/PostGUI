@@ -16,6 +16,7 @@ export interface IPostgRESTBaseUrlResponse {
 export interface IParsedColumnSchema {
   isPrimaryKey: boolean
   type: 'string' | 'integer' | 'boolean' | 'number' | 'object'
+  // TODO: this should be an array, right? Multiple columns could have it as a FK.
   foreignKeyTo: {
     table: string
     column: string
@@ -56,18 +57,24 @@ export const parseDatabaseSchema = (
       const columnProperties =
         baseUrlResponse.definitions[dbTable].properties[tableCol]
 
+      const isPrimaryKey =
+        columnProperties.description?.includes('<pk/>') ?? false
+
+      const type = columnProperties.type
+
+      const foreignKeyTo =
+        (columnProperties.description?.includes('<fk') && {
+          table: columnProperties.description.match(regex)[1],
+          column: columnProperties.description.match(regex)[2]
+        }) ||
+        undefined
+
       parsedSchema[dbTable] = {
         ...parsedSchema[dbTable],
         [tableCol]: {
-          isPrimaryKey:
-            columnProperties.description?.includes('<pk/>') ?? false,
-          type: columnProperties.type,
-          foreignKeyTo:
-            (columnProperties.description?.includes('<fk') && {
-              table: columnProperties.description.match(regex)[1],
-              column: columnProperties.description.match(regex)[2]
-            }) ||
-            undefined
+          isPrimaryKey,
+          type,
+          foreignKeyTo
         }
       }
     }
