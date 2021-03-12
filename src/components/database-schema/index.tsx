@@ -118,7 +118,7 @@ export const DatabaseSchema: React.FC<IDatabaseSchemaProps> = () => {
   }
 
   return (
-    <div>
+    <div style={{width: '450px'}}>
       <List
         subheader={
           <ListSubheader disableSticky component='div'>
