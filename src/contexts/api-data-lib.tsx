@@ -15,21 +15,18 @@ export interface IPostgRESTBaseUrlResponse {
 
 export interface IParsedDatabaseSchema {
   [tableName: string]: {
-    columns: string[]
-    columnsProperties?: {
-      [columnName: string]: {
-        isPrimaryKey: boolean
-        type: 'string' | 'integer' | 'boolean' | 'number' | 'object'
-        foreignKeyTo: {
-          // <fk table='actor' column='actor_id'/>
-          table: string
-          column: string
-        }
+    [columnName: string]: {
+      isPrimaryKey: boolean
+      type: 'string' | 'integer' | 'boolean' | 'number' | 'object'
+      foreignKeyTo: {
+        table: string
+        column: string
       }
     }
   }
 }
 
+// <fk table='actor' column='actor_id'/>
 const regex = /fk table='(.*)'\scolumn='(.*)'/
 
 /**
@@ -51,29 +48,22 @@ export const parseDatabaseSchema = (
       baseUrlResponse.definitions[dbTable].properties
     )
 
-    parsedSchema[dbTable] = {
-      columns: tableColumns
-    }
-
     for (const tableCol of tableColumns) {
       const columnProperties =
         baseUrlResponse.definitions[dbTable].properties[tableCol]
 
       parsedSchema[dbTable] = {
         ...parsedSchema[dbTable],
-        columnsProperties: {
-          ...parsedSchema[dbTable].columnsProperties,
-          [tableCol]: {
-            isPrimaryKey:
-              columnProperties.description?.includes('<pk/>') ?? false,
-            type: columnProperties.type,
-            foreignKeyTo:
-              (columnProperties.description?.includes('<fk') && {
-                table: columnProperties.description.match(regex)[1],
-                column: columnProperties.description.match(regex)[2]
-              }) ||
-              undefined
-          }
+        [tableCol]: {
+          isPrimaryKey:
+            columnProperties.description?.includes('<pk/>') ?? false,
+          type: columnProperties.type,
+          foreignKeyTo:
+            (columnProperties.description?.includes('<fk') && {
+              table: columnProperties.description.match(regex)[1],
+              column: columnProperties.description.match(regex)[2]
+            }) ||
+            undefined
         }
       }
     }
