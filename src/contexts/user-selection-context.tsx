@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState } from 'react';
 
+import { useStringToggleState } from 'hooks/use-element-toggle-state';
+
 
 // Context Values
 export interface IUserSelectionContextValues {
@@ -29,7 +31,7 @@ export const UserSelectionContextProvider: React.FC<IUserSelectionContextProvide
   props
 ) => {
   const [dbName, setDbName] = useState<string>(null)
-  const [selectedTableName, setSelectedTableName] = useState<string>(null)
+  const [selectedTableName, setSelectedTableName] = useStringToggleState(null)
   const [databaseIndex, setDatabaseIndex] = useState<number>(0)
 
   return (

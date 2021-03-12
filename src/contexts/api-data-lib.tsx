@@ -13,17 +13,21 @@ export interface IPostgRESTBaseUrlResponse {
   }
 }
 
-export interface IParsedDatabaseSchema {
-  [tableName: string]: {
-    [columnName: string]: {
-      isPrimaryKey: boolean
-      type: 'string' | 'integer' | 'boolean' | 'number' | 'object'
-      foreignKeyTo: {
-        table: string
-        column: string
-      }
-    }
+export interface IParsedColumnSchema {
+  isPrimaryKey: boolean
+  type: 'string' | 'integer' | 'boolean' | 'number' | 'object'
+  foreignKeyTo: {
+    table: string
+    column: string
   }
+}
+
+export interface IParsedTableSchema {
+  [columnName: string]: IParsedColumnSchema
+}
+
+export interface IParsedDatabaseSchema {
+  [tableName: string]: IParsedTableSchema
 }
 
 // <fk table='actor' column='actor_id'/>

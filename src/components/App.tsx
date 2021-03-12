@@ -29,7 +29,7 @@ export const App: React.FC = () => {
             requestConfig: {
               headers: {
                 Authorization:
-                  'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicmVhZHVzZXIiLCJlbWFpbCI6InJlYWRAcHJpeWFua3B1cm9oaXQuY29tIiwiZXhwIjoxNjE1NTEwNzU1fQ.NJdO94ASAtptNVI74kIov-Mvx_lAseIIEFoL1NlsaSc'
+                  'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicmVhZHVzZXIiLCJlbWFpbCI6InJlYWRAcHJpeWFua3B1cm9oaXQuY29tIiwiZXhwIjoxNjE1NTE2MTc5fQ.EE_mfCnsCnOfrw6grf1WX7IUlbxPrfx-m6ZbKS0wEUU'
               }
             }
           }}
