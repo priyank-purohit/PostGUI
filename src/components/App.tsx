@@ -3,11 +3,16 @@ import 'styles/reset.css';
 import React, { useState } from 'react';
 
 import { AppConfigContextProvider } from 'contexts/app-config-context';
-import { UserSelectionContextProvider } from 'contexts/user-selection-context';
+import {
+    UserSelectionContextProvider, useUserSelectionContext
+} from 'contexts/user-selection-context';
 import { APP_CONFIGURATION } from 'data/config';
 import { useToggleState } from 'hooks/use-toggle-state';
 
-import { Divider, Grid, Paper } from '@material-ui/core';
+import {
+    Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, Grid,
+    Paper, TextField
+} from '@material-ui/core';
 import { deepPurple, orange, pink } from '@material-ui/core/colors';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
@@ -45,34 +50,83 @@ export const App: React.FC = () => (
   </ThemeProvider>
 )
 
+const AuthForm: React.FC = () => (
+  <Dialog open fullWidth>
+    <DialogTitle>PostGUI Login</DialogTitle>
+    <DialogContent>
+      <DialogContentText>
+        Provide your credentials for this database.
+      </DialogContentText>
+      <div style={{paddingTop: 15}} />
+      <TextField
+        autoFocus
+        required
+        color='secondary'
+        variant='outlined'
+        id='email'
+        label='Email Address'
+        type='email'
+        onChange={() => {}}
+        fullWidth
+      />
+      <div style={{paddingTop: 15}} />
+      <TextField
+        required
+        color='secondary'
+        variant='outlined'
+        id='password'
+        label='Password'
+        type='password'
+        onChange={() => {}}
+        fullWidth
+      />
+      <div style={{paddingTop: 15}} />
+    </DialogContent>
+    <Divider />
+    <DialogActions>
+      <Button onClick={() => {}} color='secondary'>
+        Login
+      </Button>
+    </DialogActions>
+  </Dialog>
+)
+
 const AppContent: React.FC = () => {
+  const {authToken, setAuthToken} = useUserSelectionContext()
+
   const [leftPanelVisibility, toggleLeftPanelVisibility] = useToggleState(true)
 
   return (
     <Grid container direction='column'>
-      <Grid item xs={12}>
-        <TopNavigation
-          databaseDisplayName='Database Name'
-          toggleLeftPanelVisibility={toggleLeftPanelVisibility}
-        />
-      </Grid>
-      <Grid
-        container
-        direction='row'
-        justify='flex-start'
-        alignItems='flex-start'
-      >
-        {leftPanelVisibility && (
-          <Grid item xs={4}>
-            <DatabasePicker />
-            <Divider style={{width: '450px'}} />
-            <DatabaseSchema />
+      {authToken ? (
+        <>
+          <Grid item xs={12}>
+            <TopNavigation
+              databaseDisplayName='Database Name'
+              toggleLeftPanelVisibility={toggleLeftPanelVisibility}
+            />
           </Grid>
-        )}
-        <Grid item xs={leftPanelVisibility ? 8 : 12}>
-          <RightPanel />
-        </Grid>
-      </Grid>
+          <Grid
+            container
+            direction='row'
+            justify='flex-start'
+            alignItems='flex-start'
+          >
+            {leftPanelVisibility && (
+              <Grid item xs={4}>
+                <DatabasePicker />
+                <Divider style={{width: '450px'}} />
+                <DatabaseSchema />
+              </Grid>
+            )}
+            <Grid item xs={leftPanelVisibility ? 8 : 12}>
+              <RightPanel />
+            </Grid>
+          </Grid>
+        </>
+      ) : (
+        <AuthForm />
+      )}
     </Grid>
   )
 }
