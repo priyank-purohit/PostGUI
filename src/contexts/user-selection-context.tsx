@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import React, { createContext, useContext, useMemo, useState } from 'react';
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
 import { useStringToggleState } from 'hooks/use-element-toggle-state';
 
@@ -42,6 +42,14 @@ export const UserSelectionContextProvider: React.FC<IUserSelectionContextProvide
     Object.keys(databases)[0]
   )
 
+  const [databaseConfig, setDatabaseConfig] = useState<IConfigDatabase>(
+    databases[databaseName]
+  )
+  useEffect(() => {
+    console.log('New config is', databases[databaseName])
+    setDatabaseConfig(databases[databaseName])
+  }, [databaseName])
+
   const [selectedTableName, setSelectedTableName] = useStringToggleState(null)
 
   return (
@@ -49,7 +57,7 @@ export const UserSelectionContextProvider: React.FC<IUserSelectionContextProvide
       value={{
         ...props.value,
         databaseName,
-        databaseConfig: databases[databaseName],
+        databaseConfig,
         selectedTableName,
         setDatabaseName,
         setSelectedTableName

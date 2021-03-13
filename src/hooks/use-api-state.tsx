@@ -13,14 +13,19 @@ export function useGetApiState<T>(
   const [response, setResponse] = useState<AxiosResponse<T>>(null)
 
   useEffect(() => {
+    const updateState = () => {
+      setResponse(null)
+    }
+
     const fetchResponse = async () => {
       const response: AxiosResponse<T> = await axios(url, requestConfig)
 
       setResponse(response)
     }
 
+    updateState()
     fetchResponse()
-  }, [])
+  }, [url])
 
   return [response]
 }

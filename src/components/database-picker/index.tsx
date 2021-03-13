@@ -47,7 +47,10 @@ export const DatabasePicker: React.FC<IDatabasePickerProps> = () => {
           <MenuItem
             key={dbName}
             selected={dbName === databaseName}
-            onClick={() => setDatabaseName(dbName)}
+            onClick={() => {
+              setDatabaseName(dbName)
+              setMenuClosed()
+            }}
             style={{minWidth: '200px'}}
           >
             {dbName}

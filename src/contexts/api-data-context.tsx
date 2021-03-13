@@ -30,6 +30,8 @@ export const ApiDataContextProvider: React.FC<IApiDataContextProviderProps> = (
 ) => {
   const {databaseConfig, selectedTableName} = useUserSelectionContext()
 
+  console.log(', databaseConfig', databaseConfig)
+
   // Database schema
   const [rawDatabaseSchema] = useGetApiState<IPostgRESTBaseUrlResponse>(
     `${databaseConfig.baseUrl}/`,

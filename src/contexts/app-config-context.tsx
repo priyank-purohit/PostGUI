@@ -23,7 +23,6 @@ export interface IAppConfigContextValues {
 
 export const AppConfigContext = createContext<IAppConfigContextValues>(null)
 
-// Provider props
 export interface IAppConfigContextProviderProps {
   value: IAppConfigContextValues
 }
