@@ -18,7 +18,6 @@ export interface IAppConfigContextValues {
   databases: IConfigDatabases
   logoUrl: string
   seqColumnNames: string[]
-  token?: string
 }
 
 export const AppConfigContext = createContext<IAppConfigContextValues>(null)

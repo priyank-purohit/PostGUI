@@ -29,7 +29,7 @@ export const UserSelectionContext = createContext<IUserSelectionContextValues>(
 
 // Provider props
 export interface IUserSelectionContextProviderProps {
-  value: IUserSelectionContextValues
+  value: Partial<IUserSelectionContextValues>
 }
 
 export const UserSelectionContextProvider: React.FC<IUserSelectionContextProviderProps> = (

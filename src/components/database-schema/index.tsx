@@ -1,8 +1,12 @@
 import React, { useMemo, useState } from 'react';
 
 import { useApiContext } from 'contexts/api-data-context';
-import { IParsedColumnSchema, IParsedTableSchema } from 'contexts/api-data-lib';
+import {
+    IParsedColumnSchema, IParsedDatabaseSchema, IParsedTableSchema, IPostgRESTBaseUrlResponse,
+    parseDatabaseSchema
+} from 'contexts/api-data-lib';
 import { useUserSelectionContext } from 'contexts/user-selection-context';
+import { useGetApiState } from 'hooks/use-api-state';
 import { useStringToggleState } from 'hooks/use-element-toggle-state';
 
 import {
@@ -26,10 +30,23 @@ export interface IDatabaseSchemaProps {}
 export const DatabaseSchema: React.FC<IDatabaseSchemaProps> = () => {
   const theme = useTheme()
 
-  const {parsedDatabaseSchema} = useApiContext()
-
   // The table to query in right panel
-  const {selectedTableName, setSelectedTableName} = useUserSelectionContext()
+  const {
+    databaseConfig,
+    selectedTableName,
+    setSelectedTableName
+  } = useUserSelectionContext()
+
+  // Database schema
+  const [rawDatabaseSchema] = useGetApiState<IPostgRESTBaseUrlResponse>(
+    `${databaseConfig.baseUrl}/`
+  )
+  const parsedDatabaseSchema: IParsedDatabaseSchema = useMemo(() => {
+    if (!rawDatabaseSchema) {
+      return null
+    }
+    return parseDatabaseSchema(rawDatabaseSchema.data)
+  }, [rawDatabaseSchema])
 
   // Properties of a column, per table
   const [tableColumnProperties, setTableColumnProperties] = useState<{

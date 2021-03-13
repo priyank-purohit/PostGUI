@@ -7,7 +7,9 @@ import {
     UserSelectionContextProvider, useUserSelectionContext
 } from 'contexts/user-selection-context';
 import { APP_CONFIGURATION } from 'data/config';
+import { usePostApiState } from 'hooks/use-api-state';
 import { useToggleState } from 'hooks/use-toggle-state';
+import { report } from 'node:process';
 
 import {
     Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, Grid,
@@ -33,16 +35,8 @@ const theme = createMuiTheme({
 export const App: React.FC = () => (
   <ThemeProvider theme={theme}>
     <AppConfigContextProvider value={{...APP_CONFIGURATION}}>
-      <UserSelectionContextProvider value={null}>
-        <ApiDataContextProvider
-          value={{
-            requestConfig: {
-              headers: {
-                Authorization: APP_CONFIGURATION.token
-              }
-            }
-          }}
-        >
+      <UserSelectionContextProvider value={{}}>
+        <ApiDataContextProvider value={{}}>
           <AppContent />
         </ApiDataContextProvider>
       </UserSelectionContextProvider>
@@ -51,15 +45,50 @@ export const App: React.FC = () => (
 )
 
 const AuthForm: React.FC = () => {
-  const {login} = useApiContext()
+  const {databaseConfig} = useUserSelectionContext()
+  const {setReqConfig} = useApiContext()
+
+  const [, loginRequest] = usePostApiState<{token: string}[]>(
+    `${databaseConfig.baseUrl}/rpc/login`
+  )
+
+  const [loginError, setLoginError] = useState<boolean>(false)
+
+  const [email, setEmail] = useState<string>(null)
+  const [pass, setPass] = useState<string>(null)
+
+  const handleLogin = async (email: string, pass: string): Promise<void> => {
+    try {
+      const response = await loginRequest({
+        email,
+        pass
+      })
+
+      setLoginError(false)
+      setReqConfig({
+        headers: {
+          Authorization: `Bearer ${response?.data[0].token}`
+        }
+      })
+    } catch (error) {
+      setLoginError(true)
+      setReqConfig(null)
+    }
+  }
 
   return (
     <Dialog open fullWidth>
       <DialogTitle>PostGUI Login</DialogTitle>
       <DialogContent>
-        <DialogContentText>
-          Provide your credentials for this database.
-        </DialogContentText>
+        {loginError ? (
+          <DialogContentText color='secondary'>
+            Incorrect credentials.
+          </DialogContentText>
+        ) : (
+          <DialogContentText>
+            Provide your credentials for this database.
+          </DialogContentText>
+        )}
         <div style={{paddingTop: 15}} />
         <TextField
           autoFocus
@@ -69,7 +98,8 @@ const AuthForm: React.FC = () => {
           id='email'
           label='Email Address'
           type='email'
-          onChange={() => {}}
+          error={loginError}
+          onChange={(e) => setEmail(e.target.value)}
           fullWidth
         />
         <div style={{paddingTop: 15}} />
@@ -80,14 +110,15 @@ const AuthForm: React.FC = () => {
           id='password'
           label='Password'
           type='password'
-          onChange={() => {}}
+          error={loginError}
+          onChange={(e) => setPass(e.target.value)}
           fullWidth
         />
         <div style={{paddingTop: 15}} />
       </DialogContent>
       <Divider />
       <DialogActions>
-        <Button onClick={() => {}} color='secondary'>
+        <Button onClick={() => handleLogin(email, pass)} color='secondary'>
           Login
         </Button>
       </DialogActions>

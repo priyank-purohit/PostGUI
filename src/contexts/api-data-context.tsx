@@ -1,7 +1,9 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
 import axios, { AxiosRequestConfig } from 'axios';
-import { useGetApiState } from 'hooks/use-api-state';
+import { useGetApiState, usePostApiState } from 'hooks/use-api-state';
+
+import { Paper } from '@material-ui/core';
 
 import {
     IParsedDatabaseSchema, IPostgRESTBaseUrlResponse, parseDatabaseSchema
@@ -13,13 +15,12 @@ import { useUserSelectionContext } from './user-selection-context';
 // Context values
 export interface IApiDataContextValues {
   isLoggedIn: boolean
-  parsedDatabaseSchema: IParsedDatabaseSchema
-  requestConfig: AxiosRequestConfig
-  login(email: string, password: string): void
+  reqConfig: AxiosRequestConfig
+  setReqConfig(reqConfig: AxiosRequestConfig): void
 }
 
 export interface IApiDataContextProviderProps {
-  value: Pick<IApiDataContextValues, 'requestConfig'>
+  value: Partial<IApiDataContextValues>
 }
 
 export const ApiDataContext = createContext<IApiDataContextValues>(null)
@@ -30,33 +31,15 @@ export const ApiDataContext = createContext<IApiDataContextValues>(null)
 export const ApiDataContextProvider: React.FC<IApiDataContextProviderProps> = (
   props
 ) => {
-  const {databaseConfig, selectedTableName} = useUserSelectionContext()
-
-  const [authToken, setAuthToken] = useState<string>(null)
-
-  // Database schema
-  const [rawDatabaseSchema] = useGetApiState<IPostgRESTBaseUrlResponse>(
-    `${databaseConfig.baseUrl}/`,
-    {...props.value.requestConfig}
-  )
-  const parsedDatabaseSchema: IParsedDatabaseSchema = useMemo(() => {
-    if (!rawDatabaseSchema) {
-      return null
-    }
-    return parseDatabaseSchema(rawDatabaseSchema.data)
-  }, [rawDatabaseSchema])
-
-  const handleLogin = (email: string, password: string): void => {
-    //
-  }
+  const [reqConfig, setReqConfig] = useState<AxiosRequestConfig>(null)
 
   return (
     <ApiDataContext.Provider
       value={{
         ...props.value,
-        isLoggedIn: !!authToken,
-        parsedDatabaseSchema,
-        login: handleLogin
+        isLoggedIn: !!reqConfig?.headers,
+        reqConfig,
+        setReqConfig
       }}
     >
       {props.children}
