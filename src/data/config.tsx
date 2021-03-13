@@ -1,4 +1,4 @@
-import { IAppConfigContextValues } from 'contexts/app-config-context';
+import { IAppConfigContextValues, IConfigDatabases } from 'contexts/app-config-context';
 
 import { LOCAL_APP_CONFIGURATION } from './config.local';
 
@@ -7,16 +7,15 @@ import { LOCAL_APP_CONFIGURATION } from './config.local';
  * Gets overriden by local app configuration.
  */
 export const APP_CONFIGURATION: IAppConfigContextValues = {
-  databases: [
-    {
-      title: 'DVD Rentals',
+  databases: {
+    'DVD Rentals': {
       baseUrl: 'http://localhost:3001',
       publicDbAcessType: 'read',
       foreignKeySearch: true,
       primaryKeyFunction: true,
       regexSupport: false
     }
-  ],
+  } as IConfigDatabases,
   logoUrl: null,
   seqColumnNames: [
     'alignment_sequence',

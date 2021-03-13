@@ -1,20 +1,26 @@
-import React, { createContext, useContext, useState } from 'react';
+/* eslint-disable no-console */
+import React, { createContext, useContext, useMemo, useState } from 'react';
 
 import { useStringToggleState } from 'hooks/use-element-toggle-state';
+
+import { IConfigDatabase, IConfigDatabases, useAppConfigContext } from './app-config-context';
 
 
 // Context Values
 export interface IUserSelectionContextValues {
-  deleteMe: string
   /**
-   * Index of the chosen database in the response of `GET /`.
+   * Name of the chosen database in the response of `GET /`.
    */
-  databaseIndex: number
+  databaseName: string
   /**
-   * Name of the table to query for the selected `databaseIndex`.
+   * Configuration of the `databaseName` database.
+   */
+  databaseConfig: IConfigDatabase
+  /**
+   * Name of the table to query for the selected `databaseName`.
    */
   selectedTableName: string
-  setDatabaseIndex(dbIndex: number): void
+  setDatabaseName(dbName: string): void
   setSelectedTableName(tableName: string): void
 }
 
@@ -24,23 +30,28 @@ export const UserSelectionContext = createContext<IUserSelectionContextValues>(
 
 // Provider props
 export interface IUserSelectionContextProviderProps {
-  value: Pick<IUserSelectionContextValues, 'deleteMe'>
+  value: IUserSelectionContextValues
 }
 
 export const UserSelectionContextProvider: React.FC<IUserSelectionContextProviderProps> = (
   props
 ) => {
-  const [dbName, setDbName] = useState<string>(null)
+  const {databases} = useAppConfigContext()
+
+  const [databaseName, setDatabaseName] = useState<string>(
+    Object.keys(databases)[0]
+  )
+
   const [selectedTableName, setSelectedTableName] = useStringToggleState(null)
-  const [databaseIndex, setDatabaseIndex] = useState<number>(0)
 
   return (
     <UserSelectionContext.Provider
       value={{
         ...props.value,
-        databaseIndex,
+        databaseName,
+        databaseConfig: databases[databaseName],
         selectedTableName,
-        setDatabaseIndex,
+        setDatabaseName,
         setSelectedTableName
       }}
     >

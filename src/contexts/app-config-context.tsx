@@ -2,7 +2,6 @@ import React, { createContext, useContext, useState } from 'react';
 
 
 export interface IConfigDatabase {
-  title: string
   baseUrl: string
   publicDbAcessType: 'read' | 'private'
   foreignKeySearch: boolean
@@ -10,9 +9,13 @@ export interface IConfigDatabase {
   regexSupport: boolean
 }
 
+export interface IConfigDatabases {
+  [key: string]: IConfigDatabase
+}
+
 // Context Values
 export interface IAppConfigContextValues {
-  databases: IConfigDatabase[]
+  databases: IConfigDatabases
   logoUrl: string
   seqColumnNames: string[]
   token?: string

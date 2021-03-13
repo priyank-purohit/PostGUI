@@ -28,12 +28,11 @@ export const ApiDataContext = createContext<IApiDataContextValues>(null)
 export const ApiDataContextProvider: React.FC<IApiDataContextProviderProps> = (
   props
 ) => {
-  const {databases} = useAppConfigContext()
-  const {databaseIndex, selectedTableName} = useUserSelectionContext()
+  const {databaseConfig, selectedTableName} = useUserSelectionContext()
 
   // Database schema
   const [rawDatabaseSchema] = useGetApiState<IPostgRESTBaseUrlResponse>(
-    `${databases[databaseIndex].baseUrl}/`,
+    `${databaseConfig.baseUrl}/`,
     {...props.value.requestConfig}
   )
   const parsedDatabaseSchema: IParsedDatabaseSchema = useMemo(() => {
