@@ -125,7 +125,7 @@ export const DatabaseSchema: React.FC<IDatabaseSchemaProps> = () => {
       }
 
       return (
-        <>
+        <span key={`${tableName}-block`}>
           <ListItem
             button
             title={tableName}
@@ -155,7 +155,7 @@ export const DatabaseSchema: React.FC<IDatabaseSchemaProps> = () => {
               {columnElements}
             </List>
           </Collapse>
-        </>
+        </span>
       )
     }
 
