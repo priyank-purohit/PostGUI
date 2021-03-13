@@ -7,7 +7,7 @@ import { UserSelectionContextProvider } from 'contexts/user-selection-context';
 import { APP_CONFIGURATION } from 'data/config';
 import { useToggleState } from 'hooks/use-toggle-state';
 
-import { Divider, Grid } from '@material-ui/core';
+import { Divider, Grid, Paper } from '@material-ui/core';
 
 import { ApiDataContextProvider } from '../contexts/api-data-context';
 import { DatabasePicker } from './database-picker';
@@ -58,7 +58,9 @@ const AppContent: React.FC = () => {
           </Grid>
         )}
         <Grid item xs={leftPanelVisibility ? 8 : 12}>
-          <div>Right Panel</div>
+          <Paper style={{padding: 15, margin: 15}}>
+            <div>Right Panel</div>
+          </Paper>
         </Grid>
       </Grid>
     </Grid>
