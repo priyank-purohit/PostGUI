@@ -12,7 +12,7 @@ export interface IDatabasePickerProps {}
 export const DatabasePicker: React.FC<IDatabasePickerProps> = () => {
   const {databases} = useAppConfigContext()
 
-  const {databaseName} = useUserSelectionContext()
+  const {databaseName, setDatabaseName} = useUserSelectionContext()
 
   const dbPickerRef = useRef(null)
   const [menuOpen, , setMenuOpen, setMenuClosed] = useToggleState(false)
@@ -43,14 +43,14 @@ export const DatabasePicker: React.FC<IDatabasePickerProps> = () => {
           vertical: 'top'
         }}
       >
-        {Object.keys(databases).map((option: any, index: number) => (
+        {Object.keys(databases).map((dbName: string) => (
           <MenuItem
-            key={option}
-            selected={option === databaseName}
-            onClick={(event) => {}}
+            key={dbName}
+            selected={dbName === databaseName}
+            onClick={() => setDatabaseName(dbName)}
             style={{minWidth: '200px'}}
           >
-            {option}
+            {dbName}
           </MenuItem>
         ))}
       </Menu>
