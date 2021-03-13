@@ -8,6 +8,8 @@ import { APP_CONFIGURATION } from 'data/config';
 import { useToggleState } from 'hooks/use-toggle-state';
 
 import { Divider, Grid, Paper } from '@material-ui/core';
+import { deepPurple, orange, pink } from '@material-ui/core/colors';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
 import { ApiDataContextProvider } from '../contexts/api-data-context';
 import { DatabasePicker } from './database-picker';
@@ -16,22 +18,31 @@ import { RightPanel } from './right-panel';
 import { TopNavigation } from './top-navigation';
 
 
+const theme = createMuiTheme({
+  palette: {
+    primary: deepPurple,
+    secondary: pink
+  }
+})
+
 export const App: React.FC = () => (
-  <AppConfigContextProvider value={{...APP_CONFIGURATION}}>
-    <UserSelectionContextProvider value={null}>
-      <ApiDataContextProvider
-        value={{
-          requestConfig: {
-            headers: {
-              Authorization: APP_CONFIGURATION.token
+  <ThemeProvider theme={theme}>
+    <AppConfigContextProvider value={{...APP_CONFIGURATION}}>
+      <UserSelectionContextProvider value={null}>
+        <ApiDataContextProvider
+          value={{
+            requestConfig: {
+              headers: {
+                Authorization: APP_CONFIGURATION.token
+              }
             }
-          }
-        }}
-      >
-        <AppContent />
-      </ApiDataContextProvider>
-    </UserSelectionContextProvider>
-  </AppConfigContextProvider>
+          }}
+        >
+          <AppContent />
+        </ApiDataContextProvider>
+      </UserSelectionContextProvider>
+    </AppConfigContextProvider>
+  </ThemeProvider>
 )
 
 const AppContent: React.FC = () => {
