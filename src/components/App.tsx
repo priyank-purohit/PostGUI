@@ -12,6 +12,7 @@ import { Divider, Grid, Paper } from '@material-ui/core';
 import { ApiDataContextProvider } from '../contexts/api-data-context';
 import { DatabasePicker } from './database-picker';
 import { DatabaseSchema } from './database-schema';
+import { RightPanel } from './right-panel';
 import { TopNavigation } from './top-navigation';
 
 
@@ -58,9 +59,7 @@ const AppContent: React.FC = () => {
           </Grid>
         )}
         <Grid item xs={leftPanelVisibility ? 8 : 12}>
-          <Paper style={{padding: 15, margin: 15}}>
-            <div>Right Panel</div>
-          </Paper>
+          <RightPanel />
         </Grid>
       </Grid>
     </Grid>
