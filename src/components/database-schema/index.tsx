@@ -6,7 +6,8 @@ import { useUserSelectionContext } from 'contexts/user-selection-context';
 import { useStringToggleState } from 'hooks/use-element-toggle-state';
 
 import {
-    Collapse, List, ListItem, ListItemIcon, ListItemText, ListSubheader, Tooltip
+    CircularProgress, Collapse, Grid, List, ListItem, ListItemIcon, ListItemText, ListSubheader,
+    Tooltip
 } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import ForeignKeyToIcon from '@material-ui/icons/CallReceived';
@@ -31,7 +32,7 @@ export const DatabaseSchema: React.FC<IDatabaseSchemaProps> = () => {
   // Can expand one more table's schema without affecting the selected table
   const [expandedTableName, setExpandedTableName] = useStringToggleState(null)
 
-  const tablesAndColumns = (): JSX.Element[] => {
+  const tablesAndColumnsElements = (): JSX.Element[] => {
     if (!parsedDatabaseSchema) {
       return []
     }
@@ -123,7 +124,13 @@ export const DatabaseSchema: React.FC<IDatabaseSchemaProps> = () => {
           </ListSubheader>
         }
       >
-        {tablesAndColumns()}
+        {parsedDatabaseSchema ? (
+          tablesAndColumnsElements()
+        ) : (
+          <Grid container alignContent='center' direction='column'>
+            <CircularProgress />
+          </Grid>
+        )}
       </List>
     </div>
   )

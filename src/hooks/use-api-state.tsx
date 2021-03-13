@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse, CancelToken } from 'axios';
 
 
 /**
@@ -10,20 +10,22 @@ export function useGetApiState<T>(
   url: string,
   requestConfig: AxiosRequestConfig
 ): [AxiosResponse<T>] {
+  const cancelToken = axios.CancelToken
+
   const [response, setResponse] = useState<AxiosResponse<T>>(null)
 
   useEffect(() => {
-    const updateState = () => {
-      setResponse(null)
-    }
-
     const fetchResponse = async () => {
-      const response: AxiosResponse<T> = await axios(url, requestConfig)
+      cancelToken.source().cancel()
+      setResponse(null)
 
+      const response: AxiosResponse<T> = await axios(url, {
+        ...requestConfig,
+        cancelToken: cancelToken.source().token
+      })
       setResponse(response)
     }
 
-    updateState()
     fetchResponse()
   }, [url])
 

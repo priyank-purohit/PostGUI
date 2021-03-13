@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
 import axios, { AxiosRequestConfig } from 'axios';
@@ -29,8 +28,6 @@ export const ApiDataContextProvider: React.FC<IApiDataContextProviderProps> = (
   props
 ) => {
   const {databaseConfig, selectedTableName} = useUserSelectionContext()
-
-  console.log(', databaseConfig', databaseConfig)
 
   // Database schema
   const [rawDatabaseSchema] = useGetApiState<IPostgRESTBaseUrlResponse>(
