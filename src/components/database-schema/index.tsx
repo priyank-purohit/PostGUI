@@ -13,9 +13,9 @@ import IconButton from '@material-ui/core/IconButton';
 import ForeignKeyToIcon from '@material-ui/icons/CallReceived';
 import ClearIcon from '@material-ui/icons/Clear';
 import CloseIcon from '@material-ui/icons/Close';
-import FolderIcon from '@material-ui/icons/Folder';
 import FolderIconOpen from '@material-ui/icons/FolderOpen';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import TableIcon from '@material-ui/icons/TableChart';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import KeyIcon from '@material-ui/icons/VpnKey';
@@ -29,10 +29,17 @@ export const DatabaseSchema: React.FC<IDatabaseSchemaProps> = () => {
   // The table to query in right panel
   const {selectedTableName, setSelectedTableName} = useUserSelectionContext()
 
+  // Properties of a column, per table
+  const [tableColumnProperties, setTableColumnProperties] = useState<{
+    [tableColumnName: string]: {
+      visible: boolean
+    }
+  }>({})
+
   // Can expand one more table's schema without affecting the selected table
   const [expandedTableName, setExpandedTableName] = useStringToggleState(null)
 
-  const tablesAndColumnsElements = (): JSX.Element[] => {
+  const tablesAndColumnsElements = ((): JSX.Element[] => {
     if (!parsedDatabaseSchema) {
       return []
     }
@@ -41,30 +48,52 @@ export const DatabaseSchema: React.FC<IDatabaseSchemaProps> = () => {
 
     const columnElement = (
       columnName: string,
-      columnSchema: IParsedColumnSchema
-    ): JSX.Element => (
-      <ListItem button key={columnName}>
-        <ListItemIcon>
-          <VisibilityIcon />
-        </ListItemIcon>
-        <ListItemText primary={columnName} />
-        <ListItemIcon>
-          {columnSchema.isPrimaryKey && (
-            <Tooltip title='Primary key'>
-              <KeyIcon style={{padding: '5px'}} />
-            </Tooltip>
-          )}
-          {columnSchema.foreignKeyTo && (
-            <Tooltip
-              title={`Foreign key to ${columnSchema.foreignKeyTo.table}.${columnSchema.foreignKeyTo.column}`}
-              placement='right'
-            >
-              <ForeignKeyToIcon style={{padding: '5px'}} />
-            </Tooltip>
-          )}
-        </ListItemIcon>
-      </ListItem>
-    )
+      columnSchema: IParsedColumnSchema,
+      tableName: string
+    ): JSX.Element => {
+      const key = `${tableName}.${columnName}`
+
+      const isVisible = tableColumnProperties[key]?.visible ?? true
+
+      return (
+        <ListItem
+          button
+          onClick={() =>
+            setTableColumnProperties({
+              ...tableColumnProperties,
+              [key]: {
+                visible: !!!(isVisible ?? true)
+              }
+            })
+          }
+          key={columnName}
+        >
+          <ListItemIcon>
+            {isVisible ? (
+              <VisibilityIcon color='primary' />
+            ) : (
+              <VisibilityOffIcon color='disabled' />
+            )}
+          </ListItemIcon>
+          <ListItemText primary={columnName} />
+          <ListItemIcon>
+            {columnSchema.isPrimaryKey && (
+              <Tooltip title='Primary key'>
+                <KeyIcon style={{padding: '5px'}} />
+              </Tooltip>
+            )}
+            {columnSchema.foreignKeyTo && (
+              <Tooltip
+                title={`Foreign key to ${columnSchema.foreignKeyTo.table}.${columnSchema.foreignKeyTo.column}`}
+                placement='right'
+              >
+                <ForeignKeyToIcon style={{padding: '5px'}} />
+              </Tooltip>
+            )}
+          </ListItemIcon>
+        </ListItem>
+      )
+    }
 
     const tableElement = (
       tableName: string,
@@ -73,7 +102,9 @@ export const DatabaseSchema: React.FC<IDatabaseSchemaProps> = () => {
       const columnElements: JSX.Element[] = []
 
       for (const columnName of Object.keys(tableSchema)) {
-        columnElements.push(columnElement(columnName, tableSchema[columnName]))
+        columnElements.push(
+          columnElement(columnName, tableSchema[columnName], tableName)
+        )
       }
 
       return (
@@ -85,7 +116,7 @@ export const DatabaseSchema: React.FC<IDatabaseSchemaProps> = () => {
             title={tableName}
           >
             <ListItemIcon>
-              <FolderIcon />
+              <TableIcon />
             </ListItemIcon>
             <ListItemText primary={tableName} />
             <ListItemIcon>
@@ -113,7 +144,7 @@ export const DatabaseSchema: React.FC<IDatabaseSchemaProps> = () => {
     }
 
     return tablesColumns
-  }
+  })()
 
   return (
     <div style={{width: '450px'}}>
@@ -125,7 +156,7 @@ export const DatabaseSchema: React.FC<IDatabaseSchemaProps> = () => {
         }
       >
         {parsedDatabaseSchema ? (
-          tablesAndColumnsElements()
+          tablesAndColumnsElements
         ) : (
           <Grid container alignContent='center' direction='column'>
             <CircularProgress />
