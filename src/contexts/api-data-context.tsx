@@ -10,9 +10,12 @@ import { useAppConfigContext } from './app-config-context';
 import { useUserSelectionContext } from './user-selection-context';
 
 
+// Context values
 export interface IApiDataContextValues {
+  isLoggedIn: boolean
   parsedDatabaseSchema: IParsedDatabaseSchema
   requestConfig: AxiosRequestConfig
+  login(email: string, password: string): void
 }
 
 export interface IApiDataContextProviderProps {
@@ -29,6 +32,8 @@ export const ApiDataContextProvider: React.FC<IApiDataContextProviderProps> = (
 ) => {
   const {databaseConfig, selectedTableName} = useUserSelectionContext()
 
+  const [authToken, setAuthToken] = useState<string>(null)
+
   // Database schema
   const [rawDatabaseSchema] = useGetApiState<IPostgRESTBaseUrlResponse>(
     `${databaseConfig.baseUrl}/`,
@@ -41,11 +46,17 @@ export const ApiDataContextProvider: React.FC<IApiDataContextProviderProps> = (
     return parseDatabaseSchema(rawDatabaseSchema.data)
   }, [rawDatabaseSchema])
 
+  const handleLogin = (email: string, password: string): void => {
+    //
+  }
+
   return (
     <ApiDataContext.Provider
       value={{
         ...props.value,
-        parsedDatabaseSchema
+        isLoggedIn: !!authToken,
+        parsedDatabaseSchema,
+        login: handleLogin
       }}
     >
       {props.children}

@@ -7,7 +7,7 @@ import { useStringToggleState } from 'hooks/use-element-toggle-state';
 
 import {
     CircularProgress, Collapse, Grid, List, ListItem, ListItemIcon, ListItemText, ListSubheader,
-    Tooltip
+    Tooltip, useTheme
 } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import ForeignKeyToIcon from '@material-ui/icons/CallReceived';
@@ -24,6 +24,8 @@ import KeyIcon from '@material-ui/icons/VpnKey';
 export interface IDatabaseSchemaProps {}
 
 export const DatabaseSchema: React.FC<IDatabaseSchemaProps> = () => {
+  const theme = useTheme()
+
   const {parsedDatabaseSchema} = useApiContext()
 
   // The table to query in right panel
@@ -99,6 +101,8 @@ export const DatabaseSchema: React.FC<IDatabaseSchemaProps> = () => {
       tableName: string,
       tableSchema: IParsedTableSchema
     ) => {
+      const isSelected = tableName === selectedTableName
+
       const columnElements: JSX.Element[] = []
 
       for (const columnName of Object.keys(tableSchema)) {
@@ -111,12 +115,17 @@ export const DatabaseSchema: React.FC<IDatabaseSchemaProps> = () => {
         <>
           <ListItem
             button
+            title={tableName}
+            style={
+              isSelected
+                ? {background: theme.palette.primary[100], borderRadius: 5}
+                : undefined
+            }
             onClick={() => setSelectedTableName(tableName)}
             key={tableName}
-            title={tableName}
           >
             <ListItemIcon>
-              <TableIcon />
+              <TableIcon color={isSelected ? 'primary' : undefined} />
             </ListItemIcon>
             <ListItemText primary={tableName} />
             <ListItemIcon>

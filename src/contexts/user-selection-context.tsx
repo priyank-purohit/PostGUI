@@ -19,8 +19,6 @@ export interface IUserSelectionContextValues {
    * Name of the table to query for the selected `databaseName`.
    */
   selectedTableName: string
-  authToken: string
-  setAuthToken(token: string): void
   setDatabaseName(dbName: string): void
   setSelectedTableName(tableName: string): void
 }
@@ -39,8 +37,6 @@ export const UserSelectionContextProvider: React.FC<IUserSelectionContextProvide
 ) => {
   const {databases} = useAppConfigContext()
 
-  const [authToken, setAuthToken] = useState<string>(null)
-
   const [databaseName, setDatabaseName] = useState<string>(
     Object.keys(databases)[0]
   )
@@ -58,11 +54,9 @@ export const UserSelectionContextProvider: React.FC<IUserSelectionContextProvide
     <UserSelectionContext.Provider
       value={{
         ...props.value,
-        authToken,
         databaseName,
         databaseConfig,
         selectedTableName,
-        setAuthToken,
         setDatabaseName,
         setSelectedTableName
       }}
