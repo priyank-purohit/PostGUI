@@ -25,9 +25,6 @@ export interface IDatabaseSchemaProps {}
 export const DatabaseSchema: React.FC<IDatabaseSchemaProps> = () => {
   const {parsedDatabaseSchema} = useApiContext()
 
-  // eslint-disable-next-line no-console
-  console.log('parsedDatabaseSchema =', parsedDatabaseSchema)
-
   // The table to query in right panel
   const {selectedTableName, setSelectedTableName} = useUserSelectionContext()
 
