@@ -1,10 +1,5 @@
 import React, { useMemo, useState } from 'react';
 
-import { useApiContext } from 'contexts/api-data-context';
-import {
-    IParsedColumnSchema, IParsedDatabaseSchema, IParsedTableSchema, IPostgRESTBaseUrlResponse,
-    parseDatabaseSchema
-} from 'contexts/api-data-lib';
 import { useUserSelectionContext } from 'contexts/user-selection-context';
 import { useGetApiState } from 'hooks/use-api-state';
 import { useStringToggleState } from 'hooks/use-element-toggle-state';
@@ -13,16 +8,17 @@ import {
     CircularProgress, Collapse, Grid, List, ListItem, ListItemIcon, ListItemText, ListSubheader,
     Tooltip, useTheme
 } from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
 import ForeignKeyToIcon from '@material-ui/icons/CallReceived';
-import ClearIcon from '@material-ui/icons/Clear';
-import CloseIcon from '@material-ui/icons/Close';
-import FolderIconOpen from '@material-ui/icons/FolderOpen';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import TableIcon from '@material-ui/icons/TableChart';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import KeyIcon from '@material-ui/icons/VpnKey';
+
+import {
+    IParsedColumnSchema, IParsedDatabaseSchema, IParsedTableSchema, IPostgRESTBaseUrlResponse,
+    parseDatabaseSchema
+} from './lib';
 
 
 export interface IDatabaseSchemaProps {}
@@ -56,7 +52,7 @@ export const DatabaseSchema: React.FC<IDatabaseSchemaProps> = () => {
   }>({})
 
   // Can expand one more table's schema without affecting the selected table
-  const [expandedTableName, setExpandedTableName] = useStringToggleState(null)
+  const [expandedTableName] = useStringToggleState(null)
 
   const tablesAndColumnsElements = ((): JSX.Element[] => {
     if (!parsedDatabaseSchema) {
@@ -173,7 +169,7 @@ export const DatabaseSchema: React.FC<IDatabaseSchemaProps> = () => {
   })()
 
   return (
-    <div style={{width: '450px'}}>
+    <div>
       <List
         subheader={
           <ListSubheader disableSticky component='div'>

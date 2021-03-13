@@ -2,7 +2,6 @@ import React from 'react';
 
 import { useApiContext } from 'contexts/api-data-context';
 
-import { Grid, InputBase } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
@@ -11,7 +10,6 @@ import Typography from '@material-ui/core/Typography';
 import HelpIcon from '@material-ui/icons/HelpOutline';
 import HistoryIcon from '@material-ui/icons/History';
 import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
 
 
 interface INavigationProps {

@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import axios, { AxiosRequestConfig, AxiosResponse, CancelToken } from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { useApiContext } from 'contexts/api-data-context';
 
 

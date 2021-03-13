@@ -1,7 +1,5 @@
 {
   "compilerOptions": {
-    "allowJs": true,
-    "allowSyntheticDefaultImports": true,
     "alwaysStrict": true,
     "baseUrl": "./src",
     "esModuleInterop": true,
@@ -22,10 +20,12 @@
     "sourceMap": true,
     "strict": true,
     "strictNullChecks": false,
-    "target": "es6",
+    "target": "ESNext",
     "types": ["node", "jest"],
     "typeRoots": ["./node_modules/@types", "./src"],
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": ["src"],
   "exclude": ["src/components/__old_components"]

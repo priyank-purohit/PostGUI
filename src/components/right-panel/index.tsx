@@ -13,7 +13,10 @@ export const RightPanel: React.FC = () => {
   }
 
   return (
-    <Paper style={{padding: 15, margin: 15}}>
+    <Paper
+      elevation={8}
+      style={{padding: 15, margin: 15, minHeight: `${90}vh`}}
+    >
       <Typography variant='h5'>{selectedTableName}</Typography>
     </Paper>
   )

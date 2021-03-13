@@ -32,7 +32,7 @@ export interface IParsedDatabaseSchema {
 }
 
 // <fk table='actor' column='actor_id'/>
-const regex = /fk table='(.*)'\scolumn='(.*)'/
+export const FOREIGN_KEY_REGEX = /fk table='(.*)'\scolumn='(.*)'/
 
 /**
  * Maps the response from GET / to make it easier to work with in this app.
@@ -64,8 +64,8 @@ export const parseDatabaseSchema = (
 
       const foreignKeyTo =
         (columnProperties.description?.includes('<fk') && {
-          table: columnProperties.description.match(regex)[1],
-          column: columnProperties.description.match(regex)[2]
+          table: columnProperties.description.match(FOREIGN_KEY_REGEX)[1],
+          column: columnProperties.description.match(FOREIGN_KEY_REGEX)[2]
         }) ||
         undefined
 

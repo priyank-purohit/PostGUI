@@ -4,7 +4,7 @@ import { useAppConfigContext } from 'contexts/app-config-context';
 import { useUserSelectionContext } from 'contexts/user-selection-context';
 import { useToggleState } from 'hooks/use-toggle-state';
 
-import { List, ListItem, ListItemText, Menu, MenuItem, Typography } from '@material-ui/core';
+import { List, ListItem, ListItemText, Menu, MenuItem } from '@material-ui/core';
 
 
 export interface IDatabasePickerProps {}
@@ -18,7 +18,7 @@ export const DatabasePicker: React.FC<IDatabasePickerProps> = () => {
   const [menuOpen, , setMenuOpen, setMenuClosed] = useToggleState(false)
 
   return (
-    <div style={{width: '450px'}}>
+    <div>
       <List ref={dbPickerRef}>
         <ListItem
           button

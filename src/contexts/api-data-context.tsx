@@ -1,15 +1,6 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
-import axios, { AxiosRequestConfig } from 'axios';
-import { useGetApiState, usePostApiState } from 'hooks/use-api-state';
-
-import { Paper } from '@material-ui/core';
-
-import {
-    IParsedDatabaseSchema, IPostgRESTBaseUrlResponse, parseDatabaseSchema
-} from './api-data-lib';
-import { useAppConfigContext } from './app-config-context';
-import { useUserSelectionContext } from './user-selection-context';
+import { AxiosRequestConfig } from 'axios';
 
 
 // Context values
