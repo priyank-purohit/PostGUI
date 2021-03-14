@@ -1,10 +1,14 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 
 import { tableColumnPropertiesAtom } from 'components/database-schema/atoms';
+import { INITIAL_ROW_LIMIT, MAX_ROW_LIMIT } from 'config/constants';
 import { useUserSelectionContext } from 'contexts/user-selection-context';
+import { useToggleState } from 'hooks/use-toggle-state';
 import { useRecoilState } from 'recoil';
 
-import { CardContent, CardHeader, Grid, Paper, Typography } from '@material-ui/core';
+import {
+    CardContent, CardHeader, Checkbox, FormControlLabel, Grid, Paper, TextField, Typography
+} from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
 
 import { SubmitButton } from './submit-button';
@@ -76,6 +80,58 @@ const QueryBuilderComponent: React.FC = () => {
   )
 }
 
-const QueryOptions: React.FC = () => null
+const QueryOptions: React.FC = () => {
+  const [error, setError] = useState(false)
+  const [exactRowCount, , , toggleExactRowCount] = useToggleState(false)
+  return (
+    <>
+      <Typography variant='h6'>Query Options</Typography>
+      <div style={{margin: 15}} />
+      <FormControlLabel
+        control={
+          <Checkbox
+            color='primary'
+            checked={exactRowCount}
+            onChange={toggleExactRowCount}
+            name='exact-row-count'
+          />
+        }
+        label='Get exact row count'
+      />
+      <div style={{margin: 15}} />
+      <FormControlLabel
+        control={
+          <TextField
+            required
+            type='number'
+            variant='outlined'
+            label='Row limit'
+            defaultValue={INITIAL_ROW_LIMIT}
+            onChange={(event) => {
+              if (
+                Number(event.target.value) > 0 &&
+                Number(event.target.value) <= MAX_ROW_LIMIT
+              ) {
+                // within boundaries
+                setError(false)
+                return
+              }
+              setError(true)
+            }}
+            error={error}
+            helperText={
+              error ? `Row limit must be between 1 and ${MAX_ROW_LIMIT}` : ''
+            }
+            style={{
+              width: 300
+            }}
+            id='row-limit'
+          />
+        }
+        label=''
+      />
+    </>
+  )
+}
 
 const DataTable: React.FC = () => null
