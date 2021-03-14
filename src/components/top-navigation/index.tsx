@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { useApiContext } from 'contexts/api-data-context';
+import { useUserSelectionContext } from 'contexts/user-selection-context';
 
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
@@ -13,13 +14,12 @@ import MenuIcon from '@material-ui/icons/Menu';
 
 
 interface INavigationProps {
-  databaseDisplayName: string
-
   toggleLeftPanelVisibility(): void
 }
 
 export const TopNavigation: React.FC<INavigationProps> = (props) => {
   const {setReqConfig} = useApiContext()
+  const {databaseName} = useUserSelectionContext()
 
   return (
     <AppBar position='static'>
@@ -27,7 +27,7 @@ export const TopNavigation: React.FC<INavigationProps> = (props) => {
         <IconButton color='inherit' onClick={props.toggleLeftPanelVisibility}>
           <MenuIcon />
         </IconButton>
-        <Typography variant='h6'>{props.databaseDisplayName}</Typography>
+        <Typography variant='h6'>{databaseName}</Typography>
         <div style={{flexGrow: 1}} />
         <div>
           <IconButton color='inherit'>

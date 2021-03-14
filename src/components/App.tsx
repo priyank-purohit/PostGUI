@@ -14,7 +14,7 @@ import { ApiDataContextProvider } from '../contexts/api-data-context';
 import { AppContent } from './frame';
 
 
-export const App: React.FC = () => {
+export const PostGUI: React.FC = () => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
   const theme = useMemo(
     () =>

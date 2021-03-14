@@ -22,11 +22,12 @@ export const AppContent: React.FC = () => {
 
   return (
     <Grid container direction='column'>
-      {isLoggedIn ? (
+      {!isLoggedIn ? (
+        <AuthForm />
+      ) : (
         <>
           <Grid item xs={12}>
             <TopNavigation
-              databaseDisplayName='Database Name'
               toggleLeftPanelVisibility={toggleLeftPanelVisibility}
             />
           </Grid>
@@ -48,8 +49,6 @@ export const AppContent: React.FC = () => {
             </Grid>
           </Grid>
         </>
-      ) : (
-        <AuthForm />
       )}
     </Grid>
   )
