@@ -2,24 +2,26 @@ import React, { useState } from 'react';
 
 import { delay } from 'utils/utils';
 
-import { CircularProgress, createStyles, Fab, makeStyles, Theme } from '@material-ui/core';
-import { green, red } from '@material-ui/core/colors';
+import { createStyles, Fab, Grid, makeStyles } from '@material-ui/core';
+import { green, grey, red } from '@material-ui/core/colors';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 import ErrorOutlineIcon from '@material-ui/icons/Error';
 
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
-    wrapper: {
-      margin: theme.spacing(1),
-      position: 'relative'
-    },
     buttonSuccess: {
       backgroundColor: green[500],
       '&:hover': {
         backgroundColor: green[700]
+      }
+    },
+    buttonLoading: {
+      backgroundColor: grey[500],
+      '&:hover': {
+        backgroundColor: grey[700]
       }
     },
     buttonError: {
@@ -27,13 +29,6 @@ const useStyles = makeStyles((theme: Theme) =>
       '&:hover': {
         backgroundColor: red[700]
       }
-    },
-    fabProgress: {
-      color: green[500],
-      position: 'absolute',
-      top: -6,
-      left: -6,
-      zIndex: 1
     }
   })
 )
@@ -53,11 +48,15 @@ export const SubmitButton: React.FC = () => {
   )
 
   return (
-    <div className={classes.wrapper}>
+    <div>
       <Fab
-        aria-label='save'
-        color='primary'
+        color='secondary'
+        variant='extended'
+        style={{width: 160}}
         className={(() => {
+          if (buttonState === SUBMIT_STATE.LOADING) {
+            return classes.buttonLoading
+          }
           if (buttonState === SUBMIT_STATE.SUCCESS) {
             return classes.buttonSuccess
           }
@@ -75,25 +74,40 @@ export const SubmitButton: React.FC = () => {
           await delay(1500)
           setButtonState(SUBMIT_STATE.READY)
         }}
+        aria-label='run-query'
       >
-        {(() => {
-          if (buttonState === SUBMIT_STATE.SUCCESS) {
-            return <CheckIcon />
-          }
-          if (buttonState === SUBMIT_STATE.LOADING) {
-            return <CloseIcon />
-          }
-          if (buttonState === SUBMIT_STATE.ERROR) {
-            return <ErrorOutlineIcon />
-          }
-          if (buttonState === SUBMIT_STATE.READY) {
-            return <ArrowForwardIcon />
-          }
-        })()}
+        <Grid container alignItems='center'>
+          {(() => {
+            if (buttonState === SUBMIT_STATE.SUCCESS) {
+              return <CheckIcon style={{marginRight: 15}} />
+            }
+            if (buttonState === SUBMIT_STATE.LOADING) {
+              return <CloseIcon style={{marginRight: 15}} />
+            }
+            if (buttonState === SUBMIT_STATE.ERROR) {
+              return <ErrorOutlineIcon style={{marginRight: 15}} />
+            }
+            if (buttonState === SUBMIT_STATE.READY) {
+              return <ArrowForwardIcon style={{marginRight: 15}} />
+            }
+          })()}
+
+          {(() => {
+            if (buttonState === SUBMIT_STATE.SUCCESS) {
+              return 'Success!'
+            }
+            if (buttonState === SUBMIT_STATE.LOADING) {
+              return 'Cancel'
+            }
+            if (buttonState === SUBMIT_STATE.ERROR) {
+              return 'Error'
+            }
+            if (buttonState === SUBMIT_STATE.READY) {
+              return 'Run Query'
+            }
+          })()}
+        </Grid>
       </Fab>
-      {buttonState === SUBMIT_STATE.LOADING && (
-        <CircularProgress size={68} className={classes.fabProgress} />
-      )}
     </div>
   )
 }

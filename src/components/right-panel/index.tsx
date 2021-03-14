@@ -45,7 +45,7 @@ export const RightPanel: React.FC = () => {
               <Typography variant='h5'>{selectedTableName}</Typography>
               <Typography variant='body1'>tableDescription</Typography>
             </Grid>
-            <Grid item xs={1}>
+            <Grid item xs={2}>
               <SubmitButton />
             </Grid>
           </Grid>
