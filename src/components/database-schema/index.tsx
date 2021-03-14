@@ -133,7 +133,10 @@ export const DatabaseSchema: React.FC<IDatabaseSchemaProps> = () => {
             style={
               isSelected
                 ? {
-                    background: (theme.palette.primary as ColorPartial)[100],
+                    background:
+                      theme.palette.type === 'dark'
+                        ? (theme.palette.primary as ColorPartial)[200]
+                        : (theme.palette.primary as ColorPartial)[100],
                     borderRadius: 5
                   }
                 : undefined

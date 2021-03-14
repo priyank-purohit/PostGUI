@@ -1,6 +1,6 @@
 import 'styles/reset.css';
 
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { AppConfigContextProvider } from 'contexts/app-config-context';
 import {
@@ -11,8 +11,8 @@ import { useApiMutation } from 'hooks/use-post-api-state';
 import { useToggleState } from 'hooks/use-toggle-state';
 
 import {
-    Button, Color, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider,
-    Grid, TextField
+    Button, Color, CssBaseline, Dialog, DialogActions, DialogContent, DialogContentText,
+    DialogTitle, Divider, Grid, TextField, useMediaQuery
 } from '@material-ui/core';
 import { deepPurple, pink } from '@material-ui/core/colors';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
@@ -24,24 +24,32 @@ import { RightPanel } from './right-panel';
 import { TopNavigation } from './top-navigation';
 
 
-const theme = createMuiTheme({
-  palette: {
-    primary: deepPurple as Color,
-    secondary: pink as Color
-  }
-})
-
-export const App: React.FC = () => (
-  <ThemeProvider theme={theme}>
-    <AppConfigContextProvider value={{...APP_CONFIGURATION}}>
-      <UserSelectionContextProvider value={{}}>
-        <ApiDataContextProvider value={{}}>
-          <AppContent />
-        </ApiDataContextProvider>
-      </UserSelectionContextProvider>
-    </AppConfigContextProvider>
-  </ThemeProvider>
-)
+export const App: React.FC = () => {
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
+  const theme = useMemo(
+    () =>
+      createMuiTheme({
+        palette: {
+          type: prefersDarkMode ? 'dark' : 'light',
+          primary: deepPurple as Color,
+          secondary: pink as Color
+        }
+      }),
+    [prefersDarkMode]
+  )
+  return (
+    <ThemeProvider theme={theme}>
+      <AppConfigContextProvider value={{...APP_CONFIGURATION}}>
+        <UserSelectionContextProvider value={{}}>
+          <ApiDataContextProvider value={{}}>
+            <CssBaseline />
+            <AppContent />
+          </ApiDataContextProvider>
+        </UserSelectionContextProvider>
+      </AppConfigContextProvider>
+    </ThemeProvider>
+  )
+}
 
 const AuthForm: React.FC = () => {
   const {databaseConfig} = useUserSelectionContext()
