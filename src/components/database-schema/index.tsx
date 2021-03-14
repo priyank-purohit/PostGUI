@@ -1,8 +1,9 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 
 import { useUserSelectionContext } from 'contexts/user-selection-context';
 import { useStringToggleState } from 'hooks/use-element-toggle-state';
 import { useGETApiState } from 'hooks/use-get-api-state';
+import { atom, useRecoilState } from 'recoil';
 
 import {
     CircularProgress, Collapse, Grid, List, ListItem, ListItemIcon, ListItemText, ListSubheader,
@@ -25,6 +26,18 @@ import {
 
 export interface IDatabaseSchemaProps {}
 
+/**
+ * Holds the column properties, per table
+ */
+export const tableColumnPropertiesAtom = atom<{
+  [tableColumnName: string]: {
+    visible: boolean
+  }
+}>({
+  key: 'tableColumnProperties',
+  default: {}
+})
+
 export const DatabaseSchema: React.FC<IDatabaseSchemaProps> = () => {
   const theme = useTheme()
 
@@ -46,12 +59,10 @@ export const DatabaseSchema: React.FC<IDatabaseSchemaProps> = () => {
     return parseDatabaseSchema(rawDatabaseSchema.data)
   }, [rawDatabaseSchema])
 
-  // Properties of a column, per table
-  const [tableColumnProperties, setTableColumnProperties] = useState<{
-    [tableColumnName: string]: {
-      visible: boolean
-    }
-  }>({})
+  // Using Recoil, just for the sake of using recoil..!
+  const [tableColumnProperties, setTableColumnProperties] = useRecoilState(
+    tableColumnPropertiesAtom
+  )
 
   // Can expand one more table's schema without affecting the selected table
   const [expandedTableName, setExpandedTableName] = useStringToggleState(null)
