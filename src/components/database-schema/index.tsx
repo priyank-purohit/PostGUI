@@ -10,6 +10,7 @@ import {
 } from '@material-ui/core';
 import { ColorPartial } from '@material-ui/core/styles/createPalette';
 import ForeignKeyToIcon from '@material-ui/icons/CallReceived';
+import CloseIcon from '@material-ui/icons/Close';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import TableIcon from '@material-ui/icons/TableChart';
 import VisibilityIcon from '@material-ui/icons/Visibility';
@@ -53,7 +54,7 @@ export const DatabaseSchema: React.FC<IDatabaseSchemaProps> = () => {
   }>({})
 
   // Can expand one more table's schema without affecting the selected table
-  const [expandedTableName] = useStringToggleState(null)
+  const [expandedTableName, setExpandedTableName] = useStringToggleState(null)
 
   const tablesAndColumnsElements = ((): JSX.Element[] => {
     if (!parsedDatabaseSchema) {
@@ -116,6 +117,7 @@ export const DatabaseSchema: React.FC<IDatabaseSchemaProps> = () => {
       tableSchema: IParsedTableSchema
     ) => {
       const isSelected = tableName === selectedTableName
+      const isExpanded = tableName === expandedTableName
 
       const columnElements: JSX.Element[] = []
 
@@ -135,7 +137,7 @@ export const DatabaseSchema: React.FC<IDatabaseSchemaProps> = () => {
                 ? {
                     background:
                       theme.palette.type === 'dark'
-                        ? (theme.palette.primary as ColorPartial)[200]
+                        ? (theme.palette.primary as ColorPartial)[300]
                         : (theme.palette.primary as ColorPartial)[100],
                     borderRadius: 5
                   }
@@ -148,9 +150,21 @@ export const DatabaseSchema: React.FC<IDatabaseSchemaProps> = () => {
               <TableIcon color={isSelected ? 'primary' : undefined} />
             </ListItemIcon>
             <ListItemText primary={tableName} />
-            <ListItemIcon>
-              <KeyboardArrowDownIcon />
-            </ListItemIcon>
+            {!isSelected && (
+              <Tooltip
+                title='Peek at schema without loading table'
+                placement='bottom'
+              >
+                <ListItemIcon
+                  onClick={(event) => {
+                    event.stopPropagation()
+                    setExpandedTableName(tableName)
+                  }}
+                >
+                  {isExpanded ? <CloseIcon /> : <KeyboardArrowDownIcon />}
+                </ListItemIcon>
+              </Tooltip>
+            )}
           </ListItem>
           <Collapse
             in={[selectedTableName, expandedTableName].includes(tableName)}
