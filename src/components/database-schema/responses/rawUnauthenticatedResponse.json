@@ -1,0 +1,630 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "7.0.1 (UNKNOWN)",
+    "title": "PostgREST API",
+    "description": "standard public schema"
+  },
+  "host": "0.0.0.0:3002",
+  "basePath": "/",
+  "schemes": ["http"],
+  "consumes": [
+    "application/json",
+    "application/vnd.pgrst.object+json",
+    "text/csv"
+  ],
+  "produces": [
+    "application/json",
+    "application/vnd.pgrst.object+json",
+    "text/csv"
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "tags": ["Introspection"],
+        "summary": "OpenAPI description (this document)",
+        "produces": ["application/openapi+json", "application/json"],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/pgp_key_id": {
+      "post": {
+        "tags": ["(rpc) pgp_key_id"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/decrypt_iv": {
+      "post": {
+        "tags": ["(rpc) decrypt_iv"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/sign": {
+      "post": {
+        "tags": ["(rpc) sign"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "required": ["payload", "secret"],
+              "type": "object",
+              "properties": {
+                "secret": {"format": "text", "type": "string"},
+                "payload": {"format": "json", "type": "string"},
+                "algorithm": {"format": "text", "type": "string"}
+              }
+            },
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/armor": {
+      "post": {
+        "tags": ["(rpc) armor"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/pgp_pub_encrypt_bytea": {
+      "post": {
+        "tags": ["(rpc) pgp_pub_encrypt_bytea"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/pgp_sym_encrypt_bytea": {
+      "post": {
+        "tags": ["(rpc) pgp_sym_encrypt_bytea"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/crypt": {
+      "post": {
+        "tags": ["(rpc) crypt"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/gen_salt": {
+      "post": {
+        "tags": ["(rpc) gen_salt"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/gen_random_uuid": {
+      "post": {
+        "tags": ["(rpc) gen_random_uuid"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/verify": {
+      "post": {
+        "tags": ["(rpc) verify"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "required": ["token", "secret"],
+              "type": "object",
+              "properties": {
+                "token": {"format": "text", "type": "string"},
+                "secret": {"format": "text", "type": "string"},
+                "algorithm": {"format": "text", "type": "string"}
+              }
+            },
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/encrypt_iv": {
+      "post": {
+        "tags": ["(rpc) encrypt_iv"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/pgp_armor_headers": {
+      "post": {
+        "tags": ["(rpc) pgp_armor_headers"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/digest": {
+      "post": {
+        "tags": ["(rpc) digest"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/url_decode": {
+      "post": {
+        "tags": ["(rpc) url_decode"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "required": ["data"],
+              "type": "object",
+              "properties": {"data": {"format": "text", "type": "string"}}
+            },
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/decrypt": {
+      "post": {
+        "tags": ["(rpc) decrypt"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/pgp_pub_decrypt": {
+      "post": {
+        "tags": ["(rpc) pgp_pub_decrypt"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/pgp_sym_decrypt": {
+      "post": {
+        "tags": ["(rpc) pgp_sym_decrypt"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/foreign_keys": {
+      "post": {
+        "tags": ["(rpc) foreign_keys"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/gen_random_bytes": {
+      "post": {
+        "tags": ["(rpc) gen_random_bytes"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/login": {
+      "post": {
+        "tags": ["(rpc) login"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "required": ["email", "pass"],
+              "type": "object",
+              "properties": {
+                "email": {"format": "text", "type": "string"},
+                "pass": {"format": "text", "type": "string"}
+              }
+            },
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/algorithm_sign": {
+      "post": {
+        "tags": ["(rpc) algorithm_sign"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "required": ["signables", "secret", "algorithm"],
+              "type": "object",
+              "properties": {
+                "signables": {"format": "text", "type": "string"},
+                "secret": {"format": "text", "type": "string"},
+                "algorithm": {"format": "text", "type": "string"}
+              }
+            },
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/pgp_pub_decrypt_bytea": {
+      "post": {
+        "tags": ["(rpc) pgp_pub_decrypt_bytea"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/pgp_sym_decrypt_bytea": {
+      "post": {
+        "tags": ["(rpc) pgp_sym_decrypt_bytea"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/url_encode": {
+      "post": {
+        "tags": ["(rpc) url_encode"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "required": ["data"],
+              "type": "object",
+              "properties": {"data": {"format": "bytea", "type": "string"}}
+            },
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/dearmor": {
+      "post": {
+        "tags": ["(rpc) dearmor"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/pgp_sym_encrypt": {
+      "post": {
+        "tags": ["(rpc) pgp_sym_encrypt"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/pgp_pub_encrypt": {
+      "post": {
+        "tags": ["(rpc) pgp_pub_encrypt"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/encrypt": {
+      "post": {
+        "tags": ["(rpc) encrypt"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/hmac": {
+      "post": {
+        "tags": ["(rpc) hmac"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/primary_keys": {
+      "post": {
+        "tags": ["(rpc) primary_keys"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    }
+  },
+  "parameters": {
+    "preferParams": {
+      "name": "Prefer",
+      "description": "Preference",
+      "required": false,
+      "in": "header",
+      "type": "string",
+      "enum": ["params=single-object"]
+    },
+    "preferReturn": {
+      "name": "Prefer",
+      "description": "Preference",
+      "required": false,
+      "in": "header",
+      "type": "string",
+      "enum": ["return=representation", "return=minimal", "return=none"]
+    },
+    "preferCount": {
+      "name": "Prefer",
+      "description": "Preference",
+      "required": false,
+      "in": "header",
+      "type": "string",
+      "enum": ["count=none"]
+    },
+    "select": {
+      "name": "select",
+      "description": "Filtering Columns",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "on_conflict": {
+      "name": "on_conflict",
+      "description": "On Conflict",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "order": {
+      "name": "order",
+      "description": "Ordering",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "range": {
+      "name": "Range",
+      "description": "Limiting and Pagination",
+      "required": false,
+      "in": "header",
+      "type": "string"
+    },
+    "rangeUnit": {
+      "name": "Range-Unit",
+      "description": "Limiting and Pagination",
+      "required": false,
+      "default": "items",
+      "in": "header",
+      "type": "string"
+    },
+    "offset": {
+      "name": "offset",
+      "description": "Limiting and Pagination",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "limit": {
+      "name": "limit",
+      "description": "Limiting and Pagination",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    }
+  },
+  "externalDocs": {
+    "url": "https://postgrest.org/en/v7.0/api.html",
+    "description": "PostgREST Documentation"
+  }
+}

@@ -1,12 +1,13 @@
 export interface IPostgRESTBaseUrlResponse {
-  definitions: {
+  definitions?: {
     [tableName: string]: {
       required: string[]
       properties: {
         [columnName: string]: {
-          description: string
+          description?: string
           format: string
           type: 'string' | 'integer' | 'boolean' | 'number' | 'object'
+          maxLength?: number
         }
       }
     }
@@ -16,7 +17,7 @@ export interface IPostgRESTBaseUrlResponse {
 export interface IParsedColumnSchema {
   isPrimaryKey: boolean
   type: 'string' | 'integer' | 'boolean' | 'number' | 'object'
-  // TODO: this should be an array, right? Multiple columns could have it as a FK.
+  // TODO: this should be an array, right? Multiple columns could have it as a FK. Maybe?
   foreignKeyTo: {
     table: string
     column: string
@@ -79,6 +80,9 @@ export const parseDatabaseSchema = (
       }
     }
   }
+
+  // eslint-disable-next-line no-console
+  console.log(JSON.stringify(parsedSchema))
 
   return parsedSchema
 }

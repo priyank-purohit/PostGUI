@@ -1,0 +1,3929 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "7.0.1 (UNKNOWN)",
+    "title": "PostgREST API",
+    "description": "standard public schema"
+  },
+  "host": "0.0.0.0:3001",
+  "basePath": "/",
+  "schemes": ["http"],
+  "consumes": [
+    "application/json",
+    "application/vnd.pgrst.object+json",
+    "text/csv"
+  ],
+  "produces": [
+    "application/json",
+    "application/vnd.pgrst.object+json",
+    "text/csv"
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "tags": ["Introspection"],
+        "summary": "OpenAPI description (this document)",
+        "produces": ["application/openapi+json", "application/json"],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/actor": {
+      "get": {
+        "tags": ["actor"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.actor.actor_id"},
+          {"$ref": "#/parameters/rowFilter.actor.first_name"},
+          {"$ref": "#/parameters/rowFilter.actor.last_name"},
+          {"$ref": "#/parameters/rowFilter.actor.last_update"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/order"},
+          {"$ref": "#/parameters/range"},
+          {"$ref": "#/parameters/rangeUnit"},
+          {"$ref": "#/parameters/offset"},
+          {"$ref": "#/parameters/limit"},
+          {"$ref": "#/parameters/preferCount"}
+        ],
+        "responses": {
+          "206": {"description": "Partial Content"},
+          "200": {
+            "schema": {
+              "items": {"$ref": "#/definitions/actor"},
+              "type": "array"
+            },
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": ["actor"],
+        "parameters": [
+          {"$ref": "#/parameters/body.actor"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"201": {"description": "Created"}}
+      },
+      "delete": {
+        "tags": ["actor"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.actor.actor_id"},
+          {"$ref": "#/parameters/rowFilter.actor.first_name"},
+          {"$ref": "#/parameters/rowFilter.actor.last_name"},
+          {"$ref": "#/parameters/rowFilter.actor.last_update"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"204": {"description": "No Content"}}
+      },
+      "patch": {
+        "tags": ["actor"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.actor.actor_id"},
+          {"$ref": "#/parameters/rowFilter.actor.first_name"},
+          {"$ref": "#/parameters/rowFilter.actor.last_name"},
+          {"$ref": "#/parameters/rowFilter.actor.last_update"},
+          {"$ref": "#/parameters/body.actor"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"204": {"description": "No Content"}}
+      }
+    },
+    "/actor_info": {
+      "get": {
+        "tags": ["actor_info"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.actor_info.actor_id"},
+          {"$ref": "#/parameters/rowFilter.actor_info.first_name"},
+          {"$ref": "#/parameters/rowFilter.actor_info.last_name"},
+          {"$ref": "#/parameters/rowFilter.actor_info.film_info"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/order"},
+          {"$ref": "#/parameters/range"},
+          {"$ref": "#/parameters/rangeUnit"},
+          {"$ref": "#/parameters/offset"},
+          {"$ref": "#/parameters/limit"},
+          {"$ref": "#/parameters/preferCount"}
+        ],
+        "responses": {
+          "206": {"description": "Partial Content"},
+          "200": {
+            "schema": {
+              "items": {"$ref": "#/definitions/actor_info"},
+              "type": "array"
+            },
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/address": {
+      "get": {
+        "tags": ["address"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.address.address_id"},
+          {"$ref": "#/parameters/rowFilter.address.address"},
+          {"$ref": "#/parameters/rowFilter.address.address2"},
+          {"$ref": "#/parameters/rowFilter.address.district"},
+          {"$ref": "#/parameters/rowFilter.address.city_id"},
+          {"$ref": "#/parameters/rowFilter.address.postal_code"},
+          {"$ref": "#/parameters/rowFilter.address.phone"},
+          {"$ref": "#/parameters/rowFilter.address.last_update"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/order"},
+          {"$ref": "#/parameters/range"},
+          {"$ref": "#/parameters/rangeUnit"},
+          {"$ref": "#/parameters/offset"},
+          {"$ref": "#/parameters/limit"},
+          {"$ref": "#/parameters/preferCount"}
+        ],
+        "responses": {
+          "206": {"description": "Partial Content"},
+          "200": {
+            "schema": {
+              "items": {"$ref": "#/definitions/address"},
+              "type": "array"
+            },
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": ["address"],
+        "parameters": [
+          {"$ref": "#/parameters/body.address"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"201": {"description": "Created"}}
+      },
+      "delete": {
+        "tags": ["address"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.address.address_id"},
+          {"$ref": "#/parameters/rowFilter.address.address"},
+          {"$ref": "#/parameters/rowFilter.address.address2"},
+          {"$ref": "#/parameters/rowFilter.address.district"},
+          {"$ref": "#/parameters/rowFilter.address.city_id"},
+          {"$ref": "#/parameters/rowFilter.address.postal_code"},
+          {"$ref": "#/parameters/rowFilter.address.phone"},
+          {"$ref": "#/parameters/rowFilter.address.last_update"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"204": {"description": "No Content"}}
+      },
+      "patch": {
+        "tags": ["address"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.address.address_id"},
+          {"$ref": "#/parameters/rowFilter.address.address"},
+          {"$ref": "#/parameters/rowFilter.address.address2"},
+          {"$ref": "#/parameters/rowFilter.address.district"},
+          {"$ref": "#/parameters/rowFilter.address.city_id"},
+          {"$ref": "#/parameters/rowFilter.address.postal_code"},
+          {"$ref": "#/parameters/rowFilter.address.phone"},
+          {"$ref": "#/parameters/rowFilter.address.last_update"},
+          {"$ref": "#/parameters/body.address"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"204": {"description": "No Content"}}
+      }
+    },
+    "/category": {
+      "get": {
+        "tags": ["category"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.category.category_id"},
+          {"$ref": "#/parameters/rowFilter.category.name"},
+          {"$ref": "#/parameters/rowFilter.category.last_update"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/order"},
+          {"$ref": "#/parameters/range"},
+          {"$ref": "#/parameters/rangeUnit"},
+          {"$ref": "#/parameters/offset"},
+          {"$ref": "#/parameters/limit"},
+          {"$ref": "#/parameters/preferCount"}
+        ],
+        "responses": {
+          "206": {"description": "Partial Content"},
+          "200": {
+            "schema": {
+              "items": {"$ref": "#/definitions/category"},
+              "type": "array"
+            },
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": ["category"],
+        "parameters": [
+          {"$ref": "#/parameters/body.category"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"201": {"description": "Created"}}
+      },
+      "delete": {
+        "tags": ["category"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.category.category_id"},
+          {"$ref": "#/parameters/rowFilter.category.name"},
+          {"$ref": "#/parameters/rowFilter.category.last_update"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"204": {"description": "No Content"}}
+      },
+      "patch": {
+        "tags": ["category"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.category.category_id"},
+          {"$ref": "#/parameters/rowFilter.category.name"},
+          {"$ref": "#/parameters/rowFilter.category.last_update"},
+          {"$ref": "#/parameters/body.category"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"204": {"description": "No Content"}}
+      }
+    },
+    "/change_log": {
+      "get": {
+        "tags": ["change_log"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.change_log.p_id"},
+          {"$ref": "#/parameters/rowFilter.change_log.change_timestamp"},
+          {"$ref": "#/parameters/rowFilter.change_log.table_changed"},
+          {
+            "$ref": "#/parameters/rowFilter.change_log.primary_key_of_changed_row"
+          },
+          {"$ref": "#/parameters/rowFilter.change_log.column_changed"},
+          {"$ref": "#/parameters/rowFilter.change_log.old_value"},
+          {"$ref": "#/parameters/rowFilter.change_log.new_value"},
+          {"$ref": "#/parameters/rowFilter.change_log.notes"},
+          {"$ref": "#/parameters/rowFilter.change_log.user_name"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/order"},
+          {"$ref": "#/parameters/range"},
+          {"$ref": "#/parameters/rangeUnit"},
+          {"$ref": "#/parameters/offset"},
+          {"$ref": "#/parameters/limit"},
+          {"$ref": "#/parameters/preferCount"}
+        ],
+        "responses": {
+          "206": {"description": "Partial Content"},
+          "200": {
+            "schema": {
+              "items": {"$ref": "#/definitions/change_log"},
+              "type": "array"
+            },
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": ["change_log"],
+        "parameters": [
+          {"$ref": "#/parameters/body.change_log"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"201": {"description": "Created"}}
+      },
+      "delete": {
+        "tags": ["change_log"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.change_log.p_id"},
+          {"$ref": "#/parameters/rowFilter.change_log.change_timestamp"},
+          {"$ref": "#/parameters/rowFilter.change_log.table_changed"},
+          {
+            "$ref": "#/parameters/rowFilter.change_log.primary_key_of_changed_row"
+          },
+          {"$ref": "#/parameters/rowFilter.change_log.column_changed"},
+          {"$ref": "#/parameters/rowFilter.change_log.old_value"},
+          {"$ref": "#/parameters/rowFilter.change_log.new_value"},
+          {"$ref": "#/parameters/rowFilter.change_log.notes"},
+          {"$ref": "#/parameters/rowFilter.change_log.user_name"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"204": {"description": "No Content"}}
+      },
+      "patch": {
+        "tags": ["change_log"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.change_log.p_id"},
+          {"$ref": "#/parameters/rowFilter.change_log.change_timestamp"},
+          {"$ref": "#/parameters/rowFilter.change_log.table_changed"},
+          {
+            "$ref": "#/parameters/rowFilter.change_log.primary_key_of_changed_row"
+          },
+          {"$ref": "#/parameters/rowFilter.change_log.column_changed"},
+          {"$ref": "#/parameters/rowFilter.change_log.old_value"},
+          {"$ref": "#/parameters/rowFilter.change_log.new_value"},
+          {"$ref": "#/parameters/rowFilter.change_log.notes"},
+          {"$ref": "#/parameters/rowFilter.change_log.user_name"},
+          {"$ref": "#/parameters/body.change_log"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"204": {"description": "No Content"}}
+      }
+    },
+    "/city": {
+      "get": {
+        "tags": ["city"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.city.city_id"},
+          {"$ref": "#/parameters/rowFilter.city.city"},
+          {"$ref": "#/parameters/rowFilter.city.country_id"},
+          {"$ref": "#/parameters/rowFilter.city.last_update"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/order"},
+          {"$ref": "#/parameters/range"},
+          {"$ref": "#/parameters/rangeUnit"},
+          {"$ref": "#/parameters/offset"},
+          {"$ref": "#/parameters/limit"},
+          {"$ref": "#/parameters/preferCount"}
+        ],
+        "responses": {
+          "206": {"description": "Partial Content"},
+          "200": {
+            "schema": {
+              "items": {"$ref": "#/definitions/city"},
+              "type": "array"
+            },
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": ["city"],
+        "parameters": [
+          {"$ref": "#/parameters/body.city"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"201": {"description": "Created"}}
+      },
+      "delete": {
+        "tags": ["city"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.city.city_id"},
+          {"$ref": "#/parameters/rowFilter.city.city"},
+          {"$ref": "#/parameters/rowFilter.city.country_id"},
+          {"$ref": "#/parameters/rowFilter.city.last_update"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"204": {"description": "No Content"}}
+      },
+      "patch": {
+        "tags": ["city"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.city.city_id"},
+          {"$ref": "#/parameters/rowFilter.city.city"},
+          {"$ref": "#/parameters/rowFilter.city.country_id"},
+          {"$ref": "#/parameters/rowFilter.city.last_update"},
+          {"$ref": "#/parameters/body.city"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"204": {"description": "No Content"}}
+      }
+    },
+    "/country": {
+      "get": {
+        "tags": ["country"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.country.country_id"},
+          {"$ref": "#/parameters/rowFilter.country.country"},
+          {"$ref": "#/parameters/rowFilter.country.last_update"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/order"},
+          {"$ref": "#/parameters/range"},
+          {"$ref": "#/parameters/rangeUnit"},
+          {"$ref": "#/parameters/offset"},
+          {"$ref": "#/parameters/limit"},
+          {"$ref": "#/parameters/preferCount"}
+        ],
+        "responses": {
+          "206": {"description": "Partial Content"},
+          "200": {
+            "schema": {
+              "items": {"$ref": "#/definitions/country"},
+              "type": "array"
+            },
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": ["country"],
+        "parameters": [
+          {"$ref": "#/parameters/body.country"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"201": {"description": "Created"}}
+      },
+      "delete": {
+        "tags": ["country"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.country.country_id"},
+          {"$ref": "#/parameters/rowFilter.country.country"},
+          {"$ref": "#/parameters/rowFilter.country.last_update"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"204": {"description": "No Content"}}
+      },
+      "patch": {
+        "tags": ["country"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.country.country_id"},
+          {"$ref": "#/parameters/rowFilter.country.country"},
+          {"$ref": "#/parameters/rowFilter.country.last_update"},
+          {"$ref": "#/parameters/body.country"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"204": {"description": "No Content"}}
+      }
+    },
+    "/customer": {
+      "get": {
+        "tags": ["customer"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.customer.customer_id"},
+          {"$ref": "#/parameters/rowFilter.customer.store_id"},
+          {"$ref": "#/parameters/rowFilter.customer.first_name"},
+          {"$ref": "#/parameters/rowFilter.customer.last_name"},
+          {"$ref": "#/parameters/rowFilter.customer.email"},
+          {"$ref": "#/parameters/rowFilter.customer.address_id"},
+          {"$ref": "#/parameters/rowFilter.customer.activebool"},
+          {"$ref": "#/parameters/rowFilter.customer.create_date"},
+          {"$ref": "#/parameters/rowFilter.customer.last_update"},
+          {"$ref": "#/parameters/rowFilter.customer.active"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/order"},
+          {"$ref": "#/parameters/range"},
+          {"$ref": "#/parameters/rangeUnit"},
+          {"$ref": "#/parameters/offset"},
+          {"$ref": "#/parameters/limit"},
+          {"$ref": "#/parameters/preferCount"}
+        ],
+        "responses": {
+          "206": {"description": "Partial Content"},
+          "200": {
+            "schema": {
+              "items": {"$ref": "#/definitions/customer"},
+              "type": "array"
+            },
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": ["customer"],
+        "parameters": [
+          {"$ref": "#/parameters/body.customer"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"201": {"description": "Created"}}
+      },
+      "delete": {
+        "tags": ["customer"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.customer.customer_id"},
+          {"$ref": "#/parameters/rowFilter.customer.store_id"},
+          {"$ref": "#/parameters/rowFilter.customer.first_name"},
+          {"$ref": "#/parameters/rowFilter.customer.last_name"},
+          {"$ref": "#/parameters/rowFilter.customer.email"},
+          {"$ref": "#/parameters/rowFilter.customer.address_id"},
+          {"$ref": "#/parameters/rowFilter.customer.activebool"},
+          {"$ref": "#/parameters/rowFilter.customer.create_date"},
+          {"$ref": "#/parameters/rowFilter.customer.last_update"},
+          {"$ref": "#/parameters/rowFilter.customer.active"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"204": {"description": "No Content"}}
+      },
+      "patch": {
+        "tags": ["customer"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.customer.customer_id"},
+          {"$ref": "#/parameters/rowFilter.customer.store_id"},
+          {"$ref": "#/parameters/rowFilter.customer.first_name"},
+          {"$ref": "#/parameters/rowFilter.customer.last_name"},
+          {"$ref": "#/parameters/rowFilter.customer.email"},
+          {"$ref": "#/parameters/rowFilter.customer.address_id"},
+          {"$ref": "#/parameters/rowFilter.customer.activebool"},
+          {"$ref": "#/parameters/rowFilter.customer.create_date"},
+          {"$ref": "#/parameters/rowFilter.customer.last_update"},
+          {"$ref": "#/parameters/rowFilter.customer.active"},
+          {"$ref": "#/parameters/body.customer"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"204": {"description": "No Content"}}
+      }
+    },
+    "/customer_list": {
+      "get": {
+        "tags": ["customer_list"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.customer_list.id"},
+          {"$ref": "#/parameters/rowFilter.customer_list.name"},
+          {"$ref": "#/parameters/rowFilter.customer_list.address"},
+          {"$ref": "#/parameters/rowFilter.customer_list.zip code"},
+          {"$ref": "#/parameters/rowFilter.customer_list.phone"},
+          {"$ref": "#/parameters/rowFilter.customer_list.city"},
+          {"$ref": "#/parameters/rowFilter.customer_list.country"},
+          {"$ref": "#/parameters/rowFilter.customer_list.notes"},
+          {"$ref": "#/parameters/rowFilter.customer_list.sid"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/order"},
+          {"$ref": "#/parameters/range"},
+          {"$ref": "#/parameters/rangeUnit"},
+          {"$ref": "#/parameters/offset"},
+          {"$ref": "#/parameters/limit"},
+          {"$ref": "#/parameters/preferCount"}
+        ],
+        "responses": {
+          "206": {"description": "Partial Content"},
+          "200": {
+            "schema": {
+              "items": {"$ref": "#/definitions/customer_list"},
+              "type": "array"
+            },
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/film": {
+      "get": {
+        "tags": ["film"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.film.film_id"},
+          {"$ref": "#/parameters/rowFilter.film.title"},
+          {"$ref": "#/parameters/rowFilter.film.description"},
+          {"$ref": "#/parameters/rowFilter.film.release_year"},
+          {"$ref": "#/parameters/rowFilter.film.language_id"},
+          {"$ref": "#/parameters/rowFilter.film.rental_duration"},
+          {"$ref": "#/parameters/rowFilter.film.rental_rate"},
+          {"$ref": "#/parameters/rowFilter.film.length"},
+          {"$ref": "#/parameters/rowFilter.film.replacement_cost"},
+          {"$ref": "#/parameters/rowFilter.film.rating"},
+          {"$ref": "#/parameters/rowFilter.film.last_update"},
+          {"$ref": "#/parameters/rowFilter.film.special_features"},
+          {"$ref": "#/parameters/rowFilter.film.fulltext"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/order"},
+          {"$ref": "#/parameters/range"},
+          {"$ref": "#/parameters/rangeUnit"},
+          {"$ref": "#/parameters/offset"},
+          {"$ref": "#/parameters/limit"},
+          {"$ref": "#/parameters/preferCount"}
+        ],
+        "responses": {
+          "206": {"description": "Partial Content"},
+          "200": {
+            "schema": {
+              "items": {"$ref": "#/definitions/film"},
+              "type": "array"
+            },
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": ["film"],
+        "parameters": [
+          {"$ref": "#/parameters/body.film"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"201": {"description": "Created"}}
+      },
+      "delete": {
+        "tags": ["film"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.film.film_id"},
+          {"$ref": "#/parameters/rowFilter.film.title"},
+          {"$ref": "#/parameters/rowFilter.film.description"},
+          {"$ref": "#/parameters/rowFilter.film.release_year"},
+          {"$ref": "#/parameters/rowFilter.film.language_id"},
+          {"$ref": "#/parameters/rowFilter.film.rental_duration"},
+          {"$ref": "#/parameters/rowFilter.film.rental_rate"},
+          {"$ref": "#/parameters/rowFilter.film.length"},
+          {"$ref": "#/parameters/rowFilter.film.replacement_cost"},
+          {"$ref": "#/parameters/rowFilter.film.rating"},
+          {"$ref": "#/parameters/rowFilter.film.last_update"},
+          {"$ref": "#/parameters/rowFilter.film.special_features"},
+          {"$ref": "#/parameters/rowFilter.film.fulltext"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"204": {"description": "No Content"}}
+      },
+      "patch": {
+        "tags": ["film"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.film.film_id"},
+          {"$ref": "#/parameters/rowFilter.film.title"},
+          {"$ref": "#/parameters/rowFilter.film.description"},
+          {"$ref": "#/parameters/rowFilter.film.release_year"},
+          {"$ref": "#/parameters/rowFilter.film.language_id"},
+          {"$ref": "#/parameters/rowFilter.film.rental_duration"},
+          {"$ref": "#/parameters/rowFilter.film.rental_rate"},
+          {"$ref": "#/parameters/rowFilter.film.length"},
+          {"$ref": "#/parameters/rowFilter.film.replacement_cost"},
+          {"$ref": "#/parameters/rowFilter.film.rating"},
+          {"$ref": "#/parameters/rowFilter.film.last_update"},
+          {"$ref": "#/parameters/rowFilter.film.special_features"},
+          {"$ref": "#/parameters/rowFilter.film.fulltext"},
+          {"$ref": "#/parameters/body.film"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"204": {"description": "No Content"}}
+      }
+    },
+    "/film_actor": {
+      "get": {
+        "tags": ["film_actor"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.film_actor.actor_id"},
+          {"$ref": "#/parameters/rowFilter.film_actor.film_id"},
+          {"$ref": "#/parameters/rowFilter.film_actor.last_update"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/order"},
+          {"$ref": "#/parameters/range"},
+          {"$ref": "#/parameters/rangeUnit"},
+          {"$ref": "#/parameters/offset"},
+          {"$ref": "#/parameters/limit"},
+          {"$ref": "#/parameters/preferCount"}
+        ],
+        "responses": {
+          "206": {"description": "Partial Content"},
+          "200": {
+            "schema": {
+              "items": {"$ref": "#/definitions/film_actor"},
+              "type": "array"
+            },
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": ["film_actor"],
+        "parameters": [
+          {"$ref": "#/parameters/body.film_actor"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"201": {"description": "Created"}}
+      },
+      "delete": {
+        "tags": ["film_actor"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.film_actor.actor_id"},
+          {"$ref": "#/parameters/rowFilter.film_actor.film_id"},
+          {"$ref": "#/parameters/rowFilter.film_actor.last_update"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"204": {"description": "No Content"}}
+      },
+      "patch": {
+        "tags": ["film_actor"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.film_actor.actor_id"},
+          {"$ref": "#/parameters/rowFilter.film_actor.film_id"},
+          {"$ref": "#/parameters/rowFilter.film_actor.last_update"},
+          {"$ref": "#/parameters/body.film_actor"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"204": {"description": "No Content"}}
+      }
+    },
+    "/film_category": {
+      "get": {
+        "tags": ["film_category"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.film_category.film_id"},
+          {"$ref": "#/parameters/rowFilter.film_category.category_id"},
+          {"$ref": "#/parameters/rowFilter.film_category.last_update"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/order"},
+          {"$ref": "#/parameters/range"},
+          {"$ref": "#/parameters/rangeUnit"},
+          {"$ref": "#/parameters/offset"},
+          {"$ref": "#/parameters/limit"},
+          {"$ref": "#/parameters/preferCount"}
+        ],
+        "responses": {
+          "206": {"description": "Partial Content"},
+          "200": {
+            "schema": {
+              "items": {"$ref": "#/definitions/film_category"},
+              "type": "array"
+            },
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": ["film_category"],
+        "parameters": [
+          {"$ref": "#/parameters/body.film_category"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"201": {"description": "Created"}}
+      },
+      "delete": {
+        "tags": ["film_category"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.film_category.film_id"},
+          {"$ref": "#/parameters/rowFilter.film_category.category_id"},
+          {"$ref": "#/parameters/rowFilter.film_category.last_update"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"204": {"description": "No Content"}}
+      },
+      "patch": {
+        "tags": ["film_category"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.film_category.film_id"},
+          {"$ref": "#/parameters/rowFilter.film_category.category_id"},
+          {"$ref": "#/parameters/rowFilter.film_category.last_update"},
+          {"$ref": "#/parameters/body.film_category"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"204": {"description": "No Content"}}
+      }
+    },
+    "/film_list": {
+      "get": {
+        "tags": ["film_list"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.film_list.fid"},
+          {"$ref": "#/parameters/rowFilter.film_list.title"},
+          {"$ref": "#/parameters/rowFilter.film_list.description"},
+          {"$ref": "#/parameters/rowFilter.film_list.category"},
+          {"$ref": "#/parameters/rowFilter.film_list.price"},
+          {"$ref": "#/parameters/rowFilter.film_list.length"},
+          {"$ref": "#/parameters/rowFilter.film_list.rating"},
+          {"$ref": "#/parameters/rowFilter.film_list.actors"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/order"},
+          {"$ref": "#/parameters/range"},
+          {"$ref": "#/parameters/rangeUnit"},
+          {"$ref": "#/parameters/offset"},
+          {"$ref": "#/parameters/limit"},
+          {"$ref": "#/parameters/preferCount"}
+        ],
+        "responses": {
+          "206": {"description": "Partial Content"},
+          "200": {
+            "schema": {
+              "items": {"$ref": "#/definitions/film_list"},
+              "type": "array"
+            },
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/inventory": {
+      "get": {
+        "tags": ["inventory"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.inventory.inventory_id"},
+          {"$ref": "#/parameters/rowFilter.inventory.film_id"},
+          {"$ref": "#/parameters/rowFilter.inventory.store_id"},
+          {"$ref": "#/parameters/rowFilter.inventory.last_update"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/order"},
+          {"$ref": "#/parameters/range"},
+          {"$ref": "#/parameters/rangeUnit"},
+          {"$ref": "#/parameters/offset"},
+          {"$ref": "#/parameters/limit"},
+          {"$ref": "#/parameters/preferCount"}
+        ],
+        "responses": {
+          "206": {"description": "Partial Content"},
+          "200": {
+            "schema": {
+              "items": {"$ref": "#/definitions/inventory"},
+              "type": "array"
+            },
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": ["inventory"],
+        "parameters": [
+          {"$ref": "#/parameters/body.inventory"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"201": {"description": "Created"}}
+      },
+      "delete": {
+        "tags": ["inventory"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.inventory.inventory_id"},
+          {"$ref": "#/parameters/rowFilter.inventory.film_id"},
+          {"$ref": "#/parameters/rowFilter.inventory.store_id"},
+          {"$ref": "#/parameters/rowFilter.inventory.last_update"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"204": {"description": "No Content"}}
+      },
+      "patch": {
+        "tags": ["inventory"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.inventory.inventory_id"},
+          {"$ref": "#/parameters/rowFilter.inventory.film_id"},
+          {"$ref": "#/parameters/rowFilter.inventory.store_id"},
+          {"$ref": "#/parameters/rowFilter.inventory.last_update"},
+          {"$ref": "#/parameters/body.inventory"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"204": {"description": "No Content"}}
+      }
+    },
+    "/language": {
+      "get": {
+        "tags": ["language"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.language.language_id"},
+          {"$ref": "#/parameters/rowFilter.language.name"},
+          {"$ref": "#/parameters/rowFilter.language.last_update"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/order"},
+          {"$ref": "#/parameters/range"},
+          {"$ref": "#/parameters/rangeUnit"},
+          {"$ref": "#/parameters/offset"},
+          {"$ref": "#/parameters/limit"},
+          {"$ref": "#/parameters/preferCount"}
+        ],
+        "responses": {
+          "206": {"description": "Partial Content"},
+          "200": {
+            "schema": {
+              "items": {"$ref": "#/definitions/language"},
+              "type": "array"
+            },
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": ["language"],
+        "parameters": [
+          {"$ref": "#/parameters/body.language"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"201": {"description": "Created"}}
+      },
+      "delete": {
+        "tags": ["language"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.language.language_id"},
+          {"$ref": "#/parameters/rowFilter.language.name"},
+          {"$ref": "#/parameters/rowFilter.language.last_update"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"204": {"description": "No Content"}}
+      },
+      "patch": {
+        "tags": ["language"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.language.language_id"},
+          {"$ref": "#/parameters/rowFilter.language.name"},
+          {"$ref": "#/parameters/rowFilter.language.last_update"},
+          {"$ref": "#/parameters/body.language"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"204": {"description": "No Content"}}
+      }
+    },
+    "/nicer_but_slower_film_list": {
+      "get": {
+        "tags": ["nicer_but_slower_film_list"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.nicer_but_slower_film_list.fid"},
+          {"$ref": "#/parameters/rowFilter.nicer_but_slower_film_list.title"},
+          {
+            "$ref": "#/parameters/rowFilter.nicer_but_slower_film_list.description"
+          },
+          {
+            "$ref": "#/parameters/rowFilter.nicer_but_slower_film_list.category"
+          },
+          {"$ref": "#/parameters/rowFilter.nicer_but_slower_film_list.price"},
+          {"$ref": "#/parameters/rowFilter.nicer_but_slower_film_list.length"},
+          {"$ref": "#/parameters/rowFilter.nicer_but_slower_film_list.rating"},
+          {"$ref": "#/parameters/rowFilter.nicer_but_slower_film_list.actors"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/order"},
+          {"$ref": "#/parameters/range"},
+          {"$ref": "#/parameters/rangeUnit"},
+          {"$ref": "#/parameters/offset"},
+          {"$ref": "#/parameters/limit"},
+          {"$ref": "#/parameters/preferCount"}
+        ],
+        "responses": {
+          "206": {"description": "Partial Content"},
+          "200": {
+            "schema": {
+              "items": {"$ref": "#/definitions/nicer_but_slower_film_list"},
+              "type": "array"
+            },
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/payment": {
+      "get": {
+        "tags": ["payment"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.payment.payment_id"},
+          {"$ref": "#/parameters/rowFilter.payment.customer_id"},
+          {"$ref": "#/parameters/rowFilter.payment.staff_id"},
+          {"$ref": "#/parameters/rowFilter.payment.rental_id"},
+          {"$ref": "#/parameters/rowFilter.payment.amount"},
+          {"$ref": "#/parameters/rowFilter.payment.payment_date"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/order"},
+          {"$ref": "#/parameters/range"},
+          {"$ref": "#/parameters/rangeUnit"},
+          {"$ref": "#/parameters/offset"},
+          {"$ref": "#/parameters/limit"},
+          {"$ref": "#/parameters/preferCount"}
+        ],
+        "responses": {
+          "206": {"description": "Partial Content"},
+          "200": {
+            "schema": {
+              "items": {"$ref": "#/definitions/payment"},
+              "type": "array"
+            },
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": ["payment"],
+        "parameters": [
+          {"$ref": "#/parameters/body.payment"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"201": {"description": "Created"}}
+      },
+      "delete": {
+        "tags": ["payment"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.payment.payment_id"},
+          {"$ref": "#/parameters/rowFilter.payment.customer_id"},
+          {"$ref": "#/parameters/rowFilter.payment.staff_id"},
+          {"$ref": "#/parameters/rowFilter.payment.rental_id"},
+          {"$ref": "#/parameters/rowFilter.payment.amount"},
+          {"$ref": "#/parameters/rowFilter.payment.payment_date"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"204": {"description": "No Content"}}
+      },
+      "patch": {
+        "tags": ["payment"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.payment.payment_id"},
+          {"$ref": "#/parameters/rowFilter.payment.customer_id"},
+          {"$ref": "#/parameters/rowFilter.payment.staff_id"},
+          {"$ref": "#/parameters/rowFilter.payment.rental_id"},
+          {"$ref": "#/parameters/rowFilter.payment.amount"},
+          {"$ref": "#/parameters/rowFilter.payment.payment_date"},
+          {"$ref": "#/parameters/body.payment"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"204": {"description": "No Content"}}
+      }
+    },
+    "/rental": {
+      "get": {
+        "tags": ["rental"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.rental.rental_id"},
+          {"$ref": "#/parameters/rowFilter.rental.rental_date"},
+          {"$ref": "#/parameters/rowFilter.rental.inventory_id"},
+          {"$ref": "#/parameters/rowFilter.rental.customer_id"},
+          {"$ref": "#/parameters/rowFilter.rental.return_date"},
+          {"$ref": "#/parameters/rowFilter.rental.staff_id"},
+          {"$ref": "#/parameters/rowFilter.rental.last_update"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/order"},
+          {"$ref": "#/parameters/range"},
+          {"$ref": "#/parameters/rangeUnit"},
+          {"$ref": "#/parameters/offset"},
+          {"$ref": "#/parameters/limit"},
+          {"$ref": "#/parameters/preferCount"}
+        ],
+        "responses": {
+          "206": {"description": "Partial Content"},
+          "200": {
+            "schema": {
+              "items": {"$ref": "#/definitions/rental"},
+              "type": "array"
+            },
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": ["rental"],
+        "parameters": [
+          {"$ref": "#/parameters/body.rental"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"201": {"description": "Created"}}
+      },
+      "delete": {
+        "tags": ["rental"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.rental.rental_id"},
+          {"$ref": "#/parameters/rowFilter.rental.rental_date"},
+          {"$ref": "#/parameters/rowFilter.rental.inventory_id"},
+          {"$ref": "#/parameters/rowFilter.rental.customer_id"},
+          {"$ref": "#/parameters/rowFilter.rental.return_date"},
+          {"$ref": "#/parameters/rowFilter.rental.staff_id"},
+          {"$ref": "#/parameters/rowFilter.rental.last_update"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"204": {"description": "No Content"}}
+      },
+      "patch": {
+        "tags": ["rental"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.rental.rental_id"},
+          {"$ref": "#/parameters/rowFilter.rental.rental_date"},
+          {"$ref": "#/parameters/rowFilter.rental.inventory_id"},
+          {"$ref": "#/parameters/rowFilter.rental.customer_id"},
+          {"$ref": "#/parameters/rowFilter.rental.return_date"},
+          {"$ref": "#/parameters/rowFilter.rental.staff_id"},
+          {"$ref": "#/parameters/rowFilter.rental.last_update"},
+          {"$ref": "#/parameters/body.rental"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"204": {"description": "No Content"}}
+      }
+    },
+    "/sales_by_film_category": {
+      "get": {
+        "tags": ["sales_by_film_category"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.sales_by_film_category.category"},
+          {"$ref": "#/parameters/rowFilter.sales_by_film_category.total_sales"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/order"},
+          {"$ref": "#/parameters/range"},
+          {"$ref": "#/parameters/rangeUnit"},
+          {"$ref": "#/parameters/offset"},
+          {"$ref": "#/parameters/limit"},
+          {"$ref": "#/parameters/preferCount"}
+        ],
+        "responses": {
+          "206": {"description": "Partial Content"},
+          "200": {
+            "schema": {
+              "items": {"$ref": "#/definitions/sales_by_film_category"},
+              "type": "array"
+            },
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/sales_by_store": {
+      "get": {
+        "tags": ["sales_by_store"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.sales_by_store.store"},
+          {"$ref": "#/parameters/rowFilter.sales_by_store.manager"},
+          {"$ref": "#/parameters/rowFilter.sales_by_store.total_sales"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/order"},
+          {"$ref": "#/parameters/range"},
+          {"$ref": "#/parameters/rangeUnit"},
+          {"$ref": "#/parameters/offset"},
+          {"$ref": "#/parameters/limit"},
+          {"$ref": "#/parameters/preferCount"}
+        ],
+        "responses": {
+          "206": {"description": "Partial Content"},
+          "200": {
+            "schema": {
+              "items": {"$ref": "#/definitions/sales_by_store"},
+              "type": "array"
+            },
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/staff": {
+      "get": {
+        "tags": ["staff"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.staff.staff_id"},
+          {"$ref": "#/parameters/rowFilter.staff.first_name"},
+          {"$ref": "#/parameters/rowFilter.staff.last_name"},
+          {"$ref": "#/parameters/rowFilter.staff.address_id"},
+          {"$ref": "#/parameters/rowFilter.staff.email"},
+          {"$ref": "#/parameters/rowFilter.staff.store_id"},
+          {"$ref": "#/parameters/rowFilter.staff.active"},
+          {"$ref": "#/parameters/rowFilter.staff.username"},
+          {"$ref": "#/parameters/rowFilter.staff.password"},
+          {"$ref": "#/parameters/rowFilter.staff.last_update"},
+          {"$ref": "#/parameters/rowFilter.staff.picture"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/order"},
+          {"$ref": "#/parameters/range"},
+          {"$ref": "#/parameters/rangeUnit"},
+          {"$ref": "#/parameters/offset"},
+          {"$ref": "#/parameters/limit"},
+          {"$ref": "#/parameters/preferCount"}
+        ],
+        "responses": {
+          "206": {"description": "Partial Content"},
+          "200": {
+            "schema": {
+              "items": {"$ref": "#/definitions/staff"},
+              "type": "array"
+            },
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": ["staff"],
+        "parameters": [
+          {"$ref": "#/parameters/body.staff"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"201": {"description": "Created"}}
+      },
+      "delete": {
+        "tags": ["staff"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.staff.staff_id"},
+          {"$ref": "#/parameters/rowFilter.staff.first_name"},
+          {"$ref": "#/parameters/rowFilter.staff.last_name"},
+          {"$ref": "#/parameters/rowFilter.staff.address_id"},
+          {"$ref": "#/parameters/rowFilter.staff.email"},
+          {"$ref": "#/parameters/rowFilter.staff.store_id"},
+          {"$ref": "#/parameters/rowFilter.staff.active"},
+          {"$ref": "#/parameters/rowFilter.staff.username"},
+          {"$ref": "#/parameters/rowFilter.staff.password"},
+          {"$ref": "#/parameters/rowFilter.staff.last_update"},
+          {"$ref": "#/parameters/rowFilter.staff.picture"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"204": {"description": "No Content"}}
+      },
+      "patch": {
+        "tags": ["staff"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.staff.staff_id"},
+          {"$ref": "#/parameters/rowFilter.staff.first_name"},
+          {"$ref": "#/parameters/rowFilter.staff.last_name"},
+          {"$ref": "#/parameters/rowFilter.staff.address_id"},
+          {"$ref": "#/parameters/rowFilter.staff.email"},
+          {"$ref": "#/parameters/rowFilter.staff.store_id"},
+          {"$ref": "#/parameters/rowFilter.staff.active"},
+          {"$ref": "#/parameters/rowFilter.staff.username"},
+          {"$ref": "#/parameters/rowFilter.staff.password"},
+          {"$ref": "#/parameters/rowFilter.staff.last_update"},
+          {"$ref": "#/parameters/rowFilter.staff.picture"},
+          {"$ref": "#/parameters/body.staff"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"204": {"description": "No Content"}}
+      }
+    },
+    "/staff_list": {
+      "get": {
+        "tags": ["staff_list"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.staff_list.id"},
+          {"$ref": "#/parameters/rowFilter.staff_list.name"},
+          {"$ref": "#/parameters/rowFilter.staff_list.address"},
+          {"$ref": "#/parameters/rowFilter.staff_list.zip code"},
+          {"$ref": "#/parameters/rowFilter.staff_list.phone"},
+          {"$ref": "#/parameters/rowFilter.staff_list.city"},
+          {"$ref": "#/parameters/rowFilter.staff_list.country"},
+          {"$ref": "#/parameters/rowFilter.staff_list.sid"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/order"},
+          {"$ref": "#/parameters/range"},
+          {"$ref": "#/parameters/rangeUnit"},
+          {"$ref": "#/parameters/offset"},
+          {"$ref": "#/parameters/limit"},
+          {"$ref": "#/parameters/preferCount"}
+        ],
+        "responses": {
+          "206": {"description": "Partial Content"},
+          "200": {
+            "schema": {
+              "items": {"$ref": "#/definitions/staff_list"},
+              "type": "array"
+            },
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/store": {
+      "get": {
+        "tags": ["store"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.store.store_id"},
+          {"$ref": "#/parameters/rowFilter.store.manager_staff_id"},
+          {"$ref": "#/parameters/rowFilter.store.address_id"},
+          {"$ref": "#/parameters/rowFilter.store.last_update"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/order"},
+          {"$ref": "#/parameters/range"},
+          {"$ref": "#/parameters/rangeUnit"},
+          {"$ref": "#/parameters/offset"},
+          {"$ref": "#/parameters/limit"},
+          {"$ref": "#/parameters/preferCount"}
+        ],
+        "responses": {
+          "206": {"description": "Partial Content"},
+          "200": {
+            "schema": {
+              "items": {"$ref": "#/definitions/store"},
+              "type": "array"
+            },
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": ["store"],
+        "parameters": [
+          {"$ref": "#/parameters/body.store"},
+          {"$ref": "#/parameters/select"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"201": {"description": "Created"}}
+      },
+      "delete": {
+        "tags": ["store"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.store.store_id"},
+          {"$ref": "#/parameters/rowFilter.store.manager_staff_id"},
+          {"$ref": "#/parameters/rowFilter.store.address_id"},
+          {"$ref": "#/parameters/rowFilter.store.last_update"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"204": {"description": "No Content"}}
+      },
+      "patch": {
+        "tags": ["store"],
+        "parameters": [
+          {"$ref": "#/parameters/rowFilter.store.store_id"},
+          {"$ref": "#/parameters/rowFilter.store.manager_staff_id"},
+          {"$ref": "#/parameters/rowFilter.store.address_id"},
+          {"$ref": "#/parameters/rowFilter.store.last_update"},
+          {"$ref": "#/parameters/body.store"},
+          {"$ref": "#/parameters/preferReturn"}
+        ],
+        "responses": {"204": {"description": "No Content"}}
+      }
+    },
+    "/rpc/rewards_report": {
+      "post": {
+        "tags": ["(rpc) rewards_report"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "required": [
+                "min_monthly_purchases",
+                "min_dollar_amount_purchased"
+              ],
+              "type": "object",
+              "properties": {
+                "min_monthly_purchases": {
+                  "format": "integer",
+                  "type": "integer"
+                },
+                "min_dollar_amount_purchased": {
+                  "format": "numeric",
+                  "type": "number"
+                }
+              }
+            },
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/pgp_key_id": {
+      "post": {
+        "tags": ["(rpc) pgp_key_id"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/decrypt_iv": {
+      "post": {
+        "tags": ["(rpc) decrypt_iv"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/sign": {
+      "post": {
+        "tags": ["(rpc) sign"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "required": ["payload", "secret"],
+              "type": "object",
+              "properties": {
+                "secret": {"format": "text", "type": "string"},
+                "payload": {"format": "json", "type": "string"},
+                "algorithm": {"format": "text", "type": "string"}
+              }
+            },
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/armor": {
+      "post": {
+        "tags": ["(rpc) armor"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/film_not_in_stock": {
+      "post": {
+        "tags": ["(rpc) film_not_in_stock"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "required": ["p_film_id", "p_store_id"],
+              "type": "object",
+              "properties": {
+                "p_store_id": {"format": "integer", "type": "integer"},
+                "p_film_id": {"format": "integer", "type": "integer"}
+              }
+            },
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/pgp_pub_encrypt_bytea": {
+      "post": {
+        "tags": ["(rpc) pgp_pub_encrypt_bytea"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/_group_concat": {
+      "post": {
+        "tags": ["(rpc) _group_concat"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/pgp_sym_encrypt_bytea": {
+      "post": {
+        "tags": ["(rpc) pgp_sym_encrypt_bytea"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/group_concat": {
+      "post": {
+        "tags": ["(rpc) group_concat"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/crypt": {
+      "post": {
+        "tags": ["(rpc) crypt"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/film_in_stock": {
+      "post": {
+        "tags": ["(rpc) film_in_stock"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "required": ["p_film_id", "p_store_id"],
+              "type": "object",
+              "properties": {
+                "p_store_id": {"format": "integer", "type": "integer"},
+                "p_film_id": {"format": "integer", "type": "integer"}
+              }
+            },
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/gen_salt": {
+      "post": {
+        "tags": ["(rpc) gen_salt"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/gen_random_uuid": {
+      "post": {
+        "tags": ["(rpc) gen_random_uuid"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/verify": {
+      "post": {
+        "tags": ["(rpc) verify"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "required": ["token", "secret"],
+              "type": "object",
+              "properties": {
+                "token": {"format": "text", "type": "string"},
+                "secret": {"format": "text", "type": "string"},
+                "algorithm": {"format": "text", "type": "string"}
+              }
+            },
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/encrypt_iv": {
+      "post": {
+        "tags": ["(rpc) encrypt_iv"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/inventory_held_by_customer": {
+      "post": {
+        "tags": ["(rpc) inventory_held_by_customer"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "required": ["p_inventory_id"],
+              "type": "object",
+              "properties": {
+                "p_inventory_id": {"format": "integer", "type": "integer"}
+              }
+            },
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/pgp_armor_headers": {
+      "post": {
+        "tags": ["(rpc) pgp_armor_headers"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/digest": {
+      "post": {
+        "tags": ["(rpc) digest"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/url_decode": {
+      "post": {
+        "tags": ["(rpc) url_decode"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "required": ["data"],
+              "type": "object",
+              "properties": {"data": {"format": "text", "type": "string"}}
+            },
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/decrypt": {
+      "post": {
+        "tags": ["(rpc) decrypt"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/inventory_in_stock": {
+      "post": {
+        "tags": ["(rpc) inventory_in_stock"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "required": ["p_inventory_id"],
+              "type": "object",
+              "properties": {
+                "p_inventory_id": {"format": "integer", "type": "integer"}
+              }
+            },
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/pgp_pub_decrypt": {
+      "post": {
+        "tags": ["(rpc) pgp_pub_decrypt"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/pgp_sym_decrypt": {
+      "post": {
+        "tags": ["(rpc) pgp_sym_decrypt"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/foreign_keys": {
+      "post": {
+        "tags": ["(rpc) foreign_keys"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/gen_random_bytes": {
+      "post": {
+        "tags": ["(rpc) gen_random_bytes"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/login": {
+      "post": {
+        "tags": ["(rpc) login"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "required": ["email", "pass"],
+              "type": "object",
+              "properties": {
+                "email": {"format": "text", "type": "string"},
+                "pass": {"format": "text", "type": "string"}
+              }
+            },
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/algorithm_sign": {
+      "post": {
+        "tags": ["(rpc) algorithm_sign"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "required": ["signables", "secret", "algorithm"],
+              "type": "object",
+              "properties": {
+                "signables": {"format": "text", "type": "string"},
+                "secret": {"format": "text", "type": "string"},
+                "algorithm": {"format": "text", "type": "string"}
+              }
+            },
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/get_customer_balance": {
+      "post": {
+        "tags": ["(rpc) get_customer_balance"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "required": ["p_customer_id", "p_effective_date"],
+              "type": "object",
+              "properties": {
+                "p_effective_date": {
+                  "format": "timestamp without time zone",
+                  "type": "string"
+                },
+                "p_customer_id": {"format": "integer", "type": "integer"}
+              }
+            },
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/pgp_pub_decrypt_bytea": {
+      "post": {
+        "tags": ["(rpc) pgp_pub_decrypt_bytea"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/pgp_sym_decrypt_bytea": {
+      "post": {
+        "tags": ["(rpc) pgp_sym_decrypt_bytea"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/last_day": {
+      "post": {
+        "tags": ["(rpc) last_day"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "required": ["timestamp"],
+              "type": "object",
+              "properties": {
+                "timestamp": {"format": "without time zone", "type": "string"}
+              }
+            },
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/url_encode": {
+      "post": {
+        "tags": ["(rpc) url_encode"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "required": ["data"],
+              "type": "object",
+              "properties": {"data": {"format": "bytea", "type": "string"}}
+            },
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/dearmor": {
+      "post": {
+        "tags": ["(rpc) dearmor"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/pgp_sym_encrypt": {
+      "post": {
+        "tags": ["(rpc) pgp_sym_encrypt"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/pgp_pub_encrypt": {
+      "post": {
+        "tags": ["(rpc) pgp_pub_encrypt"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/encrypt": {
+      "post": {
+        "tags": ["(rpc) encrypt"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/hmac": {
+      "post": {
+        "tags": ["(rpc) hmac"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/primary_keys": {
+      "post": {
+        "tags": ["(rpc) primary_keys"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/rpc/last_updated": {
+      "post": {
+        "tags": ["(rpc) last_updated"],
+        "produces": ["application/json", "application/vnd.pgrst.object+json"],
+        "parameters": [
+          {
+            "required": true,
+            "schema": {"type": "object"},
+            "in": "body",
+            "name": "args"
+          },
+          {"$ref": "#/parameters/preferParams"}
+        ],
+        "responses": {"200": {"description": "OK"}}
+      }
+    }
+  },
+  "definitions": {
+    "actor": {
+      "required": ["actor_id", "first_name", "last_name", "last_update"],
+      "properties": {
+        "actor_id": {
+          "format": "integer",
+          "type": "integer",
+          "description": "Note:\nThis is a Primary Key.<pk/>"
+        },
+        "first_name": {
+          "maxLength": 45,
+          "format": "character varying",
+          "type": "string"
+        },
+        "last_name": {
+          "maxLength": 45,
+          "format": "character varying",
+          "type": "string"
+        },
+        "last_update": {
+          "format": "timestamp without time zone",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "actor_info": {
+      "properties": {
+        "actor_id": {"format": "integer", "type": "integer"},
+        "first_name": {
+          "maxLength": 45,
+          "format": "character varying",
+          "type": "string"
+        },
+        "last_name": {
+          "maxLength": 45,
+          "format": "character varying",
+          "type": "string"
+        },
+        "film_info": {"format": "text", "type": "string"}
+      },
+      "type": "object"
+    },
+    "address": {
+      "required": [
+        "address_id",
+        "address",
+        "district",
+        "city_id",
+        "phone",
+        "last_update"
+      ],
+      "properties": {
+        "address_id": {
+          "format": "integer",
+          "type": "integer",
+          "description": "Note:\nThis is a Primary Key.<pk/>"
+        },
+        "address": {
+          "maxLength": 50,
+          "format": "character varying",
+          "type": "string"
+        },
+        "address2": {
+          "maxLength": 50,
+          "format": "character varying",
+          "type": "string"
+        },
+        "district": {
+          "maxLength": 20,
+          "format": "character varying",
+          "type": "string"
+        },
+        "city_id": {
+          "format": "smallint",
+          "type": "integer",
+          "description": "Note:\nThis is a Foreign Key to `city.city_id`.<fk table='city' column='city_id'/>"
+        },
+        "postal_code": {
+          "maxLength": 10,
+          "format": "character varying",
+          "type": "string"
+        },
+        "phone": {
+          "maxLength": 20,
+          "format": "character varying",
+          "type": "string"
+        },
+        "last_update": {
+          "format": "timestamp without time zone",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "category": {
+      "required": ["category_id", "name", "last_update"],
+      "properties": {
+        "category_id": {
+          "format": "integer",
+          "type": "integer",
+          "description": "Note:\nThis is a Primary Key.<pk/>"
+        },
+        "name": {
+          "maxLength": 25,
+          "format": "character varying",
+          "type": "string"
+        },
+        "last_update": {
+          "format": "timestamp without time zone",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "change_log": {
+      "required": [
+        "p_id",
+        "change_timestamp",
+        "table_changed",
+        "primary_key_of_changed_row",
+        "column_changed",
+        "old_value",
+        "new_value",
+        "user_name"
+      ],
+      "properties": {
+        "p_id": {
+          "format": "integer",
+          "type": "integer",
+          "description": "Note:\nThis is a Primary Key.<pk/>"
+        },
+        "change_timestamp": {
+          "format": "timestamp without time zone",
+          "type": "string"
+        },
+        "table_changed": {"format": "text", "type": "string"},
+        "primary_key_of_changed_row": {"format": "text", "type": "string"},
+        "column_changed": {"format": "text", "type": "string"},
+        "old_value": {"format": "text", "type": "string"},
+        "new_value": {"format": "text", "type": "string"},
+        "notes": {"format": "text", "type": "string"},
+        "user_name": {"format": "text", "type": "string"}
+      },
+      "type": "object"
+    },
+    "city": {
+      "required": ["city_id", "city", "country_id", "last_update"],
+      "properties": {
+        "city_id": {
+          "format": "integer",
+          "type": "integer",
+          "description": "Note:\nThis is a Primary Key.<pk/>"
+        },
+        "city": {
+          "maxLength": 50,
+          "format": "character varying",
+          "type": "string"
+        },
+        "country_id": {
+          "format": "smallint",
+          "type": "integer",
+          "description": "Note:\nThis is a Foreign Key to `country.country_id`.<fk table='country' column='country_id'/>"
+        },
+        "last_update": {
+          "format": "timestamp without time zone",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "country": {
+      "required": ["country_id", "country", "last_update"],
+      "properties": {
+        "country_id": {
+          "format": "integer",
+          "type": "integer",
+          "description": "Note:\nThis is a Primary Key.<pk/>"
+        },
+        "country": {
+          "maxLength": 50,
+          "format": "character varying",
+          "type": "string"
+        },
+        "last_update": {
+          "format": "timestamp without time zone",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "customer": {
+      "required": [
+        "customer_id",
+        "store_id",
+        "first_name",
+        "last_name",
+        "address_id",
+        "activebool",
+        "create_date"
+      ],
+      "properties": {
+        "customer_id": {
+          "format": "integer",
+          "type": "integer",
+          "description": "Note:\nThis is a Primary Key.<pk/>"
+        },
+        "store_id": {"format": "smallint", "type": "integer"},
+        "first_name": {
+          "maxLength": 45,
+          "format": "character varying",
+          "type": "string"
+        },
+        "last_name": {
+          "maxLength": 45,
+          "format": "character varying",
+          "type": "string"
+        },
+        "email": {
+          "maxLength": 50,
+          "format": "character varying",
+          "type": "string"
+        },
+        "address_id": {
+          "format": "smallint",
+          "type": "integer",
+          "description": "Note:\nThis is a Foreign Key to `address.address_id`.<fk table='address' column='address_id'/>"
+        },
+        "activebool": {"default": true, "format": "boolean", "type": "boolean"},
+        "create_date": {"format": "date", "type": "string"},
+        "last_update": {
+          "format": "timestamp without time zone",
+          "type": "string"
+        },
+        "active": {"format": "integer", "type": "integer"}
+      },
+      "type": "object"
+    },
+    "customer_list": {
+      "properties": {
+        "id": {
+          "format": "integer",
+          "type": "integer",
+          "description": "Note:\nThis is a Primary Key.<pk/>"
+        },
+        "name": {"format": "text", "type": "string"},
+        "address": {
+          "maxLength": 50,
+          "format": "character varying",
+          "type": "string"
+        },
+        "zip code": {
+          "maxLength": 10,
+          "format": "character varying",
+          "type": "string"
+        },
+        "phone": {
+          "maxLength": 20,
+          "format": "character varying",
+          "type": "string"
+        },
+        "city": {
+          "maxLength": 50,
+          "format": "character varying",
+          "type": "string"
+        },
+        "country": {
+          "maxLength": 50,
+          "format": "character varying",
+          "type": "string"
+        },
+        "notes": {"format": "text", "type": "string"},
+        "sid": {"format": "smallint", "type": "integer"}
+      },
+      "type": "object"
+    },
+    "film": {
+      "required": [
+        "film_id",
+        "title",
+        "language_id",
+        "rental_duration",
+        "rental_rate",
+        "replacement_cost",
+        "last_update",
+        "fulltext"
+      ],
+      "properties": {
+        "film_id": {
+          "format": "integer",
+          "type": "integer",
+          "description": "Note:\nThis is a Primary Key.<pk/>"
+        },
+        "title": {
+          "maxLength": 255,
+          "format": "character varying",
+          "type": "string"
+        },
+        "description": {"format": "text", "type": "string"},
+        "release_year": {"format": "integer", "type": "integer"},
+        "language_id": {
+          "format": "smallint",
+          "type": "integer",
+          "description": "Note:\nThis is a Foreign Key to `language.language_id`.<fk table='language' column='language_id'/>"
+        },
+        "rental_duration": {
+          "default": 3,
+          "format": "smallint",
+          "type": "integer"
+        },
+        "rental_rate": {"default": 4.99, "format": "numeric", "type": "number"},
+        "length": {"format": "smallint", "type": "integer"},
+        "replacement_cost": {
+          "default": 19.99,
+          "format": "numeric",
+          "type": "number"
+        },
+        "rating": {
+          "format": "public.mpaa_rating",
+          "type": "string",
+          "enum": ["G", "PG", "PG-13", "R", "NC-17"]
+        },
+        "last_update": {
+          "format": "timestamp without time zone",
+          "type": "string"
+        },
+        "special_features": {"format": "ARRAY", "type": "string"},
+        "fulltext": {"format": "tsvector", "type": "string"}
+      },
+      "type": "object"
+    },
+    "film_actor": {
+      "required": ["actor_id", "film_id", "last_update"],
+      "properties": {
+        "actor_id": {
+          "format": "smallint",
+          "type": "integer",
+          "description": "Note:\nThis is a Primary Key.<pk/>\nThis is a Foreign Key to `actor.actor_id`.<fk table='actor' column='actor_id'/>"
+        },
+        "film_id": {
+          "format": "smallint",
+          "type": "integer",
+          "description": "Note:\nThis is a Primary Key.<pk/>\nThis is a Foreign Key to `film.film_id`.<fk table='film' column='film_id'/>"
+        },
+        "last_update": {
+          "format": "timestamp without time zone",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "film_category": {
+      "required": ["film_id", "category_id", "last_update"],
+      "properties": {
+        "film_id": {
+          "format": "smallint",
+          "type": "integer",
+          "description": "Note:\nThis is a Primary Key.<pk/>\nThis is a Foreign Key to `film.film_id`.<fk table='film' column='film_id'/>"
+        },
+        "category_id": {
+          "format": "smallint",
+          "type": "integer",
+          "description": "Note:\nThis is a Primary Key.<pk/>\nThis is a Foreign Key to `category.category_id`.<fk table='category' column='category_id'/>"
+        },
+        "last_update": {
+          "format": "timestamp without time zone",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "film_list": {
+      "properties": {
+        "fid": {
+          "format": "integer",
+          "type": "integer",
+          "description": "Note:\nThis is a Primary Key.<pk/>"
+        },
+        "title": {
+          "maxLength": 255,
+          "format": "character varying",
+          "type": "string"
+        },
+        "description": {"format": "text", "type": "string"},
+        "category": {
+          "maxLength": 25,
+          "format": "character varying",
+          "type": "string"
+        },
+        "price": {"format": "numeric", "type": "number"},
+        "length": {"format": "smallint", "type": "integer"},
+        "rating": {
+          "format": "public.mpaa_rating",
+          "type": "string",
+          "enum": ["G", "PG", "PG-13", "R", "NC-17"]
+        },
+        "actors": {"format": "text", "type": "string"}
+      },
+      "type": "object"
+    },
+    "inventory": {
+      "required": ["inventory_id", "film_id", "store_id", "last_update"],
+      "properties": {
+        "inventory_id": {
+          "format": "integer",
+          "type": "integer",
+          "description": "Note:\nThis is a Primary Key.<pk/>"
+        },
+        "film_id": {
+          "format": "smallint",
+          "type": "integer",
+          "description": "Note:\nThis is a Foreign Key to `film.film_id`.<fk table='film' column='film_id'/>"
+        },
+        "store_id": {"format": "smallint", "type": "integer"},
+        "last_update": {
+          "format": "timestamp without time zone",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "language": {
+      "required": ["language_id", "name", "last_update"],
+      "properties": {
+        "language_id": {
+          "format": "integer",
+          "type": "integer",
+          "description": "Note:\nThis is a Primary Key.<pk/>"
+        },
+        "name": {"maxLength": 20, "format": "character", "type": "string"},
+        "last_update": {
+          "format": "timestamp without time zone",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "nicer_but_slower_film_list": {
+      "properties": {
+        "fid": {
+          "format": "integer",
+          "type": "integer",
+          "description": "Note:\nThis is a Primary Key.<pk/>"
+        },
+        "title": {
+          "maxLength": 255,
+          "format": "character varying",
+          "type": "string"
+        },
+        "description": {"format": "text", "type": "string"},
+        "category": {
+          "maxLength": 25,
+          "format": "character varying",
+          "type": "string"
+        },
+        "price": {"format": "numeric", "type": "number"},
+        "length": {"format": "smallint", "type": "integer"},
+        "rating": {
+          "format": "public.mpaa_rating",
+          "type": "string",
+          "enum": ["G", "PG", "PG-13", "R", "NC-17"]
+        },
+        "actors": {"format": "text", "type": "string"}
+      },
+      "type": "object"
+    },
+    "payment": {
+      "required": [
+        "payment_id",
+        "customer_id",
+        "staff_id",
+        "rental_id",
+        "amount",
+        "payment_date"
+      ],
+      "properties": {
+        "payment_id": {
+          "format": "integer",
+          "type": "integer",
+          "description": "Note:\nThis is a Primary Key.<pk/>"
+        },
+        "customer_id": {
+          "format": "smallint",
+          "type": "integer",
+          "description": "Note:\nThis is a Foreign Key to `customer.customer_id`.<fk table='customer' column='customer_id'/>"
+        },
+        "staff_id": {
+          "format": "smallint",
+          "type": "integer",
+          "description": "Note:\nThis is a Foreign Key to `staff.staff_id`.<fk table='staff' column='staff_id'/>"
+        },
+        "rental_id": {
+          "format": "integer",
+          "type": "integer",
+          "description": "Note:\nThis is a Foreign Key to `rental.rental_id`.<fk table='rental' column='rental_id'/>"
+        },
+        "amount": {"format": "numeric", "type": "number"},
+        "payment_date": {
+          "format": "timestamp without time zone",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "rental": {
+      "required": [
+        "rental_id",
+        "rental_date",
+        "inventory_id",
+        "customer_id",
+        "staff_id",
+        "last_update"
+      ],
+      "properties": {
+        "rental_id": {
+          "format": "integer",
+          "type": "integer",
+          "description": "Note:\nThis is a Primary Key.<pk/>"
+        },
+        "rental_date": {
+          "format": "timestamp without time zone",
+          "type": "string"
+        },
+        "inventory_id": {
+          "format": "integer",
+          "type": "integer",
+          "description": "Note:\nThis is a Foreign Key to `inventory.inventory_id`.<fk table='inventory' column='inventory_id'/>"
+        },
+        "customer_id": {
+          "format": "smallint",
+          "type": "integer",
+          "description": "Note:\nThis is a Foreign Key to `customer.customer_id`.<fk table='customer' column='customer_id'/>"
+        },
+        "return_date": {
+          "format": "timestamp without time zone",
+          "type": "string"
+        },
+        "staff_id": {
+          "format": "smallint",
+          "type": "integer",
+          "description": "Note:\nThis is a Foreign Key to `staff.staff_id`.<fk table='staff' column='staff_id'/>"
+        },
+        "last_update": {
+          "format": "timestamp without time zone",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "sales_by_film_category": {
+      "properties": {
+        "category": {
+          "maxLength": 25,
+          "format": "character varying",
+          "type": "string"
+        },
+        "total_sales": {"format": "numeric", "type": "number"}
+      },
+      "type": "object"
+    },
+    "sales_by_store": {
+      "properties": {
+        "store": {"format": "text", "type": "string"},
+        "manager": {"format": "text", "type": "string"},
+        "total_sales": {"format": "numeric", "type": "number"}
+      },
+      "type": "object"
+    },
+    "staff": {
+      "required": [
+        "staff_id",
+        "first_name",
+        "last_name",
+        "address_id",
+        "store_id",
+        "active",
+        "username",
+        "last_update"
+      ],
+      "properties": {
+        "staff_id": {
+          "format": "integer",
+          "type": "integer",
+          "description": "Note:\nThis is a Primary Key.<pk/>"
+        },
+        "first_name": {
+          "maxLength": 45,
+          "format": "character varying",
+          "type": "string"
+        },
+        "last_name": {
+          "maxLength": 45,
+          "format": "character varying",
+          "type": "string"
+        },
+        "address_id": {
+          "format": "smallint",
+          "type": "integer",
+          "description": "Note:\nThis is a Foreign Key to `address.address_id`.<fk table='address' column='address_id'/>"
+        },
+        "email": {
+          "maxLength": 50,
+          "format": "character varying",
+          "type": "string"
+        },
+        "store_id": {"format": "smallint", "type": "integer"},
+        "active": {"default": true, "format": "boolean", "type": "boolean"},
+        "username": {
+          "maxLength": 16,
+          "format": "character varying",
+          "type": "string"
+        },
+        "password": {
+          "maxLength": 40,
+          "format": "character varying",
+          "type": "string"
+        },
+        "last_update": {
+          "format": "timestamp without time zone",
+          "type": "string"
+        },
+        "picture": {"format": "bytea", "type": "string"}
+      },
+      "type": "object"
+    },
+    "staff_list": {
+      "properties": {
+        "id": {
+          "format": "integer",
+          "type": "integer",
+          "description": "Note:\nThis is a Primary Key.<pk/>"
+        },
+        "name": {"format": "text", "type": "string"},
+        "address": {
+          "maxLength": 50,
+          "format": "character varying",
+          "type": "string"
+        },
+        "zip code": {
+          "maxLength": 10,
+          "format": "character varying",
+          "type": "string"
+        },
+        "phone": {
+          "maxLength": 20,
+          "format": "character varying",
+          "type": "string"
+        },
+        "city": {
+          "maxLength": 50,
+          "format": "character varying",
+          "type": "string"
+        },
+        "country": {
+          "maxLength": 50,
+          "format": "character varying",
+          "type": "string"
+        },
+        "sid": {"format": "smallint", "type": "integer"}
+      },
+      "type": "object"
+    },
+    "store": {
+      "required": ["store_id", "manager_staff_id", "address_id", "last_update"],
+      "properties": {
+        "store_id": {
+          "format": "integer",
+          "type": "integer",
+          "description": "Note:\nThis is a Primary Key.<pk/>"
+        },
+        "manager_staff_id": {
+          "format": "smallint",
+          "type": "integer",
+          "description": "Note:\nThis is a Foreign Key to `staff.staff_id`.<fk table='staff' column='staff_id'/>"
+        },
+        "address_id": {
+          "format": "smallint",
+          "type": "integer",
+          "description": "Note:\nThis is a Foreign Key to `address.address_id`.<fk table='address' column='address_id'/>"
+        },
+        "last_update": {
+          "format": "timestamp without time zone",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "parameters": {
+    "preferParams": {
+      "name": "Prefer",
+      "description": "Preference",
+      "required": false,
+      "in": "header",
+      "type": "string",
+      "enum": ["params=single-object"]
+    },
+    "preferReturn": {
+      "name": "Prefer",
+      "description": "Preference",
+      "required": false,
+      "in": "header",
+      "type": "string",
+      "enum": ["return=representation", "return=minimal", "return=none"]
+    },
+    "preferCount": {
+      "name": "Prefer",
+      "description": "Preference",
+      "required": false,
+      "in": "header",
+      "type": "string",
+      "enum": ["count=none"]
+    },
+    "select": {
+      "name": "select",
+      "description": "Filtering Columns",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "on_conflict": {
+      "name": "on_conflict",
+      "description": "On Conflict",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "order": {
+      "name": "order",
+      "description": "Ordering",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "range": {
+      "name": "Range",
+      "description": "Limiting and Pagination",
+      "required": false,
+      "in": "header",
+      "type": "string"
+    },
+    "rangeUnit": {
+      "name": "Range-Unit",
+      "description": "Limiting and Pagination",
+      "required": false,
+      "default": "items",
+      "in": "header",
+      "type": "string"
+    },
+    "offset": {
+      "name": "offset",
+      "description": "Limiting and Pagination",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "limit": {
+      "name": "limit",
+      "description": "Limiting and Pagination",
+      "required": false,
+      "in": "query",
+      "type": "string"
+    },
+    "body.actor": {
+      "name": "actor",
+      "description": "actor",
+      "required": false,
+      "schema": {"$ref": "#/definitions/actor"},
+      "in": "body"
+    },
+    "rowFilter.actor.actor_id": {
+      "name": "actor_id",
+      "required": false,
+      "format": "integer",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.actor.first_name": {
+      "name": "first_name",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.actor.last_name": {
+      "name": "last_name",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.actor.last_update": {
+      "name": "last_update",
+      "required": false,
+      "format": "timestamp without time zone",
+      "in": "query",
+      "type": "string"
+    },
+    "body.actor_info": {
+      "name": "actor_info",
+      "description": "actor_info",
+      "required": false,
+      "schema": {"$ref": "#/definitions/actor_info"},
+      "in": "body"
+    },
+    "rowFilter.actor_info.actor_id": {
+      "name": "actor_id",
+      "required": false,
+      "format": "integer",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.actor_info.first_name": {
+      "name": "first_name",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.actor_info.last_name": {
+      "name": "last_name",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.actor_info.film_info": {
+      "name": "film_info",
+      "required": false,
+      "format": "text",
+      "in": "query",
+      "type": "string"
+    },
+    "body.address": {
+      "name": "address",
+      "description": "address",
+      "required": false,
+      "schema": {"$ref": "#/definitions/address"},
+      "in": "body"
+    },
+    "rowFilter.address.address_id": {
+      "name": "address_id",
+      "required": false,
+      "format": "integer",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.address.address": {
+      "name": "address",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.address.address2": {
+      "name": "address2",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.address.district": {
+      "name": "district",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.address.city_id": {
+      "name": "city_id",
+      "required": false,
+      "format": "smallint",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.address.postal_code": {
+      "name": "postal_code",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.address.phone": {
+      "name": "phone",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.address.last_update": {
+      "name": "last_update",
+      "required": false,
+      "format": "timestamp without time zone",
+      "in": "query",
+      "type": "string"
+    },
+    "body.category": {
+      "name": "category",
+      "description": "category",
+      "required": false,
+      "schema": {"$ref": "#/definitions/category"},
+      "in": "body"
+    },
+    "rowFilter.category.category_id": {
+      "name": "category_id",
+      "required": false,
+      "format": "integer",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.category.name": {
+      "name": "name",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.category.last_update": {
+      "name": "last_update",
+      "required": false,
+      "format": "timestamp without time zone",
+      "in": "query",
+      "type": "string"
+    },
+    "body.change_log": {
+      "name": "change_log",
+      "description": "change_log",
+      "required": false,
+      "schema": {"$ref": "#/definitions/change_log"},
+      "in": "body"
+    },
+    "rowFilter.change_log.p_id": {
+      "name": "p_id",
+      "required": false,
+      "format": "integer",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.change_log.change_timestamp": {
+      "name": "change_timestamp",
+      "required": false,
+      "format": "timestamp without time zone",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.change_log.table_changed": {
+      "name": "table_changed",
+      "required": false,
+      "format": "text",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.change_log.primary_key_of_changed_row": {
+      "name": "primary_key_of_changed_row",
+      "required": false,
+      "format": "text",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.change_log.column_changed": {
+      "name": "column_changed",
+      "required": false,
+      "format": "text",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.change_log.old_value": {
+      "name": "old_value",
+      "required": false,
+      "format": "text",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.change_log.new_value": {
+      "name": "new_value",
+      "required": false,
+      "format": "text",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.change_log.notes": {
+      "name": "notes",
+      "required": false,
+      "format": "text",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.change_log.user_name": {
+      "name": "user_name",
+      "required": false,
+      "format": "text",
+      "in": "query",
+      "type": "string"
+    },
+    "body.city": {
+      "name": "city",
+      "description": "city",
+      "required": false,
+      "schema": {"$ref": "#/definitions/city"},
+      "in": "body"
+    },
+    "rowFilter.city.city_id": {
+      "name": "city_id",
+      "required": false,
+      "format": "integer",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.city.city": {
+      "name": "city",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.city.country_id": {
+      "name": "country_id",
+      "required": false,
+      "format": "smallint",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.city.last_update": {
+      "name": "last_update",
+      "required": false,
+      "format": "timestamp without time zone",
+      "in": "query",
+      "type": "string"
+    },
+    "body.country": {
+      "name": "country",
+      "description": "country",
+      "required": false,
+      "schema": {"$ref": "#/definitions/country"},
+      "in": "body"
+    },
+    "rowFilter.country.country_id": {
+      "name": "country_id",
+      "required": false,
+      "format": "integer",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.country.country": {
+      "name": "country",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.country.last_update": {
+      "name": "last_update",
+      "required": false,
+      "format": "timestamp without time zone",
+      "in": "query",
+      "type": "string"
+    },
+    "body.customer": {
+      "name": "customer",
+      "description": "customer",
+      "required": false,
+      "schema": {"$ref": "#/definitions/customer"},
+      "in": "body"
+    },
+    "rowFilter.customer.customer_id": {
+      "name": "customer_id",
+      "required": false,
+      "format": "integer",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.customer.store_id": {
+      "name": "store_id",
+      "required": false,
+      "format": "smallint",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.customer.first_name": {
+      "name": "first_name",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.customer.last_name": {
+      "name": "last_name",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.customer.email": {
+      "name": "email",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.customer.address_id": {
+      "name": "address_id",
+      "required": false,
+      "format": "smallint",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.customer.activebool": {
+      "name": "activebool",
+      "required": false,
+      "format": "boolean",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.customer.create_date": {
+      "name": "create_date",
+      "required": false,
+      "format": "date",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.customer.last_update": {
+      "name": "last_update",
+      "required": false,
+      "format": "timestamp without time zone",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.customer.active": {
+      "name": "active",
+      "required": false,
+      "format": "integer",
+      "in": "query",
+      "type": "string"
+    },
+    "body.customer_list": {
+      "name": "customer_list",
+      "description": "customer_list",
+      "required": false,
+      "schema": {"$ref": "#/definitions/customer_list"},
+      "in": "body"
+    },
+    "rowFilter.customer_list.id": {
+      "name": "id",
+      "required": false,
+      "format": "integer",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.customer_list.name": {
+      "name": "name",
+      "required": false,
+      "format": "text",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.customer_list.address": {
+      "name": "address",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.customer_list.zip code": {
+      "name": "zip code",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.customer_list.phone": {
+      "name": "phone",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.customer_list.city": {
+      "name": "city",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.customer_list.country": {
+      "name": "country",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.customer_list.notes": {
+      "name": "notes",
+      "required": false,
+      "format": "text",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.customer_list.sid": {
+      "name": "sid",
+      "required": false,
+      "format": "smallint",
+      "in": "query",
+      "type": "string"
+    },
+    "body.film": {
+      "name": "film",
+      "description": "film",
+      "required": false,
+      "schema": {"$ref": "#/definitions/film"},
+      "in": "body"
+    },
+    "rowFilter.film.film_id": {
+      "name": "film_id",
+      "required": false,
+      "format": "integer",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.film.title": {
+      "name": "title",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.film.description": {
+      "name": "description",
+      "required": false,
+      "format": "text",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.film.release_year": {
+      "name": "release_year",
+      "required": false,
+      "format": "integer",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.film.language_id": {
+      "name": "language_id",
+      "required": false,
+      "format": "smallint",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.film.rental_duration": {
+      "name": "rental_duration",
+      "required": false,
+      "format": "smallint",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.film.rental_rate": {
+      "name": "rental_rate",
+      "required": false,
+      "format": "numeric",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.film.length": {
+      "name": "length",
+      "required": false,
+      "format": "smallint",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.film.replacement_cost": {
+      "name": "replacement_cost",
+      "required": false,
+      "format": "numeric",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.film.rating": {
+      "name": "rating",
+      "required": false,
+      "format": "public.mpaa_rating",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.film.last_update": {
+      "name": "last_update",
+      "required": false,
+      "format": "timestamp without time zone",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.film.special_features": {
+      "name": "special_features",
+      "required": false,
+      "format": "ARRAY",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.film.fulltext": {
+      "name": "fulltext",
+      "required": false,
+      "format": "tsvector",
+      "in": "query",
+      "type": "string"
+    },
+    "body.film_actor": {
+      "name": "film_actor",
+      "description": "film_actor",
+      "required": false,
+      "schema": {"$ref": "#/definitions/film_actor"},
+      "in": "body"
+    },
+    "rowFilter.film_actor.actor_id": {
+      "name": "actor_id",
+      "required": false,
+      "format": "smallint",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.film_actor.film_id": {
+      "name": "film_id",
+      "required": false,
+      "format": "smallint",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.film_actor.last_update": {
+      "name": "last_update",
+      "required": false,
+      "format": "timestamp without time zone",
+      "in": "query",
+      "type": "string"
+    },
+    "body.film_category": {
+      "name": "film_category",
+      "description": "film_category",
+      "required": false,
+      "schema": {"$ref": "#/definitions/film_category"},
+      "in": "body"
+    },
+    "rowFilter.film_category.film_id": {
+      "name": "film_id",
+      "required": false,
+      "format": "smallint",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.film_category.category_id": {
+      "name": "category_id",
+      "required": false,
+      "format": "smallint",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.film_category.last_update": {
+      "name": "last_update",
+      "required": false,
+      "format": "timestamp without time zone",
+      "in": "query",
+      "type": "string"
+    },
+    "body.film_list": {
+      "name": "film_list",
+      "description": "film_list",
+      "required": false,
+      "schema": {"$ref": "#/definitions/film_list"},
+      "in": "body"
+    },
+    "rowFilter.film_list.fid": {
+      "name": "fid",
+      "required": false,
+      "format": "integer",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.film_list.title": {
+      "name": "title",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.film_list.description": {
+      "name": "description",
+      "required": false,
+      "format": "text",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.film_list.category": {
+      "name": "category",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.film_list.price": {
+      "name": "price",
+      "required": false,
+      "format": "numeric",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.film_list.length": {
+      "name": "length",
+      "required": false,
+      "format": "smallint",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.film_list.rating": {
+      "name": "rating",
+      "required": false,
+      "format": "public.mpaa_rating",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.film_list.actors": {
+      "name": "actors",
+      "required": false,
+      "format": "text",
+      "in": "query",
+      "type": "string"
+    },
+    "body.inventory": {
+      "name": "inventory",
+      "description": "inventory",
+      "required": false,
+      "schema": {"$ref": "#/definitions/inventory"},
+      "in": "body"
+    },
+    "rowFilter.inventory.inventory_id": {
+      "name": "inventory_id",
+      "required": false,
+      "format": "integer",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.inventory.film_id": {
+      "name": "film_id",
+      "required": false,
+      "format": "smallint",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.inventory.store_id": {
+      "name": "store_id",
+      "required": false,
+      "format": "smallint",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.inventory.last_update": {
+      "name": "last_update",
+      "required": false,
+      "format": "timestamp without time zone",
+      "in": "query",
+      "type": "string"
+    },
+    "body.language": {
+      "name": "language",
+      "description": "language",
+      "required": false,
+      "schema": {"$ref": "#/definitions/language"},
+      "in": "body"
+    },
+    "rowFilter.language.language_id": {
+      "name": "language_id",
+      "required": false,
+      "format": "integer",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.language.name": {
+      "name": "name",
+      "required": false,
+      "format": "character",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.language.last_update": {
+      "name": "last_update",
+      "required": false,
+      "format": "timestamp without time zone",
+      "in": "query",
+      "type": "string"
+    },
+    "body.nicer_but_slower_film_list": {
+      "name": "nicer_but_slower_film_list",
+      "description": "nicer_but_slower_film_list",
+      "required": false,
+      "schema": {"$ref": "#/definitions/nicer_but_slower_film_list"},
+      "in": "body"
+    },
+    "rowFilter.nicer_but_slower_film_list.fid": {
+      "name": "fid",
+      "required": false,
+      "format": "integer",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.nicer_but_slower_film_list.title": {
+      "name": "title",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.nicer_but_slower_film_list.description": {
+      "name": "description",
+      "required": false,
+      "format": "text",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.nicer_but_slower_film_list.category": {
+      "name": "category",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.nicer_but_slower_film_list.price": {
+      "name": "price",
+      "required": false,
+      "format": "numeric",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.nicer_but_slower_film_list.length": {
+      "name": "length",
+      "required": false,
+      "format": "smallint",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.nicer_but_slower_film_list.rating": {
+      "name": "rating",
+      "required": false,
+      "format": "public.mpaa_rating",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.nicer_but_slower_film_list.actors": {
+      "name": "actors",
+      "required": false,
+      "format": "text",
+      "in": "query",
+      "type": "string"
+    },
+    "body.payment": {
+      "name": "payment",
+      "description": "payment",
+      "required": false,
+      "schema": {"$ref": "#/definitions/payment"},
+      "in": "body"
+    },
+    "rowFilter.payment.payment_id": {
+      "name": "payment_id",
+      "required": false,
+      "format": "integer",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.payment.customer_id": {
+      "name": "customer_id",
+      "required": false,
+      "format": "smallint",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.payment.staff_id": {
+      "name": "staff_id",
+      "required": false,
+      "format": "smallint",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.payment.rental_id": {
+      "name": "rental_id",
+      "required": false,
+      "format": "integer",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.payment.amount": {
+      "name": "amount",
+      "required": false,
+      "format": "numeric",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.payment.payment_date": {
+      "name": "payment_date",
+      "required": false,
+      "format": "timestamp without time zone",
+      "in": "query",
+      "type": "string"
+    },
+    "body.rental": {
+      "name": "rental",
+      "description": "rental",
+      "required": false,
+      "schema": {"$ref": "#/definitions/rental"},
+      "in": "body"
+    },
+    "rowFilter.rental.rental_id": {
+      "name": "rental_id",
+      "required": false,
+      "format": "integer",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.rental.rental_date": {
+      "name": "rental_date",
+      "required": false,
+      "format": "timestamp without time zone",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.rental.inventory_id": {
+      "name": "inventory_id",
+      "required": false,
+      "format": "integer",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.rental.customer_id": {
+      "name": "customer_id",
+      "required": false,
+      "format": "smallint",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.rental.return_date": {
+      "name": "return_date",
+      "required": false,
+      "format": "timestamp without time zone",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.rental.staff_id": {
+      "name": "staff_id",
+      "required": false,
+      "format": "smallint",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.rental.last_update": {
+      "name": "last_update",
+      "required": false,
+      "format": "timestamp without time zone",
+      "in": "query",
+      "type": "string"
+    },
+    "body.sales_by_film_category": {
+      "name": "sales_by_film_category",
+      "description": "sales_by_film_category",
+      "required": false,
+      "schema": {"$ref": "#/definitions/sales_by_film_category"},
+      "in": "body"
+    },
+    "rowFilter.sales_by_film_category.category": {
+      "name": "category",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.sales_by_film_category.total_sales": {
+      "name": "total_sales",
+      "required": false,
+      "format": "numeric",
+      "in": "query",
+      "type": "string"
+    },
+    "body.sales_by_store": {
+      "name": "sales_by_store",
+      "description": "sales_by_store",
+      "required": false,
+      "schema": {"$ref": "#/definitions/sales_by_store"},
+      "in": "body"
+    },
+    "rowFilter.sales_by_store.store": {
+      "name": "store",
+      "required": false,
+      "format": "text",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.sales_by_store.manager": {
+      "name": "manager",
+      "required": false,
+      "format": "text",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.sales_by_store.total_sales": {
+      "name": "total_sales",
+      "required": false,
+      "format": "numeric",
+      "in": "query",
+      "type": "string"
+    },
+    "body.staff": {
+      "name": "staff",
+      "description": "staff",
+      "required": false,
+      "schema": {"$ref": "#/definitions/staff"},
+      "in": "body"
+    },
+    "rowFilter.staff.staff_id": {
+      "name": "staff_id",
+      "required": false,
+      "format": "integer",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.staff.first_name": {
+      "name": "first_name",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.staff.last_name": {
+      "name": "last_name",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.staff.address_id": {
+      "name": "address_id",
+      "required": false,
+      "format": "smallint",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.staff.email": {
+      "name": "email",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.staff.store_id": {
+      "name": "store_id",
+      "required": false,
+      "format": "smallint",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.staff.active": {
+      "name": "active",
+      "required": false,
+      "format": "boolean",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.staff.username": {
+      "name": "username",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.staff.password": {
+      "name": "password",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.staff.last_update": {
+      "name": "last_update",
+      "required": false,
+      "format": "timestamp without time zone",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.staff.picture": {
+      "name": "picture",
+      "required": false,
+      "format": "bytea",
+      "in": "query",
+      "type": "string"
+    },
+    "body.staff_list": {
+      "name": "staff_list",
+      "description": "staff_list",
+      "required": false,
+      "schema": {"$ref": "#/definitions/staff_list"},
+      "in": "body"
+    },
+    "rowFilter.staff_list.id": {
+      "name": "id",
+      "required": false,
+      "format": "integer",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.staff_list.name": {
+      "name": "name",
+      "required": false,
+      "format": "text",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.staff_list.address": {
+      "name": "address",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.staff_list.zip code": {
+      "name": "zip code",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.staff_list.phone": {
+      "name": "phone",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.staff_list.city": {
+      "name": "city",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.staff_list.country": {
+      "name": "country",
+      "required": false,
+      "format": "character varying",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.staff_list.sid": {
+      "name": "sid",
+      "required": false,
+      "format": "smallint",
+      "in": "query",
+      "type": "string"
+    },
+    "body.store": {
+      "name": "store",
+      "description": "store",
+      "required": false,
+      "schema": {"$ref": "#/definitions/store"},
+      "in": "body"
+    },
+    "rowFilter.store.store_id": {
+      "name": "store_id",
+      "required": false,
+      "format": "integer",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.store.manager_staff_id": {
+      "name": "manager_staff_id",
+      "required": false,
+      "format": "smallint",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.store.address_id": {
+      "name": "address_id",
+      "required": false,
+      "format": "smallint",
+      "in": "query",
+      "type": "string"
+    },
+    "rowFilter.store.last_update": {
+      "name": "last_update",
+      "required": false,
+      "format": "timestamp without time zone",
+      "in": "query",
+      "type": "string"
+    }
+  },
+  "externalDocs": {
+    "url": "https://postgrest.org/en/v7.0/api.html",
+    "description": "PostgREST Documentation"
+  }
+}
