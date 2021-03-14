@@ -7,12 +7,12 @@ import {
     UserSelectionContextProvider, useUserSelectionContext
 } from 'contexts/user-selection-context';
 import { APP_CONFIGURATION } from 'data/config';
-import { usePostApiState } from 'hooks/use-api-state';
+import { useApiMutation } from 'hooks/use-post-api-state';
 import { useToggleState } from 'hooks/use-toggle-state';
 
 import {
-    Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, Grid,
-    TextField
+    Button, Color, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider,
+    Grid, TextField
 } from '@material-ui/core';
 import { deepPurple, pink } from '@material-ui/core/colors';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
@@ -26,8 +26,8 @@ import { TopNavigation } from './top-navigation';
 
 const theme = createMuiTheme({
   palette: {
-    primary: deepPurple,
-    secondary: pink
+    primary: deepPurple as Color,
+    secondary: pink as Color
   }
 })
 
@@ -46,34 +46,28 @@ export const App: React.FC = () => (
 const AuthForm: React.FC = () => {
   const {databaseConfig} = useUserSelectionContext()
   const {setReqConfig} = useApiContext()
-
-  const [, loginRequest] = usePostApiState<{token: string}[]>(
-    `${databaseConfig.baseUrl}/rpc/login`
-  )
-
   const [loginError, setLoginError] = useState<boolean>(false)
 
   const [email, setEmail] = useState<string>(null)
   const [pass, setPass] = useState<string>(null)
 
-  const handleLogin = async (email: string, pass: string): Promise<void> => {
-    try {
-      const response = await loginRequest({
-        email,
-        pass
-      })
-
-      setLoginError(false)
+  const [handleLogin] = useApiMutation<
+    {email: string; pass: string},
+    {token: string}[]
+  >(
+    `${databaseConfig.baseUrl}/rpc/login`,
+    (response) => {
       setReqConfig({
         headers: {
           Authorization: `Bearer ${response?.data[0].token}`
         }
       })
-    } catch (error) {
+    },
+    () => {
       setLoginError(true)
       setReqConfig(null)
     }
-  }
+  )
 
   return (
     <Dialog open fullWidth>
@@ -113,7 +107,7 @@ const AuthForm: React.FC = () => {
       </DialogContent>
       <Divider />
       <DialogActions>
-        <Button onClick={() => handleLogin(email, pass)} color='secondary'>
+        <Button onClick={() => handleLogin({email, pass})} color='secondary'>
           Login
         </Button>
       </DialogActions>
@@ -124,7 +118,9 @@ const AuthForm: React.FC = () => {
 const AppContent: React.FC = () => {
   const {isLoggedIn} = useApiContext()
 
-  const [leftPanelVisibility, toggleLeftPanelVisibility] = useToggleState(true)
+  const [leftPanelVisibility, , , toggleLeftPanelVisibility] = useToggleState(
+    true
+  )
 
   return (
     <Grid container direction='column'>

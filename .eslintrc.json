@@ -60,7 +60,6 @@
     ],
     "@typescript-eslint/no-empty-function": 0, // some catch need to be empty
     "@typescript-eslint/no-empty-interface": 0, // Good for renaming without duplicating code *2 rules*
-    "@typescript-eslint/no-explicit-any": 0,
     "@typescript-eslint/no-unused-vars": 1, // *2 rules*
     "@typescript-eslint/no-use-before-define": 0, // *2 rules* should turn to WARNING?
 

@@ -1,13 +1,14 @@
 import React, { useMemo, useState } from 'react';
 
 import { useUserSelectionContext } from 'contexts/user-selection-context';
-import { useGetApiState } from 'hooks/use-api-state';
 import { useStringToggleState } from 'hooks/use-element-toggle-state';
+import { useGETApiState } from 'hooks/use-get-api-state';
 
 import {
     CircularProgress, Collapse, Grid, List, ListItem, ListItemIcon, ListItemText, ListSubheader,
     Tooltip, useTheme
 } from '@material-ui/core';
+import { ColorPartial } from '@material-ui/core/styles/createPalette';
 import ForeignKeyToIcon from '@material-ui/icons/CallReceived';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import TableIcon from '@material-ui/icons/TableChart';
@@ -34,7 +35,7 @@ export const DatabaseSchema: React.FC<IDatabaseSchemaProps> = () => {
   } = useUserSelectionContext()
 
   // Database schema
-  const [rawDatabaseSchema] = useGetApiState<IPostgRESTBaseUrlResponse>(
+  const [rawDatabaseSchema] = useGETApiState<IPostgRESTBaseUrlResponse>(
     `${databaseConfig.baseUrl}/`
   )
   const parsedDatabaseSchema: IParsedDatabaseSchema = useMemo(() => {
@@ -131,7 +132,10 @@ export const DatabaseSchema: React.FC<IDatabaseSchemaProps> = () => {
             title={tableName}
             style={
               isSelected
-                ? {background: theme.palette.primary[100], borderRadius: 5}
+                ? {
+                    background: (theme.palette.primary as ColorPartial)[100],
+                    borderRadius: 5
+                  }
                 : undefined
             }
             onClick={() => setSelectedTableName(tableName)}

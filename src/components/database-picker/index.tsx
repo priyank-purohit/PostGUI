@@ -15,7 +15,7 @@ export const DatabasePicker: React.FC<IDatabasePickerProps> = () => {
   const {databaseName, setDatabaseName} = useUserSelectionContext()
 
   const dbPickerRef = useRef(null)
-  const [menuOpen, , setMenuOpen, setMenuClosed] = useToggleState(false)
+  const [menuOpen, setMenuOpen, setMenuClosed] = useToggleState(false)
 
   return (
     <div>

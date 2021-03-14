@@ -4,11 +4,13 @@ import { useCallback, useState } from 'react';
 /**
  * Provides a convenient method to toggle a boolean state.
  *
- * @returns
- *  Current boolean state
- *  Toggle method
- *  Set True method
- *  Set False method
+ * This is preferred over `useState<boolean>()` for improved clarity
+ * and readability over `setState(true)`. For example, `openModal()` is
+ * more readable than `setModalVisibility(true)`.
+ * For the same reason, the `toggleState` method returned by this hook is
+ * NOT usually named.
+ *
+ * @returns [state, toggle method, set true method, set false method]
  */
 export function useToggleState(
   defaultValue: boolean
@@ -27,5 +29,5 @@ export function useToggleState(
     setState(false)
   }, [state])
 
-  return [state, toggleState, setTrue, setFalse, setState]
+  return [state, setTrue, setFalse, toggleState, setState]
 }
