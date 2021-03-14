@@ -20,7 +20,8 @@ export const RightPanel: React.FC = () => {
         style={{marginTop: 25, marginLeft: 40, maxWidth: 750}}
       >
         <AlertTitle>No table selected</AlertTitle>
-        Please select a table to query from the left panel.
+        Please select a table to query from the database schema panel on the
+        left.
       </Alert>
     )
   }
@@ -34,6 +35,25 @@ export const RightPanel: React.FC = () => {
       <Typography variant='h5'>
         {JSON.stringify(tableColumnProperties[selectedTableName])}
       </Typography>
+      <QueryBuilderContainer />
+      <DataTable />
     </Paper>
   )
 }
+
+// STOPPED HERE, WORKING TO BUILD THE QUERY BUILDER CONTAINER
+
+const QueryBuilderContainer: React.FC = () => (
+  <>
+    <QueryBuilderComponent />
+    <QueryOptions />
+  </>
+)
+
+const QueryBuilderComponent: React.FC = () => (
+  <div id='query-builder' ref='queryBuilder' />
+)
+
+const QueryOptions: React.FC = () => null
+
+const DataTable: React.FC = () => null

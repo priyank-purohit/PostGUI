@@ -2,9 +2,9 @@ import 'styles/reset.css';
 
 import React, { useMemo } from 'react';
 
+import { APP_CONFIGURATION } from 'config/config';
 import { AppConfigContextProvider } from 'contexts/app-config-context';
 import { UserSelectionContextProvider } from 'contexts/user-selection-context';
-import { APP_CONFIGURATION } from 'data/config';
 import { RecoilRoot } from 'recoil';
 
 import { Color, CssBaseline, useMediaQuery } from '@material-ui/core';
@@ -12,7 +12,7 @@ import { deepPurple, pink } from '@material-ui/core/colors';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
 import { ApiDataContextProvider } from '../contexts/api-data-context';
-import { AppContent } from './frame';
+import { AppContent } from './app-frame';
 
 
 export const PostGUI: React.FC = () => {
