@@ -16,10 +16,10 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import KeyIcon from '@material-ui/icons/VpnKey';
 
+import { parseDatabaseSchema } from './lib';
 import {
-    IParsedColumnSchema, IParsedDatabaseSchema, IParsedTableSchema, IPostgRESTBaseUrlResponse,
-    parseDatabaseSchema
-} from './lib';
+    IParsedColumnSchema, IParsedDatabaseSchema, IParsedTableSchema, IPostgRESTBaseUrlResponse
+} from './typings';
 
 
 export interface IDatabaseSchemaProps {}

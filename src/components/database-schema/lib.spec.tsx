@@ -1,7 +1,8 @@
 import dvdRentalsOpenApiResponse from './responses/rawDvdRentalsResponse.json';
 import unauthenticatedResponse from './responses/rawUnauthenticatedResponse.json';
 
-import { IPostgRESTBaseUrlResponse, parseDatabaseSchema } from './lib';
+import { parseDatabaseSchema } from './lib';
+import { IPostgRESTBaseUrlResponse } from './typings';
 
 
 describe('tests to parse raw schema to what PostGUI wants', () => {
