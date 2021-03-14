@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
 import { tableColumnPropertiesAtom } from 'components/database-schema/atoms';
 import { useUserSelectionContext } from 'contexts/user-selection-context';
 import { useRecoilState } from 'recoil';
 
-import { Paper, Typography } from '@material-ui/core';
+import { CardContent, CardHeader, Grid, Paper, Typography } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
+
+import { SubmitButton } from './submit-button';
 
 
 export const RightPanel: React.FC = () => {
@@ -31,12 +33,26 @@ export const RightPanel: React.FC = () => {
       elevation={8}
       style={{padding: 15, margin: 15, minHeight: `${90}vh`}}
     >
-      <Typography variant='h5'>{selectedTableName}</Typography>
-      <Typography variant='h5'>
-        {JSON.stringify(tableColumnProperties[selectedTableName])}
-      </Typography>
-      <QueryBuilderContainer />
-      <DataTable />
+      <CardHeader
+        title={
+          <Grid container alignItems='center'>
+            <Grid item xs>
+              <Typography variant='h5'>{selectedTableName}</Typography>
+              <Typography variant='body1'>tableDescription</Typography>
+            </Grid>
+            <Grid item xs={1}>
+              <SubmitButton />
+            </Grid>
+          </Grid>
+        }
+      />
+      <CardContent>
+        <QueryBuilderContainer />
+        <DataTable />
+        <Typography variant='caption'>
+          {JSON.stringify(tableColumnProperties[selectedTableName])}
+        </Typography>
+      </CardContent>
     </Paper>
   )
 }
@@ -50,9 +66,15 @@ const QueryBuilderContainer: React.FC = () => (
   </>
 )
 
-const QueryBuilderComponent: React.FC = () => (
-  <div id='query-builder' ref='queryBuilder' />
-)
+const QueryBuilderComponent: React.FC = () => {
+  const queryBuilderRef = useRef(null)
+  return (
+    <>
+      <Typography variant='h6'>Query Builder</Typography>
+      <div id='query-builder' ref={queryBuilderRef} />
+    </>
+  )
+}
 
 const QueryOptions: React.FC = () => null
 
