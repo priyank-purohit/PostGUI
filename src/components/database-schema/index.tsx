@@ -100,7 +100,7 @@ export const DatabaseSchema: React.FC<IDatabaseSchemaProps> = () => {
           <ListItemIcon>
             {columnSchema.isPrimaryKey && (
               <Tooltip title='Primary key'>
-                <KeyIcon style={{padding: '5px'}} />
+                <KeyIcon style={{padding: 3}} />
               </Tooltip>
             )}
             {columnSchema.foreignKeyTo && (
@@ -108,7 +108,7 @@ export const DatabaseSchema: React.FC<IDatabaseSchemaProps> = () => {
                 title={`Foreign key to ${columnSchema.foreignKeyTo.table}.${columnSchema.foreignKeyTo.column}`}
                 placement='right'
               >
-                <ForeignKeyToIcon style={{padding: '5px'}} />
+                <ForeignKeyToIcon style={{padding: 3}} />
               </Tooltip>
             )}
           </ListItemIcon>

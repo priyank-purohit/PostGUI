@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 
 import { tableColumnPropertiesAtom } from 'components/database-schema/atoms';
+import { Spacer } from 'components/spacer';
 import { INITIAL_ROW_LIMIT, MAX_ROW_LIMIT } from 'config/constants';
 import { useUserSelectionContext } from 'contexts/user-selection-context';
 import { useToggleState } from 'hooks/use-toggle-state';
@@ -86,7 +87,7 @@ const QueryOptions: React.FC = () => {
   return (
     <>
       <Typography variant='h6'>Query Options</Typography>
-      <div style={{margin: 15}} />
+      <Spacer size='s' />
       <FormControlLabel
         control={
           <Checkbox
@@ -98,7 +99,7 @@ const QueryOptions: React.FC = () => {
         }
         label='Get exact row count'
       />
-      <div style={{margin: 15}} />
+      <Spacer size='s' />
       <FormControlLabel
         control={
           <TextField

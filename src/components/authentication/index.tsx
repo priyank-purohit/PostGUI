@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import { Spacer } from 'components/spacer';
 import { useApiContext } from 'contexts/api-data-context';
 import { useUserSelectionContext } from 'contexts/user-selection-context';
 import { useApiMutation } from 'hooks/use-post-api-state';
@@ -44,7 +45,7 @@ export const AuthForm: React.FC = () => {
             ? 'Incorrect credentials provided.'
             : 'Provide your credentials for this database.'}
         </DialogContentText>
-        <div style={{paddingTop: 15}} />
+        <Spacer size='s' />
         <TextField
           autoFocus
           required
@@ -57,7 +58,7 @@ export const AuthForm: React.FC = () => {
           onChange={(e) => setEmail(e.target.value)}
           fullWidth
         />
-        <div style={{paddingTop: 15}} />
+        <Spacer size='s' />
         <TextField
           required
           color='secondary'
@@ -69,7 +70,7 @@ export const AuthForm: React.FC = () => {
           onChange={(e) => setPass(e.target.value)}
           fullWidth
         />
-        <div style={{paddingTop: 15}} />
+        <Spacer size='s' />
       </DialogContent>
       <Divider />
       <DialogActions>
