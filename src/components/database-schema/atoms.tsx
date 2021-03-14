@@ -8,8 +8,10 @@ import { atom } from 'recoil';
  * as a dependency by moving this to `UserSelectionContext`.
  */
 export const tableColumnPropertiesAtom = atom<{
-  [tableColumnName: string]: {
-    visible: boolean
+  [tableName: string]: {
+    [columnName: string]: {
+      visible: boolean
+    }
   }
 }>({
   key: 'tableColumnProperties',

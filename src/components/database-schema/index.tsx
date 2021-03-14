@@ -67,9 +67,11 @@ export const DatabaseSchema: React.FC<IDatabaseSchemaProps> = () => {
       columnSchema: IParsedColumnSchema,
       tableName: string
     ): JSX.Element => {
-      const key = `${tableName}.${columnName}`
-
-      const isVisible = tableColumnProperties[key]?.visible ?? true
+      const isVisible =
+        (tableColumnProperties[tableName] &&
+          tableColumnProperties[tableName][columnName] &&
+          tableColumnProperties[tableName][columnName].visible) ??
+        true
 
       return (
         <ListItem
@@ -77,8 +79,11 @@ export const DatabaseSchema: React.FC<IDatabaseSchemaProps> = () => {
           onClick={() =>
             setTableColumnProperties({
               ...tableColumnProperties,
-              [key]: {
-                visible: !!!(isVisible ?? true)
+              [tableName]: {
+                ...tableColumnProperties[tableName],
+                [columnName]: {
+                  visible: !!!(isVisible ?? true)
+                }
               }
             })
           }

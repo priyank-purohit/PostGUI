@@ -1,6 +1,8 @@
 import React from 'react';
 
+import { tableColumnPropertiesAtom } from 'components/database-schema/atoms';
 import { useUserSelectionContext } from 'contexts/user-selection-context';
+import { useRecoilState } from 'recoil';
 
 import { Paper, Typography } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
@@ -8,6 +10,8 @@ import { Alert, AlertTitle } from '@material-ui/lab';
 
 export const RightPanel: React.FC = () => {
   const {selectedTableName} = useUserSelectionContext()
+
+  const [tableColumnProperties] = useRecoilState(tableColumnPropertiesAtom)
 
   if (!selectedTableName) {
     return (
@@ -27,6 +31,9 @@ export const RightPanel: React.FC = () => {
       style={{padding: 15, margin: 15, minHeight: `${90}vh`}}
     >
       <Typography variant='h5'>{selectedTableName}</Typography>
+      <Typography variant='h5'>
+        {JSON.stringify(tableColumnProperties[selectedTableName])}
+      </Typography>
     </Paper>
   )
 }
