@@ -3,7 +3,7 @@ import React, { useMemo } from 'react';
 import { useUserSelectionContext } from 'contexts/user-selection-context';
 import { useStringToggleState } from 'hooks/use-element-toggle-state';
 import { useGETApiState } from 'hooks/use-get-api-state';
-import { atom, useRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 
 import {
     CircularProgress, Collapse, Grid, List, ListItem, ListItemIcon, ListItemText, ListSubheader,
@@ -18,6 +18,7 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import KeyIcon from '@material-ui/icons/VpnKey';
 
+import { tableColumnPropertiesAtom } from './atoms';
 import { parseDatabaseSchema } from './lib';
 import {
     IParsedColumnSchema, IParsedDatabaseSchema, IParsedTableSchema, IPostgRESTBaseUrlResponse
@@ -25,18 +26,6 @@ import {
 
 
 export interface IDatabaseSchemaProps {}
-
-/**
- * Holds the column properties, per table
- */
-export const tableColumnPropertiesAtom = atom<{
-  [tableColumnName: string]: {
-    visible: boolean
-  }
-}>({
-  key: 'tableColumnProperties',
-  default: {}
-})
 
 export const DatabaseSchema: React.FC<IDatabaseSchemaProps> = () => {
   const theme = useTheme()
@@ -59,7 +48,6 @@ export const DatabaseSchema: React.FC<IDatabaseSchemaProps> = () => {
     return parseDatabaseSchema(rawDatabaseSchema.data)
   }, [rawDatabaseSchema])
 
-  // Using Recoil, just for the sake of using recoil..!
   const [tableColumnProperties, setTableColumnProperties] = useRecoilState(
     tableColumnPropertiesAtom
   )

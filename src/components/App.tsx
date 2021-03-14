@@ -5,6 +5,7 @@ import React, { useMemo } from 'react';
 import { AppConfigContextProvider } from 'contexts/app-config-context';
 import { UserSelectionContextProvider } from 'contexts/user-selection-context';
 import { APP_CONFIGURATION } from 'data/config';
+import { RecoilRoot } from 'recoil';
 
 import { Color, CssBaseline, useMediaQuery } from '@material-ui/core';
 import { deepPurple, pink } from '@material-ui/core/colors';
@@ -29,14 +30,16 @@ export const PostGUI: React.FC = () => {
   )
   return (
     <ThemeProvider theme={theme}>
-      <AppConfigContextProvider value={{...APP_CONFIGURATION}}>
-        <UserSelectionContextProvider value={{}}>
-          <ApiDataContextProvider value={{}}>
-            <CssBaseline />
-            <AppContent />
-          </ApiDataContextProvider>
-        </UserSelectionContextProvider>
-      </AppConfigContextProvider>
+      <RecoilRoot>
+        <AppConfigContextProvider value={{...APP_CONFIGURATION}}>
+          <UserSelectionContextProvider value={{}}>
+            <ApiDataContextProvider value={{}}>
+              <CssBaseline />
+              <AppContent />
+            </ApiDataContextProvider>
+          </UserSelectionContextProvider>
+        </AppConfigContextProvider>
+      </RecoilRoot>
     </ThemeProvider>
   )
 }
