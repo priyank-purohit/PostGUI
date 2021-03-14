@@ -7,15 +7,11 @@ import { green, red } from '@material-ui/core/colors';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
-import WarningIcon from '@material-ui/icons/Warning';
+import ErrorOutlineIcon from '@material-ui/icons/Error';
 
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-      display: 'flex',
-      alignItems: 'center'
-    },
     wrapper: {
       margin: theme.spacing(1),
       position: 'relative'
@@ -38,14 +34,6 @@ const useStyles = makeStyles((theme: Theme) =>
       top: -6,
       left: -6,
       zIndex: 1
-    },
-    buttonProgress: {
-      color: green[500],
-      position: 'absolute',
-      top: '50%',
-      left: '50%',
-      marginTop: -12,
-      marginLeft: -12
     }
   })
 )
@@ -96,7 +84,7 @@ export const SubmitButton: React.FC = () => {
             return <CloseIcon />
           }
           if (buttonState === SUBMIT_STATE.ERROR) {
-            return <WarningIcon />
+            return <ErrorOutlineIcon />
           }
           if (buttonState === SUBMIT_STATE.READY) {
             return <ArrowForwardIcon />
