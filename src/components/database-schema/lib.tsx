@@ -81,8 +81,5 @@ export const parseDatabaseSchema = (
     }
   }
 
-  // eslint-disable-next-line no-console
-  console.log(JSON.stringify(parsedSchema))
-
   return parsedSchema
 }
