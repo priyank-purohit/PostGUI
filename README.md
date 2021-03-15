@@ -2,6 +2,10 @@
 
 **A React web application to query and share any PostgreSQL database.**
 
+## Current Status
+This app is currently being updated in the `v2` branch. This new version is written in Typescript, and follows a set of modern React development standards.
+
+
 ## Table of Contents
 1. [ Introduction ](#introduction)
 1. [ Features ](#features)
