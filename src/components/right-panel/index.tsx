@@ -1,4 +1,5 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
+import QueryBuilder, { Field } from 'react-querybuilder';
 
 import { tableColumnPropertiesAtom } from 'components/database-schema/atoms';
 import { Spacer } from 'components/spacer';
@@ -71,15 +72,31 @@ const QueryBuilderContainer: React.FC = () => (
   </>
 )
 
-const QueryBuilderComponent: React.FC = () => {
-  const queryBuilderRef = useRef(null)
-  return (
-    <>
-      <Typography variant='h6'>Query Builder</Typography>
-      <div id='query-builder' ref={queryBuilderRef} />
-    </>
-  )
-}
+const QueryBuilderComponent: React.FC = () => (
+  <>
+    <Typography variant='h6'>Query Builder</Typography>
+    <div style={{margin: 25, border: '1px solid red'}}>
+      <QueryBuilder
+        showNotToggle
+        showCombinatorsBetweenRules
+        fields={[
+          {name: 'firstName', label: 'First Name'} as Field,
+          {name: 'lastName', label: 'Last Name'},
+          {name: 'age', label: 'Age', inputType: 'number'},
+          {name: 'address', label: 'Address'},
+          {name: 'phone', label: 'Phone'},
+          {name: 'email', label: 'Email'},
+          {name: 'twitter', label: 'Twitter'},
+          {name: 'isDev', label: 'Is a Developer?', defaultValue: false}
+        ]}
+        onQueryChange={(query) => {
+          // eslint-disable-next-line no-console
+          console.log(query)
+        }}
+      />
+    </div>
+  </>
+)
 
 const QueryOptions: React.FC = () => {
   const [error, setError] = useState(false)
