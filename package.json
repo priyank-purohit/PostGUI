@@ -4,8 +4,8 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.11.3",
-    "@material-ui/lab": "4.0.0-alpha.57",
     "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "4.0.0-alpha.57",
     "@testing-library/jest-dom": "^5.11.10",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^13.0.16",
@@ -40,6 +40,7 @@
     "react": "^17.0.2",
     "react-copy-to-clipboard": "^5.0.3",
     "react-dom": "^17.0.2",
+    "react-querybuilder": "^3.9.9",
     "react-scripts": "4.0.3",
     "react-table": "^7.6.3",
     "recoil": "^0.1.3",
