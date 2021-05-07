@@ -15,7 +15,7 @@
     "jQuery-QueryBuilder": "^2.5.2",
     "js2xmlparser": "^4.0.1",
     "json2csv": "^5.0.1",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "npm": "^6.14.6",
     "react": "^16.13.1",
     "react-copy-to-clipboard": "^5.0.2",
